@@ -1,0 +1,22 @@
+
+
+using AutoMapper;
+using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DTOLayer.Dtos.LikeDtos;
+using XenoTerra.DataAccessLayer.Repositories;
+
+namespace XenoTerra.DataAccessLayer.Services.LikeServices
+{
+    
+    public class LikeServiceDAL : GenericRepositoryDAL<Like, ResultLikeDto, ResultLikeByIdDto, CreateLikeDto, UpdateLikeDto, Guid>, ILikeServiceDAL
+
+    {
+
+        public LikeServiceDAL(Context context, IMapper mapper)
+            : base(context, mapper)
+        {
+        }
+
+    }
+}

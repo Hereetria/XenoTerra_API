@@ -1,0 +1,15 @@
+
+using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.DataAccessLayer.Repositories;
+using XenoTerra.EntityLayer.Entities;
+
+namespace XenoTerra.DataAccessLayer.Services.PostServices
+{
+    
+    public interface IPostServiceDAL : IGenericRepositoryDAL<Post, ResultPostDto, ResultPostByIdDto ,CreatePostDto, UpdatePostDto, Guid>
+
+    {
+        IQueryable<ResultPostDto> TGetMainstreamPosts(Guid userId, int seed);
+        IQueryable<ResultPostDto> TGetFollowingPosts(Guid userId);
+    }
+}

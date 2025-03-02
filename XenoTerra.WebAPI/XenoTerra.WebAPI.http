@@ -1,0 +1,6 @@
+@XenoTerra.WebAPI_HostAddress = http://localhost:5196
+
+GET {{XenoTerra.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
