@@ -2,6 +2,7 @@
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.DataAccessLayer.Repositories;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DataAccessLayer.Services.PostServices
 {

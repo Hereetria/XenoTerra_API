@@ -24,5 +24,14 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
             }
             return result;
         }
+
+        [UseProjection]
+        [GraphQLDescription("Get following users stories")]
+        public IQueryable<ResultStoryDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
+        {
+            var userId = Guid.Parse("9a466137-3217-424f-39b3-08dd59a25e5a");
+            var result = storyServiceBLL.GetFollowingStories(userId);
+            return result;
+        }
     }
 }

@@ -2,6 +2,18 @@ using XenoTerra.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.AllowAnyOrigin()   // Tüm domainlerden istek kabul eder
+                  .AllowAnyMethod()   // GET, POST, PUT, DELETE gibi tüm HTTP metotlarýna izin verir
+                  .AllowAnyHeader();  // Tüm header’lara izin verir
+        });
+});
+
 // Add services to the container.
 Configuration.ConfigureServices(builder);
 
@@ -21,6 +33,8 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 

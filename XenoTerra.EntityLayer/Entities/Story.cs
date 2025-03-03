@@ -17,7 +17,7 @@ namespace XenoTerra.EntityLayer.Entities
         public User User { get; set; }
         
         public ICollection<ViewStory> ViewStories { get; set; } = new List<ViewStory>();
-        public Highlight Highlight { get; set; }
+        public ICollection<Highlight> Highlights { get; set; } = new List<Highlight>();
 
         public DateTime CreatedAt { get; set; }
     }

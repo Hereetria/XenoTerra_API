@@ -6,6 +6,6 @@ namespace XenoTerra.BussinessLogicLayer.Services.StoryServices
 {
         public interface IStoryServiceBLL : IGenericRepositoryBLL<Story, ResultStoryDto, ResultStoryByIdDto, CreateStoryDto, UpdateStoryDto, Guid>
     {
-
+        IQueryable<ResultStoryDto> GetFollowingStories(Guid userId);
     }
 }

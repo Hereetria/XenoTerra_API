@@ -9,6 +9,6 @@ namespace XenoTerra.DataAccessLayer.Services.StoryServices
     public interface IStoryServiceDAL : IGenericRepositoryDAL<Story, ResultStoryDto, ResultStoryByIdDto ,CreateStoryDto, UpdateStoryDto, Guid>
 
     {
-        IQueryable<ResultStoryDto> GetFollowingStories(Guid userId);
+        IQueryable<ResultStoryDto> TGetFollowingStories(Guid userId);
     }
 }

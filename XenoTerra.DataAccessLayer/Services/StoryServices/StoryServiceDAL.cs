@@ -1,4 +1,4 @@
-
+ 
 
 using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
@@ -19,7 +19,7 @@ namespace XenoTerra.DataAccessLayer.Services.StoryServices
         {
         }
 
-        public IQueryable<ResultStoryDto> GetFollowingStories(Guid userId)
+        public IQueryable<ResultStoryDto> TGetFollowingStories(Guid userId)
         {
             var query = _context.Stories
                 .Where(story =>

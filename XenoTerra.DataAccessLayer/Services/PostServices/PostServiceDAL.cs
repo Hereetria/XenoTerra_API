@@ -7,6 +7,7 @@ using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.DataAccessLayer.Repositories;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DataAccessLayer.Services.PostServices
 {
@@ -22,16 +23,13 @@ namespace XenoTerra.DataAccessLayer.Services.PostServices
 
         public IQueryable<ResultPostDto> TGetMainstreamPosts(Guid userId, int seed)
         {
-            // Kullanýcýnýn beðenmediði postlarý filtrele
             var query = _context.Posts
                 .Where(post => post.Likes == null || !post.Likes.Any(like => like.UserId == userId));
 
-            // Sadece PostId'yi seçip seed'e göre sýralama yap
             var orderedPostIds = _context.Posts
                 .FromSqlRaw("SELECT PostId FROM Posts ORDER BY CAST(HASHBYTES('MD5', CONCAT(PostId, {0})) AS UNIQUEIDENTIFIER) OFFSET 0 ROWS", seed)
-                .Select(p => p.PostId); // Sadece PostId çek
+                .Select(p => p.PostId);
 
-            // Filtrelenmiþ postlarý sýralanmýþ PostId listesiyle birleþtir
             var ordered = query
                 .Join(orderedPostIds, post => post.PostId, orderedId => orderedId, (post, orderedId) => post);
 
@@ -40,7 +38,6 @@ namespace XenoTerra.DataAccessLayer.Services.PostServices
 
             return result;
         }
-
 
         public IQueryable<ResultPostDto> TGetFollowingPosts(Guid userId)
         {
@@ -52,7 +49,7 @@ namespace XenoTerra.DataAccessLayer.Services.PostServices
                         .Contains(post.UserId)
                     &&
                     (post.Likes == null || !post.Likes.Any(like => like.UserId == userId))
-                    
+
                 )
                 .OrderBy(post => post.CreatedAt);
 
@@ -62,5 +59,6 @@ namespace XenoTerra.DataAccessLayer.Services.PostServices
 
 
         }
+
     }
 }

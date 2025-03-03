@@ -9,6 +9,6 @@ namespace XenoTerra.DataAccessLayer.Services.UserServices
     public interface IUserServiceDAL : IGenericRepositoryDAL<User, ResultUserDto, ResultUserByIdDto ,CreateUserDto, UpdateUserDto, Guid>
 
     {
-
+        IQueryable<ResultUserDto> TGetSuggestedUsers(Guid userId);
     }
 }
