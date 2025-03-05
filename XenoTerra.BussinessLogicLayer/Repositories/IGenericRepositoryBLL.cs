@@ -9,9 +9,8 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
         where TCreateDto : class
         where TUpdateDto : class
     {
-        IQueryable<TResultDto> GetAllQuerable();
-        IQueryable<TResultById> GetByIdQuerable(TKey id);
-        Task<TResultById> GetByIdAsync(TKey id);
+        Task<List<Guid>> GetAllIdsAsync();
+        IQueryable<TEntity> GetByIdsQuerable(IEnumerable<Guid> ids);
         Task<TResultById> CreateAsync(TCreateDto createDto);
 
         Task<TResultById> UpdateAsync(TUpdateDto updateDto);

@@ -1,5 +1,6 @@
 
 using System.Linq.Expressions;
+using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories
 {
     
@@ -10,17 +11,14 @@ namespace XenoTerra.DataAccessLayer.Repositories
         where TCreateDto : class
         where TUpdateDto : class
     {
-
-        IQueryable<TResultDto> TGetAllQueryable();
-        IQueryable<TResultById> TGetByIdQuerable(TKey id);
+        Task<List<Guid>> TGetAllIdsAsync();
+        IQueryable<TEntity> TGetByIdsQuerable(IEnumerable<Guid> ids);
 
         Task<TResultById> TCreateAsync(TCreateDto createDto);
 
         Task<TResultById> TUpdateAsync(TUpdateDto updateDto);
 
         Task<bool> TDeleteAsync(TKey id);
-
-        Task<TResultById> TGetByIdAsync(TKey id);
 
         Task<List<TResultQueryDto>> TGetEntitiesByQueryAsync<TResultQueryDto>(
             Func<IQueryable<TEntity>, IQueryable<TEntity>> query)

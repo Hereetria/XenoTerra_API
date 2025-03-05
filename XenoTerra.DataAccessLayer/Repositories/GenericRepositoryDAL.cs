@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.DataAccessLayer.Contexts;
 using System.Linq.Expressions;
 using AutoMapper.QueryableExtensions;
+using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories
 {
@@ -17,7 +18,6 @@ namespace XenoTerra.DataAccessLayer.Repositories
         where TResultById : class
 
     {
-
         protected readonly Context _context;
         protected readonly IMapper _mapper;
 
@@ -27,59 +27,68 @@ namespace XenoTerra.DataAccessLayer.Repositories
             _mapper = mapper;
         }
 
-        public IQueryable<TResultDto> TGetAllQueryable()
+        public async Task<List<Guid>> TGetAllIdsAsync()
         {
-            return _context.Set<TEntity>()
-                           .AsNoTracking()
-                           .ProjectTo<TResultDto>(_mapper.ConfigurationProvider);
-        }
-
-        public IQueryable<TResultById> TGetByIdQuerable(TKey id)
-        {
-            if (id == null)
-                throw new ArgumentNullException(nameof(id), "ID cannot be null.");
-
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
-                             ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
+                              ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
 
             var primaryKey = entityType.FindPrimaryKey();
             if (primaryKey == null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException("This method only supports entities with a single primary key.");
 
-            var keyPropertyName = primaryKey.Properties[0].Name;
-            if (string.IsNullOrEmpty(keyPropertyName))
-                throw new InvalidOperationException("Primary key property name is null or empty.");
+            var keyProperty = primaryKey.Properties[0];
 
-            return _context.Set<TEntity>()
-                           .AsNoTracking()
-                           .Where(entity => EF.Property<TKey>(entity, keyPropertyName).Equals(id))
-                           .ProjectTo<TResultById>(_mapper.ConfigurationProvider);
+            var result = await _context.Set<TEntity>()
+                .Select(entity => EF.Property<Guid>(entity, keyProperty.Name))
+                .ToListAsync();
+
+            return result;
         }
 
 
-        public async Task<TResultById> TGetByIdAsync(TKey id)
+        public IQueryable<TEntity> TGetByIdsQuerable(IEnumerable<Guid> ids)
         {
-            try
-            {
-                if (id == null)
-                {
-                    throw new ArgumentNullException(nameof(id), "ID cannot be null.");
-                }
+            var entityType = _context.Model.FindEntityType(typeof(TEntity))
+                              ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
 
-                var entity = await _context.Set<TEntity>().FindAsync(id);
-                if (entity == null)
-                {
-                    throw new KeyNotFoundException($"Record with ID {id} not found.");
-                }
+            var primaryKey = entityType.FindPrimaryKey();
+            if (primaryKey == null || primaryKey.Properties.Count != 1)
+                throw new NotSupportedException("This method only supports entities with a single primary key.");
 
-                var result = _mapper.Map<TResultById>(entity);
-                return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"An error occurred while retrieving the record: {ex.Message}");
-            }
+            var keyProperty = primaryKey.Properties[0];
+
+            var result = _context.Set<TEntity>()
+                .Where(entity => EF.Property<Guid>(entity, keyProperty.Name).Equals(ids));
+
+            return result;
         }
+
+
+
+
+        //public async Task<TResultById> TGetByIdAsync(TKey id)
+        //{
+        //    try
+        //    {
+        //        if (id == null)
+        //        {
+        //            throw new ArgumentNullException(nameof(id), "ID cannot be null.");
+        //        }
+
+        //        var entity = await _context.Set<TEntity>().FindAsync(id);
+        //        if (entity == null)
+        //        {
+        //            throw new KeyNotFoundException($"Record with ID {id} not found.");
+        //        }
+
+        //        var result = _mapper.Map<TResultById>(entity);
+        //        return result;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception($"An error occurred while retrieving the record: {ex.Message}");
+        //    }
+        //}
 
         public async Task<TResultById> TCreateAsync(TCreateDto createDto)
         {

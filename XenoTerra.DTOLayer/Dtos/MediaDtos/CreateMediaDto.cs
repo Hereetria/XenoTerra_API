@@ -1,5 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
     public class CreateMediaDto
@@ -7,5 +9,7 @@ namespace XenoTerra.DTOLayer.Dtos.MediaDtos
         public string PhotoUrl { get; set; }
         public Guid UserId { get; set; }
         public DateTime UploadedAt { get; set; }
+
+        public ResultUserByIdDto User { get; set; }
     }
 }

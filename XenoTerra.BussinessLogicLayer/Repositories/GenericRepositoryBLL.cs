@@ -2,6 +2,7 @@
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 using XenoTerra.DataAccessLayer.Repositories;
 using System.Linq.Expressions;
+
 namespace XenoTerra.BussinessLogicLayer.Repositories
 {
         public abstract class GenericRepositoryBLL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>
@@ -21,21 +22,15 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
             _repositoryDAL = _repositoryDALFactory.CreateRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>();
         }
 
-        public IQueryable<TResultDto> GetAllQuerable()
+        public async Task<List<Guid>> GetAllIdsAsync()
         {
-            var result = _repositoryDAL.TGetAllQueryable();
+            var result = await _repositoryDAL.TGetAllIdsAsync();
             return result;
         }
 
-        public IQueryable<TResultById> GetByIdQuerable(TKey id)
+        public IQueryable<TEntity> GetByIdsQuerable(IEnumerable<Guid> ids)
         {
-            var result = _repositoryDAL.TGetByIdQuerable(id);
-            return result;
-        }
-
-        public async Task<TResultById> GetByIdAsync(TKey id)
-        {
-            var result = await _repositoryDAL.TGetByIdAsync(id);
+            var result = _repositoryDAL.TGetByIdsQuerable(ids);
             return result;
         }
 
@@ -82,6 +77,5 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
             var values = await _repositoryDAL.TGetSelectedEntitiesByQueryAsync<TResultQueryDto, TResultEntity>(query, selectExpression);
             return values;
         }
-
     }
 }

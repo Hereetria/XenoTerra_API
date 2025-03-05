@@ -1,5 +1,8 @@
 
 
+using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.LikeDtos
 {
     public class CreateLikeDto
@@ -7,5 +10,8 @@ namespace XenoTerra.DTOLayer.Dtos.LikeDtos
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
         public DateTime LikedAt { get; set; }
+
+        public ResultUserByIdDto User { get; set; }
+        public ResultPostByIdDto Post { get; set; }
     }
 }
