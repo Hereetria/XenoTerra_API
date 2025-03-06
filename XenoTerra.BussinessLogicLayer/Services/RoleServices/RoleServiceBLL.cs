@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.RoleServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.RoleServices
 {
-     public class RoleServiceBLL : GenericRepositoryBLL<Role, ResultRoleDto, CreateRoleDto, UpdateRoleDto, Guid>, IRoleServiceBLL
+     public class RoleServiceBLL : GenericRepositoryBLL<Role, ResultRoleDto, ResultRoleWithRelationsDto, CreateRoleDto, UpdateRoleDto, Guid>, IRoleServiceBLL
     {
         public RoleServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

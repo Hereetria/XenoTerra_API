@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Role
     public class RoleQuery
     {
         [UseProjection]
-        public IQueryable<ResultRoleDto> GetRoles(List<Guid>? ids, [Service] IRoleServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultRoleWithRelationsDto> GetRoles(
+        List<Guid>? ids,
+        [Service] IRoleServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Roles")]
         //public IQueryable<ResultRoleDto> GetAllRoles([Service] IRoleServiceBLL roleServiceBLL)

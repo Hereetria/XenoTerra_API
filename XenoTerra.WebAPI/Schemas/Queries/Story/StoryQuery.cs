@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
     public class StoryQuery
     {
         [UseProjection]
-        public IQueryable<ResultStoryWithRelationsDto> GetStories(List<Guid>? ids, [Service] IStoryServiceBLL service)
-     => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultStoryWithRelationsDto> GetStories(
+      List<Guid>? ids,
+      [Service] IStoryServiceBLL service
+  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Stories")]
         //public IQueryable<ResultStoryDto> GetAllStories([Service] IStoryServiceBLL storyServiceBLL)
@@ -30,7 +33,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
 
         [UseProjection]
         [GraphQLDescription("Get following users stories")]
-        public IQueryable<ResultStoryWithRelationsDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
+        public IQueryable<ResultStoryDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
         {
             var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
             var result = storyServiceBLL.GetFollowingStories(userId);

@@ -7,8 +7,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Reaction
     public class ReactionQuery
     {
         [UseProjection]
-        public IQueryable<ResultReactionDto> GetReactions(List<Guid>? ids, [Service] IReactionServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultReactionWithRelationsDto> GetReactions(
+            List<Guid>? ids,
+            [Service] IReactionServiceBLL service
+        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
         //[UseProjection]
         //[GraphQLDescription("Get all Reactions")]
         //public IQueryable<ResultReactionDto> GetAllReactions([Service] IReactionServiceBLL reactionServiceBLL)

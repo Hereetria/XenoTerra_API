@@ -34,6 +34,12 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
             return result;
         }
 
+        public IQueryable<TResultWithRelationsDto> GetByIdsQuerableWithRelations(IEnumerable<Guid> ids)
+        {
+            var result = _repositoryDAL.TGetByIdsQuerableWithRelations(ids);
+            return result;
+        }
+
         public async Task<TResultDto> CreateAsync(TCreateDto createDto)
         {
             var result = await _repositoryDAL.TCreateAsync(createDto);

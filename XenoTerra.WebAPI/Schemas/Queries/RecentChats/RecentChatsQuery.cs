@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.RecentChats
     public class RecentChatsQuery
     {
         [UseProjection]
-        public IQueryable<ResultRecentChatsWithRelationsDto> GetRecentChats(List<Guid>? ids, [Service] IRecentChatsServiceBLL service)
-     => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultRecentChatsWithRelationsDto> GetRecentChats(
+            List<Guid>? ids,
+            [Service] IRecentChatsServiceBLL service
+        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all RecentChats")]
         //public IQueryable<ResultRecentChatsDto> GetAllRecentChats([Service] IRecentChatsServiceBLL recentChatsServiceBLL)

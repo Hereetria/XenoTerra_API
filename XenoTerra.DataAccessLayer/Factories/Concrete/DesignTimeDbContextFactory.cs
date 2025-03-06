@@ -19,11 +19,21 @@ namespace XenoTerra.DataAccessLayer.Factories.Concrete
         {
             var optionsBuilder = new DbContextOptionsBuilder<Context>();
 
+            // API veya başka bir katmandan gelen Connection String
             string connectionString = ConnectionStringProvider.GetConnectionString();
 
-            optionsBuilder.UseSqlServer(connectionString);
+            // Eğer connection string boş veya null ise hata fırlat
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Connection string could not be retrieved.");
+            }
+
+            // SQL Server bağlantısını yapılandır
+            optionsBuilder.UseSqlServer(connectionString, options =>
+                options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 
             return new Context(optionsBuilder.Options);
         }
     }
+
 }

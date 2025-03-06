@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Follow
     public class FollowQuery
     {
         [UseProjection]
-        public IQueryable<ResultFollowDto> GetFollows(List<Guid>? ids, [Service] IFollowServiceBLL service)
-             => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultFollowWithRelationsDto> GetFollows(
+      List<Guid>? ids,
+      [Service] IFollowServiceBLL service
+  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Follows")]
         //public IQueryable<ResultFollowDto> GetAllFollows([Service] IFollowServiceBLL followServiceBLL)

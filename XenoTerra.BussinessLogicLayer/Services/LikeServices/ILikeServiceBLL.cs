@@ -4,7 +4,7 @@ using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.LikeServices
 {
-        public interface ILikeServiceBLL : IGenericRepositoryBLL<Like, ResultLikeDto, CreateLikeDto, UpdateLikeDto, Guid>
+        public interface ILikeServiceBLL : IGenericRepositoryBLL<Like, ResultLikeDto, ResultLikeWithRelationsDto, CreateLikeDto, UpdateLikeDto, Guid>
     {
 
     }

@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.UserSettingServices
 {
     
-    public interface IUserSettingServiceDAL : IGenericRepositoryDAL<UserSetting, ResultUserSettingDto, ResultUserSettingWithRelationsDto CreateUserSettingDto, UpdateUserSettingDto, Guid>
+    public interface IUserSettingServiceDAL : IGenericRepositoryDAL<UserSetting, ResultUserSettingDto, ResultUserSettingWithRelationsDto, CreateUserSettingDto, UpdateUserSettingDto, Guid>
 
     {
 

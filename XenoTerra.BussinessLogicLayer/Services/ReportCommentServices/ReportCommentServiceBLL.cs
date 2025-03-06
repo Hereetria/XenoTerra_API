@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.ReportCommentServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.ReportCommentServices
 {
-     public class ReportCommentServiceBLL : GenericRepositoryBLL<ReportComment, ResultReportCommentDto, CreateReportCommentDto, UpdateReportCommentDto, Guid>, IReportCommentServiceBLL
+     public class ReportCommentServiceBLL : GenericRepositoryBLL<ReportComment, ResultReportCommentDto, ResultReportCommentWithRelationsDto, CreateReportCommentDto, UpdateReportCommentDto, Guid>, IReportCommentServiceBLL
     {
         public ReportCommentServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

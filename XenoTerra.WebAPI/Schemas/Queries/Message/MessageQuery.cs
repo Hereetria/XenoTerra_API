@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Message
     public class MessageQuery
     {
         [UseProjection]
-        public IQueryable<ResultMessageDto> GetMessages(List<Guid>? ids, [Service] IMessageServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultMessageWithRelationsDto> GetMessages(
+      List<Guid>? ids,
+      [Service] IMessageServiceBLL service
+  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Messages")]
         //public IQueryable<ResultMessageDto> GetAllMessages([Service] IMessageServiceBLL messageServiceBLL)

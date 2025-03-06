@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.PostTag
     public class PostTagQuery
     {
         [UseProjection]
-        public IQueryable<ResultPostTagWithRelationsDto> GetPostTags(List<Guid>? ids, [Service] IPostTagServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultPostTagWithRelationsDto> GetPostTags(
+      List<Guid>? ids,
+      [Service] IPostTagServiceBLL service
+  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all PostTags")]
         //public IQueryable<ResultPostTagDto> GetAllPostTags([Service] IPostTagServiceBLL postTagServiceBLL)

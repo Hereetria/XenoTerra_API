@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.MessageServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.MessageServices
 {
-     public class MessageServiceBLL : GenericRepositoryBLL<Message, ResultMessageDto, CreateMessageDto, UpdateMessageDto, Guid>, IMessageServiceBLL
+     public class MessageServiceBLL : GenericRepositoryBLL<Message, ResultMessageDto, ResultMessageWithRelationsDto, CreateMessageDto, UpdateMessageDto, Guid>, IMessageServiceBLL
     {
         public MessageServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

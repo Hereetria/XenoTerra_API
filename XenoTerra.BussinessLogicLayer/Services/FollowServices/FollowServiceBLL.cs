@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.FollowServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.FollowServices
 {
-     public class FollowServiceBLL : GenericRepositoryBLL<Follow, ResultFollowDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowServiceBLL
+     public class FollowServiceBLL : GenericRepositoryBLL<Follow, ResultFollowDto, ResultFollowWithRelationsDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowServiceBLL
     {
         public FollowServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

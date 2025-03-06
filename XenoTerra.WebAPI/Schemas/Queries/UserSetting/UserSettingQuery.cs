@@ -7,8 +7,12 @@ namespace XenoTerra.WebAPI.Schemas.Queries.UserSetting
     public class UserSettingQuery
     {
         [UseProjection]
-        public IQueryable<ResultUserSettingWithRelationsDto> GetUserSettings(List<Guid>? ids, [Service] IUserSettingServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultUserSettingWithRelationsDto> GetUserSettings(
+        List<Guid>? ids,
+        [Service] IUserSettingServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
+
         //[UseProjection]
         //[GraphQLDescription("Get all UserSettings")]
         //public IQueryable<ResultUserSettingDto> GetAllUserSettings([Service] IUserSettingServiceBLL userSettingServiceBLL)

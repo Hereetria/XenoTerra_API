@@ -10,11 +10,14 @@ namespace XenoTerra.WebAPI.Schemas.Queries.User
     public class UserQuery
     {
         [UseProjection]
-        public IQueryable<ResultUserWithRelationsDto> GetUsers(List<Guid>? ids, [Service] IUserServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultUserWithRelationsDto> GetUsers(
+       List<Guid>? ids,
+       [Service] IUserServiceBLL service
+   ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         [UseProjection]
         [GraphQLDescription("Get all Users")]
-        public IQueryable<ResultUserWithRelationsDto> GetAllUsers([Service] IUserServiceBLL userServiceBLL)
+        public IQueryable<ResultUserDto> GetAllUsers([Service] IUserServiceBLL userServiceBLL)
         {
             var ids = userServiceBLL.GetAllIdsAsync().Result;
             return userServiceBLL.GetByIdsQuerable(ids);
@@ -35,7 +38,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.User
         [UsePaging(IncludeTotalCount = true)]
         [UseProjection]
         [GraphQLDescription("Get Suggested Users")]
-        public IQueryable<ResultUserWithRelationsDto> GetSuggestedUsers(
+        public IQueryable<ResultUserDto> GetSuggestedUsers(
         [Service] IUserServiceBLL userServiceBLL)
         {
             var userId = Guid.Parse("9a466137-3217-424f-39b3-08dd59a25e5a");

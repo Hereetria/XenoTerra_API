@@ -8,8 +8,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
     public class PostQuery
     {
         [UseProjection]
-        public IQueryable<ResultPostDto> GetPosts(List<Guid>? ids, [Service] IPostServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultPostWithRelationsDto> GetPosts(
+    List<Guid>? ids,
+    [Service] IPostServiceBLL service
+) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Posts")]
         //public IQueryable<ResultPostDto> GetAllPosts([Service] IPostServiceBLL postServiceBLL)
@@ -32,7 +35,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
         [UsePaging(IncludeTotalCount = true)]
         [UseProjection]
         [GraphQLDescription("Get mainstream posts")]
-        public IQueryable<ResultPostWithRelationsDto> GetMainstreamPosts(
+        public IQueryable<ResultPostDto> GetMainstreamPosts(
             Guid seed,
             [Service] IPostServiceBLL postServiceBLL)
         {
@@ -45,7 +48,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
         [UsePaging(IncludeTotalCount = true)]
         [UseProjection]
         [GraphQLDescription("Get following posts")]
-        public IQueryable<ResultPostWithRelationsDto> GetFollowingPosts(
+        public IQueryable<ResultPostDto> GetFollowingPosts(
             [Service] IPostServiceBLL postServiceBLL)
         {
             var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");

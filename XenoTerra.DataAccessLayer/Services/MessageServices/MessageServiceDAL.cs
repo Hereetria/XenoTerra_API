@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.MessageServices
 {
     
-    public class MessageServiceDAL : GenericRepositoryDAL<Message, ResultMessageDto, ResultMessageWithRelationsDto CreateMessageDto, UpdateMessageDto, Guid>, IMessageServiceDAL
+    public class MessageServiceDAL : GenericRepositoryDAL<Message, ResultMessageDto, ResultMessageWithRelationsDto, CreateMessageDto, UpdateMessageDto, Guid>, IMessageServiceDAL
 
     {
 

@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Like
     public class LikeQuery
     {
         [UseProjection]
-        public IQueryable<ResultLikeDto> GetLikes(List<Guid>? ids, [Service] ILikeServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultLikeWithRelationsDto> GetLikes(
+        List<Guid>? ids,
+        [Service] ILikeServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Likes")]
         //public IQueryable<ResultLikeDto> GetAllLikes([Service] ILikeServiceBLL likeServiceBLL)

@@ -55,6 +55,7 @@ using XenoTerra.BussinessLogicLayer.Services.SearchHistoryUserServices;
 using XenoTerra.DataAccessLayer.Services.PostTagServices;
 using XenoTerra.DataAccessLayer.Services.SearchHistoryUserServices;
 using XenoTerra.WebAPI.Schemas.Types;
+using XenoTerra.WebAPI.Schemas.DataLoaders;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -69,18 +70,20 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddMutationType<Mutation>()
                 .AddType<ResultBlockUserDtoType>() 
                 .AddProjections()
-                .AddFiltering();
+                .AddFiltering()
+                .AddDataLoader<UserDataLoader>();
 
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping));
 
-        
-            builder.Services.AddDbContext<Context>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            builder.Services.AddDbContextFactory<Context>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             builder.Services.AddScoped<IGenericRepositoryDALFactory, GenericRepositoryDALFactory>();
-            builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,>), typeof(GenericRepositoryDAL<,,,,>));
+            builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,,>), typeof(GenericRepositoryDAL<,,,,,>));
 
 
             builder.Services.AddScoped<IBlockUserServiceBLL, BlockUserServiceBLL>();

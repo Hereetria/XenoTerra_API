@@ -8,10 +8,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUser
     public class BlockUserQuery
     {
         [UseProjection]
-        public IQueryable<ResultBlockUserDto> GetBlockUsers(
+        public IQueryable<ResultBlockUserWithRelationsDto> GetBlockUsers(
             List<Guid>? ids,
             [Service] IBlockUserServiceBLL service
-        ) => service.GetByIdsQuerable(ids ?? service.GetAllIdsAsync().Result);
+        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
 
 
 

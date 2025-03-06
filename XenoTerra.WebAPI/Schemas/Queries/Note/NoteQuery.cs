@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Note
     public class NoteQuery
     {
         [UseProjection]
-        public IQueryable<ResultNoteDto> GetNotes(List<Guid>? ids, [Service] INoteServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultNoteWithRelationsDto> GetNotes(
+      List<Guid>? ids,
+      [Service] INoteServiceBLL service
+  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Notes")]
         //public IQueryable<ResultNoteDto> GetAllNotes([Service] INoteServiceBLL noteServiceBLL)

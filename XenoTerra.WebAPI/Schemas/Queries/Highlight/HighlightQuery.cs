@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Highlight
     public class HighlightQuery
     {
         [UseProjection]
-        public IQueryable<ResultHighlightDto> GetHighlights(List<Guid>? ids, [Service] IHighlightServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultHighlightWithRelationsDto> GetHighlights(
+        List<Guid>? ids,
+        [Service] IHighlightServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Highlights")]
         //public IQueryable<ResultHighlightDto> GetAllHighlights([Service] IHighlightServiceBLL highlightServiceBLL)

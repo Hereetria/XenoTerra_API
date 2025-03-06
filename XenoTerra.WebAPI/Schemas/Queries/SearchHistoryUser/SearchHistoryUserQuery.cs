@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.SearchHistoryUser
     public class SearchHistoryUserQuery
     {
         [UseProjection]
-        public IQueryable<ResultSearchHistoryUserWithRelationsDto> GetSearchHistoryUsers(List<Guid>? ids, [Service] ISearchHistoryUserServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultSearchHistoryUserWithRelationsDto> GetSearchHistoryUsers(
+         List<Guid>? ids,
+         [Service] ISearchHistoryUserServiceBLL service
+     ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all SearchHistoryUsers")]
         //public IQueryable<ResultSearchHistoryUserDto> GetAllSearchHistoryUsers([Service] ISearchHistoryUserServiceBLL searchHistoryUserServiceBLL)

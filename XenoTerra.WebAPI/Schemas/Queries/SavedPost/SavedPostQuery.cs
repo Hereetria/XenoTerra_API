@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.SavedPost
     public class SavedPostQuery
     {
         [UseProjection]
-        public IQueryable<ResultSavedPostWithRelationsDto> GetSavedPosts(List<Guid>? ids, [Service] ISavedPostServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultSavedPostWithRelationsDto> GetSavedPosts(
+        List<Guid>? ids,
+        [Service] ISavedPostServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all SavedPosts")]
         //public IQueryable<ResultSavedPostDto> GetAllSavedPosts([Service] ISavedPostServiceBLL savedPostServiceBLL)

@@ -7,8 +7,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Comment
     public class CommentQuery
     {
         [UseProjection]
-        public IQueryable<ResultCommentDto> GetComments(List<Guid>? ids, [Service] ICommentServiceBLL service)
-            => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultCommentWithRelationsDto> GetComments(
+            List<Guid>? ids,
+            [Service] ICommentServiceBLL service
+        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
 
         //[UseProjection]
         //[GraphQLDescription("Get Comment by ID")]

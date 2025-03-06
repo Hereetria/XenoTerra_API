@@ -11,6 +11,7 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
     {
         Task<List<Guid>> GetAllIdsAsync();
         IQueryable<TResultDto> GetByIdsQuerable(IEnumerable<Guid> ids);
+        IQueryable<TResultWithRelationsDto> GetByIdsQuerableWithRelations(IEnumerable<Guid> ids);
         Task<TResultDto> CreateAsync(TCreateDto createDto);
 
         Task<TResultDto> UpdateAsync(TUpdateDto updateDto);

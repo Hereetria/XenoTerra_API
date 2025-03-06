@@ -7,9 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ViewStory
     public class ViewStoryQuery
     {
         [UseProjection]
-        public IQueryable<ResultViewStoryWithRelationsDto> GetViewStories(List<Guid>? ids, [Service] IViewStoryServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
-        //[UseProjection]
+        public IQueryable<ResultViewStoryWithRelationsDto> GetViewStories(
+        List<Guid>? ids,
+        [Service] IViewStoryServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[GraphQLDescription("Get all ViewStories")]
         //public IQueryable<ResultViewStoryDto> GetAllViewStories([Service] IViewStoryServiceBLL viewStoryServiceBLL)
         //{

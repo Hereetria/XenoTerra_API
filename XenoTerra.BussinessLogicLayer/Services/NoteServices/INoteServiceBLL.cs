@@ -4,7 +4,7 @@ using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.NoteServices
 {
-        public interface INoteServiceBLL : IGenericRepositoryBLL<Note, ResultNoteDto, CreateNoteDto, UpdateNoteDto, Guid>
+        public interface INoteServiceBLL : IGenericRepositoryBLL<Note, ResultNoteDto, ResultNoteWithRelationsDto, CreateNoteDto, UpdateNoteDto, Guid>
     {
 
     }

@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.NoteServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.NoteServices
 {
-     public class NoteServiceBLL : GenericRepositoryBLL<Note, ResultNoteDto, CreateNoteDto, UpdateNoteDto, Guid>, INoteServiceBLL
+     public class NoteServiceBLL : GenericRepositoryBLL<Note, ResultNoteDto, ResultNoteWithRelationsDto, CreateNoteDto, UpdateNoteDto, Guid>, INoteServiceBLL
     {
         public NoteServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

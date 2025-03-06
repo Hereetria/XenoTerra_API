@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.EntityLayer.Entities;
 
@@ -10,9 +11,15 @@ namespace XenoTerra.DataAccessLayer.Contexts
     
     public class Context : IdentityDbContext<User, Role, Guid>
     {
+        private readonly string _connectionString;
 
-        public Context(DbContextOptions<Context> options) : base(options)
+        public Context(DbContextOptions<Context> options, IConfiguration? configuration = null)
+            : base(options)
         {
+            if (configuration is not null)
+            {
+                _connectionString = configuration.GetConnectionString("DefaultConnection");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -142,9 +149,19 @@ namespace XenoTerra.DataAccessLayer.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                var connectionString = ConnectionStringProvider.GetConnectionString();
-                optionsBuilder.UseSqlServer(connectionString, options =>
-                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                // Eðer DI içinde bir connection string tanýmlýysa onu kullan
+                if (!string.IsNullOrEmpty(_connectionString))
+                {
+                    optionsBuilder.UseSqlServer(_connectionString, options =>
+                        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                }
+                else
+                {
+                    // Migration veya DesignTimeFactory için
+                    var connectionString = ConnectionStringProvider.GetConnectionString();
+                    optionsBuilder.UseSqlServer(connectionString, options =>
+                        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                }
             }
         }
 

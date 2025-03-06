@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Media
     public class MediaQuery
     {
         [UseProjection]
-        public IQueryable<ResultMediaDto> GetMedia(List<Guid>? ids, [Service] IMediaServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultMediaWithRelationsDto> GetMedias(
+         List<Guid>? ids,
+         [Service] IMediaServiceBLL service
+     ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Media")]
         //public IQueryable<ResultMediaDto> GetAllMedia([Service] IMediaServiceBLL mediaServiceBLL)

@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Notification
     public class NotificationQuery
     {
         [UseProjection]
-        public IQueryable<ResultNotificationDto> GetNotifications(List<Guid>? ids, [Service] INotificationServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultNotificationWithRelationsDto> GetNotifications(
+        List<Guid>? ids,
+        [Service] INotificationServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all Notifications")]
         //public IQueryable<ResultNotificationDto> GetAllNotifications([Service] INotificationServiceBLL notificationServiceBLL)

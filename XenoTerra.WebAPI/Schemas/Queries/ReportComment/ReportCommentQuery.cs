@@ -7,8 +7,11 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ReportComment
     public class ReportCommentQuery
     {
         [UseProjection]
-        public IQueryable<ResultReportCommentWithRelationsDto> GetReportComments(List<Guid>? ids, [Service] IReportCommentServiceBLL service)
-    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        public IQueryable<ResultReportCommentWithRelationsDto> GetReportComments(
+        List<Guid>? ids,
+        [Service] IReportCommentServiceBLL service
+    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+
         //[UseProjection]
         //[GraphQLDescription("Get all ReportComments")]
         //public IQueryable<ResultReportCommentDto> GetAllReportComments([Service] IReportCommentServiceBLL reportCommentServiceBLL)
