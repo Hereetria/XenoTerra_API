@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Like
     {
         [UseProjection]
         [GraphQLDescription("Create a new Like")]
-        public async Task<ResultLikeByIdDto> CreateLikeAsync(CreateLikeDto createLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
+        public async Task<ResultLikeDto> CreateLikeAsync(CreateLikeDto createLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
         {
             var result = await likeServiceBLL.CreateAsync(createLikeDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Like
 
         [UseProjection]
         [GraphQLDescription("Update an existing Like")]
-        public async Task<ResultLikeByIdDto> UpdateLikeAsync(UpdateLikeDto updateLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
+        public async Task<ResultLikeDto> UpdateLikeAsync(UpdateLikeDto updateLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
         {
             var result = await likeServiceBLL.UpdateAsync(updateLikeDto);
             return result;

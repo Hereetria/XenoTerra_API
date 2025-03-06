@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.UserServices
 {
     
-    public interface IUserServiceDAL : IGenericRepositoryDAL<User, ResultUserDto, ResultUserByIdDto ,CreateUserDto, UpdateUserDto, Guid>
+    public interface IUserServiceDAL : IGenericRepositoryDAL<User, ResultUserDto, ResultUserWithRelationsDto, CreateUserDto, UpdateUserDto, Guid>
 
     {
         IQueryable<ResultUserDto> TGetSuggestedUsers(Guid userId);

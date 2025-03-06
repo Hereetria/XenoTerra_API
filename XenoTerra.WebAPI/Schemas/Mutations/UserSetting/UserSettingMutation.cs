@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.UserSetting
     {
         [UseProjection]
         [GraphQLDescription("Create a new UserSetting")]
-        public async Task<ResultUserSettingByIdDto> CreateUserSettingAsync(CreateUserSettingDto createUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
+        public async Task<ResultUserSettingDto> CreateUserSettingAsync(CreateUserSettingDto createUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
         {
             var result = await userSettingServiceBLL.CreateAsync(createUserSettingDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.UserSetting
 
         [UseProjection]
         [GraphQLDescription("Update an existing UserSetting")]
-        public async Task<ResultUserSettingByIdDto> UpdateUserSettingAsync(UpdateUserSettingDto updateUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
+        public async Task<ResultUserSettingDto> UpdateUserSettingAsync(UpdateUserSettingDto updateUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
         {
             var result = await userSettingServiceBLL.UpdateAsync(updateUserSettingDto);
             return result;

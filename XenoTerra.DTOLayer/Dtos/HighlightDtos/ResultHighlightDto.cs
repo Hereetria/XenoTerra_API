@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
 {
@@ -10,7 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
         public string Name { get; set; }
         public string ProfilePicturePath { get; set; }
         public Guid StoryId { get; set; }
-
-        public ICollection<ResultStoryByIdDto> Stories { get; set; }
     }
 }

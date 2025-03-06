@@ -12,8 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.MessageDtos
         public Guid ReceiverId { get; set; }
         public string Header { get; set; }
         public DateTime SentAt { get; set; }
-
-        public ResultUserByIdDto Sender { get; set; }
-        public ResultUserByIdDto Receiver { get; set; }
     }
 }

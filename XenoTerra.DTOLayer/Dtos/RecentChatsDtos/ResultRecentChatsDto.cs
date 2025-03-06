@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
 {
@@ -10,7 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
         public string LastMessage { get; set; }
         public Guid UserId { get; set; }
         public DateTime LastMessageAt { get; set; }
-
-        public ICollection<ResultUserByIdDto> Users { get; set; }
     }
 }

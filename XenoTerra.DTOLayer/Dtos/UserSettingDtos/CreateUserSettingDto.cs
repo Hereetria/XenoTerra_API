@@ -12,6 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
         public bool ShowActivityStatus { get; set; }
         public DateTime LastUpdated { get; set; }
 
-        public ResultUserByIdDto User { get; set; }
     }
 }

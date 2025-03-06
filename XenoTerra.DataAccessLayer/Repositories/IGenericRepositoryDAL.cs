@@ -4,19 +4,20 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories
 {
     
-    public interface IGenericRepositoryDAL<TEntity, TResultDto, TResultById,TCreateDto, TUpdateDto, TKey>
+    public interface IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
         where TResultDto : class
-        where TResultById : class
+        where TResultWithRelationsDto : class
         where TCreateDto : class
         where TUpdateDto : class
     {
         Task<List<Guid>> TGetAllIdsAsync();
-        IQueryable<TEntity> TGetByIdsQuerable(IEnumerable<Guid> ids);
+        IQueryable<TResultDto> TGetByIdsQuerable(IEnumerable<Guid> ids);
+        IQueryable<TResultWithRelationsDto> TGetByIdsQuerableWithRelations(IEnumerable<Guid> ids);
 
-        Task<TResultById> TCreateAsync(TCreateDto createDto);
+        Task<TResultDto> TCreateAsync(TCreateDto createDto);
 
-        Task<TResultById> TUpdateAsync(TUpdateDto updateDto);
+        Task<TResultDto> TUpdateAsync(TUpdateDto updateDto);
 
         Task<bool> TDeleteAsync(TKey id);
 

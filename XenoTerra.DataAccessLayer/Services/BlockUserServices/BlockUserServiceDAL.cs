@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.BlockUserServices
 {
     
-    public class BlockUserServiceDAL : GenericRepositoryDAL<BlockUser, ResultBlockUserDto, ResultBlockUserByIdDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>, IBlockUserServiceDAL
+    public class BlockUserServiceDAL : GenericRepositoryDAL<BlockUser, ResultBlockUserDto, ResultBlockUserWithRelationsDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>, IBlockUserServiceDAL
 
     {
 

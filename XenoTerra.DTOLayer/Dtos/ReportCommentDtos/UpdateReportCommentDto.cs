@@ -12,8 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
         public Guid CommentId { get; set; }
         public string Reason { get; set; }
         public DateTime ReportedAt { get; set; }
-
-        public ResultUserByIdDto ReporterUser { get; set; }
-        public ResultCommentByIdDto Comment { get; set; }
     }
 }

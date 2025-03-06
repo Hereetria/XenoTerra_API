@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.PostTagServices
 {
     
-    public class PostTagServiceDAL : GenericRepositoryDAL<PostTag, ResultPostTagDto, ResultPostTagByIdDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagServiceDAL
+    public class PostTagServiceDAL : GenericRepositoryDAL<PostTag, ResultPostTagDto, ResultPostTagWithRelationsDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagServiceDAL
 
     {
 

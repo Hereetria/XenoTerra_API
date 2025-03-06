@@ -5,21 +5,21 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.BussinessLogicLayer.Repositories
 {
-        public abstract class GenericRepositoryBLL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>
-        : IGenericRepositoryBLL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>
+        public abstract class GenericRepositoryBLL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
+        : IGenericRepositoryBLL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
         where TResultDto : class
-        where TResultById : class
+        where TResultWithRelationsDto : class
         where TCreateDto : class
         where TUpdateDto : class
     {
         private readonly IGenericRepositoryDALFactory _repositoryDALFactory;
-        protected readonly IGenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey> _repositoryDAL;
+        protected readonly IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey> _repositoryDAL;
 
         public GenericRepositoryBLL(IGenericRepositoryDALFactory repositoryDALFactory)
         {
             _repositoryDALFactory = repositoryDALFactory;
-            _repositoryDAL = _repositoryDALFactory.CreateRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>();
+            _repositoryDAL = _repositoryDALFactory.CreateRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>();
         }
 
         public async Task<List<Guid>> GetAllIdsAsync()
@@ -28,19 +28,19 @@ namespace XenoTerra.BussinessLogicLayer.Repositories
             return result;
         }
 
-        public IQueryable<TEntity> GetByIdsQuerable(IEnumerable<Guid> ids)
+        public IQueryable<TResultDto> GetByIdsQuerable(IEnumerable<Guid> ids)
         {
             var result = _repositoryDAL.TGetByIdsQuerable(ids);
             return result;
         }
 
-        public async Task<TResultById> CreateAsync(TCreateDto createDto)
+        public async Task<TResultDto> CreateAsync(TCreateDto createDto)
         {
             var result = await _repositoryDAL.TCreateAsync(createDto);
             return result;
         }
 
-        public async Task<TResultById> UpdateAsync(TUpdateDto updateDto)
+        public async Task<TResultDto> UpdateAsync(TUpdateDto updateDto)
         {
             var result = await _repositoryDAL.TUpdateAsync(updateDto);
             return result;

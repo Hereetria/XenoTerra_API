@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.StoryServices
 {
     
-    public interface IStoryServiceDAL : IGenericRepositoryDAL<Story, ResultStoryDto, ResultStoryByIdDto ,CreateStoryDto, UpdateStoryDto, Guid>
+    public interface IStoryServiceDAL : IGenericRepositoryDAL<Story, ResultStoryDto, ResultStoryWithRelationsDto, CreateStoryDto, UpdateStoryDto, Guid>
 
     {
         IQueryable<ResultStoryDto> TGetFollowingStories(Guid userId);

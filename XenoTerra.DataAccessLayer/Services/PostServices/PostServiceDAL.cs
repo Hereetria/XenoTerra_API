@@ -12,7 +12,7 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 namespace XenoTerra.DataAccessLayer.Services.PostServices
 {
     
-    public class PostServiceDAL : GenericRepositoryDAL<Post, ResultPostDto, ResultPostByIdDto, CreatePostDto, UpdatePostDto, Guid>, IPostServiceDAL
+    public class PostServiceDAL : GenericRepositoryDAL<Post, ResultPostDto, ResultPostWithRelationsDto, CreatePostDto, UpdatePostDto, Guid>, IPostServiceDAL
 
     {
 

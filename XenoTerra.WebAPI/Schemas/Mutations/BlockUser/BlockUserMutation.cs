@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.BlockUser
     {
         [UseProjection]
         [GraphQLDescription("Create a new BlockUser")]
-        public async Task<ResultBlockUserByIdDto> CreateBlockUserAsync(CreateBlockUserDto createBlockUserDto, [Service]IBlockUserServiceBLL blockUserServiceBLL)
+        public async Task<ResultBlockUserDto> CreateBlockUserAsync(CreateBlockUserDto createBlockUserDto, [Service] IBlockUserServiceBLL blockUserServiceBLL)
         {
             var result = await blockUserServiceBLL.CreateAsync(createBlockUserDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.BlockUser
 
         [UseProjection]
         [GraphQLDescription("Update an existing BlockUser")]
-        public async Task<ResultBlockUserByIdDto> UpdateBlockUser(UpdateBlockUserDto updateBlockUserDto, [Service] IBlockUserServiceBLL blockUserServiceBLL)
+        public async Task<ResultBlockUserDto> UpdateBlockUser(UpdateBlockUserDto updateBlockUserDto, [Service] IBlockUserServiceBLL blockUserServiceBLL)
         {
             var result = await blockUserServiceBLL.UpdateAsync(updateBlockUserDto);
             return result;

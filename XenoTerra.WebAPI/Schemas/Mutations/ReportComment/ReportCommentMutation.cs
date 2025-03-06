@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.ReportComment
     {
         [UseProjection]
         [GraphQLDescription("Create a new ReportComment")]
-        public async Task<ResultReportCommentByIdDto> CreateReportCommentAsync(CreateReportCommentDto createReportCommentDto, [Service] IReportCommentServiceBLL reportCommentServiceBLL)
+        public async Task<ResultReportCommentDto> CreateReportCommentAsync(CreateReportCommentDto createReportCommentDto, [Service] IReportCommentServiceBLL reportCommentServiceBLL)
         {
             var result = await reportCommentServiceBLL.CreateAsync(createReportCommentDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.ReportComment
 
         [UseProjection]
         [GraphQLDescription("Update an existing ReportComment")]
-        public async Task<ResultReportCommentByIdDto> UpdateReportCommentAsync(UpdateReportCommentDto updateReportCommentDto, [Service] IReportCommentServiceBLL reportCommentServiceBLL)
+        public async Task<ResultReportCommentDto> UpdateReportCommentAsync(UpdateReportCommentDto updateReportCommentDto, [Service] IReportCommentServiceBLL reportCommentServiceBLL)
         {
             var result = await reportCommentServiceBLL.UpdateAsync(updateReportCommentDto);
             return result;

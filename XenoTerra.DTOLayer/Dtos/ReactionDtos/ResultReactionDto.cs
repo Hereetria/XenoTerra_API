@@ -1,7 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.MessageDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
 {
@@ -11,8 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
         public string Payload { get; set; }
         public Guid MessageId { get; set; }
         public Guid UserId { get; set; }
-
-        public ResultMessageByIdDto Message { get; set; }
-        public ResultUserByIdDto User { get; set; }
     }
 }

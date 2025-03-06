@@ -10,12 +10,12 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories
 {
     
-    public class GenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey> : IGenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>
+    public class GenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey> : IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
+        where TResultDto : class
+        where TResultWithRelationsDto : class
         where TCreateDto : class
         where TUpdateDto : class
-        where TResultDto : class
-        where TResultById : class
 
     {
         protected readonly Context _context;
@@ -46,7 +46,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
         }
 
 
-        public IQueryable<TEntity> TGetByIdsQuerable(IEnumerable<Guid> ids)
+        public IQueryable<TResultDto> TGetByIdsQuerable(IEnumerable<Guid> ids)
         {
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
@@ -57,13 +57,26 @@ namespace XenoTerra.DataAccessLayer.Repositories
 
             var keyProperty = primaryKey.Properties[0];
 
-            var result = _context.Set<TEntity>()
-                .Where(entity => EF.Property<Guid>(entity, keyProperty.Name).Equals(ids));
-
-            return result;
+            return _context.Set<TEntity>()
+                .Where(entity => ids.Contains(EF.Property<Guid>(entity, keyProperty.Name)))
+                .ProjectTo<TResultDto>(_mapper.ConfigurationProvider);
         }
 
+        public IQueryable<TResultWithRelationsDto> TGetByIdsQuerableWithRelations(IEnumerable<Guid> ids)
+        {
+            var entityType = _context.Model.FindEntityType(typeof(TEntity))
+                              ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
 
+            var primaryKey = entityType.FindPrimaryKey();
+            if (primaryKey == null || primaryKey.Properties.Count != 1)
+                throw new NotSupportedException("This method only supports entities with a single primary key.");
+
+            var keyProperty = primaryKey.Properties[0];
+
+            return _context.Set<TEntity>()
+                .Where(entity => ids.Contains(EF.Property<Guid>(entity, keyProperty.Name)))
+                .ProjectTo<TResultWithRelationsDto>(_mapper.ConfigurationProvider);
+        }
 
 
         //public async Task<TResultById> TGetByIdAsync(TKey id)
@@ -90,7 +103,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
         //    }
         //}
 
-        public async Task<TResultById> TCreateAsync(TCreateDto createDto)
+        public async Task<TResultDto> TCreateAsync(TCreateDto createDto)
         {
             try
             {
@@ -103,7 +116,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
                 await _context.Set<TEntity>().AddAsync(entity);
                 await _context.SaveChangesAsync();
 
-                var result = _mapper.Map<TResultById>(entity);
+                var result = _mapper.Map<TResultDto>(entity);
                 return result;
             }
             catch (DbUpdateException dbEx)
@@ -116,7 +129,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
             }
         }
 
-        public async Task<TResultById> TUpdateAsync(TUpdateDto updateDto)
+        public async Task<TResultDto> TUpdateAsync(TUpdateDto updateDto)
         {
             if (updateDto == null)
                 throw new ArgumentNullException(nameof(updateDto), "The entity to update cannot be null.");
@@ -132,7 +145,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
                 _mapper.Map(updateDto, existingEntity);
                 await _context.SaveChangesAsync();
 
-                var result = _mapper.Map<TResultById>(existingEntity);
+                var result = _mapper.Map<TResultDto>(existingEntity);
                 return result;
             }
             catch (Exception ex) when (ex is DbUpdateConcurrencyException || ex is DbUpdateException)

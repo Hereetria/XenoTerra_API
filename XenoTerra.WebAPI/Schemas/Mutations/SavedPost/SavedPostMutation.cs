@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.SavedPost
     {
         [UseProjection]
         [GraphQLDescription("Create a new SavedPost")]
-        public async Task<ResultSavedPostByIdDto> CreateSavedPostAsync(CreateSavedPostDto createSavedPostDto, [Service] ISavedPostServiceBLL savedPostServiceBLL)
+        public async Task<ResultSavedPostDto> CreateSavedPostAsync(CreateSavedPostDto createSavedPostDto, [Service] ISavedPostServiceBLL savedPostServiceBLL)
         {
             var result = await savedPostServiceBLL.CreateAsync(createSavedPostDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.SavedPost
 
         [UseProjection]
         [GraphQLDescription("Update an existing SavedPost")]
-        public async Task<ResultSavedPostByIdDto> UpdateSavedPostAsync(UpdateSavedPostDto updateSavedPostDto, [Service] ISavedPostServiceBLL savedPostServiceBLL)
+        public async Task<ResultSavedPostDto> UpdateSavedPostAsync(UpdateSavedPostDto updateSavedPostDto, [Service] ISavedPostServiceBLL savedPostServiceBLL)
         {
             var result = await savedPostServiceBLL.UpdateAsync(updateSavedPostDto);
             return result;

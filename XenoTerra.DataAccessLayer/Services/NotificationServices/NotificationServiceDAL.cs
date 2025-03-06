@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.NotificationServices
 {
     
-    public class NotificationServiceDAL : GenericRepositoryDAL<Notification, ResultNotificationDto, ResultNotificationByIdDto, CreateNotificationDto, UpdateNotificationDto, Guid>, INotificationServiceDAL
+    public class NotificationServiceDAL : GenericRepositoryDAL<Notification, ResultNotificationDto, ResultNotificationWithRelationsDto, CreateNotificationDto, UpdateNotificationDto, Guid>, INotificationServiceDAL
 
     {
 

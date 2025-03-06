@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.UserSettingServices
 {
     
-    public class UserSettingServiceDAL : GenericRepositoryDAL<UserSetting, ResultUserSettingDto, ResultUserSettingByIdDto, CreateUserSettingDto, UpdateUserSettingDto, Guid>, IUserSettingServiceDAL
+    public class UserSettingServiceDAL : GenericRepositoryDAL<UserSetting, ResultUserSettingDto, ResultUserSettingWithRelationsDto, CreateUserSettingDto, UpdateUserSettingDto, Guid>, IUserSettingServiceDAL
 
     {
 

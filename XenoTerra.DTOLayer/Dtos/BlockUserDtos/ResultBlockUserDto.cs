@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
 {
@@ -10,8 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
         public Guid BlockingUserId { get; set; }
         public Guid BlockedUserId { get; set; }
         public DateTime BlockedAt { get; set; }
-
-        public ResultUserByIdDto BlockingUser { get; set; }
-        public ResultUserByIdDto BlockedUser { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.ViewStoryServices
 {
     
-    public class ViewStoryServiceDAL : GenericRepositoryDAL<ViewStory, ResultViewStoryDto, ResultViewStoryByIdDto, CreateViewStoryDto, UpdateViewStoryDto, Guid>, IViewStoryServiceDAL
+    public class ViewStoryServiceDAL : GenericRepositoryDAL<ViewStory, ResultViewStoryDto, ResultViewStoryWithRelationsDto, CreateViewStoryDto, UpdateViewStoryDto, Guid>, IViewStoryServiceDAL
 
     {
 

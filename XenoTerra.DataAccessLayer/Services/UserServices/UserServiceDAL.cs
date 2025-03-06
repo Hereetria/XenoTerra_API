@@ -10,7 +10,7 @@ using AutoMapper.QueryableExtensions;
 namespace XenoTerra.DataAccessLayer.Services.UserServices
 {
     
-    public class UserServiceDAL : GenericRepositoryDAL<User, ResultUserDto, ResultUserByIdDto, CreateUserDto, UpdateUserDto, Guid>, IUserServiceDAL
+    public class UserServiceDAL : GenericRepositoryDAL<User, ResultUserDto, ResultUserWithRelationsDto, CreateUserDto, UpdateUserDto, Guid>, IUserServiceDAL
 
     {
 

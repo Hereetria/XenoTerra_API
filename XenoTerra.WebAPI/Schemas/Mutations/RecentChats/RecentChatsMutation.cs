@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.RecentChats
     {
         [UseProjection]
         [GraphQLDescription("Create a new RecentChat")]
-        public async Task<ResultRecentChatsByIdDto> CreateRecentChatAsync(CreateRecentChatsDto createRecentChatsDto, [Service] IRecentChatsServiceBLL recentChatsServiceBLL)
+        public async Task<ResultRecentChatsDto> CreateRecentChatAsync(CreateRecentChatsDto createRecentChatsDto, [Service] IRecentChatsServiceBLL recentChatsServiceBLL)
         {
             var result = await recentChatsServiceBLL.CreateAsync(createRecentChatsDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.RecentChats
 
         [UseProjection]
         [GraphQLDescription("Update an existing RecentChat")]
-        public async Task<ResultRecentChatsByIdDto> UpdateRecentChatAsync(UpdateRecentChatsDto updateRecentChatsDto, [Service] IRecentChatsServiceBLL recentChatsServiceBLL)
+        public async Task<ResultRecentChatsDto> UpdateRecentChatAsync(UpdateRecentChatsDto updateRecentChatsDto, [Service] IRecentChatsServiceBLL recentChatsServiceBLL)
         {
             var result = await recentChatsServiceBLL.UpdateAsync(updateRecentChatsDto);
             return result;

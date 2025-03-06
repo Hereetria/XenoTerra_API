@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.ReactionServices
 {
     
-    public class ReactionServiceDAL : GenericRepositoryDAL<Reaction, ResultReactionDto, ResultReactionByIdDto, CreateReactionDto, UpdateReactionDto, Guid>, IReactionServiceDAL
+    public class ReactionServiceDAL : GenericRepositoryDAL<Reaction, ResultReactionDto, ResultReactionWithRelationsDto, CreateReactionDto, UpdateReactionDto, Guid>, IReactionServiceDAL
 
     {
 

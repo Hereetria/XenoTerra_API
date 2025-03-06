@@ -8,7 +8,7 @@ using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.DataAccessLayer.Services.UserServices;
 namespace XenoTerra.BussinessLogicLayer.Services.UserServices
 {
-     public class UserServiceBLL : GenericRepositoryBLL<User, ResultUserDto, ResultUserByIdDto, CreateUserDto, UpdateUserDto, Guid>, IUserServiceBLL
+     public class UserServiceBLL : GenericRepositoryBLL<User, ResultUserDto, CreateUserDto, UpdateUserDto, Guid>, IUserServiceBLL
     {
         private readonly IUserServiceDAL _userServiceDAL;
         public UserServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory, IUserServiceDAL userServiceDAL)

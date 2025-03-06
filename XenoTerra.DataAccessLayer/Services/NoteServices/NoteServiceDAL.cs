@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.NoteServices
 {
     
-    public class NoteServiceDAL : GenericRepositoryDAL<Note, ResultNoteDto, ResultNoteByIdDto, CreateNoteDto, UpdateNoteDto, Guid>, INoteServiceDAL
+    public class NoteServiceDAL : GenericRepositoryDAL<Note, ResultNoteDto, ResultNoteWithRelationsDto, CreateNoteDto, UpdateNoteDto, Guid>, INoteServiceDAL
 
     {
 

@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Notification
     {
         [UseProjection]
         [GraphQLDescription("Create a new Notification")]
-        public async Task<ResultNotificationByIdDto> CreateNotificationAsync(CreateNotificationDto createNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
+        public async Task<ResultNotificationDto> CreateNotificationAsync(CreateNotificationDto createNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
         {
             var result = await notificationServiceBLL.CreateAsync(createNotificationDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Notification
 
         [UseProjection]
         [GraphQLDescription("Update an existing Notification")]
-        public async Task<ResultNotificationByIdDto> UpdateNotificationAsync(UpdateNotificationDto updateNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
+        public async Task<ResultNotificationDto> UpdateNotificationAsync(UpdateNotificationDto updateNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
         {
             var result = await notificationServiceBLL.UpdateAsync(updateNotificationDto);
             return result;

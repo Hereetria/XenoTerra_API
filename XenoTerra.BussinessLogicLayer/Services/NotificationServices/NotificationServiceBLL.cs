@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.NotificationServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.NotificationServices
 {
-     public class NotificationServiceBLL : GenericRepositoryBLL<Notification, ResultNotificationDto, ResultNotificationByIdDto, CreateNotificationDto, UpdateNotificationDto, Guid>, INotificationServiceBLL
+     public class NotificationServiceBLL : GenericRepositoryBLL<Notification, ResultNotificationDto, CreateNotificationDto, UpdateNotificationDto, Guid>, INotificationServiceBLL
     {
         public NotificationServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

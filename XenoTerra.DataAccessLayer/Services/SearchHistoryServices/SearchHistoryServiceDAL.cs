@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.SearchHistoryServices
 {
     
-    public class SearchHistoryServiceDAL : GenericRepositoryDAL<SearchHistory, ResultSearchHistoryDto, ResultSearchHistoryByIdDto, CreateSearchHistoryDto, UpdateSearchHistoryDto, Guid>, ISearchHistoryServiceDAL
+    public class SearchHistoryServiceDAL : GenericRepositoryDAL<SearchHistory, ResultSearchHistoryDto, ResultSearchHistoryWithRelationsDto, CreateSearchHistoryDto, UpdateSearchHistoryDto, Guid>, ISearchHistoryServiceDAL
 
     {
 

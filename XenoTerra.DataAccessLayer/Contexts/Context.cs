@@ -143,9 +143,11 @@ namespace XenoTerra.DataAccessLayer.Contexts
             if (!optionsBuilder.IsConfigured)
             {
                 var connectionString = ConnectionStringProvider.GetConnectionString();
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer(connectionString, options =>
+                    options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             }
         }
+
 
         public DbSet<BlockUser> BlockUsers { get; set; }
         public DbSet<Comment> Comments { get; set; }

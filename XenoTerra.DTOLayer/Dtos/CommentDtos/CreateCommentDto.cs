@@ -11,8 +11,5 @@ namespace XenoTerra.DTOLayer.Dtos.CommentDtos
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
         public DateTime CommentedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
-        public ResultPostByIdDto Post { get; set; }
     }
 }

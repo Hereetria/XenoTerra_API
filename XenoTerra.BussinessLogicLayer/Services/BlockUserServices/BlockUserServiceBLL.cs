@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.BlockUserServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.BlockUserServices
 {
-     public class BlockUserServiceBLL : GenericRepositoryBLL<BlockUser, ResultBlockUserDto, ResultBlockUserByIdDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>, IBlockUserServiceBLL
+     public class BlockUserServiceBLL : GenericRepositoryBLL<BlockUser, ResultBlockUserDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>, IBlockUserServiceBLL
     {
         public BlockUserServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

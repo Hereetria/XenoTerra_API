@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Message
     {
         [UseProjection]
         [GraphQLDescription("Create a new Message")]
-        public async Task<ResultMessageByIdDto> CreateMessageAsync(CreateMessageDto createMessageDto, [Service] IMessageServiceBLL messageServiceBLL)
+        public async Task<ResultMessageDto> CreateMessageAsync(CreateMessageDto createMessageDto, [Service] IMessageServiceBLL messageServiceBLL)
         {
             var result = await messageServiceBLL.CreateAsync(createMessageDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Message
 
         [UseProjection]
         [GraphQLDescription("Update an existing Message")]
-        public async Task<ResultMessageByIdDto> UpdateMessageAsync(UpdateMessageDto updateMessageDto, [Service] IMessageServiceBLL messageServiceBLL)
+        public async Task<ResultMessageDto> UpdateMessageAsync(UpdateMessageDto updateMessageDto, [Service] IMessageServiceBLL messageServiceBLL)
         {
             var result = await messageServiceBLL.UpdateAsync(updateMessageDto);
             return result;

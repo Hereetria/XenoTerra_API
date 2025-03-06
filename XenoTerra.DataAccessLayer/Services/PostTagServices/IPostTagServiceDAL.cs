@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.PostTagServices
 {
     
-    public interface IPostTagServiceDAL : IGenericRepositoryDAL<PostTag, ResultPostTagDto, ResultPostTagByIdDto ,CreatePostTagDto, UpdatePostTagDto, Guid>
+    public interface IPostTagServiceDAL : IGenericRepositoryDAL<PostTag, ResultPostTagDto, ResultPostTagWithRelationsDto, CreatePostTagDto, UpdatePostTagDto, Guid>
 
     {
 

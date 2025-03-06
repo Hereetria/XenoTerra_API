@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Highlight
     {
         [UseProjection]
         [GraphQLDescription("Create a new Highlight")]
-        public async Task<ResultHighlightByIdDto> CreateHighlightAsync(CreateHighlightDto createHighlightDto, [Service] IHighlightServiceBLL highlightServiceBLL)
+        public async Task<ResultHighlightDto> CreateHighlightAsync(CreateHighlightDto createHighlightDto, [Service] IHighlightServiceBLL highlightServiceBLL)
         {
             var result = await highlightServiceBLL.CreateAsync(createHighlightDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Highlight
 
         [UseProjection]
         [GraphQLDescription("Update an existing Highlight")]
-        public async Task<ResultHighlightByIdDto> UpdateHighlightAsync(UpdateHighlightDto updateHighlightDto, [Service] IHighlightServiceBLL highlightServiceBLL)
+        public async Task<ResultHighlightDto> UpdateHighlightAsync(UpdateHighlightDto updateHighlightDto, [Service] IHighlightServiceBLL highlightServiceBLL)
         {
             var result = await highlightServiceBLL.UpdateAsync(updateHighlightDto);
             return result;

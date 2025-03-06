@@ -7,22 +7,25 @@ namespace XenoTerra.WebAPI.Schemas.Queries.PostTag
     public class PostTagQuery
     {
         [UseProjection]
-        [GraphQLDescription("Get all PostTags")]
-        public IQueryable<ResultPostTagDto> GetAllPostTags([Service] IPostTagServiceBLL postTagServiceBLL)
-        {
-            return postTagServiceBLL.GetAllQuerable();
-        }
+        public IQueryable<ResultPostTagWithRelationsDto> GetPostTags(List<Guid>? ids, [Service] IPostTagServiceBLL service)
+    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        //[UseProjection]
+        //[GraphQLDescription("Get all PostTags")]
+        //public IQueryable<ResultPostTagDto> GetAllPostTags([Service] IPostTagServiceBLL postTagServiceBLL)
+        //{
+        //    return postTagServiceBLL.GetAllQuerable();
+        //}
 
-        [UseProjection]
-        [GraphQLDescription("Get PostTag by ID")]
-        public IQueryable<ResultPostTagByIdDto> GetPostTagById(Guid id, [Service] IPostTagServiceBLL postTagServiceBLL)
-        {
-            var result = postTagServiceBLL.GetByIdQuerable(id);
-            if (result == null)
-            {
-                throw new Exception($"PostTag with ID {id} not found");
-            }
-            return result;
-        }
+        //[UseProjection]
+        //[GraphQLDescription("Get PostTag by ID")]
+        //public IQueryable<ResultPostTagByIdDto> GetPostTagById(Guid id, [Service] IPostTagServiceBLL postTagServiceBLL)
+        //{
+        //    var result = postTagServiceBLL.GetByIdQuerable(id);
+        //    if (result == null)
+        //    {
+        //        throw new Exception($"PostTag with ID {id} not found");
+        //    }
+        //    return result;
+        //}
     }
 }

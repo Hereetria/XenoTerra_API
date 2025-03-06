@@ -1,7 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
 {
@@ -12,8 +13,5 @@ namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
         public Guid CommentId { get; set; }
         public string Reason { get; set; }
         public DateTime ReportedAt { get; set; }
-
-        public ResultUserByIdDto ReporterUser { get; set; }
-        public ResultCommentByIdDto Comment { get; set; }
     }
 }

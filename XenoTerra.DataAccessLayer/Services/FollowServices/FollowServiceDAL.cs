@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.FollowServices
 {
     
-    public class FollowServiceDAL : GenericRepositoryDAL<Follow, ResultFollowDto, ResultFollowByIdDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowServiceDAL
+    public class FollowServiceDAL : GenericRepositoryDAL<Follow, ResultFollowDto, ResultFollowWithRelationsDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowServiceDAL
 
     {
 

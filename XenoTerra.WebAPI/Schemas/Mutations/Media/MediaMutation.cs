@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Media
     {
         [UseProjection]
         [GraphQLDescription("Create a new Media")]
-        public async Task<ResultMediaByIdDto> CreateMediaAsync(CreateMediaDto createMediaDto, [Service] IMediaServiceBLL mediaServiceBLL)
+        public async Task<ResultMediaDto> CreateMediaAsync(CreateMediaDto createMediaDto, [Service] IMediaServiceBLL mediaServiceBLL)
         {
             var result = await mediaServiceBLL.CreateAsync(createMediaDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Media
 
         [UseProjection]
         [GraphQLDescription("Update an existing Media")]
-        public async Task<ResultMediaByIdDto> UpdateMediaAsync(UpdateMediaDto updateMediaDto, [Service] IMediaServiceBLL mediaServiceBLL)
+        public async Task<ResultMediaDto> UpdateMediaAsync(UpdateMediaDto updateMediaDto, [Service] IMediaServiceBLL mediaServiceBLL)
         {
             var result = await mediaServiceBLL.UpdateAsync(updateMediaDto);
             return result;

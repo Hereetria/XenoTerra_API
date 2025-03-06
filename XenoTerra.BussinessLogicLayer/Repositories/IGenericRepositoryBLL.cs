@@ -2,18 +2,18 @@
 
 namespace XenoTerra.BussinessLogicLayer.Repositories
 {
-        public interface IGenericRepositoryBLL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>
+        public interface IGenericRepositoryBLL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
         where TResultDto : class
-        where TResultById : class
+        where TResultWithRelationsDto : class
         where TCreateDto : class
         where TUpdateDto : class
     {
         Task<List<Guid>> GetAllIdsAsync();
-        IQueryable<TEntity> GetByIdsQuerable(IEnumerable<Guid> ids);
-        Task<TResultById> CreateAsync(TCreateDto createDto);
+        IQueryable<TResultDto> GetByIdsQuerable(IEnumerable<Guid> ids);
+        Task<TResultDto> CreateAsync(TCreateDto createDto);
 
-        Task<TResultById> UpdateAsync(TUpdateDto updateDto);
+        Task<TResultDto> UpdateAsync(TUpdateDto updateDto);
 
         Task<bool> DeleteAsync(TKey id);
     }

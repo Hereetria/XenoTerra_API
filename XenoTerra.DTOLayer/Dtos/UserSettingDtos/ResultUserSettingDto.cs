@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
 {
@@ -12,7 +14,5 @@ namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
         public bool ReceiveNotifications { get; set; }
         public bool ShowActivityStatus { get; set; }
         public DateTime LastUpdated { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
     }
 }

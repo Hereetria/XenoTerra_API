@@ -15,11 +15,5 @@ namespace XenoTerra.DTOLayer.Dtos.PostDtos
         public bool IsVideo { get; set; }
         public Guid UserId { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
-        public ICollection<ResultLikeByIdDto> Likes { get; set; }
-        public ICollection<ResultCommentByIdDto> Comments { get; set; }
-        public ICollection<ResultSavedPostByIdDto> SavedPosts { get; set; }
-        public ICollection<ResultPostTagByIdDto> TaggedUsers { get; set; }
     }
 }

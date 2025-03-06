@@ -7,7 +7,7 @@ using XenoTerra.DataAccessLayer.Services.PostServices;
 
 namespace XenoTerra.BussinessLogicLayer.Services.PostTagServices
 {
-     public class PostTagServiceBLL : GenericRepositoryBLL<PostTag, ResultPostTagDto, ResultPostTagByIdDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagServiceBLL
+     public class PostTagServiceBLL : GenericRepositoryBLL<PostTag, ResultPostTagDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagServiceBLL
     {
         public PostTagServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)

@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Story
     {
         [UseProjection]
         [GraphQLDescription("Create a new Story")]
-        public async Task<ResultStoryByIdDto> CreateStoryAsync(CreateStoryDto createStoryDto, [Service] IStoryServiceBLL storyServiceBLL)
+        public async Task<ResultStoryDto> CreateStoryAsync(CreateStoryDto createStoryDto, [Service] IStoryServiceBLL storyServiceBLL)
         {
             var result = await storyServiceBLL.CreateAsync(createStoryDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Story
 
         [UseProjection]
         [GraphQLDescription("Update an existing Story")]
-        public async Task<ResultStoryByIdDto> UpdateStoryAsync(UpdateStoryDto updateStoryDto, [Service] IStoryServiceBLL storyServiceBLL)
+        public async Task<ResultStoryDto> UpdateStoryAsync(UpdateStoryDto updateStoryDto, [Service] IStoryServiceBLL storyServiceBLL)
         {
             var result = await storyServiceBLL.UpdateAsync(updateStoryDto);
             return result;

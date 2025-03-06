@@ -1,7 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
 {
@@ -10,8 +11,5 @@ namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
         public Guid SearchHistoryId { get; set; }
         public Guid UserId { get; set; }
         public DateTime SearchedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
-        public ICollection<ResultSearchHistoryUserByIdDto> SearchedUsers { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Reaction
     {
         [UseProjection]
         [GraphQLDescription("Create a new Reaction")]
-        public async Task<ResultReactionByIdDto> CreateReactionAsync(CreateReactionDto createReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
+        public async Task<ResultReactionDto> CreateReactionAsync(CreateReactionDto createReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
         {
             var result = await reactionServiceBLL.CreateAsync(createReactionDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Reaction
 
         [UseProjection]
         [GraphQLDescription("Update an existing Reaction")]
-        public async Task<ResultReactionByIdDto> UpdateReactionAsync(UpdateReactionDto updateReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
+        public async Task<ResultReactionDto> UpdateReactionAsync(UpdateReactionDto updateReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
         {
             var result = await reactionServiceBLL.UpdateAsync(updateReactionDto);
             return result;

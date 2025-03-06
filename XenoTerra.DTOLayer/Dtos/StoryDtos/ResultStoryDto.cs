@@ -1,8 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
-using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryDtos
 {
@@ -13,9 +13,5 @@ namespace XenoTerra.DTOLayer.Dtos.StoryDtos
         public bool IsVideo { get; set; }
         public Guid UserId { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
-        public ICollection<ResultViewStoryByIdDto> ViewStories { get; set; }
-        public ICollection<ResultHighlightByIdDto> Highlights { get; set; }
     }
 }

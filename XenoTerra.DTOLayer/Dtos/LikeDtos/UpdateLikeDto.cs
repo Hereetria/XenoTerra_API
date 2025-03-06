@@ -11,8 +11,5 @@ namespace XenoTerra.DTOLayer.Dtos.LikeDtos
         public Guid PostId { get; set; }
         public Guid UserId { get; set; }
         public DateTime LikedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
-        public ResultPostByIdDto Post { get; set; }
     }
 }

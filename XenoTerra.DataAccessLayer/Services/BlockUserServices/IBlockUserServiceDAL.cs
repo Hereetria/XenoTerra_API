@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.BlockUserServices
 {
     
-    public interface IBlockUserServiceDAL : IGenericRepositoryDAL<BlockUser, ResultBlockUserDto, ResultBlockUserByIdDto ,CreateBlockUserDto, UpdateBlockUserDto, Guid>
+    public interface IBlockUserServiceDAL : IGenericRepositoryDAL<BlockUser, ResultBlockUserDto, ResultBlockUserWithRelationsDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>
 
     {
 

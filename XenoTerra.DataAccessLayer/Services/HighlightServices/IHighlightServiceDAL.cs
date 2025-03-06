@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.HighlightServices
 {
     
-    public interface IHighlightServiceDAL : IGenericRepositoryDAL<Highlight, ResultHighlightDto, ResultHighlightByIdDto ,CreateHighlightDto, UpdateHighlightDto, Guid>
+    public interface IHighlightServiceDAL : IGenericRepositoryDAL<Highlight, ResultHighlightDto, ResultHighlightWithRelationsDto CreateHighlightDto, UpdateHighlightDto, Guid>
 
     {
 

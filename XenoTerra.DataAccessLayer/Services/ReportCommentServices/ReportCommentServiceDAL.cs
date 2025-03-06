@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.ReportCommentServices
 {
     
-    public class ReportCommentServiceDAL : GenericRepositoryDAL<ReportComment, ResultReportCommentDto, ResultReportCommentByIdDto, CreateReportCommentDto, UpdateReportCommentDto, Guid>, IReportCommentServiceDAL
+    public class ReportCommentServiceDAL : GenericRepositoryDAL<ReportComment, ResultReportCommentDto, ResultReportCommentWithRelationsDto, CreateReportCommentDto, UpdateReportCommentDto, Guid>, IReportCommentServiceDAL
 
     {
 

@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.NoteDtos
 {
@@ -10,7 +12,5 @@ namespace XenoTerra.DTOLayer.Dtos.NoteDtos
         public string Text { get; set; }
         public Guid UserId { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
     }
 }

@@ -1,6 +1,8 @@
-
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.NotificationDtos
 {
@@ -11,7 +13,5 @@ namespace XenoTerra.DTOLayer.Dtos.NotificationDtos
         public Guid Message { get; set; }
         public string Image { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        public ResultUserByIdDto User { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using XenoTerra.BussinessLogicLayer.Services.HighlightServices;
 using XenoTerra.DataAccessLayer.Factories.Abstract;
 namespace XenoTerra.BussinessLogicLayer.Services.HighlightServices
 {
-     public class HighlightServiceBLL : GenericRepositoryBLL<Highlight, ResultHighlightDto, ResultHighlightByIdDto, CreateHighlightDto, UpdateHighlightDto, Guid>, IHighlightServiceBLL
+     public class HighlightServiceBLL : GenericRepositoryBLL<Highlight, ResultHighlightDto, CreateHighlightDto, UpdateHighlightDto, Guid>, IHighlightServiceBLL
     {
         public HighlightServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory)
             : base(repositoryDALFactory)
