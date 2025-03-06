@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Note
     {
         [UseProjection]
         [GraphQLDescription("Create a new Note")]
-        public async Task<ResultNoteByIdDto> CreateNoteAsync(CreateNoteDto createNoteDto, [Service] INoteServiceBLL noteServiceBLL)
+        public async Task<ResultNoteDto> CreateNoteAsync(CreateNoteDto createNoteDto, [Service] INoteServiceBLL noteServiceBLL)
         {
             var result = await noteServiceBLL.CreateAsync(createNoteDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Note
 
         [UseProjection]
         [GraphQLDescription("Update an existing Note")]
-        public async Task<ResultNoteByIdDto> UpdateNoteAsync(UpdateNoteDto updateNoteDto, [Service] INoteServiceBLL noteServiceBLL)
+        public async Task<ResultNoteDto> UpdateNoteAsync(UpdateNoteDto updateNoteDto, [Service] INoteServiceBLL noteServiceBLL)
         {
             var result = await noteServiceBLL.UpdateAsync(updateNoteDto);
             return result;

@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.HighlightServices
 {
     
-    public class HighlightServiceDAL : GenericRepositoryDAL<Highlight, ResultHighlightDto, ResultHighlightByIdDto, CreateHighlightDto, UpdateHighlightDto, Guid>, IHighlightServiceDAL
+    public class HighlightServiceDAL : GenericRepositoryDAL<Highlight, ResultHighlightDto, ResultHighlightWithRelationsDto, CreateHighlightDto, UpdateHighlightDto, Guid>, IHighlightServiceDAL
 
     {
 

@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.MediaServices
 {
     
-    public class MediaServiceDAL : GenericRepositoryDAL<Media, ResultMediaDto, ResultMediaByIdDto, CreateMediaDto, UpdateMediaDto, Guid>, IMediaServiceDAL
+    public class MediaServiceDAL : GenericRepositoryDAL<Media, ResultMediaDto, ResultMediaWithRelationsDto, CreateMediaDto, UpdateMediaDto, Guid>, IMediaServiceDAL
 
     {
 

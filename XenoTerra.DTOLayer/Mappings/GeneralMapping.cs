@@ -30,116 +30,137 @@ namespace XenoTerra.DTOLayer.Mappings
     {
         public GeneralMapping()
         {
+            // BlockUser Mappings
+            CreateMap<BlockUser, ResultBlockUserWithRelationsDto>().ReverseMap();
             CreateMap<BlockUser, ResultBlockUserDto>().ReverseMap();
-            CreateMap<BlockUser, ResultBlockUserByIdDto>().ReverseMap();
             CreateMap<BlockUser, CreateBlockUserDto>().ReverseMap();
             CreateMap<BlockUser, UpdateBlockUserDto>().ReverseMap();
 
+            // Comment Mappings
+            CreateMap<Comment, ResultCommentWithRelationsDto>().ReverseMap();
             CreateMap<Comment, ResultCommentDto>().ReverseMap();
-            CreateMap<Comment, ResultCommentByIdDto>().ReverseMap();
             CreateMap<Comment, CreateCommentDto>().ReverseMap();
             CreateMap<Comment, UpdateCommentDto>().ReverseMap();
 
+            // Follow Mappings
+            CreateMap<Follow, ResultFollowWithRelationsDto>().ReverseMap();
             CreateMap<Follow, ResultFollowDto>().ReverseMap();
-            CreateMap<Follow, ResultFollowByIdDto>().ReverseMap();
             CreateMap<Follow, CreateFollowDto>().ReverseMap();
             CreateMap<Follow, UpdateFollowDto>().ReverseMap();
 
+            // Highlight Mappings
+            CreateMap<Highlight, ResultHighlightWithRelationsDto>().ReverseMap();
             CreateMap<Highlight, ResultHighlightDto>().ReverseMap();
-            CreateMap<Highlight, ResultHighlightByIdDto>().ReverseMap();
             CreateMap<Highlight, CreateHighlightDto>().ReverseMap();
             CreateMap<Highlight, UpdateHighlightDto>().ReverseMap();
 
+            // Like Mappings
+            CreateMap<Like, ResultLikeWithRelationsDto>().ReverseMap();
             CreateMap<Like, ResultLikeDto>().ReverseMap();
-            CreateMap<Like, ResultLikeByIdDto>().ReverseMap();
             CreateMap<Like, CreateLikeDto>().ReverseMap();
             CreateMap<Like, UpdateLikeDto>().ReverseMap();
 
+            // Media Mappings
+            CreateMap<Media, ResultMediaWithRelationsDto>().ReverseMap();
             CreateMap<Media, ResultMediaDto>().ReverseMap();
-            CreateMap<Media, ResultMediaByIdDto>().ReverseMap();
             CreateMap<Media, CreateMediaDto>().ReverseMap();
             CreateMap<Media, UpdateMediaDto>().ReverseMap();
 
+            // Message Mappings
+            CreateMap<Message, ResultMessageWithRelationsDto>().ReverseMap();
             CreateMap<Message, ResultMessageDto>().ReverseMap();
-            CreateMap<Message, ResultMessageByIdDto>().ReverseMap();
             CreateMap<Message, CreateMessageDto>().ReverseMap();
             CreateMap<Message, UpdateMessageDto>().ReverseMap();
 
+            // Note Mappings
+            CreateMap<Note, ResultNoteWithRelationsDto>().ReverseMap();
             CreateMap<Note, ResultNoteDto>().ReverseMap();
-            CreateMap<Note, ResultNoteByIdDto>().ReverseMap();
             CreateMap<Note, CreateNoteDto>().ReverseMap();
             CreateMap<Note, UpdateNoteDto>().ReverseMap();
 
+            // Notification Mappings
+            CreateMap<Notification, ResultNotificationWithRelationsDto>().ReverseMap();
             CreateMap<Notification, ResultNotificationDto>().ReverseMap();
-            CreateMap<Notification, ResultNotificationByIdDto>().ReverseMap();
             CreateMap<Notification, CreateNotificationDto>().ReverseMap();
             CreateMap<Notification, UpdateNotificationDto>().ReverseMap();
 
+            // Post Mappings
+            CreateMap<Post, ResultPostWithRelationsDto>().ReverseMap();
             CreateMap<Post, ResultPostDto>().ReverseMap();
-            CreateMap<Post, ResultPostByIdDto>().ReverseMap();
             CreateMap<Post, CreatePostDto>().ReverseMap();
             CreateMap<Post, UpdatePostDto>().ReverseMap();
 
+            // PostTag Mappings
+            CreateMap<PostTag, ResultPostTagWithRelationsDto>().ReverseMap();
             CreateMap<PostTag, ResultPostTagDto>().ReverseMap();
-            CreateMap<PostTag, ResultPostTagByIdDto>().ReverseMap();
             CreateMap<PostTag, CreatePostTagDto>().ReverseMap();
             CreateMap<PostTag, UpdatePostTagDto>().ReverseMap();
 
+            // Reaction Mappings
+            CreateMap<Reaction, ResultReactionWithRelationsDto>().ReverseMap();
             CreateMap<Reaction, ResultReactionDto>().ReverseMap();
-            CreateMap<Reaction, ResultReactionByIdDto>().ReverseMap();
             CreateMap<Reaction, CreateReactionDto>().ReverseMap();
             CreateMap<Reaction, UpdateReactionDto>().ReverseMap();
 
+            // RecentChats Mappings
+            CreateMap<RecentChats, ResultRecentChatsWithRelationsDto>().ReverseMap();
             CreateMap<RecentChats, ResultRecentChatsDto>().ReverseMap();
-            CreateMap<RecentChats, ResultRecentChatsByIdDto>().ReverseMap();
             CreateMap<RecentChats, CreateRecentChatsDto>().ReverseMap();
             CreateMap<RecentChats, UpdateRecentChatsDto>().ReverseMap();
 
+            // ReportComment Mappings
+            CreateMap<ReportComment, ResultReportCommentWithRelationsDto>().ReverseMap();
             CreateMap<ReportComment, ResultReportCommentDto>().ReverseMap();
-            CreateMap<ReportComment, ResultReportCommentByIdDto>().ReverseMap();
             CreateMap<ReportComment, CreateReportCommentDto>().ReverseMap();
             CreateMap<ReportComment, UpdateReportCommentDto>().ReverseMap();
 
+            // Role Mappings
+            CreateMap<Role, ResultRoleWithRelationsDto>().ReverseMap();
             CreateMap<Role, ResultRoleDto>().ReverseMap();
-            CreateMap<Role, ResultRoleByIdDto>().ReverseMap();
             CreateMap<Role, CreateRoleDto>().ReverseMap();
             CreateMap<Role, UpdateRoleDto>().ReverseMap();
 
+            // SavedPost Mappings
+            CreateMap<SavedPost, ResultSavedPostWithRelationsDto>().ReverseMap();
             CreateMap<SavedPost, ResultSavedPostDto>().ReverseMap();
-            CreateMap<SavedPost, ResultSavedPostByIdDto>().ReverseMap();
             CreateMap<SavedPost, CreateSavedPostDto>().ReverseMap();
             CreateMap<SavedPost, UpdateSavedPostDto>().ReverseMap();
 
+            // SearchHistory Mappings
+            CreateMap<SearchHistory, ResultSearchHistoryWithRelationsDto>().ReverseMap();
             CreateMap<SearchHistory, ResultSearchHistoryDto>().ReverseMap();
-            CreateMap<SearchHistory, ResultSearchHistoryByIdDto>().ReverseMap();
             CreateMap<SearchHistory, CreateSearchHistoryDto>().ReverseMap();
             CreateMap<SearchHistory, UpdateSearchHistoryDto>().ReverseMap();
 
+            // SearchHistoryUser Mappings
+            CreateMap<SearchHistoryUser, ResultSearchHistoryUserWithRelationsDto>().ReverseMap();
             CreateMap<SearchHistoryUser, ResultSearchHistoryUserDto>().ReverseMap();
-            CreateMap<SearchHistoryUser, ResultSearchHistoryUserByIdDto>().ReverseMap();
             CreateMap<SearchHistoryUser, CreateSearchHistoryUserDto>().ReverseMap();
             CreateMap<SearchHistoryUser, UpdateSearchHistoryUserDto>().ReverseMap();
 
+            // Story Mappings
+            CreateMap<Story, ResultStoryWithRelationsDto>().ReverseMap();
             CreateMap<Story, ResultStoryDto>().ReverseMap();
-            CreateMap<Story, ResultStoryByIdDto>().ReverseMap();
             CreateMap<Story, CreateStoryDto>().ReverseMap();
             CreateMap<Story, UpdateStoryDto>().ReverseMap();
 
+            // User Mappings
+            CreateMap<User, ResultUserWithRelationsDto>().ReverseMap();
             CreateMap<User, ResultUserDto>().ReverseMap();
-            CreateMap<User, ResultUserByIdDto>().ReverseMap();
             CreateMap<User, CreateUserDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
 
+            // UserSetting Mappings
+            CreateMap<UserSetting, ResultUserSettingWithRelationsDto>().ReverseMap();
             CreateMap<UserSetting, ResultUserSettingDto>().ReverseMap();
-            CreateMap<UserSetting, ResultUserSettingByIdDto>().ReverseMap();
             CreateMap<UserSetting, CreateUserSettingDto>().ReverseMap();
             CreateMap<UserSetting, UpdateUserSettingDto>().ReverseMap();
 
+            // ViewStory Mappings
+            CreateMap<ViewStory, ResultViewStoryWithRelationsDto>().ReverseMap();
             CreateMap<ViewStory, ResultViewStoryDto>().ReverseMap();
-            CreateMap<ViewStory, ResultViewStoryByIdDto>().ReverseMap();
             CreateMap<ViewStory, CreateViewStoryDto>().ReverseMap();
             CreateMap<ViewStory, UpdateViewStoryDto>().ReverseMap();
-
         }
     }
 }

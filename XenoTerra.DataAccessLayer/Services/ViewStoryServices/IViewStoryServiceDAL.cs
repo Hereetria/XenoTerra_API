@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.ViewStoryServices
 {
     
-    public interface IViewStoryServiceDAL : IGenericRepositoryDAL<ViewStory, ResultViewStoryDto, ResultViewStoryByIdDto ,CreateViewStoryDto, UpdateViewStoryDto, Guid>
+    public interface IViewStoryServiceDAL : IGenericRepositoryDAL<ViewStory, ResultViewStoryDto, ResultViewStoryWithRelationsDto, CreateViewStoryDto, UpdateViewStoryDto, Guid>
 
     {
 

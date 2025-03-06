@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.SavedPostServices
 {
     
-    public interface ISavedPostServiceDAL : IGenericRepositoryDAL<SavedPost, ResultSavedPostDto, ResultSavedPostByIdDto ,CreateSavedPostDto, UpdateSavedPostDto, Guid>
+    public interface ISavedPostServiceDAL : IGenericRepositoryDAL<SavedPost, ResultSavedPostDto, ResultSavedPostWithRelationsDto, CreateSavedPostDto, UpdateSavedPostDto, Guid>
 
     {
 

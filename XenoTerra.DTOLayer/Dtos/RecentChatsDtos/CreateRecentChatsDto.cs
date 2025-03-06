@@ -1,5 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
 {
     public class CreateRecentChatsDto

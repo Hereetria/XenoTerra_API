@@ -7,7 +7,7 @@ using XenoTerra.DataAccessLayer.Factories.Abstract;
 using XenoTerra.DataAccessLayer.Services.PostServices;
 namespace XenoTerra.BussinessLogicLayer.Services.PostServices
 {
-     public class PostServiceBLL : GenericRepositoryBLL<Post, ResultPostDto, ResultPostByIdDto, CreatePostDto, UpdatePostDto, Guid>, IPostServiceBLL
+     public class PostServiceBLL : GenericRepositoryBLL<Post, ResultPostDto, CreatePostDto, UpdatePostDto, Guid>, IPostServiceBLL
     {
         private readonly IPostServiceDAL _postServiceDAL;
 

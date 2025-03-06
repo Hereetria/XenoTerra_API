@@ -18,14 +18,14 @@ namespace XenoTerra.DataAccessLayer.Factories.Concrete
             _serviceProvider = serviceProvider;
         }
 
-        public IGenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey> CreateRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>()
+        public IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey> CreateRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>()
             where TEntity : class
             where TResultDto : class
-            where TResultById : class
+            where TResultWithRelationsDto : class
             where TCreateDto : class
             where TUpdateDto : class
         {
-            return _serviceProvider.GetRequiredService<IGenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>>();
+            return _serviceProvider.GetRequiredService<IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>>();
         }
     }
 }

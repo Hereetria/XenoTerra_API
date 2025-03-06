@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.User
     {
         [UseProjection]
         [GraphQLDescription("Create a new User")]
-        public async Task<ResultUserByIdDto> CreateUserAsync(CreateUserDto createUserDto, [Service] IUserServiceBLL userServiceBLL)
+        public async Task<ResultUserDto> CreateUserAsync(CreateUserDto createUserDto, [Service] IUserServiceBLL userServiceBLL)
         {
             var result = await userServiceBLL.CreateAsync(createUserDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.User
 
         [UseProjection]
         [GraphQLDescription("Update an existing User")]
-        public async Task<ResultUserByIdDto> UpdateUserAsync(UpdateUserDto updateUserDto, [Service] IUserServiceBLL userServiceBLL)
+        public async Task<ResultUserDto> UpdateUserAsync(UpdateUserDto updateUserDto, [Service] IUserServiceBLL userServiceBLL)
         {
             var result = await userServiceBLL.UpdateAsync(updateUserDto);
             return result;

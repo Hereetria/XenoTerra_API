@@ -54,6 +54,7 @@ using XenoTerra.BussinessLogicLayer.Services.PostTagServices;
 using XenoTerra.BussinessLogicLayer.Services.SearchHistoryUserServices;
 using XenoTerra.DataAccessLayer.Services.PostTagServices;
 using XenoTerra.DataAccessLayer.Services.SearchHistoryUserServices;
+using XenoTerra.WebAPI.Schemas.Types;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -66,8 +67,10 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
+                .AddType<ResultBlockUserDtoType>() 
                 .AddProjections()
                 .AddFiltering();
+
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping));
@@ -77,7 +80,7 @@ namespace XenoTerra.WebAPI.Extensions
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IGenericRepositoryDALFactory, GenericRepositoryDALFactory>();
-            builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,,>), typeof(GenericRepositoryDAL<,,,,,>));
+            builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,>), typeof(GenericRepositoryDAL<,,,,>));
 
 
             builder.Services.AddScoped<IBlockUserServiceBLL, BlockUserServiceBLL>();

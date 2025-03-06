@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.SavedPostServices
 {
     
-    public class SavedPostServiceDAL : GenericRepositoryDAL<SavedPost, ResultSavedPostDto, ResultSavedPostByIdDto, CreateSavedPostDto, UpdateSavedPostDto, Guid>, ISavedPostServiceDAL
+    public class SavedPostServiceDAL : GenericRepositoryDAL<SavedPost, ResultSavedPostDto, ResultSavedPostWithRelationsDto, CreateSavedPostDto, UpdateSavedPostDto, Guid>, ISavedPostServiceDAL
 
     {
 

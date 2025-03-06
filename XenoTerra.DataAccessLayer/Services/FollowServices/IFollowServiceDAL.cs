@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.FollowServices
 {
     
-    public interface IFollowServiceDAL : IGenericRepositoryDAL<Follow, ResultFollowDto, ResultFollowByIdDto ,CreateFollowDto, UpdateFollowDto, Guid>
+    public interface IFollowServiceDAL : IGenericRepositoryDAL<Follow, ResultFollowDto, ResultFollowWithRelationsDto, CreateFollowDto, UpdateFollowDto, Guid>
 
     {
 

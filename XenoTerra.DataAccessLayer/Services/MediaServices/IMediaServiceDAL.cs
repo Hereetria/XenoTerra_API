@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.MediaServices
 {
     
-    public interface IMediaServiceDAL : IGenericRepositoryDAL<Media, ResultMediaDto, ResultMediaByIdDto ,CreateMediaDto, UpdateMediaDto, Guid>
+    public interface IMediaServiceDAL : IGenericRepositoryDAL<Media, ResultMediaDto, ResultMediaWithRelationsDto CreateMediaDto, UpdateMediaDto, Guid>
 
     {
 

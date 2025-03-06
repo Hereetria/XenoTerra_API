@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.LikeServices
 {
     
-    public interface ILikeServiceDAL : IGenericRepositoryDAL<Like, ResultLikeDto, ResultLikeByIdDto ,CreateLikeDto, UpdateLikeDto, Guid>
+    public interface ILikeServiceDAL : IGenericRepositoryDAL<Like, ResultLikeDto, ResultLikeWithRelationsDto CreateLikeDto, UpdateLikeDto, Guid>
 
     {
 

@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.PostTag
     {
         [UseProjection]
         [GraphQLDescription("Create a new PostTag")]
-        public async Task<ResultPostTagByIdDto> CreatePostTagAsync(CreatePostTagDto createPostTagDto, [Service] IPostTagServiceBLL postTagServiceBLL)
+        public async Task<ResultPostTagDto> CreatePostTagAsync(CreatePostTagDto createPostTagDto, [Service] IPostTagServiceBLL postTagServiceBLL)
         {
             var result = await postTagServiceBLL.CreateAsync(createPostTagDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.PostTag
 
         [UseProjection]
         [GraphQLDescription("Update an existing PostTag")]
-        public async Task<ResultPostTagByIdDto> UpdatePostTagAsync(UpdatePostTagDto updatePostTagDto, [Service] IPostTagServiceBLL postTagServiceBLL)
+        public async Task<ResultPostTagDto> UpdatePostTagAsync(UpdatePostTagDto updatePostTagDto, [Service] IPostTagServiceBLL postTagServiceBLL)
         {
             var result = await postTagServiceBLL.UpdateAsync(updatePostTagDto);
             return result;

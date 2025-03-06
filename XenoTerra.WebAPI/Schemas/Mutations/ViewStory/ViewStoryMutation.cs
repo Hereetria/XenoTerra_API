@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.ViewStory
     {
         [UseProjection]
         [GraphQLDescription("Create a new ViewStory")]
-        public async Task<ResultViewStoryByIdDto> CreateViewStoryAsync(CreateViewStoryDto createViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
+        public async Task<ResultViewStoryDto> CreateViewStoryAsync(CreateViewStoryDto createViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
         {
             var result = await viewStoryServiceBLL.CreateAsync(createViewStoryDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.ViewStory
 
         [UseProjection]
         [GraphQLDescription("Update an existing ViewStory")]
-        public async Task<ResultViewStoryByIdDto> UpdateViewStoryAsync(UpdateViewStoryDto updateViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
+        public async Task<ResultViewStoryDto> UpdateViewStoryAsync(UpdateViewStoryDto updateViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
         {
             var result = await viewStoryServiceBLL.UpdateAsync(updateViewStoryDto);
             return result;

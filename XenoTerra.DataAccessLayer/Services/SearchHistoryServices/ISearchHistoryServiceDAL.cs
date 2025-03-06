@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.SearchHistoryServices
 {
     
-    public interface ISearchHistoryServiceDAL : IGenericRepositoryDAL<SearchHistory, ResultSearchHistoryDto, ResultSearchHistoryByIdDto ,CreateSearchHistoryDto, UpdateSearchHistoryDto, Guid>
+    public interface ISearchHistoryServiceDAL : IGenericRepositoryDAL<SearchHistory, ResultSearchHistoryDto, ResultSearchHistoryWithRelationsDto, CreateSearchHistoryDto, UpdateSearchHistoryDto, Guid>
 
     {
 

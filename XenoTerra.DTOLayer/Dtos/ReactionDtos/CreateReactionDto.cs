@@ -1,5 +1,8 @@
 
 
+using XenoTerra.DTOLayer.Dtos.MessageDtos;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
 {
     public class CreateReactionDto

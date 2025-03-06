@@ -10,7 +10,7 @@ using AutoMapper.QueryableExtensions;
 namespace XenoTerra.DataAccessLayer.Services.StoryServices
 {
     
-    public class StoryServiceDAL : GenericRepositoryDAL<Story, ResultStoryDto, ResultStoryByIdDto, CreateStoryDto, UpdateStoryDto, Guid>, IStoryServiceDAL
+    public class StoryServiceDAL : GenericRepositoryDAL<Story, ResultStoryDto, ResultStoryWithRelationsDto, CreateStoryDto, UpdateStoryDto, Guid>, IStoryServiceDAL
 
     {
 

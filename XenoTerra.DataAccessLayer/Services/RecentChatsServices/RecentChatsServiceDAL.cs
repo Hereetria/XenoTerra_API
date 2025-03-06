@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.RecentChatsServices
 {
     
-    public class RecentChatsServiceDAL : GenericRepositoryDAL<RecentChats, ResultRecentChatsDto, ResultRecentChatsByIdDto, CreateRecentChatsDto, UpdateRecentChatsDto, Guid>, IRecentChatsServiceDAL
+    public class RecentChatsServiceDAL : GenericRepositoryDAL<RecentChats, ResultRecentChatsDto, ResultRecentChatsWithRelationsDto, CreateRecentChatsDto, UpdateRecentChatsDto, Guid>, IRecentChatsServiceDAL
 
     {
 

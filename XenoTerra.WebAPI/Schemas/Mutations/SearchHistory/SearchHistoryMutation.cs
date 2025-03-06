@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.SearchHistory
     {
         [UseProjection]
         [GraphQLDescription("Create a new SearchHistory")]
-        public async Task<ResultSearchHistoryByIdDto> CreateSearchHistoryAsync(CreateSearchHistoryDto createSearchHistoryDto, [Service] ISearchHistoryServiceBLL searchHistoryServiceBLL)
+        public async Task<ResultSearchHistoryDto> CreateSearchHistoryAsync(CreateSearchHistoryDto createSearchHistoryDto, [Service] ISearchHistoryServiceBLL searchHistoryServiceBLL)
         {
             var result = await searchHistoryServiceBLL.CreateAsync(createSearchHistoryDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.SearchHistory
 
         [UseProjection]
         [GraphQLDescription("Update an existing SearchHistory")]
-        public async Task<ResultSearchHistoryByIdDto> UpdateSearchHistoryAsync(UpdateSearchHistoryDto updateSearchHistoryDto, [Service] ISearchHistoryServiceBLL searchHistoryServiceBLL)
+        public async Task<ResultSearchHistoryDto> UpdateSearchHistoryAsync(UpdateSearchHistoryDto updateSearchHistoryDto, [Service] ISearchHistoryServiceBLL searchHistoryServiceBLL)
         {
             var result = await searchHistoryServiceBLL.UpdateAsync(updateSearchHistoryDto);
             return result;

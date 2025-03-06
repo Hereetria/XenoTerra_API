@@ -8,28 +8,31 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
     public class PostQuery
     {
         [UseProjection]
-        [GraphQLDescription("Get all Posts")]
-        public IQueryable<ResultPostDto> GetAllPosts([Service] IPostServiceBLL postServiceBLL)
-        {
-            return postServiceBLL.GetAllQuerable();
-        }
+        public IQueryable<ResultPostDto> GetPosts(List<Guid>? ids, [Service] IPostServiceBLL service)
+    => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        //[UseProjection]
+        //[GraphQLDescription("Get all Posts")]
+        //public IQueryable<ResultPostDto> GetAllPosts([Service] IPostServiceBLL postServiceBLL)
+        //{
+        //    return postServiceBLL.GetAllQuerable();
+        //}
 
-        [UseProjection]
-        [GraphQLDescription("Get Post by ID")]
-        public IQueryable<ResultPostByIdDto> GetPostById(Guid id, [Service] IPostServiceBLL postServiceBLL)
-        {
-            var result = postServiceBLL.GetByIdQuerable(id);
-            if (result == null)
-            {
-                throw new Exception($"Post with ID {id} not found");
-            }
-            return result;
-        }
+        //[UseProjection]
+        //[GraphQLDescription("Get Post by ID")]
+        //public IQueryable<ResultPostByIdDto> GetPostById(Guid id, [Service] IPostServiceBLL postServiceBLL)
+        //{
+        //    var result = postServiceBLL.GetByIdQuerable(id);
+        //    if (result == null)
+        //    {
+        //        throw new Exception($"Post with ID {id} not found");
+        //    }
+        //    return result;
+        //}
 
         [UsePaging(IncludeTotalCount = true)]
         [UseProjection]
         [GraphQLDescription("Get mainstream posts")]
-        public IQueryable<ResultPostDto> GetMainstreamPosts(
+        public IQueryable<ResultPostWithRelationsDto> GetMainstreamPosts(
             Guid seed,
             [Service] IPostServiceBLL postServiceBLL)
         {
@@ -42,7 +45,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
         [UsePaging(IncludeTotalCount = true)]
         [UseProjection]
         [GraphQLDescription("Get following posts")]
-        public IQueryable<ResultPostDto> GetFollowingPosts(
+        public IQueryable<ResultPostWithRelationsDto> GetFollowingPosts(
             [Service] IPostServiceBLL postServiceBLL)
         {
             var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");

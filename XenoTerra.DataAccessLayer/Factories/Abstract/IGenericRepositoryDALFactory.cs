@@ -9,10 +9,10 @@ namespace XenoTerra.DataAccessLayer.Factories.Abstract
 {
     public interface IGenericRepositoryDALFactory
     {
-        IGenericRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey> CreateRepositoryDAL<TEntity, TResultDto, TResultById, TCreateDto, TUpdateDto, TKey>()
+        IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey> CreateRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>()
             where TEntity : class
             where TResultDto : class
-            where TResultById : class
+            where TResultWithRelationsDto : class
             where TCreateDto : class
             where TUpdateDto : class;
     }

@@ -1,5 +1,8 @@
 
 
+using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.LikeDtos
 {
     public class UpdateLikeDto

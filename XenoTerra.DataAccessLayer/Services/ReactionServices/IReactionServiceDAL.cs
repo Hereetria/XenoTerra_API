@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.ReactionServices
 {
     
-    public interface IReactionServiceDAL : IGenericRepositoryDAL<Reaction, ResultReactionDto, ResultReactionByIdDto ,CreateReactionDto, UpdateReactionDto, Guid>
+    public interface IReactionServiceDAL : IGenericRepositoryDAL<Reaction, ResultReactionDto, ResultReactionWithRelationsDto, CreateReactionDto, UpdateReactionDto, Guid>
 
     {
 

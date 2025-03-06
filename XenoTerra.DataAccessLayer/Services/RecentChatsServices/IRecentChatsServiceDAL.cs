@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.RecentChatsServices
 {
     
-    public interface IRecentChatsServiceDAL : IGenericRepositoryDAL<RecentChats, ResultRecentChatsDto, ResultRecentChatsByIdDto ,CreateRecentChatsDto, UpdateRecentChatsDto, Guid>
+    public interface IRecentChatsServiceDAL : IGenericRepositoryDAL<RecentChats, ResultRecentChatsDto, ResultRecentChatsWithRelationsDto, CreateRecentChatsDto, UpdateRecentChatsDto, Guid>
 
     {
 

@@ -4,7 +4,7 @@ using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.HighlightServices
 {
-        public interface IHighlightServiceBLL : IGenericRepositoryBLL<Highlight, ResultHighlightDto, ResultHighlightByIdDto, CreateHighlightDto, UpdateHighlightDto, Guid>
+        public interface IHighlightServiceBLL : IGenericRepositoryBLL<Highlight, ResultHighlightDto, CreateHighlightDto, UpdateHighlightDto, Guid>
     {
 
     }

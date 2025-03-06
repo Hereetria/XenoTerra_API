@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Services.StoryServices;
 
 namespace XenoTerra.BussinessLogicLayer.Services.StoryServices
 {
-     public class StoryServiceBLL : GenericRepositoryBLL<Story, ResultStoryDto, ResultStoryByIdDto, CreateStoryDto, UpdateStoryDto, Guid>, IStoryServiceBLL
+     public class StoryServiceBLL : GenericRepositoryBLL<Story, ResultStoryDto, CreateStoryDto, UpdateStoryDto, Guid>, IStoryServiceBLL
     {
         private readonly IStoryServiceDAL _storyServiceDAL;
         public StoryServiceBLL(IGenericRepositoryDALFactory repositoryDALFactory, IStoryServiceDAL storyServiceDAL)

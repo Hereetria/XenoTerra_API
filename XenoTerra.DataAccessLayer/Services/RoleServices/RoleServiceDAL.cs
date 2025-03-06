@@ -9,7 +9,7 @@ using XenoTerra.DataAccessLayer.Repositories;
 namespace XenoTerra.DataAccessLayer.Services.RoleServices
 {
     
-    public class RoleServiceDAL : GenericRepositoryDAL<Role, ResultRoleDto, ResultRoleByIdDto, CreateRoleDto, UpdateRoleDto, Guid>, IRoleServiceDAL
+    public class RoleServiceDAL : GenericRepositoryDAL<Role, ResultRoleDto, ResultRoleWithRelationsDto, CreateRoleDto, UpdateRoleDto, Guid>, IRoleServiceDAL
 
     {
 

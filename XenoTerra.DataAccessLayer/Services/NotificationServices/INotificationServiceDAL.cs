@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.NotificationServices
 {
     
-    public interface INotificationServiceDAL : IGenericRepositoryDAL<Notification, ResultNotificationDto, ResultNotificationByIdDto ,CreateNotificationDto, UpdateNotificationDto, Guid>
+    public interface INotificationServiceDAL : IGenericRepositoryDAL<Notification, ResultNotificationDto, ResultNotificationWithRelationsDto, CreateNotificationDto, UpdateNotificationDto, Guid>
 
     {
 

@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Follow
     {
         [UseProjection]
         [GraphQLDescription("Create a new Follow")]
-        public async Task<ResultFollowByIdDto> CreateFollowAsync(CreateFollowDto createFollowDto, [Service] IFollowServiceBLL followServiceBLL)
+        public async Task<ResultFollowDto> CreateFollowAsync(CreateFollowDto createFollowDto, [Service] IFollowServiceBLL followServiceBLL)
         {
             var result = await followServiceBLL.CreateAsync(createFollowDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Follow
 
         [UseProjection]
         [GraphQLDescription("Update an existing Follow")]
-        public async Task<ResultFollowByIdDto> UpdateFollowAsync(UpdateFollowDto updateFollowDto, [Service] IFollowServiceBLL followServiceBLL)
+        public async Task<ResultFollowDto> UpdateFollowAsync(UpdateFollowDto updateFollowDto, [Service] IFollowServiceBLL followServiceBLL)
         {
             var result = await followServiceBLL.UpdateAsync(updateFollowDto);
             return result;

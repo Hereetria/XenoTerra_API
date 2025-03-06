@@ -4,7 +4,7 @@ using XenoTerra.DTOLayer.Dtos.PostTagDtos;
 using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.PostTagServices
 {
-        public interface IPostTagServiceBLL : IGenericRepositoryBLL<PostTag, ResultPostTagDto, ResultPostTagByIdDto, CreatePostTagDto, UpdatePostTagDto, Guid>
+        public interface IPostTagServiceBLL : IGenericRepositoryBLL<PostTag, ResultPostTagDto, CreatePostTagDto, UpdatePostTagDto, Guid>
     {
     }
 }

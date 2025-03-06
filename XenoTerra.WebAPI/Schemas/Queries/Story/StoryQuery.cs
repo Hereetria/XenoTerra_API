@@ -7,27 +7,30 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
     public class StoryQuery
     {
         [UseProjection]
-        [GraphQLDescription("Get all Stories")]
-        public IQueryable<ResultStoryDto> GetAllStories([Service] IStoryServiceBLL storyServiceBLL)
-        {
-            return storyServiceBLL.GetAllQuerable();
-        }
+        public IQueryable<ResultStoryWithRelationsDto> GetStories(List<Guid>? ids, [Service] IStoryServiceBLL service)
+     => ids != null && ids.Any() ? service.GetByIdsQuerable(ids) : service.GetByIdsQuerable(service.GetAllIdsAsync().Result);
+        //[UseProjection]
+        //[GraphQLDescription("Get all Stories")]
+        //public IQueryable<ResultStoryDto> GetAllStories([Service] IStoryServiceBLL storyServiceBLL)
+        //{
+        //    return storyServiceBLL.GetAllQuerable();
+        //}
 
-        [UseProjection]
-        [GraphQLDescription("Get Story by ID")]
-        public IQueryable<ResultStoryByIdDto> GetStoryById(Guid id, [Service] IStoryServiceBLL storyServiceBLL)
-        {
-            var result = storyServiceBLL.GetByIdQuerable(id);
-            if (result == null)
-            {
-                throw new Exception($"Story with ID {id} not found");
-            }
-            return result;
-        }
+        //[UseProjection]
+        //[GraphQLDescription("Get Story by ID")]
+        //public IQueryable<ResultStoryByIdDto> GetStoryById(Guid id, [Service] IStoryServiceBLL storyServiceBLL)
+        //{
+        //    var result = storyServiceBLL.GetByIdQuerable(id);
+        //    if (result == null)
+        //    {
+        //        throw new Exception($"Story with ID {id} not found");
+        //    }
+        //    return result;
+        //}
 
         [UseProjection]
         [GraphQLDescription("Get following users stories")]
-        public IQueryable<ResultStoryDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
+        public IQueryable<ResultStoryWithRelationsDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
         {
             var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
             var result = storyServiceBLL.GetFollowingStories(userId);

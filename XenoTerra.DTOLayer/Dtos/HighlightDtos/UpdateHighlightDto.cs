@@ -1,5 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.StoryDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
 {
     public class UpdateHighlightDto

@@ -1,5 +1,8 @@
 
 
+using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.CommentDtos
 {
     public class UpdateCommentDto

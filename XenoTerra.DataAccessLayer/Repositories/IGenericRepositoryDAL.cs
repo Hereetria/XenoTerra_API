@@ -1,26 +1,25 @@
 
 using System.Linq.Expressions;
+using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories
 {
     
-    public interface IGenericRepositoryDAL<TEntity, TResultDto, TResultById,TCreateDto, TUpdateDto, TKey>
+    public interface IGenericRepositoryDAL<TEntity, TResultDto, TResultWithRelationsDto, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
         where TResultDto : class
-        where TResultById : class
+        where TResultWithRelationsDto : class
         where TCreateDto : class
         where TUpdateDto : class
     {
+        Task<List<Guid>> TGetAllIdsAsync();
+        IQueryable<TResultDto> TGetByIdsQuerable(IEnumerable<Guid> ids);
+        IQueryable<TResultWithRelationsDto> TGetByIdsQuerableWithRelations(IEnumerable<Guid> ids);
 
-        IQueryable<TResultDto> TGetAllQueryable();
-        IQueryable<TResultById> TGetByIdQuerable(TKey id);
+        Task<TResultDto> TCreateAsync(TCreateDto createDto);
 
-        Task<TResultById> TCreateAsync(TCreateDto createDto);
-
-        Task<TResultById> TUpdateAsync(TUpdateDto updateDto);
+        Task<TResultDto> TUpdateAsync(TUpdateDto updateDto);
 
         Task<bool> TDeleteAsync(TKey id);
-
-        Task<TResultById> TGetByIdAsync(TKey id);
 
         Task<List<TResultQueryDto>> TGetEntitiesByQueryAsync<TResultQueryDto>(
             Func<IQueryable<TEntity>, IQueryable<TEntity>> query)

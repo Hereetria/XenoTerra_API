@@ -1,5 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
     public class UpdateMediaDto

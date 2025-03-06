@@ -8,7 +8,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Post
     {
         [UseProjection]
         [GraphQLDescription("Create a new Post")]
-        public async Task<ResultPostByIdDto> CreatePostAsync(CreatePostDto createPostDto, [Service] IPostServiceBLL postServiceBLL)
+        public async Task<ResultPostDto> CreatePostAsync(CreatePostDto createPostDto, [Service] IPostServiceBLL postServiceBLL)
         {
             var result = await postServiceBLL.CreateAsync(createPostDto);
             return result;
@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Post
 
         [UseProjection]
         [GraphQLDescription("Update an existing Post")]
-        public async Task<ResultPostByIdDto> UpdatePostAsync(UpdatePostDto updatePostDto, [Service] IPostServiceBLL postServiceBLL)
+        public async Task<ResultPostDto> UpdatePostAsync(UpdatePostDto updatePostDto, [Service] IPostServiceBLL postServiceBLL)
         {
             var result = await postServiceBLL.UpdateAsync(updatePostDto);
             return result;

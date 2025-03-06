@@ -6,7 +6,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Services.CommentServices
 {
     
-    public interface ICommentServiceDAL : IGenericRepositoryDAL<Comment, ResultCommentDto, ResultCommentByIdDto ,CreateCommentDto, UpdateCommentDto, Guid>
+    public interface ICommentServiceDAL : IGenericRepositoryDAL<Comment, ResultCommentDto, ResultCommentWithRelationsDto, CreateCommentDto, UpdateCommentDto, Guid>
 
     {
 

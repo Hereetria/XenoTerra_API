@@ -1,5 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.UserDtos;
+
 namespace XenoTerra.DTOLayer.Dtos.NoteDtos
 {
     public class CreateNoteDto
