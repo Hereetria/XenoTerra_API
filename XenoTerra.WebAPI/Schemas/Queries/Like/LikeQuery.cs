@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Like
 {
     public class LikeQuery
     {
-        [UseProjection]
-        public IQueryable<ResultLikeWithRelationsDto> GetLikes(
-        List<Guid>? ids,
-        [Service] ILikeServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Likes")]

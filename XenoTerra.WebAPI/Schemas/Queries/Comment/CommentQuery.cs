@@ -6,11 +6,15 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Comment
 {
     public class CommentQuery
     {
-        [UseProjection]
-        public IQueryable<ResultCommentWithRelationsDto> GetComments(
-            List<Guid>? ids,
-            [Service] ICommentServiceBLL service
-        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
+        //[UseProjection]
+        //public IQueryable<ResultCommentWithRelationsDto> GetComments(
+        //    List<Guid>? ids,
+        //    [Service] ICommentServiceBLL service
+        //) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
 
         //[UseProjection]
         //[GraphQLDescription("Get Comment by ID")]

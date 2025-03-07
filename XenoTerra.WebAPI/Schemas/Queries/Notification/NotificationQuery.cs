@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Notification
 {
     public class NotificationQuery
     {
-        [UseProjection]
-        public IQueryable<ResultNotificationWithRelationsDto> GetNotifications(
-        List<Guid>? ids,
-        [Service] INotificationServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Notifications")]

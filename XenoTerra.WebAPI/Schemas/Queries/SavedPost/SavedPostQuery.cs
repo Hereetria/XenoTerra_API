@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.SavedPost
 {
     public class SavedPostQuery
     {
-        [UseProjection]
-        public IQueryable<ResultSavedPostWithRelationsDto> GetSavedPosts(
-        List<Guid>? ids,
-        [Service] ISavedPostServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all SavedPosts")]

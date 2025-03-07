@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Follow
 {
     public class FollowQuery
     {
-        [UseProjection]
-        public IQueryable<ResultFollowWithRelationsDto> GetFollows(
-      List<Guid>? ids,
-      [Service] IFollowServiceBLL service
-  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Follows")]

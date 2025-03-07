@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Media
 {
     public class MediaQuery
     {
-        [UseProjection]
-        public IQueryable<ResultMediaWithRelationsDto> GetMedias(
-         List<Guid>? ids,
-         [Service] IMediaServiceBLL service
-     ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Media")]

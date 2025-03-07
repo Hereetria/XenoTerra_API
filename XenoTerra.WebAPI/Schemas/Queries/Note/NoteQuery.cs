@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Note
 {
     public class NoteQuery
     {
-        [UseProjection]
-        public IQueryable<ResultNoteWithRelationsDto> GetNotes(
-      List<Guid>? ids,
-      [Service] INoteServiceBLL service
-  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Notes")]

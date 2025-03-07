@@ -6,6 +6,11 @@ using XenoTerra.DataAccessLayer.Contexts;
 using System.Linq.Expressions;
 using AutoMapper.QueryableExtensions;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DataAccessLayer.Utils;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using HotChocolate;
+using XenoTerra.DataAccessLayer.Services.BlockUserServices;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 
 namespace XenoTerra.DataAccessLayer.Repositories
 {
@@ -62,7 +67,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
                 .ProjectTo<TResultDto>(_mapper.ConfigurationProvider);
         }
 
-        public IQueryable<TResultWithRelationsDto> TGetByIdsQuerableWithRelations(IEnumerable<Guid> ids)
+        public async Task<IEnumerable<TResultWithRelationsDto>> TGetByIdsWithRelationsAsync(IEnumerable<Guid> ids, IEnumerable<string> selectedFields)
         {
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
@@ -71,11 +76,62 @@ namespace XenoTerra.DataAccessLayer.Repositories
             if (primaryKey == null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException("This method only supports entities with a single primary key.");
 
-            var keyProperty = primaryKey.Properties[0];
+            // Dinamik Select Expression oluþtur
+            var selector = CreateSelectorExpression(selectedFields);
 
-            return _context.Set<TEntity>()
-                .Where(entity => ids.Contains(EF.Property<Guid>(entity, keyProperty.Name)))
-                .ProjectTo<TResultWithRelationsDto>(_mapper.ConfigurationProvider);
+            var result = await _context.Set<TEntity>()
+                .Where(entity => ids.Contains(EF.Property<Guid>(entity, primaryKey.Properties[0].Name)))
+                .Select(selector)
+                .ToListAsync();
+
+            return result;
+        }
+
+        private Expression<Func<TEntity, TResultWithRelationsDto>> CreateSelectorExpression(IEnumerable<string> selectedFields)
+        {
+            var parameter = Expression.Parameter(typeof(TEntity), "entity");
+            var bindings = new List<MemberBinding>();
+
+            foreach (var field in selectedFields)
+            {
+                var entityProperty = Expression.Property(parameter, field);
+                var dtoProperty = typeof(TResultWithRelationsDto).GetProperty(field);
+                if (dtoProperty != null)
+                {
+                    var binding = Expression.Bind(dtoProperty, entityProperty);
+                    bindings.Add(binding);
+                }
+            }
+
+            var body = Expression.MemberInit(Expression.New(typeof(TResultWithRelationsDto)), bindings);
+            return Expression.Lambda<Func<TEntity, TResultWithRelationsDto>>(body, parameter);
+        }
+
+
+        private static TResultWithRelationsDto ConvertEntityToDto(TEntity entity, IEnumerable<string> selectedFields)
+        {
+            var dtoInstance = Activator.CreateInstance<TResultWithRelationsDto>();
+            var dtoType = typeof(TResultWithRelationsDto);
+            var entityType = typeof(TEntity);
+
+            var selectedProperties = dtoType.GetProperties()
+                .Where(prop => !IsPrimitiveOrValueType(prop.PropertyType) && selectedFields.Contains(prop.Name))
+                .ToList();
+
+            foreach (var property in selectedProperties)
+            {
+                var entityProperty = entityType.GetProperty(property.Name);
+                if (entityProperty != null)
+                {
+                    property.SetValue(dtoInstance, entityProperty.GetValue(entity));
+                }
+            }
+            return dtoInstance;
+        }
+
+        private static bool IsPrimitiveOrValueType(Type type)
+        {
+            return type.IsPrimitive || type.IsValueType || type == typeof(string) || type == typeof(DateTime) || type == typeof(Guid);
         }
 
 

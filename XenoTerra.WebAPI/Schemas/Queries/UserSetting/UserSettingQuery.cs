@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.UserSetting
 {
     public class UserSettingQuery
     {
-        [UseProjection]
-        public IQueryable<ResultUserSettingWithRelationsDto> GetUserSettings(
-        List<Guid>? ids,
-        [Service] IUserSettingServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
 
         //[UseProjection]

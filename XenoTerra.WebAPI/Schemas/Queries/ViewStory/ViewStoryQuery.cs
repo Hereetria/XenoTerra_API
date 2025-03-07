@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ViewStory
 {
     public class ViewStoryQuery
     {
-        [UseProjection]
-        public IQueryable<ResultViewStoryWithRelationsDto> GetViewStories(
-        List<Guid>? ids,
-        [Service] IViewStoryServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[GraphQLDescription("Get all ViewStories")]
         //public IQueryable<ResultViewStoryDto> GetAllViewStories([Service] IViewStoryServiceBLL viewStoryServiceBLL)

@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Role
 {
     public class RoleQuery
     {
-        [UseProjection]
-        public IQueryable<ResultRoleWithRelationsDto> GetRoles(
-        List<Guid>? ids,
-        [Service] IRoleServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Roles")]

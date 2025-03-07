@@ -1,17 +1,25 @@
 ﻿using HotChocolate;
+using HotChocolate.Resolvers;
 using XenoTerra.BussinessLogicLayer.Services.BlockUserServices;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.WebAPI.Schemas.DataLoaders;
+using XenoTerra.WebAPI.Schemas.Resolvers;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.BlockUser
 {
     public class BlockUserQuery
     {
-        [UseProjection]
-        public IQueryable<ResultBlockUserWithRelationsDto> GetBlockUsers(
+        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersAsync(
             List<Guid>? ids,
-            [Service] IBlockUserServiceBLL service
-        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+            [Service] BlockUserResolver blockUserResolver,
+            [Service] IBlockUserServiceBLL service,
+            IResolverContext context)
+            => await blockUserResolver.GetBlockUsersAsync(ids, service, context);
+
+            var result = await service.GetByIdsWithRelationsAsync(
+                ids ?? await service.GetAllIdsAsync(),
+                selectedFields
+
 
 
 

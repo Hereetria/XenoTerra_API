@@ -9,11 +9,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.User
 {
     public class UserQuery
     {
-        [UseProjection]
-        public IQueryable<ResultUserWithRelationsDto> GetUsers(
-       List<Guid>? ids,
-       [Service] IUserServiceBLL service
-   ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         [UseProjection]
         [GraphQLDescription("Get all Users")]

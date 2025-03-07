@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.SearchHistory
 {
     public class SearchHistoryQuery
     {
-        [UseProjection]
-        public IQueryable<ResultSearchHistoryWithRelationsDto> GetSearchHistories(
-       List<Guid>? ids,
-       [Service] ISearchHistoryServiceBLL service
-   ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all SearchHistories")]

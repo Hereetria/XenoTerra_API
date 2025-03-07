@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ReportComment
 {
     public class ReportCommentQuery
     {
-        [UseProjection]
-        public IQueryable<ResultReportCommentWithRelationsDto> GetReportComments(
-        List<Guid>? ids,
-        [Service] IReportCommentServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all ReportComments")]

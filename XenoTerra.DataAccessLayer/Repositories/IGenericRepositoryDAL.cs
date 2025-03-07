@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
     {
         Task<List<Guid>> TGetAllIdsAsync();
         IQueryable<TResultDto> TGetByIdsQuerable(IEnumerable<Guid> ids);
-        IQueryable<TResultWithRelationsDto> TGetByIdsQuerableWithRelations(IEnumerable<Guid> ids);
+        Task<IEnumerable<TResultWithRelationsDto>> TGetByIdsWithRelationsAsync(IEnumerable<Guid> ids, IEnumerable<string> selectedFields);
 
         Task<TResultDto> TCreateAsync(TCreateDto createDto);
 

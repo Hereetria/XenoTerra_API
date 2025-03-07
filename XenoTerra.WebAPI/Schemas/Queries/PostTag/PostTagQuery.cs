@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.PostTag
 {
     public class PostTagQuery
     {
-        [UseProjection]
-        public IQueryable<ResultPostTagWithRelationsDto> GetPostTags(
-      List<Guid>? ids,
-      [Service] IPostTagServiceBLL service
-  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all PostTags")]

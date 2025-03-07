@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Highlight
 {
     public class HighlightQuery
     {
-        [UseProjection]
-        public IQueryable<ResultHighlightWithRelationsDto> GetHighlights(
-        List<Guid>? ids,
-        [Service] IHighlightServiceBLL service
-    ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Highlights")]

@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
 {
     public class StoryQuery
     {
-        [UseProjection]
-        public IQueryable<ResultStoryWithRelationsDto> GetStories(
-      List<Guid>? ids,
-      [Service] IStoryServiceBLL service
-  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Stories")]

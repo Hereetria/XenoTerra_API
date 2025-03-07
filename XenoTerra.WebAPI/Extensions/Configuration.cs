@@ -56,6 +56,7 @@ using XenoTerra.DataAccessLayer.Services.PostTagServices;
 using XenoTerra.DataAccessLayer.Services.SearchHistoryUserServices;
 using XenoTerra.WebAPI.Schemas.Types;
 using XenoTerra.WebAPI.Schemas.DataLoaders;
+using XenoTerra.WebAPI.Schemas.Resolvers;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -84,6 +85,8 @@ namespace XenoTerra.WebAPI.Extensions
 
             builder.Services.AddScoped<IGenericRepositoryDALFactory, GenericRepositoryDALFactory>();
             builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,,>), typeof(GenericRepositoryDAL<,,,,,>));
+
+            builder.Services.AddScoped<BlockUserResolver>();
 
 
             builder.Services.AddScoped<IBlockUserServiceBLL, BlockUserServiceBLL>();

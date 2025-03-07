@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.RecentChats
 {
     public class RecentChatsQuery
     {
-        [UseProjection]
-        public IQueryable<ResultRecentChatsWithRelationsDto> GetRecentChats(
-            List<Guid>? ids,
-            [Service] IRecentChatsServiceBLL service
-        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all RecentChats")]

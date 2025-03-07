@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Reaction
 {
     public class ReactionQuery
     {
-        [UseProjection]
-        public IQueryable<ResultReactionWithRelationsDto> GetReactions(
-            List<Guid>? ids,
-            [Service] IReactionServiceBLL service
-        ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
         //[UseProjection]
         //[GraphQLDescription("Get all Reactions")]
         //public IQueryable<ResultReactionDto> GetAllReactions([Service] IReactionServiceBLL reactionServiceBLL)

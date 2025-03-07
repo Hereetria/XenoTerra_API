@@ -6,11 +6,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Message
 {
     public class MessageQuery
     {
-        [UseProjection]
-        public IQueryable<ResultMessageWithRelationsDto> GetMessages(
-      List<Guid>? ids,
-      [Service] IMessageServiceBLL service
-  ) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Messages")]

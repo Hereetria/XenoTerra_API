@@ -7,11 +7,10 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
 {
     public class PostQuery
     {
-        [UseProjection]
-        public IQueryable<ResultPostWithRelationsDto> GetPosts(
-    List<Guid>? ids,
-    [Service] IPostServiceBLL service
-) => service.GetByIdsQuerableWithRelations(ids ?? service.GetAllIdsAsync().Result);
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
 
         //[UseProjection]
         //[GraphQLDescription("Get all Posts")]
