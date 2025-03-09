@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.UserSettingServices
 
     {
 
-        public UserSettingServiceDAL(Context context, IMapper mapper)
+        public UserSettingServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

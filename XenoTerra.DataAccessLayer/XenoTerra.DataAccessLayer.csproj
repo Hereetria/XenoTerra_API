@@ -23,4 +23,9 @@
     <ProjectReference Include="..\XenoTerra.DTOLayer\XenoTerra.DTOLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Abstract\" />
+    <Folder Include="Services\Concrete\" />
+  </ItemGroup>
+
 </Project>

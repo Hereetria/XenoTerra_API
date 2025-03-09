@@ -13,27 +13,27 @@ using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.DataAccessLayer.Factories.Concrete
 {
-    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<Context>
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+{
+    public AppDbContext CreateDbContext(string[] args)
     {
-        public Context CreateDbContext(string[] args)
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+
+        // Connection String sadece Provider üzerinden alınır
+        string connectionString = ConnectionStringProvider.GetConnectionString();
+
+        if (string.IsNullOrEmpty(connectionString))
         {
-            var optionsBuilder = new DbContextOptionsBuilder<Context>();
-
-            // API veya başka bir katmandan gelen Connection String
-            string connectionString = ConnectionStringProvider.GetConnectionString();
-
-            // Eğer connection string boş veya null ise hata fırlat
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new InvalidOperationException("Connection string could not be retrieved.");
-            }
-
-            // SQL Server bağlantısını yapılandır
-            optionsBuilder.UseSqlServer(connectionString, options =>
-                options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
-
-            return new Context(optionsBuilder.Options);
+            throw new InvalidOperationException("Connection string coul d not be retrieved from ConnectionStringProvider.");
         }
+
+        optionsBuilder.UseSqlServer(connectionString, options =>
+            options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+
+        return new AppDbContext(optionsBuilder.Options);
     }
+}
+
+
 
 }

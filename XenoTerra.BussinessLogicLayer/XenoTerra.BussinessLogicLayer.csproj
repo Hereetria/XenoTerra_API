@@ -23,4 +23,8 @@
     <ProjectReference Include="..\XenoTerra.DataAccessLayer\XenoTerra.DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repositories\Abstract\" />
+  </ItemGroup>
+
 </Project>

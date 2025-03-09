@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.HighlightServices
 
     {
 
-        public HighlightServiceDAL(Context context, IMapper mapper)
+        public HighlightServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

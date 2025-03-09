@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.LikeServices
 
     {
 
-        public LikeServiceDAL(Context context, IMapper mapper)
+        public LikeServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

@@ -65,28 +65,32 @@ namespace XenoTerra.WebAPI.Extensions
 
         public static void ConfigureServices(WebApplicationBuilder builder)
         {
-
             builder.Services.AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
-                .AddType<ResultBlockUserDtoType>() 
+                .AddType<ResultBlockUserDtoType>()
+                .AddType<ResultHighlightDtoType>()
                 .AddProjections()
                 .AddFiltering()
-                .AddDataLoader<UserDataLoader>();
+                .AddDataLoader<UserDataLoader>()
+                .AddDataLoader<StoryDataLoader>()
+                .AddDataLoader<HighlightStoryDataLoader>();
+
+            builder.Services.AddScoped<BlockUserResolver>();
+            builder.Services.AddScoped<HighlightResolver>();
 
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping));
 
 
-            builder.Services.AddDbContextFactory<Context>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-                sqlOptions => sqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
+            builder.Services.AddDbContextFactory<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
             builder.Services.AddScoped<IGenericRepositoryDALFactory, GenericRepositoryDALFactory>();
             builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,,>), typeof(GenericRepositoryDAL<,,,,,>));
 
-            builder.Services.AddScoped<BlockUserResolver>();
+
 
 
             builder.Services.AddScoped<IBlockUserServiceBLL, BlockUserServiceBLL>();

@@ -13,7 +13,7 @@ namespace XenoTerra.EntityLayer.Entities
         public string Name { get; set; }
         public string ProfilePicturePath { get; set; }
 
-        public Guid StoryId { get; set; }
-        public ICollection<Story> Stories { get; set; } = new List<Story>();
+        public ICollection<StoryHighlight> StoryHighlights { get; set; } = new List<StoryHighlight>();
     }
+
 }

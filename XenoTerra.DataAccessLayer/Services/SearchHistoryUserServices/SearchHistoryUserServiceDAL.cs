@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.SearchHistoryUserServices
 
     {
 
-        public SearchHistoryUserServiceDAL(Context context, IMapper mapper)
+        public SearchHistoryUserServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

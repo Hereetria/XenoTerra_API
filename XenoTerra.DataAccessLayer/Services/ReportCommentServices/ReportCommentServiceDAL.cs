@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.ReportCommentServices
 
     {
 
-        public ReportCommentServiceDAL(Context context, IMapper mapper)
+        public ReportCommentServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

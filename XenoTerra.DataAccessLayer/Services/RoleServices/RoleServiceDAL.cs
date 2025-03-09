@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.RoleServices
 
     {
 
-        public RoleServiceDAL(Context context, IMapper mapper)
+        public RoleServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

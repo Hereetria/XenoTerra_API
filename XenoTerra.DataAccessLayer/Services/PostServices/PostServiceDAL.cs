@@ -16,7 +16,7 @@ namespace XenoTerra.DataAccessLayer.Services.PostServices
 
     {
 
-        public PostServiceDAL(Context context, IMapper mapper)
+        public PostServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

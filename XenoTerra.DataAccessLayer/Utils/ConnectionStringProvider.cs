@@ -25,6 +25,7 @@ namespace XenoTerra.DataAccessLayer.Utils
             }
 
             return connectionString;
+;
         }
     }
 }

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(AppDbContext))]
     partial class ContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -21,21 +21,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("HighlightStory", b =>
-                {
-                    b.Property<Guid>("HighlightsHighlightId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StoriesStoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("HighlightsHighlightId", "StoriesStoryId");
-
-                    b.HasIndex("StoriesStoryId");
-
-                    b.ToTable("HighlightStory");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
@@ -244,9 +229,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<string>("ProfilePicturePath")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("StoryId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("HighlightId");
 
@@ -612,6 +594,21 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("Stories");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.StoryHighlight", b =>
+                {
+                    b.Property<Guid>("StoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("HighlightId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StoryId", "HighlightId");
+
+                    b.HasIndex("HighlightId");
+
+                    b.ToTable("StoryHighlights");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -759,21 +756,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("ViewStories");
-                });
-
-            modelBuilder.Entity("HighlightStory", b =>
-                {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.Highlight", null)
-                        .WithMany()
-                        .HasForeignKey("HighlightsHighlightId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("XenoTerra.EntityLayer.Entities.Story", null)
-                        .WithMany()
-                        .HasForeignKey("StoriesStoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1098,6 +1080,25 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.StoryHighlight", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Highlight", "Highlight")
+                        .WithMany("StoryHighlights")
+                        .HasForeignKey("HighlightId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Story", "Story")
+                        .WithMany("StoryHighlights")
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Highlight");
+
+                    b.Navigation("Story");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.UserSetting", b =>
                 {
                     b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
@@ -1133,6 +1134,11 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("ReportComments");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Highlight", b =>
+                {
+                    b.Navigation("StoryHighlights");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Message", b =>
                 {
                     b.Navigation("Reactions");
@@ -1156,6 +1162,8 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Story", b =>
                 {
+                    b.Navigation("StoryHighlights");
+
                     b.Navigation("ViewStories");
                 });
 

@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.FollowServices
 
     {
 
-        public FollowServiceDAL(Context context, IMapper mapper)
+        public FollowServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

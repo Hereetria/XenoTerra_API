@@ -15,10 +15,12 @@ namespace XenoTerra.EntityLayer.Entities
 
         public Guid UserId { get; set; }
         public User User { get; set; }
-        
+
         public ICollection<ViewStory> ViewStories { get; set; } = new List<ViewStory>();
-        public ICollection<Highlight> Highlights { get; set; } = new List<Highlight>();
+
+        public ICollection<StoryHighlight> StoryHighlights { get; set; } = new List<StoryHighlight>();
 
         public DateTime CreatedAt { get; set; }
     }
+
 }

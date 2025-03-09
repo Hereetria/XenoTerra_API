@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.BlockUserServices
 
     {
 
-        public BlockUserServiceDAL(Context context, IMapper mapper)
+        public BlockUserServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

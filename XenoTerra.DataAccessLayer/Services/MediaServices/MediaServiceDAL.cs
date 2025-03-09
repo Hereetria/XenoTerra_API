@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.MediaServices
 
     {
 
-        public MediaServiceDAL(Context context, IMapper mapper)
+        public MediaServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

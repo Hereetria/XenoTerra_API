@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.MessageServices
 
     {
 
-        public MessageServiceDAL(Context context, IMapper mapper)
+        public MessageServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

@@ -1,9 +1,12 @@
 ﻿using HotChocolate;
+using HotChocolate.Language;
 using HotChocolate.Resolvers;
 using XenoTerra.BussinessLogicLayer.Services.BlockUserServices;
+using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.WebAPI.Schemas.DataLoaders;
 using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.BlockUser
 {
@@ -11,16 +14,16 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUser
     {
         public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersAsync(
             List<Guid>? ids,
-            [Service] BlockUserResolver blockUserResolver,
             [Service] IBlockUserServiceBLL service,
             IResolverContext context)
-            => await blockUserResolver.GetBlockUsersAsync(ids, service, context);
-
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
             var result = await service.GetByIdsWithRelationsAsync(
-                ids ?? await service.GetAllIdsAsync(),
-                selectedFields
+                ids, selectedFields
+            );
 
-
+            return result;
+        }
 
 
 

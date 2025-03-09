@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.NotificationServices
 
     {
 
-        public NotificationServiceDAL(Context context, IMapper mapper)
+        public NotificationServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

@@ -11,7 +11,7 @@ using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(AppDbContext))]
     [Migration("20250302181132_mig2")]
     partial class mig2
     {

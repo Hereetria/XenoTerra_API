@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.ViewStoryServices
 
     {
 
-        public ViewStoryServiceDAL(Context context, IMapper mapper)
+        public ViewStoryServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

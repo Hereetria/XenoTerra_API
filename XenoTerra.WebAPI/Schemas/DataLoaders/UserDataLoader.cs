@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using XenoTerra.BussinessLogicLayer.Services.UserServices;
 using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
 
@@ -20,104 +20,103 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders
 {
     public class UserDataLoader : BatchDataLoader<Guid, ResultUserDto>
     {
-        private readonly IUserServiceBLL _userServiceBLL;
-        private readonly IDbContextFactory<Context> _contextFactory;
-        private readonly IServiceProvider _serviceProvider;
-        private readonly IMapper _mapper;
-        private readonly Context _context;
-        private readonly ConcurrentDictionary<Guid, List<string>> _fieldsCache = new(); private readonly Dictionary<Guid, List<string>> _selectedFieldsCache = new();
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private static readonly ConcurrentDictionary<Guid, List<string>> _fieldsCache = new();
+        private static readonly ConcurrentDictionary<string, LambdaExpression> _expressionCache = new();
         public UserDataLoader(
             IBatchScheduler batchScheduler,
             DataLoaderOptions options,
-            IDbContextFactory<Context> contextFactory,
-            IServiceProvider serviceProvider
-,
-            IMapper mapper
-,
-            Context context,
-            IUserServiceBLL userServiceBLL) : base(batchScheduler, options)
+            IDbContextFactory<AppDbContext> contextFactory) 
+                : base(batchScheduler, options)
         {
             _contextFactory = contextFactory;
-            _serviceProvider = serviceProvider;
-            _mapper = mapper;
-            _context = context;
-            _userServiceBLL = userServiceBLL;
         }
 
-        public async Task<ResultUserDto?> LoadAsync(Guid userId, List<string> selectedFields)
+        public async Task<IReadOnlyDictionary<Guid, ResultUserDto>> LoadAsync(List<Guid> userIds, List<string> selectedFields)
         {
-            //_fieldsCache[userId] = selectedFields;
-            return await LoadAsync(userId);
+            foreach (var userId in userIds)
+            {
+                _fieldsCache[userId] = selectedFields;
+            }
+            return await LoadBatchAsync(userIds, CancellationToken.None);
         }
+
 
         protected override async Task<IReadOnlyDictionary<Guid, ResultUserDto>> LoadBatchAsync(
             IReadOnlyList<Guid> keys,
             CancellationToken cancellationToken)
         {
-            // `_fieldsCache` içindeki değerleri al
-            var selectedFields = keys
-                .Where(_fieldsCache.ContainsKey)
-                .Select(key => _fieldsCache[key])
-                .FirstOrDefault() ?? new List<string>();
-
-            // `Id` alanını zorunlu ekleyelim (aksi takdirde ilişkili kullanıcıyı çekemeyebiliriz)
-            if (!selectedFields.Any(f => f.Equals(nameof(ResultUserDto.Id), StringComparison.OrdinalIgnoreCase)))
-            {
-                selectedFields.Add(nameof(ResultUserDto.Id));
-            }
+            var fieldGroups = keys
+                .Select(key => new { Key = key, Fields = _fieldsCache.ContainsKey(key) ? _fieldsCache[key] : new List<string>() })
+                .GroupBy(x => string.Join(",", x.Fields.OrderBy(f => f)), x => x.Key)
+                .ToDictionary(g => g.Key, g => g.ToList());
 
             await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
+            var usersDict = new Dictionary<Guid, ResultUserDto>();
 
-            var users = await context.Users
-                .Where(u => keys.Contains(u.Id))
-                .Select(u => new ResultUserDto
+            foreach (var fieldGroup in fieldGroups)
+            {
+                var selectedFields = fieldGroup.Key.Split(',').ToList();
+
+                if (!selectedFields.Any(f => f.Equals(nameof(ResultUserDto.Id), StringComparison.OrdinalIgnoreCase)))
                 {
-                    Id = u.Id,
-                    Email = u.Email,
-                    UserName = u.UserName
-                })
-                .ToListAsync(cancellationToken);
+                    selectedFields.Add(nameof(ResultUserDto.Id));
+                }
 
-            return users.ToDictionary(u => u.Id);
+                var selector = CreateSelectorExpression(selectedFields);
+
+                var groupResults = await context.Users
+                    .Where(user => fieldGroup.Value.Contains(user.Id))
+                    .Select(selector)
+                    .ToDictionaryAsync(user => user.Id, cancellationToken);
+
+                foreach (var kvp in groupResults)
+                {
+                    usersDict[kvp.Key] = kvp.Value;
+                }
+            }
+
+            return usersDict;
         }
 
-
-        private static Expression<Func<User, ResultUserDto>> SelectFieldsExpression(List<string> selectedFields)
+        private static Expression<Func<User, ResultUserDto>> CreateSelectorExpression(List<string> selectedFields)
         {
-            var parameter = Expression.Parameter(typeof(User), "u");
+            var cacheKey = string.Join(",", selectedFields.OrderBy(f => f));
+
+            if (_expressionCache.TryGetValue(cacheKey, out var cachedExpression))
+            {
+                return (Expression<Func<User, ResultUserDto>>)cachedExpression;
+            }
+
+            var userParameter = Expression.Parameter(typeof(User), "user");
+            var dtoParameter = Expression.New(typeof(ResultUserDto));
+
             var bindings = new List<MemberBinding>();
+            var userProperties = typeof(User).GetProperties();
+            var dtoProperties = typeof(ResultUserDto).GetProperties();
 
-            foreach (var fieldName in selectedFields)
+            foreach (var field in selectedFields)
             {
-                var userProperty = typeof(User).GetProperty(fieldName);
-                var dtoProperty = typeof(ResultUserDto).GetProperty(fieldName);
+                var entityProperty = userProperties.FirstOrDefault(p =>
+                    string.Equals(p.Name, field, StringComparison.OrdinalIgnoreCase));
 
-                if (userProperty != null && dtoProperty != null)
+                var dtoProperty = dtoProperties.FirstOrDefault(p =>
+                    string.Equals(p.Name, field, StringComparison.OrdinalIgnoreCase));
+
+                if (entityProperty != null && dtoProperty != null)
                 {
-                    var propertyAccess = Expression.Property(parameter, userProperty);
-                    bindings.Add(Expression.Bind(dtoProperty, propertyAccess));
+                    var userPropertyExpression = Expression.Property(userParameter, entityProperty);
+                    var binding = Expression.Bind(dtoProperty, userPropertyExpression);
+                    bindings.Add(binding);
                 }
             }
 
-            // Eğer hiçbir alan seçilmemişse, en azından Id'yi seçelim (boş bir query dönmemesi için)
-            if (!bindings.Any())
-            {
-                var idProperty = typeof(User).GetProperty(nameof(ResultUserDto.Id));
-                var idDtoProperty = typeof(ResultUserDto).GetProperty(nameof(ResultUserDto.Id));
+            var body = Expression.MemberInit(dtoParameter, bindings);
+            var expression = Expression.Lambda<Func<User, ResultUserDto>>(body, userParameter);
 
-                if (idProperty != null && idDtoProperty != null)
-                {
-                    var idAccess = Expression.Property(parameter, idProperty);
-                    bindings.Add(Expression.Bind(idDtoProperty, idAccess));
-                }
-            }
+            _expressionCache[cacheKey] = expression; // 🏷 Expression önbelleğe alındı
 
-            var body = Expression.MemberInit(Expression.New(typeof(ResultUserDto)), bindings);
-            return Expression.Lambda<Func<User, ResultUserDto>>(body, parameter);
+            return expression;
         }
-
-
-
-
     }
 }

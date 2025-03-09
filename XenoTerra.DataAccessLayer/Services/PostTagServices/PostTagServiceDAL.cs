@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.PostTagServices
 
     {
 
-        public PostTagServiceDAL(Context context, IMapper mapper)
+        public PostTagServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

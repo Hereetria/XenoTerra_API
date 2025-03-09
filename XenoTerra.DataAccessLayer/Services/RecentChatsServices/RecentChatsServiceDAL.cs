@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.RecentChatsServices
 
     {
 
-        public RecentChatsServiceDAL(Context context, IMapper mapper)
+        public RecentChatsServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

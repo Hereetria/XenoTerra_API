@@ -8,6 +8,5 @@ namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
     {
         public string Name { get; set; }
         public string ProfilePicturePath { get; set; }
-        public Guid StoryId { get; set; }
     }
 }

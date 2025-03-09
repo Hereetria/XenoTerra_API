@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.ReactionServices
 
     {
 
-        public ReactionServiceDAL(Context context, IMapper mapper)
+        public ReactionServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

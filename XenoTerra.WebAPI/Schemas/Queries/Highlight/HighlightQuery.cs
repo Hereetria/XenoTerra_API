@@ -1,14 +1,30 @@
 ﻿using HotChocolate;
+using HotChocolate.Language;
+using HotChocolate.Resolvers;
 using XenoTerra.BussinessLogicLayer.Services.HighlightServices;
+using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.Highlight
 {
     public class HighlightQuery
     {
-        public string GetRandomData()
+        public async Task<IEnumerable<ResultHighlightWithRelationsDto>> GetHighlightsAsync(
+            List<Guid>? ids,
+            [Service] IHighlightServiceBLL service,
+            IResolverContext context)
         {
-            return "Default data to prevent query class from being empty.";
+            var selectedFields = context.Selection.SyntaxNode.SelectionSet?.Selections
+                .OfType<FieldNode>()
+                .Select(s => s.Name.Value)
+                .ToList() ?? new List<string>();
+
+            var result = await service.GetByIdsWithRelationsAsync(
+                ids ?? await service.GetAllIdsAsync(),
+                selectedFields
+            );
+
+            return result;
         }
 
         //[UseProjection]

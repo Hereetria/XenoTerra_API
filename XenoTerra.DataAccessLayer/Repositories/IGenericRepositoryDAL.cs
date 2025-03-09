@@ -19,20 +19,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
 
         Task<TResultDto> TUpdateAsync(TUpdateDto updateDto);
 
-        Task<bool> TDeleteAsync(TKey id);
+        Task<bool> TDeleteAsync(TKey key);
 
-        Task<List<TResultQueryDto>> TGetEntitiesByQueryAsync<TResultQueryDto>(
-            Func<IQueryable<TEntity>, IQueryable<TEntity>> query)
-            where TResultQueryDto : class;
-
-        Task<TResultQueryDto?> TGetEntityByQueryAsync<TResultQueryDto>(
-            Func<IQueryable<TEntity>, IQueryable<TEntity>> query)
-            where TResultQueryDto : class;
-
-        Task<List<TResultQueryDto>> TGetSelectedEntitiesByQueryAsync<TResultQueryDto, TResultEntity>(
-            Func<IQueryable<TEntity>, IQueryable<TEntity>> query,
-            Expression<Func<TEntity, TResultEntity>> selectExpression)
-            where TResultQueryDto : class
-            where TResultEntity : class;
     }
 }

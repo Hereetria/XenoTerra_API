@@ -9,21 +9,29 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Contexts
 {
     
-    public class Context : IdentityDbContext<User, Role, Guid>
+    public class AppDbContext : IdentityDbContext<User, Role, Guid>
     {
-        private readonly string _connectionString;
 
-        public Context(DbContextOptions<Context> options, IConfiguration? configuration = null)
+        public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
         {
-            if (configuration is not null)
-            {
-                _connectionString = configuration.GetConnectionString("DefaultConnection");
-            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<StoryHighlight>()
+            .HasKey(sh => new { sh.StoryId, sh.HighlightId });
+
+            modelBuilder.Entity<StoryHighlight>()
+                .HasOne(sh => sh.Story)
+                .WithMany(s => s.StoryHighlights)
+                .HasForeignKey(sh => sh.StoryId);
+
+            modelBuilder.Entity<StoryHighlight>()
+                .HasOne(sh => sh.Highlight)
+                .WithMany(h => h.StoryHighlights)
+                .HasForeignKey(sh => sh.HighlightId);
+
             modelBuilder.Entity<BlockUser>()
                 .HasOne(bu => bu.BlockingUser)
                 .WithMany()
@@ -149,21 +157,19 @@ namespace XenoTerra.DataAccessLayer.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // Eðer DI içinde bir connection string tanýmlýysa onu kullan
-                if (!string.IsNullOrEmpty(_connectionString))
+                // Connection String Provider'dan al
+                string connectionString = ConnectionStringProvider.GetConnectionString();
+
+                // Eðer connection string NULL veya boþ ise hata fýrlat
+                if (string.IsNullOrEmpty(connectionString))
                 {
-                    optionsBuilder.UseSqlServer(_connectionString, options =>
-                        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
+                    throw new InvalidOperationException("No valid connection string found from ConnectionStringProvider.");
                 }
-                else
-                {
-                    // Migration veya DesignTimeFactory için
-                    var connectionString = ConnectionStringProvider.GetConnectionString();
-                    optionsBuilder.UseSqlServer(connectionString, options =>
-                        options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
-                }
+
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
+
 
 
         public DbSet<BlockUser> BlockUsers { get; set; }
@@ -185,6 +191,7 @@ namespace XenoTerra.DataAccessLayer.Contexts
         public DbSet<SearchHistory> SearchHistories { get; set; }
         public DbSet<SearchHistoryUser> SearchHistoryUsers { get; set; }
         public DbSet<Story> Stories { get; set; }
+        public DbSet<StoryHighlight> StoryHighlights { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSetting> UserSettings { get; set; }
         public DbSet<ViewStory> ViewStories { get; set; }

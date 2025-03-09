@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.CommentServices
 
     {
 
-        public CommentServiceDAL(Context context, IMapper mapper)
+        public CommentServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

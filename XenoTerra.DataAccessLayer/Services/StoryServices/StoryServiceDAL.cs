@@ -14,7 +14,7 @@ namespace XenoTerra.DataAccessLayer.Services.StoryServices
 
     {
 
-        public StoryServiceDAL(Context context, IMapper mapper)
+        public StoryServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

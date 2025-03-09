@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.SavedPostServices
 
     {
 
-        public SavedPostServiceDAL(Context context, IMapper mapper)
+        public SavedPostServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }

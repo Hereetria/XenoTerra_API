@@ -11,6 +11,8 @@ using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using HotChocolate;
 using XenoTerra.DataAccessLayer.Services.BlockUserServices;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using Microsoft.EntityFrameworkCore.Metadata;
+using System.Reflection;
 
 namespace XenoTerra.DataAccessLayer.Repositories
 {
@@ -23,10 +25,10 @@ namespace XenoTerra.DataAccessLayer.Repositories
         where TUpdateDto : class
 
     {
-        protected readonly Context _context;
+        protected readonly AppDbContext _context;
         protected readonly IMapper _mapper;
 
-        public GenericRepositoryDAL(Context context, IMapper mapper)
+        public GenericRepositoryDAL(AppDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -67,8 +69,12 @@ namespace XenoTerra.DataAccessLayer.Repositories
                 .ProjectTo<TResultDto>(_mapper.ConfigurationProvider);
         }
 
-        public async Task<IEnumerable<TResultWithRelationsDto>> TGetByIdsWithRelationsAsync(IEnumerable<Guid> ids, IEnumerable<string> selectedFields)
+
+        public async Task<IEnumerable<TResultWithRelationsDto>> TGetByIdsWithRelationsAsync(IReadOnlyCollection<Guid>? ids, IReadOnlyCollection<string> selectedFields)
         {
+            if (ids == null || !ids.Any())
+                return await GetAllWithRelationsAsync(selectedFields);
+
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
 
@@ -76,11 +82,24 @@ namespace XenoTerra.DataAccessLayer.Repositories
             if (primaryKey == null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException("This method only supports entities with a single primary key.");
 
-            // Dinamik Select Expression oluþtur
+            var idSet = new HashSet<Guid>(ids);
             var selector = CreateSelectorExpression(selectedFields);
 
             var result = await _context.Set<TEntity>()
-                .Where(entity => ids.Contains(EF.Property<Guid>(entity, primaryKey.Properties[0].Name)))
+                .AsNoTracking()
+                .Where(entity => idSet.Contains(EF.Property<Guid>(entity, primaryKey.Properties[0].Name)))
+                .Select(selector)
+                .ToListAsync();
+
+            return result;
+        }
+
+        private async Task<IEnumerable<TResultWithRelationsDto>> GetAllWithRelationsAsync(IEnumerable<string> selectedFields)
+        {
+            var selector = CreateSelectorExpression(selectedFields);
+
+            var result = await _context.Set<TEntity>()
+                .AsNoTracking()
                 .Select(selector)
                 .ToListAsync();
 
@@ -92,12 +111,28 @@ namespace XenoTerra.DataAccessLayer.Repositories
             var parameter = Expression.Parameter(typeof(TEntity), "entity");
             var bindings = new List<MemberBinding>();
 
-            foreach (var field in selectedFields)
+            var selectedFieldsSet = new HashSet<string>(selectedFields, StringComparer.OrdinalIgnoreCase);
+            var fieldQueue = new Queue<string>(selectedFieldsSet);
+
+            var entityType = _context.Model.FindEntityType(typeof(TEntity));
+
+            while (fieldQueue.Count > 0)
             {
-                var entityProperty = Expression.Property(parameter, field);
-                var dtoProperty = typeof(TResultWithRelationsDto).GetProperty(field);
-                if (dtoProperty != null)
+                var field = fieldQueue.Dequeue();
+                var dtoProperty = typeof(TResultWithRelationsDto).GetProperties()
+                    .FirstOrDefault(p => string.Equals(p.Name, field, StringComparison.OrdinalIgnoreCase));
+
+                if (dtoProperty == null) continue;
+
+                ProcessNavigationProperty(dtoProperty, entityType, selectedFieldsSet, fieldQueue);
+
+                if (dtoProperty != null &&
+                    (dtoProperty.PropertyType.IsPrimitive || // int, bool, double vs.
+                     dtoProperty.PropertyType == typeof(string) ||
+                     dtoProperty.PropertyType == typeof(Guid)))
+
                 {
+                    var entityProperty = Expression.Property(parameter, field);
                     var binding = Expression.Bind(dtoProperty, entityProperty);
                     bindings.Add(binding);
                 }
@@ -107,57 +142,7 @@ namespace XenoTerra.DataAccessLayer.Repositories
             return Expression.Lambda<Func<TEntity, TResultWithRelationsDto>>(body, parameter);
         }
 
-
-        private static TResultWithRelationsDto ConvertEntityToDto(TEntity entity, IEnumerable<string> selectedFields)
-        {
-            var dtoInstance = Activator.CreateInstance<TResultWithRelationsDto>();
-            var dtoType = typeof(TResultWithRelationsDto);
-            var entityType = typeof(TEntity);
-
-            var selectedProperties = dtoType.GetProperties()
-                .Where(prop => !IsPrimitiveOrValueType(prop.PropertyType) && selectedFields.Contains(prop.Name))
-                .ToList();
-
-            foreach (var property in selectedProperties)
-            {
-                var entityProperty = entityType.GetProperty(property.Name);
-                if (entityProperty != null)
-                {
-                    property.SetValue(dtoInstance, entityProperty.GetValue(entity));
-                }
-            }
-            return dtoInstance;
-        }
-
-        private static bool IsPrimitiveOrValueType(Type type)
-        {
-            return type.IsPrimitive || type.IsValueType || type == typeof(string) || type == typeof(DateTime) || type == typeof(Guid);
-        }
-
-
-        //public async Task<TResultById> TGetByIdAsync(TKey id)
-        //{
-        //    try
-        //    {
-        //        if (id == null)
-        //        {
-        //            throw new ArgumentNullException(nameof(id), "ID cannot be null.");
-        //        }
-
-        //        var entity = await _context.Set<TEntity>().FindAsync(id);
-        //        if (entity == null)
-        //        {
-        //            throw new KeyNotFoundException($"Record with ID {id} not found.");
-        //        }
-
-        //        var result = _mapper.Map<TResultById>(entity);
-        //        return result;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception($"An error occurred while retrieving the record: {ex.Message}");
-        //    }
-        //}
+        
 
         public async Task<TResultDto> TCreateAsync(TCreateDto createDto)
         {
@@ -236,6 +221,29 @@ namespace XenoTerra.DataAccessLayer.Repositories
             catch (Exception ex)
             {
                 throw new Exception($"An error occurred while deleting the entity: {ex.Message}");
+            }
+        }
+
+        private void ProcessNavigationProperty(
+            PropertyInfo dtoProperty,
+            IEntityType? entityType,
+            HashSet<string> selectedFieldsSet,
+            Queue<string> fieldQueue)
+        {
+            if (dtoProperty.PropertyType.IsClass && dtoProperty.PropertyType != typeof(string))
+            {
+                var navigation = entityType?.FindNavigation(dtoProperty.Name);
+                var foreignKey = navigation?.ForeignKey?.Properties.FirstOrDefault();
+
+                if (foreignKey != null)
+                {
+                    var idPropertyName = foreignKey.Name;
+
+                    if (selectedFieldsSet.Add(idPropertyName))
+                    {
+                        fieldQueue.Enqueue(idPropertyName);
+                    }
+                }
             }
         }
 

@@ -9,10 +9,6 @@ namespace XenoTerra.WebAPI.Schemas.Queries.User
 {
     public class UserQuery
     {
-        public string GetRandomData()
-        {
-            return "Default data to prevent query class from being empty.";
-        }
 
         [UseProjection]
         [GraphQLDescription("Get all Users")]

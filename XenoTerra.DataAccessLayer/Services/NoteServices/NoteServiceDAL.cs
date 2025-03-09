@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Services.NoteServices
 
     {
 
-        public NoteServiceDAL(Context context, IMapper mapper)
+        public NoteServiceDAL(AppDbContext context, IMapper mapper)
             : base(context, mapper)
         {
         }
