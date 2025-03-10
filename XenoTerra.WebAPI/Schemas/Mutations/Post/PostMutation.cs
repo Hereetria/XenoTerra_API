@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.PostServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.PostService;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.Post
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Post
     {
         [UseProjection]
         [GraphQLDescription("Create a new Post")]
-        public async Task<ResultPostDto> CreatePostAsync(CreatePostDto createPostDto, [Service] IPostServiceBLL postServiceBLL)
+        public async Task<ResultPostDto> CreatePostAsync(CreatePostDto createPostDto, [Service] IPostWriteService postWriteService)
         {
-            var result = await postServiceBLL.CreateAsync(createPostDto);
+            var result = await postWriteService.CreateAsync(createPostDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing Post")]
-        public async Task<ResultPostDto> UpdatePostAsync(UpdatePostDto updatePostDto, [Service] IPostServiceBLL postServiceBLL)
+        public async Task<ResultPostDto> UpdatePostAsync(UpdatePostDto updatePostDto, [Service] IPostWriteService postWriteService)
         {
-            var result = await postServiceBLL.UpdateAsync(updatePostDto);
+            var result = await postWriteService.UpdateAsync(updatePostDto);
             return result;
         }
 
         [GraphQLDescription("Delete a Post by ID")]
-        public async Task<bool> DeletePostAsync(Guid id, [Service] IPostServiceBLL postServiceBLL)
+        public async Task<bool> DeletePostAsync(Guid id, [Service] IPostWriteService postWriteService)
         {
-            var result = await postServiceBLL.DeleteAsync(id);
+            var result = await postWriteService.DeleteAsync(id);
             return result;
         }
     }

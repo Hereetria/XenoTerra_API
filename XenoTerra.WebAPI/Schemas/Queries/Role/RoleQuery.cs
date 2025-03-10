@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.RoleServices;
-using XenoTerra.DTOLayer.Dtos.RoleDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Role
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Role
 {
     public class RoleQuery
     {

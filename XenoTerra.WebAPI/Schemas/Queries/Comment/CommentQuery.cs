@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.CommentServices;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Comment
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Comment
 {
     public class CommentQuery
     {

@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.UserSettingServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.UserSetting
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.UserSetting
     {
         [UseProjection]
         [GraphQLDescription("Create a new UserSetting")]
-        public async Task<ResultUserSettingDto> CreateUserSettingAsync(CreateUserSettingDto createUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
+        public async Task<ResultUserSettingDto> CreateUserSettingAsync(CreateUserSettingDto createUserSettingDto, [Service] IUserSettingWriteService userSettingWriteService)
         {
-            var result = await userSettingServiceBLL.CreateAsync(createUserSettingDto);
+            var result = await userSettingWriteService.CreateAsync(createUserSettingDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing UserSetting")]
-        public async Task<ResultUserSettingDto> UpdateUserSettingAsync(UpdateUserSettingDto updateUserSettingDto, [Service] IUserSettingServiceBLL userSettingServiceBLL)
+        public async Task<ResultUserSettingDto> UpdateUserSettingAsync(UpdateUserSettingDto updateUserSettingDto, [Service] IUserSettingWriteService userSettingWriteService)
         {
-            var result = await userSettingServiceBLL.UpdateAsync(updateUserSettingDto);
+            var result = await userSettingWriteService.UpdateAsync(updateUserSettingDto);
             return result;
         }
 
         [GraphQLDescription("Delete a UserSetting by ID")]
-        public async Task<bool> DeleteUserSettingAsync(Guid id, [Service] IUserSettingServiceBLL userSettingServiceBLL)
+        public async Task<bool> DeleteUserSettingAsync(Guid id, [Service] IUserSettingWriteService userSettingWriteService)
         {
-            var result = await userSettingServiceBLL.DeleteAsync(id);
+            var result = await userSettingWriteService.DeleteAsync(id);
             return result;
         }
     }

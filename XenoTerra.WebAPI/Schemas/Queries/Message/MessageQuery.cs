@@ -1,5 +1,4 @@
 ﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.MessageServices;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.Message

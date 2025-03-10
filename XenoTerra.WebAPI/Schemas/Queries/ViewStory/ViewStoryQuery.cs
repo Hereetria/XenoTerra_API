@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.ViewStoryServices;
-using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.ViewStory
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.ViewStory
 {
     public class ViewStoryQuery
     {

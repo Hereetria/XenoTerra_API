@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.LikeServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.Like
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Like
     {
         [UseProjection]
         [GraphQLDescription("Create a new Like")]
-        public async Task<ResultLikeDto> CreateLikeAsync(CreateLikeDto createLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
+        public async Task<ResultLikeDto> CreateLikeAsync(CreateLikeDto createLikeDto, [Service] ILikeWriteService  likeWriteService)
         {
-            var result = await likeServiceBLL.CreateAsync(createLikeDto);
+            var result = await likeWriteService.CreateAsync(createLikeDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing Like")]
-        public async Task<ResultLikeDto> UpdateLikeAsync(UpdateLikeDto updateLikeDto, [Service] ILikeServiceBLL likeServiceBLL)
+        public async Task<ResultLikeDto> UpdateLikeAsync(UpdateLikeDto updateLikeDto, [Service] ILikeWriteService  likeWriteService)
         {
-            var result = await likeServiceBLL.UpdateAsync(updateLikeDto);
+            var result = await likeWriteService.UpdateAsync(updateLikeDto);
             return result;
         }
 
         [GraphQLDescription("Delete a Like by ID")]
-        public async Task<bool> DeleteLikeAsync(Guid id, [Service] ILikeServiceBLL likeServiceBLL)
+        public async Task<bool> DeleteLikeAsync(Guid id, [Service] ILikeWriteService  likeWriteService)
         {
-            var result = await likeServiceBLL.DeleteAsync(id);
+            var result = await likeWriteService.DeleteAsync(id);
             return result;
         }
     }

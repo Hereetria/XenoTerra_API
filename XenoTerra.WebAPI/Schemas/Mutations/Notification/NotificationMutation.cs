@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.NotificationServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.Notification
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Notification
     {
         [UseProjection]
         [GraphQLDescription("Create a new Notification")]
-        public async Task<ResultNotificationDto> CreateNotificationAsync(CreateNotificationDto createNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
+        public async Task<ResultNotificationDto> CreateNotificationAsync(CreateNotificationDto createNotificationDto, [Service] INotificationWriteService notificationWriteService)
         {
-            var result = await notificationServiceBLL.CreateAsync(createNotificationDto);
+            var result = await notificationWriteService.CreateAsync(createNotificationDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing Notification")]
-        public async Task<ResultNotificationDto> UpdateNotificationAsync(UpdateNotificationDto updateNotificationDto, [Service] INotificationServiceBLL notificationServiceBLL)
+        public async Task<ResultNotificationDto> UpdateNotificationAsync(UpdateNotificationDto updateNotificationDto, [Service] INotificationWriteService notificationWriteService)
         {
-            var result = await notificationServiceBLL.UpdateAsync(updateNotificationDto);
+            var result = await notificationWriteService.UpdateAsync(updateNotificationDto);
             return result;
         }
 
         [GraphQLDescription("Delete a Notification by ID")]
-        public async Task<bool> DeleteNotificationAsync(Guid id, [Service] INotificationServiceBLL notificationServiceBLL)
+        public async Task<bool> DeleteNotificationAsync(Guid id, [Service] INotificationWriteService notificationWriteService)
         {
-            var result = await notificationServiceBLL.DeleteAsync(id);
+            var result = await notificationWriteService.DeleteAsync(id);
             return result;
         }
     }

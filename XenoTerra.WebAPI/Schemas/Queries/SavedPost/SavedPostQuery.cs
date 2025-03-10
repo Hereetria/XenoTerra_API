@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.SavedPostServices;
-using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.SavedPost
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.SavedPost
 {
     public class SavedPostQuery
     {

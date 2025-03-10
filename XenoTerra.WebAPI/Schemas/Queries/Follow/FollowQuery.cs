@@ -1,5 +1,4 @@
 ﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.FollowServices;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.Follow

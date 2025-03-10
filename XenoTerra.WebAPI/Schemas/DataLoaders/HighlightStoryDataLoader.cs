@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;

@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.PostTagServices;
-using XenoTerra.DTOLayer.Dtos.PostTagDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.PostTag
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.PostTag
 {
     public class PostTagQuery
     {

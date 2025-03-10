@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.RecentChatsServices;
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.RecentChats
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.RecentChats
 {
     public class RecentChatsQuery
     {

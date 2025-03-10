@@ -4,8 +4,7 @@ namespace XenoTerra.DataAccessLayer.Utils
 {
     public static class SelectorExpressionProvider
     {
-        public static Expression<Func<TSource, TDestination>> GetSelectorExpression<TSource, TDestination>(
-            IReadOnlyCollection<string> propertyNames)
+        public static Expression<Func<TSource, TDestination>> GetSelectorExpression<TSource, TDestination>(IEnumerable<string> selectedProperties)
             where TSource : class
             where TDestination : class, new()
         {
@@ -15,10 +14,12 @@ namespace XenoTerra.DataAccessLayer.Utils
             var sourceProperties = typeof(TSource).GetProperties();
             var destinationProperties = typeof(TDestination).GetProperties();
 
-            foreach (var propName in propertyNames)
+            foreach (var propertyName in selectedProperties)
             {
-                var sourceProp = sourceProperties.FirstOrDefault(p => string.Equals(p.Name, propName, StringComparison.OrdinalIgnoreCase));
-                var destinationProp = destinationProperties.FirstOrDefault(p => string.Equals(p.Name, propName, StringComparison.OrdinalIgnoreCase));
+                var sourceProp = sourceProperties.FirstOrDefault(p =>
+                    string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
+                var destinationProp = destinationProperties.FirstOrDefault(p =>
+                    string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
 
                 if (destinationProp != null && sourceProp != null)
                 {

@@ -5,58 +5,61 @@ using XenoTerra.DataAccessLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DTOLayer.Mappings;
 using System.Reflection;
-using XenoTerra.BussinessLogicLayer.Services.BlockUserServices;
-using XenoTerra.BussinessLogicLayer.Services.CommentServices;
-using XenoTerra.BussinessLogicLayer.Services.FollowServices;
-using XenoTerra.BussinessLogicLayer.Services.HighlightServices;
-using XenoTerra.BussinessLogicLayer.Services.LikeServices;
-using XenoTerra.BussinessLogicLayer.Services.MediaServices;
-using XenoTerra.BussinessLogicLayer.Services.MessageServices;
-using XenoTerra.BussinessLogicLayer.Services.NoteServices;
-using XenoTerra.BussinessLogicLayer.Services.NotificationServices;
-using XenoTerra.BussinessLogicLayer.Services.PostServices;
-using XenoTerra.BussinessLogicLayer.Services.ReactionServices;
-using XenoTerra.BussinessLogicLayer.Services.RecentChatsServices;
-using XenoTerra.BussinessLogicLayer.Services.ReportCommentServices;
-using XenoTerra.BussinessLogicLayer.Services.SavedPostServices;
-using XenoTerra.BussinessLogicLayer.Services.SearchHistoryServices;
-using XenoTerra.BussinessLogicLayer.Services.StoryServices;
-using XenoTerra.BussinessLogicLayer.Services.UserServices;
-using XenoTerra.BussinessLogicLayer.Services.UserSettingServices;
-using XenoTerra.BussinessLogicLayer.Services.ViewStoryServices;
-using XenoTerra.DataAccessLayer.Factories.Abstract;
-using XenoTerra.DataAccessLayer.Factories.Concrete;
-using XenoTerra.DataAccessLayer.Repositories;
-using XenoTerra.DataAccessLayer.Services.BlockUserServices;
-using XenoTerra.DataAccessLayer.Services.CommentServices;
-using XenoTerra.DataAccessLayer.Services.FollowServices;
-using XenoTerra.DataAccessLayer.Services.HighlightServices;
-using XenoTerra.DataAccessLayer.Services.LikeServices;
-using XenoTerra.DataAccessLayer.Services.MediaServices;
-using XenoTerra.DataAccessLayer.Services.MessageServices;
-using XenoTerra.DataAccessLayer.Services.NoteServices;
-using XenoTerra.DataAccessLayer.Services.NotificationServices;
-using XenoTerra.DataAccessLayer.Services.PostServices;
-using XenoTerra.DataAccessLayer.Services.ReactionServices;
-using XenoTerra.DataAccessLayer.Services.RecentChatsServices;
-using XenoTerra.DataAccessLayer.Services.ReportCommentServices;
-using XenoTerra.DataAccessLayer.Services.SavedPostServices;
-using XenoTerra.DataAccessLayer.Services.SearchHistoryServices;
-using XenoTerra.DataAccessLayer.Services.StoryServices;
-using XenoTerra.DataAccessLayer.Services.UserServices;
-using XenoTerra.DataAccessLayer.Services.UserSettingServices;
-using XenoTerra.DataAccessLayer.Services.ViewStoryServices;
-using XenoTerra.DataAccessLayer.Services.RoleServices;
-using XenoTerra.BussinessLogicLayer.Services.RoleServices;
 using XenoTerra.WebAPI.Schemas.Mutations;
 using XenoTerra.WebAPI.Schemas.Queries;
-using XenoTerra.BussinessLogicLayer.Services.PostTagServices;
-using XenoTerra.BussinessLogicLayer.Services.SearchHistoryUserServices;
-using XenoTerra.DataAccessLayer.Services.PostTagServices;
-using XenoTerra.DataAccessLayer.Services.SearchHistoryUserServices;
 using XenoTerra.WebAPI.Schemas.Types;
 using XenoTerra.WebAPI.Schemas.DataLoaders;
 using XenoTerra.WebAPI.Schemas.Resolvers;
+using Microsoft.EntityFrameworkCore.Migrations;
+using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
+using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository;
+using XenoTerra.BussinessLogicLayer.Services.Entity.CommentService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.FollowService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MediaService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.RoleService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService;
+using XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.HighlightStoryRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.MediaRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.PostTagRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.ReportCommentRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.StoryHighlightRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository;
+using XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService;
+using XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryUserRepository;
+using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -87,77 +90,126 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddDbContextFactory<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
-            builder.Services.AddScoped<IGenericRepositoryDALFactory, GenericRepositoryDALFactory>();
-            builder.Services.AddScoped(typeof(IGenericRepositoryDAL<,,,,,>), typeof(GenericRepositoryDAL<,,,,,>));
+            builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
+            builder.Services.AddScoped(typeof(IWriteRepository<,>), typeof(WriteRepository<,>));
 
 
 
+            builder.Services.AddScoped<IBlockUserReadService, BlockUserReadService>();
+            builder.Services.AddScoped<IBlockUserWriteService, BlockUserWriteService>();
+            builder.Services.AddScoped<IBlockUserReadRepository, BlockUserReadRepository>();
+            builder.Services.AddScoped<IBlockUserWriteRepository, BlockUserWriteRepository>();
 
-            builder.Services.AddScoped<IBlockUserServiceBLL, BlockUserServiceBLL>();
-            builder.Services.AddScoped<IBlockUserServiceDAL, BlockUserServiceDAL>();
+            builder.Services.AddScoped<ICommentReadService, CommentReadService>();
+            builder.Services.AddScoped<ICommentWriteService, CommentWriteService>();
+            builder.Services.AddScoped<ICommentReadRepository, CommentReadRepository>();
+            builder.Services.AddScoped<ICommentWriteRepository, CommentWriteRepository>();
 
-            builder.Services.AddScoped<ICommentServiceBLL, CommentServiceBLL>();
-            builder.Services.AddScoped<ICommentServiceDAL, CommentServiceDAL>();
+            builder.Services.AddScoped<IFollowReadService, FollowReadService>();
+            builder.Services.AddScoped<IFollowWriteService, FollowWriteService>();
+            builder.Services.AddScoped<IFollowReadRepository, FollowReadRepository>();
+            builder.Services.AddScoped<IFollowWriteRepository, FollowWriteRepository>();
 
-            builder.Services.AddScoped<IFollowServiceBLL, FollowServiceBLL>();
-            builder.Services.AddScoped<IFollowServiceDAL, FollowServiceDAL>();
+            builder.Services.AddScoped<IHighlightReadService, HighlightReadService>();
+            builder.Services.AddScoped<IHighlightWriteService, HighlightWriteService>();
+            builder.Services.AddScoped<IHighlightReadRepository, HighlightReadRepository>();
+            builder.Services.AddScoped<IHighlightWriteRepository, HighlightWriteRepository>();
 
-            builder.Services.AddScoped<IHighlightServiceBLL, HighlightServiceBLL>();
-            builder.Services.AddScoped<IHighlightServiceDAL, HighlightServiceDAL>();
+            builder.Services.AddScoped<IStoryHighlightReadService, StoryHighlightReadService>();
+            builder.Services.AddScoped<IStoryHighlightWriteService, StoryHighlightWriteService>();
+            builder.Services.AddScoped<IStoryHighlightReadRepository, StoryHighlightReadRepository>();
+            builder.Services.AddScoped<IStoryHighlightWriteRepository, StoryHighlightWriteRepository>();
 
-            builder.Services.AddScoped<ILikeServiceBLL, LikeServiceBLL>();
-            builder.Services.AddScoped<ILikeServiceDAL, LikeServiceDAL>();
+            builder.Services.AddScoped<ILikeReadService, LikeReadService>();
+            builder.Services.AddScoped<ILikeWriteService, LikeWriteService>();
+            builder.Services.AddScoped<ILikeReadRepository, LikeReadRepository>();
+            builder.Services.AddScoped<ILikeWriteRepository, LikeWriteRepository>();
 
-            builder.Services.AddScoped<IMediaServiceBLL, MediaServiceBLL>();
-            builder.Services.AddScoped<IMediaServiceDAL, MediaServiceDAL>();
+            builder.Services.AddScoped<IMediaReadService, MediaReadService>();
+            builder.Services.AddScoped<IMediaWriteService, MediaWriteService>();
+            builder.Services.AddScoped<IMediaReadRepository, MediaReadRepository>();
+            builder.Services.AddScoped<IMediaWriteRepository, MediaWriteRepository>();
 
-            builder.Services.AddScoped<IMessageServiceBLL, MessageServiceBLL>();
-            builder.Services.AddScoped<IMessageServiceDAL, MessageServiceDAL>();
+            builder.Services.AddScoped<IMessageReadService, MessageReadService>();
+            builder.Services.AddScoped<IMessageWriteService, MessageWriteService>();
+            builder.Services.AddScoped<IMessageReadRepository, MessageReadRepository>();
+            builder.Services.AddScoped<IMessageWriteRepository, MessageWriteRepository>();
 
-            builder.Services.AddScoped<INoteServiceBLL, NoteServiceBLL>();
-            builder.Services.AddScoped<INoteServiceDAL, NoteServiceDAL>();
+            builder.Services.AddScoped<INoteReadService, NoteReadService>();
+            builder.Services.AddScoped<INoteWriteService, NoteWriteService>();
+            builder.Services.AddScoped<INoteReadRepository, NoteReadRepository>();
+            builder.Services.AddScoped<INoteWriteRepository, NoteWriteRepository>();
 
-            builder.Services.AddScoped<INotificationServiceBLL, NotificationServiceBLL>();
-            builder.Services.AddScoped<INotificationServiceDAL, NotificationServiceDAL>();
+            builder.Services.AddScoped<INotificationReadService, NotificationReadService>();
+            builder.Services.AddScoped<INotificationWriteService, NotificationWriteService>();
+            builder.Services.AddScoped<INotificationReadRepository, NotificationReadRepository>();
+            builder.Services.AddScoped<INotificationWriteRepository, NotificationWriteRepository>();
 
-            builder.Services.AddScoped<IPostServiceBLL, PostServiceBLL>();
-            builder.Services.AddScoped<IPostServiceDAL, PostServiceDAL>();
+            builder.Services.AddScoped<IPostReadService, PostReadService>();
+            builder.Services.AddScoped<IPostWriteService, PostWriteService>();
+            builder.Services.AddScoped<IPostReadRepository, PostReadRepository>();
+            builder.Services.AddScoped<IPostWriteRepository, PostWriteRepository>();
 
-            builder.Services.AddScoped<IPostTagServiceBLL, PostTagServiceBLL>(); 
-            builder.Services.AddScoped<IPostTagServiceDAL, PostTagServiceDAL>();
+            builder.Services.AddScoped<IPostTagReadService, PostTagReadService>();
+            builder.Services.AddScoped<IPostTagWriteService, PostTagWriteService>();
+            builder.Services.AddScoped<IPostTagReadRepository, PostTagReadRepository>();
+            builder.Services.AddScoped<IPostTagWriteRepository, PostTagWriteRepository>();
 
-            builder.Services.AddScoped<IReactionServiceBLL, ReactionServiceBLL>();
-            builder.Services.AddScoped<IReactionServiceDAL, ReactionServiceDAL>();
+            builder.Services.AddScoped<IReactionReadService, ReactionReadService>();
+            builder.Services.AddScoped<IReactionWriteService, ReactionWriteService>();
+            builder.Services.AddScoped<IReactionReadRepository, ReactionReadRepository>();
+            builder.Services.AddScoped<IReactionWriteRepository, ReactionWriteRepository>();
 
-            builder.Services.AddScoped<IRecentChatsServiceBLL, RecentChatsServiceBLL>();
-            builder.Services.AddScoped<IRecentChatsServiceDAL, RecentChatsServiceDAL>();
+            builder.Services.AddScoped<IRecentChatsReadService, RecentChatsReadService>();
+            builder.Services.AddScoped<IRecentChatsWriteService, RecentChatsWriteService>();
+            builder.Services.AddScoped<IRecentChatsReadRepository, RecentChatsReadRepository>();
+            builder.Services.AddScoped<IRecentChatsWriteRepository, RecentChatsWriteRepository>();
 
-            builder.Services.AddScoped<IReportCommentServiceBLL, ReportCommentServiceBLL>();
-            builder.Services.AddScoped<IReportCommentServiceDAL, ReportCommentServiceDAL>();
+            builder.Services.AddScoped<IReportCommentReadService, ReportCommentReadService>();
+            builder.Services.AddScoped<IReportCommentWriteService, ReportCommentWriteService>();
+            builder.Services.AddScoped<IReportCommentReadRepository, ReportCommentReadRepository>();
+            builder.Services.AddScoped<IReportCommentWriteRepository, ReportCommentWriteRepository>();
 
-            builder.Services.AddScoped<IRoleServiceBLL, RoleServiceBLL>();
-            builder.Services.AddScoped<IRoleServiceDAL, RoleServiceDAL>();
+            builder.Services.AddScoped<IRoleReadService, RoleReadService>();
+            builder.Services.AddScoped<IRoleWriteService, RoleWriteService>();
+            builder.Services.AddScoped<IRoleReadRepository, RoleReadRepository>();
+            builder.Services.AddScoped<IRoleWriteRepository, RoleWriteRepository>();
 
-            builder.Services.AddScoped<ISavedPostServiceBLL, SavedPostServiceBLL>();
-            builder.Services.AddScoped<ISavedPostServiceDAL, SavedPostServiceDAL>();
+            builder.Services.AddScoped<ISavedPostReadService, SavedPostReadService>();
+            builder.Services.AddScoped<ISavedPostWriteService, SavedPostWriteService>();
+            builder.Services.AddScoped<ISavedPostReadRepository, SavedPostReadRepository>();
+            builder.Services.AddScoped<ISavedPostWriteRepository, SavedPostWriteRepository>();
 
-            builder.Services.AddScoped<ISearchHistoryServiceBLL, SearchHistoryServiceBLL>();
-            builder.Services.AddScoped<ISearchHistoryServiceDAL, SearchHistoryServiceDAL>();
+            builder.Services.AddScoped<ISearchHistoryReadService, SearchHistoryReadService>();
+            builder.Services.AddScoped<ISearchHistoryWriteService, SearchHistoryWriteService>();
+            builder.Services.AddScoped<ISearchHistoryReadRepository, SearchHistoryReadRepository>();
+            builder.Services.AddScoped<ISearchHistoryWriteRepository, SearchHistoryWriteRepository>();
 
-            builder.Services.AddScoped<ISearchHistoryUserServiceBLL, SearchHistoryUserServiceBLL>(); 
-            builder.Services.AddScoped<ISearchHistoryUserServiceDAL, SearchHistoryUserServiceDAL>(); 
+            builder.Services.AddScoped<ISearchHistoryUserReadService, SearchHistoryUserReadService>();
+            builder.Services.AddScoped<ISearchHistoryUserWriteService, SearchHistoryUserWriteService>();
+            builder.Services.AddScoped<ISearchHistoryUserReadRepository, SearchHistoryUserReadRepository>();
+            builder.Services.AddScoped<ISearchHistoryUserWriteRepository, SearchHistoryUserWriteRepository>();
 
-            builder.Services.AddScoped<IStoryServiceBLL, StoryServiceBLL>();
-            builder.Services.AddScoped<IStoryServiceDAL, StoryServiceDAL>();
+            builder.Services.AddScoped<IStoryReadService, StoryReadService>();
+            builder.Services.AddScoped<IStoryWriteService, StoryWriteService>();
+            builder.Services.AddScoped<IStoryReadRepository, StoryReadRepository>();
+            builder.Services.AddScoped<IStoryWriteRepository, StoryWriteRepository>();
 
-            builder.Services.AddScoped<IUserServiceBLL, UserServiceBLL>();
-            builder.Services.AddScoped<IUserServiceDAL, UserServiceDAL>();
+            builder.Services.AddScoped<IUserReadService, UserReadService>();
+            builder.Services.AddScoped<IUserWriteService, UserWriteService>();
+            builder.Services.AddScoped<IUserReadRepository, UserReadRepository>();
+            builder.Services.AddScoped<IUserWriteRepository, UserWriteRepository>();
 
-            builder.Services.AddScoped<IUserSettingServiceBLL, UserSettingServiceBLL>();
-            builder.Services.AddScoped<IUserSettingServiceDAL, UserSettingServiceDAL>();
+            builder.Services.AddScoped<IUserSettingReadService, UserSettingReadService>();
+            builder.Services.AddScoped<IUserSettingWriteService, UserSettingWriteService>();
+            builder.Services.AddScoped<IUserSettingReadRepository, UserSettingReadRepository>();
+            builder.Services.AddScoped<IUserSettingWriteRepository, UserSettingWriteRepository>();
 
-            builder.Services.AddScoped<IViewStoryServiceBLL, ViewStoryServiceBLL>();
-            builder.Services.AddScoped<IViewStoryServiceDAL, ViewStoryServiceDAL>();
+            builder.Services.AddScoped<IViewStoryReadService, ViewStoryReadService>();
+            builder.Services.AddScoped<IViewStoryWriteService, ViewStoryWriteService>();
+            builder.Services.AddScoped<IViewStoryReadRepository, ViewStoryReadRepository>();
+            builder.Services.AddScoped<IViewStoryWriteRepository, ViewStoryWriteRepository>();
+
 
         }
     }

@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.NotificationServices;
-using XenoTerra.DTOLayer.Dtos.NotificationDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Notification
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Notification
 {
     public class NotificationQuery
     {

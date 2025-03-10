@@ -1,9 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.PostServices;
-using XenoTerra.DataAccessLayer.Services.PostServices;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Post
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Post
 {
     public class PostQuery
     {
@@ -31,29 +26,29 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Post
         //    return result;
         //}
 
-        [UsePaging(IncludeTotalCount = true)]
-        [UseProjection]
-        [GraphQLDescription("Get mainstream posts")]
-        public IQueryable<ResultPostDto> GetMainstreamPosts(
-            Guid seed,
-            [Service] IPostServiceBLL postServiceBLL)
-        {
-            var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
-            int seedHash = seed.GetHashCode();
-            var result = postServiceBLL.GetMainstreamPosts(userId, seedHash);
-            return result;
-        }
+        //[UsePaging(IncludeTotalCount = true)]
+        //[UseProjection]
+        //[GraphQLDescription("Get mainstream posts")]
+        //public IQueryable<ResultPostDto> GetMainstreamPosts(
+        //    Guid seed,
+        //    [Service] IPostServiceBLL postServiceBLL)
+        //{
+        //    var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
+        //    int seedHash = seed.GetHashCode();
+        //    var result = postServiceBLL.GetMainstreamPosts(userId, seedHash);
+        //    return result;
+        //}
 
-        [UsePaging(IncludeTotalCount = true)]
-        [UseProjection]
-        [GraphQLDescription("Get following posts")]
-        public IQueryable<ResultPostDto> GetFollowingPosts(
-            [Service] IPostServiceBLL postServiceBLL)
-        {
-            var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
-            var result = postServiceBLL.GetFollowingPosts(userId);
-            return result;
-        }
+        //[UsePaging(IncludeTotalCount = true)]
+        //[UseProjection]
+        //[GraphQLDescription("Get following posts")]
+        //public IQueryable<ResultPostDto> GetFollowingPosts(
+        //    [Service] IPostServiceBLL postServiceBLL)
+        //{
+        //    var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
+        //    var result = postServiceBLL.GetFollowingPosts(userId);
+        //    return result;
+        //}
 
     }
 }

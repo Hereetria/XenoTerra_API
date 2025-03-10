@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Abstract\" />
-    <Folder Include="Services\Concrete\" />
+    <Folder Include="Factories\Abstract\" />
   </ItemGroup>
 
 </Project>

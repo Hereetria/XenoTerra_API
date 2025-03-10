@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.NoteServices;
-using XenoTerra.DTOLayer.Dtos.NoteDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Note
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Note
 {
     public class NoteQuery
     {

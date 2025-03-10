@@ -1,5 +1,5 @@
 ﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.SearchHistoryUserServices;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.SearchHistoryUser
@@ -8,24 +8,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.SearchHistoryUser
     {
         [UseProjection]
         [GraphQLDescription("Create a new SearchHistoryUser")]
-        public async Task<ResultSearchHistoryUserDto> CreateSearchHistoryUserAsync(CreateSearchHistoryUserDto createSearchHistoryUserDto, [Service] ISearchHistoryUserServiceBLL searchHistoryUserServiceBLL)
+        public async Task<ResultSearchHistoryUserDto> CreateSearchHistoryUserAsync(CreateSearchHistoryUserDto createSearchHistoryUserDto, [Service] ISearchHistoryUserWriteService searchHistoryUserWriteService)
         {
-            var result = await searchHistoryUserServiceBLL.CreateAsync(createSearchHistoryUserDto);
+            var result = await searchHistoryUserWriteService.CreateAsync(createSearchHistoryUserDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing SearchHistoryUser")]
-        public async Task<ResultSearchHistoryUserDto> UpdateSearchHistoryUserAsync(UpdateSearchHistoryUserDto updateSearchHistoryUserDto, [Service] ISearchHistoryUserServiceBLL searchHistoryUserServiceBLL)
+        public async Task<ResultSearchHistoryUserDto> UpdateSearchHistoryUserAsync(UpdateSearchHistoryUserDto updateSearchHistoryUserDto, [Service] ISearchHistoryUserWriteService searchHistoryUserWriteService)
         {
-            var result = await searchHistoryUserServiceBLL.UpdateAsync(updateSearchHistoryUserDto);
+            var result = await searchHistoryUserWriteService.UpdateAsync(updateSearchHistoryUserDto);
             return result;
         }
 
         [GraphQLDescription("Delete a SearchHistoryUser by ID")]
-        public async Task<bool> DeleteSearchHistoryUserAsync(Guid id, [Service] ISearchHistoryUserServiceBLL searchHistoryUserServiceBLL)
+        public async Task<bool> DeleteSearchHistoryUserAsync(Guid id, [Service] ISearchHistoryUserWriteService searchHistoryUserWriteService)
         {
-            var result = await searchHistoryUserServiceBLL.DeleteAsync(id);
+            var result = await searchHistoryUserWriteService.DeleteAsync(id);
             return result;
         }
     }

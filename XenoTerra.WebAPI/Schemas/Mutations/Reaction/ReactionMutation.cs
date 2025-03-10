@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.ReactionServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.Reaction
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.Reaction
     {
         [UseProjection]
         [GraphQLDescription("Create a new Reaction")]
-        public async Task<ResultReactionDto> CreateReactionAsync(CreateReactionDto createReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
+        public async Task<ResultReactionDto> CreateReactionAsync(CreateReactionDto createReactionDto, [Service] IReactionWriteService reactionWriteService)
         {
-            var result = await reactionServiceBLL.CreateAsync(createReactionDto);
+            var result = await reactionWriteService.CreateAsync(createReactionDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing Reaction")]
-        public async Task<ResultReactionDto> UpdateReactionAsync(UpdateReactionDto updateReactionDto, [Service] IReactionServiceBLL reactionServiceBLL)
+        public async Task<ResultReactionDto> UpdateReactionAsync(UpdateReactionDto updateReactionDto, [Service] IReactionWriteService reactionWriteService)
         {
-            var result = await reactionServiceBLL.UpdateAsync(updateReactionDto);
+            var result = await reactionWriteService.UpdateAsync(updateReactionDto);
             return result;
         }
 
         [GraphQLDescription("Delete a Reaction by ID")]
-        public async Task<bool> DeleteReactionAsync(Guid id, [Service] IReactionServiceBLL reactionServiceBLL)
+        public async Task<bool> DeleteReactionAsync(Guid id, [Service] IReactionWriteService reactionWriteService)
         {
-            var result = await reactionServiceBLL.DeleteAsync(id);
+            var result = await reactionWriteService.DeleteAsync(id);
             return result;
         }
     }

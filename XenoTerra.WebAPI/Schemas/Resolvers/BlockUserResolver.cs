@@ -1,7 +1,6 @@
 ﻿using GreenDonut;
 using HotChocolate.Language;
 using HotChocolate.Resolvers;
-using XenoTerra.BussinessLogicLayer.Services.BlockUserServices;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;

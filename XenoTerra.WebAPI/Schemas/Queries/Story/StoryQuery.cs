@@ -1,6 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.StoryServices;
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
+﻿using XenoTerra.DTOLayer.Dtos.StoryDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.Story
 {
@@ -30,13 +28,13 @@ namespace XenoTerra.WebAPI.Schemas.Queries.Story
         //    return result;
         //}
 
-        [UseProjection]
-        [GraphQLDescription("Get following users stories")]
-        public IQueryable<ResultStoryDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
-        {
-            var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
-            var result = storyServiceBLL.GetFollowingStories(userId);
-            return result;
-        }
+        //[UseProjection]
+        //[GraphQLDescription("Get following users stories")]
+        //public IQueryable<ResultStoryDto> GetFollowingStories([Service] IStoryServiceBLL storyServiceBLL)
+        //{
+        //    var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
+        //    var result = storyServiceBLL.GetFollowingStories(userId);
+        //    return result;
+        //}
     }
 }

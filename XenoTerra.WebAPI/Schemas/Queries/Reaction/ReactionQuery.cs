@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.ReactionServices;
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Reaction
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Reaction
 {
     public class ReactionQuery
     {

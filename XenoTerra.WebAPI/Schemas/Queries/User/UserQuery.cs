@@ -1,21 +1,15 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.PostServices;
-using XenoTerra.BussinessLogicLayer.Services.UserServices;
-using XenoTerra.DataAccessLayer.Services.UserServices;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.User
 {
     public class UserQuery
     {
 
-        [UseProjection]
-        [GraphQLDescription("Get all Users")]
-        public IQueryable<ResultUserDto> GetAllUsers([Service] IUserServiceBLL userServiceBLL)
+        public string GetRandomData()
         {
-            var ids = userServiceBLL.GetAllIdsAsync().Result;
-            return userServiceBLL.GetByIdsQuerable(ids);
+            return "Default data to prevent query class from being empty.";
         }
 
         //[UseProjection]
@@ -30,15 +24,15 @@ namespace XenoTerra.WebAPI.Schemas.Queries.User
         //    return result;
         //}
 
-        [UsePaging(IncludeTotalCount = true)]
-        [UseProjection]
-        [GraphQLDescription("Get Suggested Users")]
-        public IQueryable<ResultUserDto> GetSuggestedUsers(
-        [Service] IUserServiceBLL userServiceBLL)
-        {
-            var userId = Guid.Parse("9a466137-3217-424f-39b3-08dd59a25e5a");
-            var result = userServiceBLL.GetSuggestedUsers(userId);
-            return result;
-        }
+        //[UsePaging(IncludeTotalCount = true)]
+        //[UseProjection]
+        //[GraphQLDescription("Get Suggested Users")]
+        //public IQueryable<ResultUserDto> GetSuggestedUsers(
+        //[Service] IUserServiceBLL userServiceBLL)
+        //{
+        //    var userId = Guid.Parse("9a466137-3217-424f-39b3-08dd59a25e5a");
+        //    var result = userServiceBLL.GetSuggestedUsers(userId);
+        //    return result;
+        //}
     }
 }

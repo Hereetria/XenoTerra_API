@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.LikeServices;
-using XenoTerra.DTOLayer.Dtos.LikeDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.Like
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.Like
 {
     public class LikeQuery
     {

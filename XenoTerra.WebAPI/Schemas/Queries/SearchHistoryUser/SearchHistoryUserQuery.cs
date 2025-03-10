@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.SearchHistoryUserServices;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.SearchHistoryUser
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.SearchHistoryUser
 {
     public class SearchHistoryUserQuery
     {

@@ -1,8 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.UserSettingServices;
-using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
-
-namespace XenoTerra.WebAPI.Schemas.Queries.UserSetting
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.UserSetting
 {
     public class UserSettingQuery
     {

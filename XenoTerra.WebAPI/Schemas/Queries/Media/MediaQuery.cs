@@ -1,5 +1,4 @@
 ﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.MediaServices;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.Media

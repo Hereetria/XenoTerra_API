@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.EntityLayer.Entities;
+
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
+{
+    public class NotificationWriteRepository : WriteRepository<Notification, Guid>, INotificationWriteRepository
+    {
+        public NotificationWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+    }
+
+}

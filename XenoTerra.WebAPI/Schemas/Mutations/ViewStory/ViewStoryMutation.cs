@@ -1,5 +1,4 @@
-﻿using HotChocolate;
-using XenoTerra.BussinessLogicLayer.Services.ViewStoryServices;
+﻿using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.ViewStory
@@ -8,24 +7,24 @@ namespace XenoTerra.WebAPI.Schemas.Mutations.ViewStory
     {
         [UseProjection]
         [GraphQLDescription("Create a new ViewStory")]
-        public async Task<ResultViewStoryDto> CreateViewStoryAsync(CreateViewStoryDto createViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
+        public async Task<ResultViewStoryDto> CreateViewStoryAsync(CreateViewStoryDto createViewStoryDto, [Service] IViewStoryWriteService viewStoryWriteService)
         {
-            var result = await viewStoryServiceBLL.CreateAsync(createViewStoryDto);
+            var result = await viewStoryWriteService.CreateAsync(createViewStoryDto);
             return result;
         }
 
         [UseProjection]
         [GraphQLDescription("Update an existing ViewStory")]
-        public async Task<ResultViewStoryDto> UpdateViewStoryAsync(UpdateViewStoryDto updateViewStoryDto, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
+        public async Task<ResultViewStoryDto> UpdateViewStoryAsync(UpdateViewStoryDto updateViewStoryDto, [Service] IViewStoryWriteService viewStoryWriteService)
         {
-            var result = await viewStoryServiceBLL.UpdateAsync(updateViewStoryDto);
+            var result = await viewStoryWriteService.UpdateAsync(updateViewStoryDto);
             return result;
         }
 
         [GraphQLDescription("Delete a ViewStory by ID")]
-        public async Task<bool> DeleteViewStoryAsync(Guid id, [Service] IViewStoryServiceBLL viewStoryServiceBLL)
+        public async Task<bool> DeleteViewStoryAsync(Guid id, [Service] IViewStoryWriteService viewStoryWriteService)
         {
-            var result = await viewStoryServiceBLL.DeleteAsync(id);
+            var result = await viewStoryWriteService.DeleteAsync(id);
             return result;
         }
     }
