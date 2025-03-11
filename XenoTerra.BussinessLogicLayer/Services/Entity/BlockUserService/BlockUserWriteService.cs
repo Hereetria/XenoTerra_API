@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
 {
     public class BlockUserWriteService : WriteService<BlockUser, ResultBlockUserDto, CreateBlockUserDto, UpdateBlockUserDto, Guid>, IBlockUserWriteService
     {
-        public BlockUserWriteService(IWriteRepository<BlockUser, Guid> repository, IMapper mapper, SelectorExpressionProvider<BlockUser, ResultBlockUserDto> selectorExpressionProvider) : base(repository, mapper, selectorExpressionProvider)
+        public BlockUserWriteService(IWriteRepository<BlockUser, Guid> repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

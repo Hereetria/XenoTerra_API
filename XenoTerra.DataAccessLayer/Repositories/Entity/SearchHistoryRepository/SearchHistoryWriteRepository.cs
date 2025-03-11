@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
 
     public class SearchHistoryWriteRepository : WriteRepository<SearchHistory, Guid>, ISearchHistoryWriteRepository
     {
-        public SearchHistoryWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public SearchHistoryWriteRepository(AppDbContext context) : base(context) { }
     }
 }

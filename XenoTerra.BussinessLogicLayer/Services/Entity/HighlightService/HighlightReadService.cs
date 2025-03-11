@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
 {
-    public class HighlightReadService : ReadService<Highlight, ResultHighlightWithRelationsDto, Guid>, IHighlightReadService
+    public class HighlightReadService : ReadService<Highlight, Guid>, IHighlightReadService
     {
-        public HighlightReadService(IReadRepository<Highlight, Guid> repository, IMapper mapper, SelectorExpressionProvider<Highlight, ResultHighlightWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public HighlightReadService(IReadRepository<Highlight, Guid> repository)
+            : base(repository) { }
     }
 }

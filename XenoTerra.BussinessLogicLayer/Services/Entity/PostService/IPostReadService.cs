@@ -12,6 +12,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostService
 {
-    public interface IPostReadService : IReadService<Post, ResultPostWithRelationsDto, Guid> { }
+    public interface IPostReadService : IReadService<Post, Guid> { }
 
 }

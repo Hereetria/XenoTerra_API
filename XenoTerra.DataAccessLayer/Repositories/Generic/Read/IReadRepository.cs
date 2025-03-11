@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 {
     public interface IReadRepository<TEntity, TKey>
         where TEntity : class
     {
-        IQueryable<TEntity> QueryAll();
-        IQueryable<TEntity> QueryById(TKey key);
-        IQueryable<TEntity> QueryByIds(IEnumerable<TKey> keys);
+        AppDbContext GetDbContext();
+        IQueryable<TEntity> GetAllQueryable();
+        IQueryable<TEntity> GetByIdQueryable(TKey key);
+        IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys);
     }
 }

@@ -12,10 +12,10 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService
 {
-    public class PostTagReadService : ReadService<PostTag, ResultPostTagWithRelationsDto, Guid>, IPostTagReadService
+    public class PostTagReadService : ReadService<PostTag, Guid>, IPostTagReadService
     {
-        public PostTagReadService(IReadRepository<PostTag, Guid> repository, IMapper mapper, SelectorExpressionProvider<PostTag, ResultPostTagWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public PostTagReadService(IReadRepository<PostTag, Guid> repository)
+            : base(repository) { }
     }
 
 }

@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository
 
     public class UserWriteRepository : WriteRepository<User, Guid>, IUserWriteRepository
     {
-        public UserWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public UserWriteRepository(AppDbContext context) : base(context) { }
     }
 }

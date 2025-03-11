@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
 {
     public class HighlightWriteService : WriteService<Highlight, ResultHighlightDto, CreateHighlightDto, UpdateHighlightDto, Guid>, IHighlightWriteService
     {
-        public HighlightWriteService(IWriteRepository<Highlight, Guid> repository, IMapper mapper, SelectorExpressionProvider<Highlight, ResultHighlightDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public HighlightWriteService(IWriteRepository<Highlight, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

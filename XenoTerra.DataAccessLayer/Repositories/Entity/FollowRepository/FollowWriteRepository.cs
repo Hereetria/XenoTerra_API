@@ -13,6 +13,8 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
 
     public class FollowWriteRepository : WriteRepository<Follow, Guid>, IFollowWriteRepository
     {
-        public FollowWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public FollowWriteRepository(AppDbContext context) : base(context)
+        {
+        }
     }
 }

@@ -14,34 +14,9 @@ namespace XenoTerra.WebAPI.Schemas.Types
     {
         protected override void Configure(IObjectTypeDescriptor<ResultBlockUserWithRelationsDto> descriptor)
         {
-            descriptor
-                .Field(x => x.BlockingUser)
-                .Resolve(async context =>
-                {
-                    var blockUserDto = context.Parent<ResultBlockUserWithRelationsDto>();
-                    var userDataLoader = context.Service<UserDataLoader>();
-                    var resolver = context.Service<BlockUserResolver>();
-
-                    await resolver.PopulateBlockUsersAsync(blockUserDto, userDataLoader, context);
-
-                    return blockUserDto.BlockingUser;
-                });
-
-            descriptor
-                .Field(x => x.BlockedUser)
-                .Resolve(async context =>
-                {
-                    var blockUserDto = context.Parent<ResultBlockUserWithRelationsDto>();
-                    var userDataLoader = context.Service<UserDataLoader>();
-                    var resolver = context.Service<BlockUserResolver>();
-
-                    await resolver.PopulateBlockUsersAsync(blockUserDto, userDataLoader, context);
-
-                    return blockUserDto.BlockedUser;
-                });
+            descriptor.Field(x => x.BlockingUser);
+            descriptor.Field(x => x.BlockedUser);
         }
 
     }
-
-
 }

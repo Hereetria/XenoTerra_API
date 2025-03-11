@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository
 
     public class ViewStoryWriteRepository : WriteRepository<ViewStory, Guid>, IViewStoryWriteRepository
     {
-        public ViewStoryWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public ViewStoryWriteRepository(AppDbContext context) : base(context) { }
     }
 }

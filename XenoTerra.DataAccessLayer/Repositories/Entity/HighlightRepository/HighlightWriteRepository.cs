@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
 {
     public class HighlightWriteRepository : WriteRepository<Highlight, Guid>, IHighlightWriteRepository
     {
-        public HighlightWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public HighlightWriteRepository(AppDbContext context) : base(context) { }
     }
 }

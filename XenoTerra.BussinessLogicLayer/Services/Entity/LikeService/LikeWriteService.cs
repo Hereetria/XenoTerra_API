@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
     public class LikeWriteService : WriteService<Like, ResultLikeDto, CreateLikeDto, UpdateLikeDto, Guid>, ILikeWriteService
     {
-        public LikeWriteService(IWriteRepository<Like, Guid> repository, IMapper mapper, SelectorExpressionProvider<Like, ResultLikeDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public LikeWriteService(IWriteRepository<Like, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

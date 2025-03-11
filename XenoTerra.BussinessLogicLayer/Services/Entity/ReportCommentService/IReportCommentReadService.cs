@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService
 {
-    public interface IReportCommentReadService : IReadService<ReportComment, ResultReportCommentWithRelationsDto, Guid> { }
+    public interface IReportCommentReadService : IReadService<ReportComment, Guid> { }
 
 }

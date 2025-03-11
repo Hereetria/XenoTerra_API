@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
 {
     public class CommentWriteService : WriteService<Comment, ResultCommentDto, CreateCommentDto, UpdateCommentDto, Guid>, ICommentWriteService
     {
-        public CommentWriteService(IWriteRepository<Comment, Guid> repository, IMapper mapper, SelectorExpressionProvider<Comment, ResultCommentDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public CommentWriteService(IWriteRepository<Comment, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

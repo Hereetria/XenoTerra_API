@@ -87,7 +87,7 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddAutoMapper(typeof(GeneralMapping));
 
 
-            builder.Services.AddDbContextFactory<AppDbContext>(options =>
+            builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
             builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));

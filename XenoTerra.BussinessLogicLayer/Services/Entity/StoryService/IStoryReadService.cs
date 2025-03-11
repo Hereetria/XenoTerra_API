@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryService
 {
-    public interface IStoryReadService : IReadService<Story, ResultStoryWithRelationsDto, Guid> { }
+    public interface IStoryReadService : IReadService<Story, Guid> { }
 
 }

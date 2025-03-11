@@ -21,13 +21,18 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             _context = context;
         }
 
-        public IQueryable<TEntity> QueryAll()
+        public AppDbContext GetDbContext()
+        {
+            return _context;
+        }
+
+        public IQueryable<TEntity> GetAllQueryable()
         {
             return _context.Set<TEntity>()
                 .AsNoTracking();
         }
 
-        public IQueryable<TEntity> QueryById(TKey key)
+        public IQueryable<TEntity> GetByIdQueryable(TKey key)
         {
             if (key == null)
                 throw new ArgumentNullException(nameof(key), "The key cannot be null.");
@@ -44,7 +49,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
                 .Where(e => EF.Property<TKey>(e, primaryKey.Properties[0].Name)!.Equals(key));
         }
 
-        public IQueryable<TEntity> QueryByIds(IEnumerable<TKey> keys)
+        public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys)
         {
             if (keys == null || !keys.Any())
                 throw new ArgumentException("At least one ID must be provided.", nameof(keys));

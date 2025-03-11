@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
 {
-    public class ReactionReadService : ReadService<Reaction, ResultReactionWithRelationsDto, Guid>, IReactionReadService
+    public class ReactionReadService : ReadService<Reaction, Guid>, IReactionReadService
     {
-        public ReactionReadService(IReadRepository<Reaction, Guid> repository, IMapper mapper, SelectorExpressionProvider<Reaction, ResultReactionWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public ReactionReadService(IReadRepository<Reaction, Guid> repository, IMapper mapper)
+            : base(repository) { }
     }
 }

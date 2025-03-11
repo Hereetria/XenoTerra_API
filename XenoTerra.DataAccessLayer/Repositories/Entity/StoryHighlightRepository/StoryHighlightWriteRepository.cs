@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightStoryRepository
 {
     public class StoryHighlightWriteRepository : WriteRepository<StoryHighlight, Guid>, IStoryHighlightWriteRepository
     {
-        public StoryHighlightWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public StoryHighlightWriteRepository(AppDbContext context) : base(context) { }
     }
 }

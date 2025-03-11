@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteService
 {
-    public class NoteReadService : ReadService<Note, ResultNoteWithRelationsDto, Guid>, INoteReadService
+    public class NoteReadService : ReadService<Note, Guid>, INoteReadService
     {
-        public NoteReadService(IReadRepository<Note, Guid> repository, IMapper mapper, SelectorExpressionProvider<Note, ResultNoteWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public NoteReadService(IReadRepository<Note, Guid> repository)
+            : base(repository) { }
     }
 }

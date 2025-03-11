@@ -12,7 +12,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryUserReposit
 {
     public class SearchHistoryUserWriteRepository : WriteRepository<SearchHistoryUser, Guid>, ISearchHistoryUserWriteRepository
     {
-        public SearchHistoryUserWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory)
+        public SearchHistoryUserWriteRepository(AppDbContext context) : base(context)
         {
         }
     }

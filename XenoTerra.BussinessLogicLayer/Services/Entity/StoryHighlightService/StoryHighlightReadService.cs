@@ -13,10 +13,10 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightService
 {
-    public class StoryHighlightReadService : ReadService<StoryHighlight, ResultStoryHighlightWithRelationsDto, Guid>, IStoryHighlightReadService
+    public class StoryHighlightReadService : ReadService<StoryHighlight, Guid>, IStoryHighlightReadService
     {
-        public StoryHighlightReadService(IReadRepository<StoryHighlight, Guid> repository, IMapper mapper, SelectorExpressionProvider<StoryHighlight, ResultStoryHighlightWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public StoryHighlightReadService(IReadRepository<StoryHighlight, Guid> repository)
+            : base(repository) { }
     }
 
 }

@@ -14,9 +14,14 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
     {
         protected readonly AppDbContext _context;
 
-        public WriteRepository(IDbContextFactory<AppDbContext> contextFactory)
+        public WriteRepository(AppDbContext context)
         {
-            _context = contextFactory.CreateDbContext();
+            _context = context;
+        }
+
+        public AppDbContext GetDbContext()
+        {
+            return _context;
         }
 
         public async Task<TEntity> InsertAsync(TEntity entity)

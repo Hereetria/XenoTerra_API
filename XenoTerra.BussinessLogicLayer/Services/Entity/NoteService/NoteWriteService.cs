@@ -14,8 +14,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteService
 {
     public class NoteWriteService : WriteService<Note, ResultNoteDto, CreateNoteDto, UpdateNoteDto, Guid>, INoteWriteService
     {
-        public NoteWriteService(IWriteRepository<Note, Guid> repository, IMapper mapper, SelectorExpressionProvider<Note, ResultNoteDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public NoteWriteService(IWriteRepository<Note, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 
 }

@@ -14,8 +14,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService
 {
     public class PostTagWriteService : WriteService<PostTag, ResultPostTagDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagWriteService
     {
-        public PostTagWriteService(IWriteRepository<PostTag, Guid> repository, IMapper mapper, SelectorExpressionProvider<PostTag, ResultPostTagDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public PostTagWriteService(IWriteRepository<PostTag, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 
 }

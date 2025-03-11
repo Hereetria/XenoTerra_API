@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository
 
     public class MessageWriteRepository : WriteRepository<Message, Guid>, IMessageWriteRepository
     {
-        public MessageWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public MessageWriteRepository(AppDbContext context) : base(context) { }
     }
 
 }

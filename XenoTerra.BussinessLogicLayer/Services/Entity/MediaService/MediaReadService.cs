@@ -12,11 +12,10 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaService
 {
-    public class MediaReadService : ReadService<Media, ResultMediaWithRelationsDto, Guid>, IMediaReadService
+    public class MediaReadService : ReadService<Media, Guid>, IMediaReadService
     {
-        public MediaReadService(IReadRepository<Media, Guid> repository, IMapper mapper, DataAccessLayer.Utils.SelectorExpressionProvider<Media, ResultMediaWithRelationsDto> selectorExpressionProvider) : base(repository, mapper, selectorExpressionProvider)
-        {
-        }
+        public MediaReadService(IReadRepository<Media, Guid> repository)
+            : base(repository) { }
     }
 
 }

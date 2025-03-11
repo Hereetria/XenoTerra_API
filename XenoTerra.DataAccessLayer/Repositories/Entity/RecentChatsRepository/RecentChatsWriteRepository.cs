@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository
 {
     public class RecentChatsWriteRepository : WriteRepository<RecentChats, Guid>, IRecentChatsWriteRepository
     {
-        public RecentChatsWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public RecentChatsWriteRepository(AppDbContext context) : base(context) { }
     }
 }

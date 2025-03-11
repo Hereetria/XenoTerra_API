@@ -12,7 +12,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
 {
     public class NotificationWriteRepository : WriteRepository<Notification, Guid>, INotificationWriteRepository
     {
-        public NotificationWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public NotificationWriteRepository(AppDbContext context) : base(context) { }
     }
 
 }

@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
 
     public class ReactionWriteRepository : WriteRepository<Reaction, Guid>, IReactionWriteRepository
     {
-        public ReactionWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public ReactionWriteRepository(AppDbContext context) : base(context) { }
     }
 }

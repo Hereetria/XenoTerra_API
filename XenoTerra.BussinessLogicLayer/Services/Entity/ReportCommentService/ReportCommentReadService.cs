@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService
 {
-    public class ReportCommentReadService : ReadService<ReportComment, ResultReportCommentWithRelationsDto, Guid>, IReportCommentReadService
+    public class ReportCommentReadService : ReadService<ReportComment, Guid>, IReportCommentReadService
     {
-        public ReportCommentReadService(IReadRepository<ReportComment, Guid> repository, IMapper mapper, SelectorExpressionProvider<ReportComment, ResultReportCommentWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public ReportCommentReadService(IReadRepository<ReportComment, Guid> repository)
+            : base(repository) { }
     }
 }

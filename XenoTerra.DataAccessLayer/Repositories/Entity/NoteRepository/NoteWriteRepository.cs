@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository
 
     public class NoteWriteRepository : WriteRepository<Note, Guid>, INoteWriteRepository
     {
-        public NoteWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public NoteWriteRepository(AppDbContext context) : base(context) { }
     }
 
 }

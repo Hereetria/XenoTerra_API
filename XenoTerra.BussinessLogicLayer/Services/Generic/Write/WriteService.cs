@@ -18,13 +18,11 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Write
     {
         private readonly IWriteRepository<TEntity, TKey> _repository;
         private readonly IMapper _mapper;
-        private readonly SelectorExpressionProvider<TEntity, TResultDto> _selectorExpressionProvider;
 
-        public WriteService(IWriteRepository<TEntity, TKey> repository, IMapper mapper, SelectorExpressionProvider<TEntity, TResultDto> selectorExpressionProvider)
+        public WriteService(IWriteRepository<TEntity, TKey> repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
-            _selectorExpressionProvider = selectorExpressionProvider;
         }
 
         public async Task<TResultDto> CreateAsync(TCreateDto createDto) 

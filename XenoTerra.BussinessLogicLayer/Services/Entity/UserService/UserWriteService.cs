@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
 {
     public class UserWriteService : WriteService<User, ResultUserDto, CreateUserDto, UpdateUserDto, Guid>, IUserWriteService
     {
-        public UserWriteService(IWriteRepository<User, Guid> repository, IMapper mapper, SelectorExpressionProvider<User, ResultUserDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public UserWriteService(IWriteRepository<User, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

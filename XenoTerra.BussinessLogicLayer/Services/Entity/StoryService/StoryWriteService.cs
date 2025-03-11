@@ -14,8 +14,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryService
 {
     public class StoryWriteService : WriteService<Story, ResultStoryDto, CreateStoryDto, UpdateStoryDto, Guid>, IStoryWriteService
     {
-        public StoryWriteService(IWriteRepository<Story, Guid> repository, IMapper mapper, SelectorExpressionProvider<Story, ResultStoryDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public StoryWriteService(IWriteRepository<Story, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 
 }

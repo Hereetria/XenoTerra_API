@@ -14,8 +14,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.MessageService
 {
     public class MessageWriteService : WriteService<Message, ResultMessageDto, CreateMessageDto, UpdateMessageDto, Guid>, IMessageWriteService
     {
-        public MessageWriteService(IWriteRepository<Message, Guid> repository, IMapper mapper, SelectorExpressionProvider<Message, ResultMessageDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public MessageWriteService(IWriteRepository<Message, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 
 }

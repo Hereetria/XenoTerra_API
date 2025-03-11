@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService
 {
-    public class SavedPostReadService : ReadService<SavedPost, ResultSavedPostWithRelationsDto, Guid>, ISavedPostReadService
+    public class SavedPostReadService : ReadService<SavedPost, Guid>, ISavedPostReadService
     {
-        public SavedPostReadService(IReadRepository<SavedPost, Guid> repository, IMapper mapper, SelectorExpressionProvider<SavedPost, ResultSavedPostWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public SavedPostReadService(IReadRepository<SavedPost, Guid> repository)
+            : base(repository) { }
     }
 }

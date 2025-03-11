@@ -12,10 +12,10 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
-    public class LikeReadService : ReadService<Like, ResultLikeWithRelationsDto, Guid>, ILikeReadService
+    public class LikeReadService : ReadService<Like, Guid>, ILikeReadService
     {
-        public LikeReadService(IReadRepository<Like, Guid> repository, IMapper mapper, SelectorExpressionProvider<Like, ResultLikeWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public LikeReadService(IReadRepository<Like, Guid> repository)
+            : base(repository) { }
     }
 
 }

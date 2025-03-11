@@ -13,6 +13,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 
     public class RoleWriteRepository : WriteRepository<Role, Guid>, IRoleWriteRepository
     {
-        public RoleWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public RoleWriteRepository(AppDbContext context) : base(context) { }
     }
 }

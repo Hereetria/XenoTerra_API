@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService
 {
-    public interface ISearchHistoryUserReadService : IReadService<SearchHistoryUser, ResultSearchHistoryUserWithRelationsDto, Guid>
+    public interface ISearchHistoryUserReadService : IReadService<SearchHistoryUser, Guid>
     {
     }
 }

@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
 {
     public class CommentWriteRepository : WriteRepository<Comment, Guid>, ICommentWriteRepository
     {
-        public CommentWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public CommentWriteRepository(AppDbContext context) : base(context) { }
     }
 }

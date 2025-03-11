@@ -15,7 +15,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowService
 
     public class FollowWriteService : WriteService<Follow, ResultFollowDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowWriteService
     {
-        public FollowWriteService(IWriteRepository<Follow, Guid> repository, IMapper mapper, SelectorExpressionProvider<Follow, ResultFollowDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public FollowWriteService(IWriteRepository<Follow, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

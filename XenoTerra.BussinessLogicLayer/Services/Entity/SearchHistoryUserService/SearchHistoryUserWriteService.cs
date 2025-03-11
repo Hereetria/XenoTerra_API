@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService
 {
     public class SearchHistoryUserWriteService : WriteService<SearchHistoryUser, ResultSearchHistoryUserDto, CreateSearchHistoryUserDto, UpdateSearchHistoryUserDto, Guid>, ISearchHistoryUserWriteService
     {
-        public SearchHistoryUserWriteService(IWriteRepository<SearchHistoryUser, Guid> repository, IMapper mapper, SelectorExpressionProvider<SearchHistoryUser, ResultSearchHistoryUserDto> selectorExpressionProvider) : base(repository, mapper, selectorExpressionProvider)
+        public SearchHistoryUserWriteService(IWriteRepository<SearchHistoryUser, Guid> repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

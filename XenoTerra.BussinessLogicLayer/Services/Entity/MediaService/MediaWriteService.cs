@@ -15,7 +15,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaService
 
     public class MediaWriteService : WriteService<Media, ResultMediaDto, CreateMediaDto, UpdateMediaDto, Guid>, IMediaWriteService
     {
-        public MediaWriteService(IWriteRepository<Media, Guid> repository, IMapper mapper, SelectorExpressionProvider<Media, ResultMediaDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public MediaWriteService(IWriteRepository<Media, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

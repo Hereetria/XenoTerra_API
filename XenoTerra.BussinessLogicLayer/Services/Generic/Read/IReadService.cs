@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
 {
-    public interface IReadService<TEntity, TResultWithRelationsDto, TKey>
+    public interface IReadService<TEntity, TKey>
         where TEntity : class
-        where TResultWithRelationsDto : class
     {
-        IQueryable<TResultWithRelationsDto> GetAll(IEnumerable<string> selectedProperties);
-        IQueryable<TResultWithRelationsDto> GetById(TKey key, IEnumerable<string> selectedProperties);
-        IQueryable<TResultWithRelationsDto> GetByIds(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties);
+        IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties);
+        IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties);
+        IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties);
     }
 }

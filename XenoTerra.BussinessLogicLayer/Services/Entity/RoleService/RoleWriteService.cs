@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
 {
     public class RoleWriteService : WriteService<Role, ResultRoleDto, CreateRoleDto, UpdateRoleDto, Guid>, IRoleWriteService
     {
-        public RoleWriteService(IWriteRepository<Role, Guid> repository, IMapper mapper, SelectorExpressionProvider<Role, ResultRoleDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public RoleWriteService(IWriteRepository<Role, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

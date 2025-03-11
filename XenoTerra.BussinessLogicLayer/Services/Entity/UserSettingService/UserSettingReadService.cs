@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService
 {
 
-    public class UserSettingReadService : ReadService<UserSetting, ResultUserSettingWithRelationsDto, Guid>, IUserSettingReadService
+    public class UserSettingReadService : ReadService<UserSetting, Guid>, IUserSettingReadService
     {
-        public UserSettingReadService(IReadRepository<UserSetting, Guid> repository, IMapper mapper, SelectorExpressionProvider<UserSetting, ResultUserSettingWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public UserSettingReadService(IReadRepository<UserSetting, Guid> repository)
+            : base(repository) { }
     }
 }

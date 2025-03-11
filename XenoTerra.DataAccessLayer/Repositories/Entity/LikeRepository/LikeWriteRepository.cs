@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
 {
     public class LikeWriteRepository : WriteRepository<Like, Guid>, ILikeWriteRepository
     {
-        public LikeWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public LikeWriteRepository(AppDbContext context) : base(context) { }
     }
 }

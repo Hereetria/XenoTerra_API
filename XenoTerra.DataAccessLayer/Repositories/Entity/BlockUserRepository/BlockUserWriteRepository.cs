@@ -12,7 +12,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
 {
     public class BlockUserWriteRepository : WriteRepository<BlockUser, Guid>, IBlockUserWriteRepository
     {
-        public BlockUserWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory)
+        public BlockUserWriteRepository(AppDbContext context) : base(context)
         {
         }
     }

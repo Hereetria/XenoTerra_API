@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReportCommentRepository
 
     public class ReportCommentWriteRepository : WriteRepository<ReportComment, Guid>, IReportCommentWriteRepository
     {
-        public ReportCommentWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public ReportCommentWriteRepository(AppDbContext context) : base(context) { }
     }
 
 }

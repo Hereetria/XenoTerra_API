@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService
 {
     public class NotificationWriteService : WriteService<Notification, ResultNotificationDto, CreateNotificationDto, UpdateNotificationDto, Guid>, INotificationWriteService
     {
-        public NotificationWriteService(IWriteRepository<Notification, Guid> repository, IMapper mapper, SelectorExpressionProvider<Notification, ResultNotificationDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public NotificationWriteService(IWriteRepository<Notification, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

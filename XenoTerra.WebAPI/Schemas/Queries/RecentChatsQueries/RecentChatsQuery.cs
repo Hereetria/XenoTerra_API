@@ -1,0 +1,29 @@
+﻿namespace XenoTerra.WebAPI.Schemas.Queries.RecentChatsQueries
+{
+    public class RecentChatsQuery
+    {
+        public string GetRandomData()
+        {
+            return "Default data to prevent query class from being empty.";
+        }
+
+        //[UseProjection]
+        //[GraphQLDescription("Get all RecentChats")]
+        //public IQueryable<ResultRecentChatsDto> GetAllRecentChats([Service] IRecentChatsServiceBLL recentChatsServiceBLL)
+        //{
+        //    return recentChatsServiceBLL.GetAllQuerable();
+        //}
+
+        //[UseProjection]
+        //[GraphQLDescription("Get RecentChat by ID")]
+        //public IQueryable<ResultRecentChatsByIdDto> GetRecentChatById(Guid id, [Service] IRecentChatsServiceBLL recentChatsServiceBLL)
+        //{
+        //    var result = recentChatsServiceBLL.GetByIdQuerable(id);
+        //    if (result == null)
+        //    {
+        //        throw new Exception($"RecentChat with ID {id} not found");
+        //    }
+        //    return result;
+        //}
+    }
+}

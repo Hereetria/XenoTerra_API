@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService
 {
 
-    public class RecentChatsReadService : ReadService<RecentChats, ResultRecentChatsWithRelationsDto, Guid>, IRecentChatsReadService
+    public class RecentChatsReadService : ReadService<RecentChats, Guid>, IRecentChatsReadService
     {
-        public RecentChatsReadService(IReadRepository<RecentChats, Guid> repository, IMapper mapper, SelectorExpressionProvider<RecentChats, ResultRecentChatsWithRelationsDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public RecentChatsReadService(IReadRepository<RecentChats, Guid> repository, IMapper mapper)
+            : base(repository) { }
     }
 }

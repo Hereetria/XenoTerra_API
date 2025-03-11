@@ -15,7 +15,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
 
     public class ReactionWriteService : WriteService<Reaction, ResultReactionDto, CreateReactionDto, UpdateReactionDto, Guid>, IReactionWriteService
     {
-        public ReactionWriteService(IWriteRepository<Reaction, Guid> repository, IMapper mapper, SelectorExpressionProvider<Reaction, ResultReactionDto> selectorExpressionProvider)
-            : base(repository, mapper, selectorExpressionProvider) { }
+        public ReactionWriteService(IWriteRepository<Reaction, Guid> repository, IMapper mapper)
+            : base(repository, mapper) { }
     }
 }

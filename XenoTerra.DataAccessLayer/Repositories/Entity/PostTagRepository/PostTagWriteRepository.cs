@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostTagRepository
 {
     public class PostTagWriteRepository : WriteRepository<PostTag, Guid>, IPostTagWriteRepository
     {
-        public PostTagWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public PostTagWriteRepository(AppDbContext context) : base(context) { }
     }
 }

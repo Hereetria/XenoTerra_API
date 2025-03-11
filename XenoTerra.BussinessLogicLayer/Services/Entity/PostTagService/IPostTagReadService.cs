@@ -12,6 +12,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService
 {
-    public interface IPostTagReadService : IReadService<PostTag, ResultPostTagWithRelationsDto, Guid> { }
+    public interface IPostTagReadService : IReadService<PostTag, Guid> { }
 
 }

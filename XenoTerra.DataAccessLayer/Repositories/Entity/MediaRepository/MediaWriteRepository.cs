@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.MediaRepository
 {
     public class MediaWriteRepository : WriteRepository<Media, Guid>, IMediaWriteRepository
     {
-        public MediaWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public MediaWriteRepository(AppDbContext context) : base(context) { }
     }
 }

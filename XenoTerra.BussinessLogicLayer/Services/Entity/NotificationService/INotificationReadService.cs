@@ -13,6 +13,6 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService
 {
 
-    public interface INotificationReadService : IReadService<Notification, ResultNotificationWithRelationsDto, Guid> { }
+    public interface INotificationReadService : IReadService<Notification, Guid> { }
 
 }

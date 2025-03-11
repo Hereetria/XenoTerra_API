@@ -12,6 +12,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository
 {
     public class StoryWriteRepository : WriteRepository<Story, Guid>, IStoryWriteRepository
     {
-        public StoryWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public StoryWriteRepository(AppDbContext context) : base(context) { }
     }
 }

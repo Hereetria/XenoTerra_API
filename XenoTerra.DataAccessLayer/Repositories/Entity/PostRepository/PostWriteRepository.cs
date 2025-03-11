@@ -12,7 +12,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
     public class PostWriteRepository : WriteRepository<Post, Guid>, IPostWriteRepository
     {
-        public PostWriteRepository(IDbContextFactory<AppDbContext> contextFactory) : base(contextFactory) { }
+        public PostWriteRepository(AppDbContext context) : base(context) { }
     }
 
 }
