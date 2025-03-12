@@ -4,6 +4,7 @@ using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
@@ -38,8 +39,8 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers
                     BlockedUserId = blockUser.BlockedUserId,
                     BlockedAt = blockUser.BlockedAt,
 
-                    BlockedUser = blockUser.BlockedUser != null ? MapUserToDto(blockUser.BlockedUser) : null,
-                    BlockingUser = blockingUser != null ? MapUserToDto(blockingUser) : null
+                    BlockedUser = blockUser.BlockedUser != null ? MapToDto<User, ResultUserDto>(blockUser.BlockedUser) : null,
+                    BlockingUser = blockingUser != null ? MapToDto<User, ResultUserDto>(blockingUser) : null
                 });
 
             return joinedQuery;
@@ -60,7 +61,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers
             var dbContext = context.Service<AppDbContext>();
             var selectedNestedFields = GraphQLFieldProvider.GetNestedSelectedFields(context, relatedFieldName);
             var selector = SimpleProjectonExpressionProvider.CreateSelectorExpression<TRelatedEntity>(selectedNestedFields);
-            var innerQuery = dbContext.Set<TRelatedEntity>().Select(selector);
+            var innerQuery = dbContext.Set<TRelatedEntity>();
 
 
             var joinForeignKeySelector = CreateJoinForeignKeySelector<TEntity, TKey>(relatedFieldName, dbContext);
@@ -68,31 +69,120 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers
             var joinResultSelector = CreateJoinResultSelector<TEntity, TRelatedEntity, TResultDto, TProjectionDto>(relatedFieldName);
 
             // Entity üzerinden Join işlemi
-            var joinedQuery = query.Join<TEntity, TRelatedEntity, TKey, TResultDto>(
-                innerQuery, // ProjectionDto seçiliyor
-                joinForeignKeySelector.Compile(), // blockUser => blockUser.BlockingUserId
-                joinRelatedKeySelector.Compile(), // user => user.Id
-                joinResultSelector.Compile() // DTO dönüşümü burada yapılır
+            var joinedQuery = query.Join(
+                innerQuery,
+                joinForeignKeySelector,
+                joinRelatedKeySelector,
+                joinResultSelector
             );
-
-
-
-            return joinedQuery.AsQueryable();
+            return joinedQuery;
         }
 
 
 
-        private static TKey GetPrimaryKeyFromProjection<TProjectionDto, TKey>(TProjectionDto projectionEntity)
-    where TProjectionDto : class
+
+        private Expression<Func<TEntity, TRelatedEntity, TResultDto>> CreateJoinResultSelector<TEntity, TRelatedEntity, TResultDto, TProjectionDto>(
+            string relatedFieldName)
+            where TEntity : class // BlockUser
+            where TRelatedEntity : class // User
+            where TResultDto : class, new() // ResultBlockUserWithRelationsDto
+            where TProjectionDto : class, new() // ResultUserDto
         {
-            var keyProperty = typeof(TProjectionDto).GetProperties()
-                .FirstOrDefault(p => p.Name.Equals("Id", StringComparison.OrdinalIgnoreCase));
+            var entityParameter = Expression.Parameter(typeof(TEntity), "entity");
+            var relatedParameter = Expression.Parameter(typeof(TRelatedEntity), "relatedEntity");
 
-            if (keyProperty == null)
-                throw new InvalidOperationException($"Primary key for {typeof(TProjectionDto).Name} not found.");
+            var bindings = new List<MemberBinding>();
 
-            return (TKey)keyProperty.GetValue(projectionEntity);
+            var resultDtoProperties = typeof(TResultDto).GetProperties();
+            var entityProperties = typeof(TEntity).GetProperties()
+                .ToDictionary(p => p.Name.ToLowerInvariant(), p => p);
+
+            var relatedEntityProperty = resultDtoProperties
+                .FirstOrDefault(p => p.Name.ToLowerInvariant() == relatedFieldName.ToLowerInvariant());
+
+            foreach (var resultDtoProperty in resultDtoProperties)
+            {
+                bool isPrimitiveType = resultDtoProperty.PropertyType.IsPrimitive
+                       || resultDtoProperty.PropertyType == typeof(string)
+                       || resultDtoProperty.PropertyType == typeof(Guid)
+                       || resultDtoProperty.PropertyType == typeof(DateTime)
+                       || resultDtoProperty.PropertyType == typeof(decimal);
+
+                if (!isPrimitiveType)
+                {
+                    var projectionExpression = CreateDtoProjectionExpression<TRelatedEntity, TProjectionDto>(relatedParameter);
+
+                    if (relatedEntityProperty != null &&
+                        resultDtoProperty.Name.ToLowerInvariant() == relatedEntityProperty.Name.ToLowerInvariant())
+                    {
+                        // ✅ `BlockingUser` için Expression
+                        var relatedEntityNullCheck = Expression.NotEqual(relatedParameter, Expression.Constant(null, typeof(TRelatedEntity)));
+
+                        var blockingUserProjectionExpression = Expression.Condition(
+                            relatedEntityNullCheck,
+                            projectionExpression,
+                            Expression.Constant(null, resultDtoProperty.PropertyType)
+                        );
+
+                        bindings.Add(Expression.Bind(resultDtoProperty, blockingUserProjectionExpression));
+                    }
+                    else
+                    {
+                        // ✅ `BlockedUser` için Expression
+                        if (entityProperties.TryGetValue("blockeduser", out var blockedUserProperty)
+                            && blockedUserProperty.PropertyType == typeof(TRelatedEntity))
+                        {
+                            var blockedUserAccess = Expression.Property(entityParameter, blockedUserProperty);
+                            var blockedUserProjectionExpression = CreateDtoProjectionExpression<TRelatedEntity, TProjectionDto>(blockedUserAccess);
+
+                            var blockedUserNullCheck = Expression.NotEqual(blockedUserAccess, Expression.Constant(null, typeof(TRelatedEntity)));
+
+                            var blockedUserFinalExpression = Expression.Condition(
+                                blockedUserNullCheck,
+                                blockedUserProjectionExpression,
+                                Expression.Constant(null, resultDtoProperty.PropertyType)
+                            );
+
+                            bindings.Add(Expression.Bind(resultDtoProperty, blockedUserFinalExpression));
+                        }
+                    }
+                }
+                else if (entityProperties.TryGetValue(resultDtoProperty.Name.ToLowerInvariant(), out var entityProperty))
+                {
+                    var entityPropertyAccess = Expression.Property(entityParameter, entityProperty);
+                    bindings.Add(Expression.Bind(resultDtoProperty, entityPropertyAccess));
+                }
+            }
+
+            var newDtoExpression = Expression.New(typeof(TResultDto));
+            var memberInitExpression = Expression.MemberInit(newDtoExpression, bindings);
+            return Expression.Lambda<Func<TEntity, TRelatedEntity, TResultDto>>(memberInitExpression, entityParameter, relatedParameter);
         }
+
+
+
+
+        private static Expression CreateDtoProjectionExpression<TSource, TDestination>(Expression sourceExpression)
+            where TSource : class
+            where TDestination : class, new()
+        {
+            var dtoBindings = new List<MemberBinding>();
+
+            foreach (var dtoProperty in typeof(TDestination).GetProperties())
+            {
+                var sourceProperty = typeof(TSource).GetProperty(dtoProperty.Name);
+                if (sourceProperty != null)
+                {
+                    var sourcePropertyAccess = Expression.Property(sourceExpression, sourceProperty);
+                    var dtoBinding = Expression.Bind(dtoProperty, sourcePropertyAccess);
+                    dtoBindings.Add(dtoBinding);
+                }
+            }
+
+            var newDtoExpression = Expression.New(typeof(TDestination));
+            return Expression.MemberInit(newDtoExpression, dtoBindings);
+        }
+
 
 
         private static Expression<Func<TRelatedEntity, TKey>> CreateJoinRelatedKeySelector<TRelatedEntity, TKey>(
@@ -132,75 +222,36 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers
             return Expression.Lambda<Func<TEntity, TKey>>(propertyAccess, entityParameter);
         }
 
-
-        private Expression<Func<TEntity, TRelatedEntity, TResultDto>> CreateJoinResultSelector<TEntity, TRelatedEntity, TResultDto, TProjectionDto>(
-            string relatedFieldName)
+        public static TResult MapToDto<TEntity, TResult>(TEntity entity)
             where TEntity : class
-            where TRelatedEntity : class
-            where TResultDto : class, new()
-            where TProjectionDto : class, new()
+            where TResult : class, new()
         {
-            var entityParameter = Expression.Parameter(typeof(TEntity), "entity");
-            var relatedParameter = Expression.Parameter(typeof(TRelatedEntity), "relatedEntity");
+            if (entity == null)
+                throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
 
-            var bindings = new List<MemberBinding>();
+            var result = new TResult();
+            var entityProperties = typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var resultProperties = typeof(TResult).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            var resultDtoProperties = typeof(TResultDto).GetProperties();
-            var entityProperties = typeof(TEntity).GetProperties()
-                .ToDictionary(p => p.Name.ToLowerInvariant(), p => p);
-
-            var relatedEntityProperty = resultDtoProperties
-                .FirstOrDefault(p => p.Name.ToLowerInvariant() == relatedFieldName.ToLowerInvariant());
-
-            foreach (var resultDtoProperty in resultDtoProperties)
+            foreach (var resultProperty in resultProperties)
             {
-                if (relatedEntityProperty != null && resultDtoProperty.Name.ToLowerInvariant() == relatedEntityProperty.Name.ToLowerInvariant())
+                var entityProperty = entityProperties.FirstOrDefault(p => p.Name == resultProperty.Name &&
+                                                                          p.PropertyType == resultProperty.PropertyType);
+
+                if (entityProperty is null)
+                    continue;
+
+                try
                 {
-                    // `MapUserToDto` metodunu reflection ile bul
-                    var mapMethod = typeof(BlockUserResolver).GetMethod(nameof(MapUserToDto),
-                        System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public);
-
-                    if (mapMethod == null)
-                    {
-                        throw new InvalidOperationException("MapUserToDto method not found. Ensure it is static and public.");
-                    }
-
-                    // `relatedParameter`'ı `User` türüne dönüştür
-                    var userCast = Expression.Convert(relatedParameter, typeof(User));
-
-                    // `MapUserToDto(User)` metodunu çağır
-                    var mapCall = Expression.Call(mapMethod, userCast);
-
-                    // Dönüşümü `ResultUserDto`'ya uygun hale getir
-                    var convertedCall = Expression.Convert(mapCall, typeof(ResultUserDto));
-
-                    // DTO'ya bağla
-                    bindings.Add(Expression.Bind(resultDtoProperty, convertedCall));
+                     var value = entityProperty.GetValue(entity);
+                    resultProperty.SetValue(result, value);
                 }
-                else if (entityProperties.TryGetValue(resultDtoProperty.Name.ToLower(), out var entityProperty))
+                catch (Exception ex)
                 {
-                    var entityPropertyAccess = Expression.Property(entityParameter, entityProperty);
-                    bindings.Add(Expression.Bind(resultDtoProperty, entityPropertyAccess));
+                    Console.WriteLine($"Property mapping failed: {resultProperty.Name} - {ex.Message}");
                 }
             }
-
-            var newDtoExpression = Expression.New(typeof(TResultDto));
-            var memberInitExpression = Expression.MemberInit(newDtoExpression, bindings);
-            return Expression.Lambda<Func<TEntity, TRelatedEntity, TResultDto>>(memberInitExpression, entityParameter, relatedParameter);
-        }
-
-
-        public static ResultUserDto? MapUserToDto(User user)
-        {
-            if (user == null) return null;
-
-            return new ResultUserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email
-                // Eğer ResultUserDto içinde daha fazla alan varsa buraya ekleyin.
-            };
+            return result;
         }
 
 

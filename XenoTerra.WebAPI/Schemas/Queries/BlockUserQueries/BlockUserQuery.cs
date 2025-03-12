@@ -24,7 +24,6 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUserQueries
 
             var query = blockUserReadService.FetchAllQueryable(selectedFields);
 
-            //var oldQuery = resolver.ModifyQuery(query, context);
             var joinedQuery = resolver.ApplyJoinWithProjection<
                 BlockUser,
                 User,
@@ -35,7 +34,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUserQueries
                     context,
                     "blockingUser");
 
-            return await joinedQuery.ToListAsync();
+            return await joinedQuery.AsQueryable().ToListAsync();
         }
 
         private static ResultUserDto MapUserToDto(XenoTerra.EntityLayer.Entities.User user)
