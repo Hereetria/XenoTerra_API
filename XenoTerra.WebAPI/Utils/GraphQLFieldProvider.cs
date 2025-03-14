@@ -7,7 +7,7 @@ namespace XenoTerra.WebAPI.Utils
 
     {
 
-        public static List<string> GetSelectedFields(IResolverContext context)
+        public static IReadOnlyList<string> GetSelectedFields(IResolverContext context)
 
         {
 
@@ -81,5 +81,9 @@ namespace XenoTerra.WebAPI.Utils
 
         }
 
+        public static IReadOnlyList<string> GetRelationalFields(IResolverContext context) =>
+           GetSelectedFields(context)
+               .Where(field => !IsNonRelationalField(context, field))
+               .ToList();
     }
 }
