@@ -1,38 +1,65 @@
-﻿using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
+﻿using AutoMapper;
+using HotChocolate.Resolvers;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Resolvers;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.UserQueries
 {
     public class UserQuery
     {
-
-        public string GetRandomData()
+        public async Task<IEnumerable<ResultUserWithRelationsDto>> GetAllUsersAsync(
+            [Service] IUserReadService userReadService,
+            [Service] UserResolver resolver,
+            [Service] IMapper mapper,
+            IResolverContext context)
         {
-            return "Default data to prevent query class from being empty.";
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = userReadService.FetchAllQueryable(selectedFields)
+                ?? Enumerable.Empty<User>().AsQueryable();
+
+            var users = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(users, context);
+
+            return mapper.Map<List<ResultUserWithRelationsDto>>(users);
         }
 
-        //[UseProjection]
-        //[GraphQLDescription("Get User by ID")]
-        //public IQueryable<ResultUserByIdDto> GetUserById(Guid id, [Service] IUserServiceBLL userServiceBLL)
-        //{
-        //    var result = userServiceBLL.GetByIdQuerable(id);
-        //    if (result == null)
-        //    {
-        //        throw new Exception($"User with ID {id} not found");
-        //    }
-        //    return result;
-        //}
+        public async Task<IEnumerable<ResultUserWithRelationsDto>> GetUsersByIdsAsync(
+            [Service] IUserReadService userReadService,
+            [Service] UserResolver resolver,
+            [Service] IMapper mapper,
+            List<Guid> keys,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = userReadService.FetchByIdsQueryable(keys, selectedFields)
+                ?? Enumerable.Empty<User>().AsQueryable();
 
-        //[UsePaging(IncludeTotalCount = true)]
-        //[UseProjection]
-        //[GraphQLDescription("Get Suggested Users")]
-        //public IQueryable<ResultUserDto> GetSuggestedUsers(
-        //[Service] IUserServiceBLL userServiceBLL)
-        //{
-        //    var userId = Guid.Parse("9a466137-3217-424f-39b3-08dd59a25e5a");
-        //    var result = userServiceBLL.GetSuggestedUsers(userId);
-        //    return result;
-        //}
+            var users = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(users, context);
+
+            return mapper.Map<List<ResultUserWithRelationsDto>>(users);
+        }
+
+        public async Task<ResultUserWithRelationsDto> GetUserByIdAsync(
+            [Service] IUserReadService userReadService,
+            [Service] UserResolver resolver,
+            [Service] IMapper mapper,
+            Guid key,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = userReadService.FetchByIdQueryable(key, selectedFields)
+                ?? Enumerable.Empty<User>().AsQueryable();
+
+            var user = await query.FirstOrDefaultAsync()
+                ?? throw new KeyNotFoundException($"User with ID {key} was not found in the database.");
+
+            await resolver.PopulateRelatedFieldAsync(user, context);
+
+            return mapper.Map<ResultUserWithRelationsDto>(user);
+        }
     }
 }

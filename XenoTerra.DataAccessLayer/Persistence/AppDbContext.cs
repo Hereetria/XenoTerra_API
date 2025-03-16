@@ -117,16 +117,16 @@ namespace XenoTerra.DataAccessLayer.Contexts
                 .OnDelete(DeleteBehavior.Restrict);
 
             // PostTag için Many-to-Many iliþki ekleme
-            modelBuilder.Entity<PostTag>()
+            modelBuilder.Entity<UserPostTag>()
                 .HasKey(pt => new { pt.PostId, pt.UserId }); // Composite Key
 
-            modelBuilder.Entity<PostTag>()
+            modelBuilder.Entity<UserPostTag>()
                 .HasOne(pt => pt.Post)
                 .WithMany(p => p.TaggedUsers) // Post'un etiketlenmiþ kullanýcýlarý
                 .HasForeignKey(pt => pt.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<PostTag>()
+            modelBuilder.Entity<UserPostTag>()
                 .HasOne(pt => pt.User)
                 .WithMany(u => u.TaggedPosts) // Kullanýcýnýn etiketlendiði postlar
                 .HasForeignKey(pt => pt.UserId)
@@ -182,7 +182,7 @@ namespace XenoTerra.DataAccessLayer.Contexts
         public DbSet<Note> Notes { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Post> Posts { get; set; }
-        public DbSet<PostTag> PostTags { get; set; }
+        public DbSet<UserPostTag> UserPostTags { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<RecentChats> RecentChatses { get; set; }
         public DbSet<ReportComment> ReportComments { get; set; }

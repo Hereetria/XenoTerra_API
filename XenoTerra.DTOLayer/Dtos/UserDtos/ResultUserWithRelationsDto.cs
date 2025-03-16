@@ -53,6 +53,6 @@ namespace XenoTerra.DTOLayer.Dtos.UserDtos
         public ICollection<ResultRecentChatsDto> RecentChats { get; set; }
         public ResultNoteDto Note { get; set; }
         public ICollection<ResultReactionDto> Reactions { get; set; }
-        public ICollection<ResultPostTagDto> TaggedPosts { get; set; }
+        public ICollection<ResultUserPostTagDto> TaggedPosts { get; set; }
     }
 }

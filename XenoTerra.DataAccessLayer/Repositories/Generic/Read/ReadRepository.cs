@@ -34,7 +34,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 
         public IQueryable<TEntity> GetByIdQueryable(TKey key)
         {
-            if (key == null)
+            if (key is null)
                 throw new ArgumentNullException(nameof(key), "The key cannot be null.");
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
@@ -51,7 +51,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 
         public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys)
         {
-            if (keys == null || !keys.Any())
+            if (keys is null || !keys.Any())
                 throw new ArgumentException("At least one ID must be provided.", nameof(keys));
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))

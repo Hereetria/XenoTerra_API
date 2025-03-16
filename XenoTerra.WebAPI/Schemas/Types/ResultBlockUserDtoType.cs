@@ -15,7 +15,7 @@ namespace XenoTerra.WebAPI.Schemas.Types
         protected override void Configure(IObjectTypeDescriptor<ResultBlockUserWithRelationsDto> descriptor)
         {
             descriptor.Field(x => x.BlockingUser);
-            descriptor.Field(x => x.BlockedUser);
+            descriptor.Field(x => x.BlockedUser); 
         }
 
     }

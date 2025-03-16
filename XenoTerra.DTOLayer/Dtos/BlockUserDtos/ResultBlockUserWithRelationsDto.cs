@@ -12,10 +12,8 @@ namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
         public Guid BlockedUserId { get; set; }
         public DateTime BlockedAt { get; set; }
 
-        [GraphQLIgnore]
         public ResultUserDto? BlockingUser { get; set; }
 
-        [GraphQLIgnore]
         public ResultUserDto? BlockedUser { get; set; }
     }
 }

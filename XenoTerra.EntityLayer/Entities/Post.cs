@@ -22,7 +22,7 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<SavedPost> SavedPosts { get; set; } = new List<SavedPost>();
 
-        public ICollection<PostTag> TaggedUsers { get; set; } = new List<PostTag>();
+        public ICollection<UserPostTag> TaggedUsers { get; set; } = new List<UserPostTag>();
         public DateTime CreatedAt { get; set; }
     }
 }

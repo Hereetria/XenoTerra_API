@@ -16,4 +16,8 @@
     <ProjectReference Include="..\XenoTerra.BussinessLogicLayer\XenoTerra.BussinessLogicLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Schemas\Mutations\StoryHighlightMutations\" />
+  </ItemGroup>
+
 </Project>

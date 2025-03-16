@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.EntityLayer.Entities
 {
-    public class PostTag
+    public class UserPostTag
     {
         public Guid PostId { get; set; }
         public Post Post { get; set; }

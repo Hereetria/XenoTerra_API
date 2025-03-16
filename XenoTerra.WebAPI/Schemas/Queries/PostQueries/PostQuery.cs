@@ -1,54 +1,67 @@
-﻿namespace XenoTerra.WebAPI.Schemas.Queries.PostQueries
+﻿using AutoMapper;
+using HotChocolate.Resolvers;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostService;
+using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Utils;
+
+namespace XenoTerra.WebAPI.Schemas.Queries.PostQueries
 {
     public class PostQuery
     {
-        public string GetRandomData()
+        public async Task<IEnumerable<ResultPostWithRelationsDto>> GetAllPostsAsync(
+            [Service] IPostReadService postReadService,
+            [Service] PostResolver resolver,
+            [Service] IMapper mapper,
+            IResolverContext context)
         {
-            return "Default data to prevent query class from being empty.";
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = postReadService.FetchAllQueryable(selectedFields)
+                ?? Enumerable.Empty<Post>().AsQueryable();
+
+            var posts = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(posts, context);
+
+            return mapper.Map<List<ResultPostWithRelationsDto>>(posts);
         }
 
-        //[UseProjection]
-        //[GraphQLDescription("Get all Posts")]
-        //public IQueryable<ResultPostDto> GetAllPosts([Service] IPostServiceBLL postServiceBLL)
-        //{
-        //    return postServiceBLL.GetAllQuerable();
-        //}
+        public async Task<IEnumerable<ResultPostWithRelationsDto>> GetPostsByIdsAsync(
+            [Service] IPostReadService postReadService,
+            [Service] PostResolver resolver,
+            [Service] IMapper mapper,
+            List<Guid> keys,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = postReadService.FetchByIdsQueryable(keys, selectedFields)
+                ?? Enumerable.Empty<Post>().AsQueryable();
 
-        //[UseProjection]
-        //[GraphQLDescription("Get Post by ID")]
-        //public IQueryable<ResultPostByIdDto> GetPostById(Guid id, [Service] IPostServiceBLL postServiceBLL)
-        //{
-        //    var result = postServiceBLL.GetByIdQuerable(id);
-        //    if (result == null)
-        //    {
-        //        throw new Exception($"Post with ID {id} not found");
-        //    }
-        //    return result;
-        //}
+            var posts = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(posts, context);
 
-        //[UsePaging(IncludeTotalCount = true)]
-        //[UseProjection]
-        //[GraphQLDescription("Get mainstream posts")]
-        //public IQueryable<ResultPostDto> GetMainstreamPosts(
-        //    Guid seed,
-        //    [Service] IPostServiceBLL postServiceBLL)
-        //{
-        //    var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
-        //    int seedHash = seed.GetHashCode();
-        //    var result = postServiceBLL.GetMainstreamPosts(userId, seedHash);
-        //    return result;
-        //}
+            return mapper.Map<List<ResultPostWithRelationsDto>>(posts);
+        }
 
-        //[UsePaging(IncludeTotalCount = true)]
-        //[UseProjection]
-        //[GraphQLDescription("Get following posts")]
-        //public IQueryable<ResultPostDto> GetFollowingPosts(
-        //    [Service] IPostServiceBLL postServiceBLL)
-        //{
-        //    var userId = Guid.Parse("bc9fddb5-ed1d-448d-a8a8-08dd5962d80d");
-        //    var result = postServiceBLL.GetFollowingPosts(userId);
-        //    return result;
-        //}
+        public async Task<ResultPostWithRelationsDto> GetPostByIdAsync(
+            [Service] IPostReadService postReadService,
+            [Service] PostResolver resolver,
+            [Service] IMapper mapper,
+            Guid key,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = postReadService.FetchByIdQueryable(key, selectedFields)
+                ?? Enumerable.Empty<Post>().AsQueryable();
+
+            var post = await query.FirstOrDefaultAsync()
+                ?? throw new KeyNotFoundException($"Post with ID {key} was not found in the database.");
+
+            await resolver.PopulateRelatedFieldAsync(post, context);
+
+            return mapper.Map<ResultPostWithRelationsDto>(post);
+        }
+
 
     }
 }

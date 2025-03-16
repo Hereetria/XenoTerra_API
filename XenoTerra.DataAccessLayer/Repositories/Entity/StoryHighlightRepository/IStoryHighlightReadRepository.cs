@@ -8,7 +8,13 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryHighlightRepository
 {
-    public interface IStoryHighlightReadRepository : IReadRepository<StoryHighlight, Guid> { }
+    public interface IStoryHighlightReadRepository : IReadRepository<StoryHighlight, Guid> 
+    {
+        public IQueryable<Story> GetStoriesByHighlightIdsQueryable(IEnumerable<Guid> keys);
+        public IQueryable<Story> GetStoryByHighlightIdQueryable(Guid key);
+        public IQueryable<Highlight> GetHighlightsByStoryIdsQueryable(IEnumerable<Guid> keys);
+        public IQueryable<Highlight> GetHighlightByStoryIdQueryable(Guid key);
+    }
 
 
 }

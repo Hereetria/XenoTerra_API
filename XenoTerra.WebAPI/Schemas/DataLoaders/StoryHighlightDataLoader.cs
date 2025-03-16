@@ -11,32 +11,31 @@ using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders
 {
-    public class HighlightStoryDataLoader : BatchDataLoader<Guid, IReadOnlyList<object>>
+    public class StoryHighlightDataLoader : BatchDataLoader<TKey, TRelatedEntity>
+        where TLeftRelatedEntity : class
+        where TRightRelatedEntity : class
+        where TKey : notnull
     {
-        private static readonly ConcurrentDictionary<Guid, List<string>> _selectedFieldsDict = new();
-        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly AppDbContext _dbContext;
+        private static List<string> _selectedFields = new();
         private Type? _lastLoadedType;
 
-        public HighlightStoryDataLoader(
+        public StoryHighlightDataLoader(
             IBatchScheduler batchScheduler,
             DataLoaderOptions options,
-            IDbContextFactory<AppDbContext> contextFactory)
+            AppDbContext context)
                 : base(batchScheduler, options)
         {
-            _contextFactory = contextFactory;
+            _dbContext = context;
         }
 
-        public async Task<IReadOnlyDictionary<Guid, List<ResultStoryDto>>> LoadStoriesByHighlightIdAsync(Guid highlightId, List<string> selectedFields)
+        public async Task<IReadOnlyDictionary<Guid, List<TRelatedEntity>>> Loadsync<TRelatedEntity>(TKey key, List<string> selectedFields)
+            where TRelatedEntity : class
         {
-            _selectedFieldsDict[highlightId] = selectedFields;
-            _lastLoadedType = typeof(ResultStoryDto);
+            _selectedFields = selectedFields;
+            _lastLoadedType = typeof(TRelatedEntity);
 
-            var batchResult = await LoadBatchAsync(new List<Guid> { highlightId }, CancellationToken.None);
-
-            var resultList = batchResult.Values.FirstOrDefault() is List<object> list
-                ? list.Cast<ResultStoryDto>().ToList()
-                : new List<ResultStoryDto>();
-
+            var batchResult =  await LoadBatchAsync(new List<TKey> { key }, CancellationToken.None);
 
 
             return batchResult.ToDictionary(
@@ -45,12 +44,12 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders
             );
         }
 
-        public async Task<IReadOnlyDictionary<Guid, List<ResultHighlightDto>>> LoadHighlightsByStoryIdAsync(Guid storyId, List<string> selectedFields)
+        public async Task<IReadOnlyDictionary<Guid, List<ResultHighlightDto>>> LoadHighlightsByStoryIdAsync(TKey key, List<string> selectedFields)
         {
-            _selectedFieldsDict[storyId] = selectedFields;
+            _selectedFields = selectedFields;
             _lastLoadedType = typeof(ResultHighlightDto);
 
-            var batchResult = await LoadBatchAsync(new List<Guid> { storyId }, CancellationToken.None);
+            var batchResult = await LoadBatchAsync(new List<TKey> { key }, CancellationToken.None);
 
             return batchResult.ToDictionary(
                 kvp => kvp.Key,
@@ -58,15 +57,12 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders
             );
         }
 
-        protected override async Task<IReadOnlyDictionary<Guid, IReadOnlyList<object>>> LoadBatchAsync(
-            IReadOnlyList<Guid> keys, CancellationToken cancellationToken)
+        protected override async Task<IReadOnlyDictionary<TKey, IReadOnlyList<object>>> LoadBatchAsync(
+            IReadOnlyList<TKey> keys, CancellationToken cancellationToken)
         {
-            await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-            var resultDict = new Dictionary<Guid, IReadOnlyList<object>>();
+            var entityDict = new Dictionary<TKey, IReadOnlyList<TRelatedEntity>>();
 
             var singleKey = keys.First();
-            _selectedFieldsDict.TryGetValue(singleKey, out var selectedFieldsList);
-            selectedFieldsList ??= new List<string>();
 
             bool isStoryForHighlightRequest = _lastLoadedType == typeof(ResultStoryDto);
 
@@ -74,8 +70,8 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders
             {
                 var selectorExpression = SelectorExpressionProvider.GetSelectorExpression<Story, ResultStoryDto>(selectedFieldsList);
 
-                var storiesQuery = context.Stories
-                    .Join(context.StoryHighlights,
+                var storiesQuery = _dbContext.Stories
+                    .Join(_dbContext.StoryHighlights,
                         s => s.StoryId,
                         sh => sh.StoryId,
                         (s, sh) => new { Story = s, HighlightId = sh.HighlightId })

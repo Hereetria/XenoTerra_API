@@ -8,5 +8,8 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightStoryRepository
 {
-    public interface IStoryHighlightWriteRepository : IWriteRepository<StoryHighlight, Guid> { }
+    public interface IStoryHighlightWriteRepository : IWriteRepository<StoryHighlight, Guid> 
+    {
+
+    }
 }

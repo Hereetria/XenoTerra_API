@@ -1,32 +1,67 @@
-﻿using HotChocolate;
+﻿using AutoMapper;
+using HotChocolate;
+using HotChocolate.Resolvers;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MediaService;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
+using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.MediaQueries
 {
     public class MediaQuery
     {
-        public string GetRandomData()
+        public async Task<IEnumerable<ResultMediaWithRelationsDto>> GetAllMediaAsync(
+            [Service] IMediaReadService mediaReadService,
+            [Service] MediaResolver resolver,
+            [Service] IMapper mapper,
+            IResolverContext context)
         {
-            return "Default data to prevent query class from being empty.";
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = mediaReadService.FetchAllQueryable(selectedFields)
+                ?? Enumerable.Empty<Media>().AsQueryable();
+
+            var media = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(media, context);
+
+            return mapper.Map<List<ResultMediaWithRelationsDto>>(media);
         }
 
-        //[UseProjection]
-        //[GraphQLDescription("Get all Media")]
-        //public IQueryable<ResultMediaDto> GetAllMedia([Service] IMediaServiceBLL mediaServiceBLL)
-        //{
-        //    return mediaServiceBLL.GetAllQuerable();
-        //}
+        public async Task<IEnumerable<ResultMediaWithRelationsDto>> GetMediaByIdsAsync(
+            [Service] IMediaReadService mediaReadService,
+            [Service] MediaResolver resolver,
+            [Service] IMapper mapper,
+            List<Guid> keys,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = mediaReadService.FetchByIdsQueryable(keys, selectedFields)
+                ?? Enumerable.Empty<Media>().AsQueryable();
 
-        //[UseProjection]
-        //[GraphQLDescription("Get Media by ID")]
-        //public IQueryable<ResultMediaByIdDto> GetMediaById(Guid id, [Service] IMediaServiceBLL mediaServiceBLL)
-        //{
-        //    var result = mediaServiceBLL.GetByIdQuerable(id);
-        //    if (result == null)
-        //    {
-        //        throw new Exception($"Media with ID {id} not found");
-        //    }
-        //    return result;
-        //}
+            var media = await query.ToListAsync();
+            await resolver.PopulateRelatedFieldsAsync(media, context);
+
+            return mapper.Map<List<ResultMediaWithRelationsDto>>(media);
+        }
+
+        public async Task<ResultMediaWithRelationsDto> GetMediaByIdAsync(
+            [Service] IMediaReadService mediaReadService,
+            [Service] MediaResolver resolver,
+            [Service] IMapper mapper,
+            Guid key,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = mediaReadService.FetchByIdQueryable(key, selectedFields)
+                ?? Enumerable.Empty<Media>().AsQueryable();
+
+            var media = await query.FirstOrDefaultAsync()
+                ?? throw new KeyNotFoundException($"Media with ID {key} was not found in the database.");
+
+            await resolver.PopulateRelatedFieldAsync(media, context);
+
+            return mapper.Map<ResultMediaWithRelationsDto>(media);
+        }
+
     }
 }

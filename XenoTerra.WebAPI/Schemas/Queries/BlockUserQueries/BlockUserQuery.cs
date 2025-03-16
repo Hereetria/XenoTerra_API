@@ -1,14 +1,9 @@
-﻿using HotChocolate;
-using HotChocolate.Data.Projections.Context;
-using HotChocolate.Language;
+﻿using AutoMapper;
 using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.DataLoaders;
 using XenoTerra.WebAPI.Schemas.Resolvers;
 using XenoTerra.WebAPI.Utils;
 
@@ -19,66 +14,63 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUserQueries
         public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetAllBlockUsersAsync(
             [Service] IBlockUserReadService blockUserReadService,
             [Service] BlockUserResolver resolver,
+            [Service] IMapper mapper,
             IResolverContext context)
         {
             var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = blockUserReadService.FetchAllQueryable(selectedFields);
-
-            if (query is null)
-                throw new Exception($"{nameof(query)} cannot be null");
-
-            query = resolver.ModifyQuery(query, context);
+            var query = blockUserReadService.FetchAllQueryable(selectedFields)
+                ?? Enumerable.Empty<BlockUser>().AsQueryable();
 
             var blockUsers = await query.ToListAsync();
 
-            var result = blockUsers.Select(b => new ResultBlockUserWithRelationsDto
-            {
-                BlockUserId = b.BlockUserId,
-                BlockingUserId = b.BlockingUserId,
-                BlockedUserId = b.BlockedUserId,
-                BlockedAt = b.BlockedAt,
-                BlockingUser = b.BlockingUser != null ? new ResultUserDto
-                {
-                    Id = b.BlockingUser.Id,
-                    UserName = b.BlockingUser.UserName,
-                    Email = b.BlockingUser.Email
-                } : null,
-                BlockedUser = b.BlockedUser != null ? new ResultUserDto
-                {
-                    Id = b.BlockedUser.Id,
-                    UserName = b.BlockedUser.UserName,
-                    Email = b.BlockedUser.Email
-                } : null
-            });
+
+            await resolver.PopulateRelatedFieldsAsync(blockUsers, context);
+
+            var result = mapper.Map<List<ResultBlockUserWithRelationsDto>>(blockUsers);
 
             return result;
-        } 
-
-
-        private static ResultUserDto MapUserToDto(XenoTerra.EntityLayer.Entities.User user)
-        {
-            if (user == null) return null;
-
-            return new ResultUserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email
-            };
         }
 
+        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersByIdsAsync(
+            [Service] IBlockUserReadService blockUserReadService,
+            [Service] BlockUserResolver resolver,
+            [Service] IMapper mapper,
+            List<Guid> keys,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = blockUserReadService.FetchByIdsQueryable(keys, selectedFields)
+                ?? Enumerable.Empty<BlockUser>().AsQueryable();
+
+            var blockUsers = await query.ToListAsync();
 
 
-        //[UseProjection]
-        //[GraphQLDescription("Get BlockUser by ID")]
-        //public IQueryable<ResultBlockUserByIdDto> GetBlockUserById(Guid id, [Service] IBlockUserServiceBLL blockUserServiceBLL)
-        //{
-        //    var result = blockUserServiceBLL.GetByIdQuerable(id);
-        //    if (result == null)
-        //    {
-        //        throw new Exception($"BlockUser with ID {id} not found");
-        //    }
-        //    return result;
-        //}
+            await resolver.PopulateRelatedFieldsAsync(blockUsers, context);
+
+            var result = mapper.Map<List<ResultBlockUserWithRelationsDto>>(blockUsers);
+
+            return result;
+        }
+
+        public async Task<ResultBlockUserWithRelationsDto> GetBlockUserByIdAsync(
+            [Service] IBlockUserReadService blockUserReadService,
+            [Service] BlockUserResolver resolver,
+            [Service] IMapper mapper,
+            Guid key,
+            IResolverContext context)
+        {
+            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
+            var query = blockUserReadService.FetchByIdQueryable(key, selectedFields)
+                ?? Enumerable.Empty<BlockUser>().AsQueryable();
+
+            var blockUser = await query.FirstOrDefaultAsync()
+                ?? throw new System.Collections.Generic.KeyNotFoundException($"BlockUser with ID {key} was not found in the database.");
+
+            await resolver.PopulateRelatedFieldAsync(blockUser, context);
+
+            var result = mapper.Map<ResultBlockUserWithRelationsDto>(blockUser);
+
+            return result;
+        }
     }
 }

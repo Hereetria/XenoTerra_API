@@ -22,7 +22,6 @@ using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.PostService;
-using XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
@@ -43,7 +42,6 @@ using XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository;
-using XenoTerra.DataAccessLayer.Repositories.Entity.PostTagRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.ReportCommentRepository;
@@ -60,6 +58,10 @@ using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService;
 using XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryUserRepository;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
+using XenoTerra.WebAPI.Schemas.Resolvers.GenericResolvers;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagService;
+using XenoTerra.DataAccessLayer.Repositories.Entity.UserPostTagRepository;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -77,8 +79,10 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddFiltering()
                 .AddDataLoader<UserDataLoader>()
                 .AddDataLoader<StoryDataLoader>()
-                .AddDataLoader<HighlightStoryDataLoader>();
+                .AddDataLoader<StoryHighlightDataLoader>();
 
+            builder.Services.AddScoped(typeof(EntityDataLoaderFactory));
+            builder.Services.AddScoped(typeof(EntityResolver<,>));
             builder.Services.AddScoped<BlockUserResolver>();
             builder.Services.AddScoped<HighlightResolver>();
 
@@ -92,6 +96,7 @@ namespace XenoTerra.WebAPI.Extensions
 
             builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
             builder.Services.AddScoped(typeof(IWriteRepository<,>), typeof(WriteRepository<,>));
+
 
 
 
@@ -150,10 +155,10 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<IPostReadRepository, PostReadRepository>();
             builder.Services.AddScoped<IPostWriteRepository, PostWriteRepository>();
 
-            builder.Services.AddScoped<IPostTagReadService, PostTagReadService>();
-            builder.Services.AddScoped<IPostTagWriteService, PostTagWriteService>();
-            builder.Services.AddScoped<IPostTagReadRepository, PostTagReadRepository>();
-            builder.Services.AddScoped<IPostTagWriteRepository, PostTagWriteRepository>();
+            builder.Services.AddScoped<IUserPostTagReadService, UserPostTagReadService>();
+            builder.Services.AddScoped<IUserPostTagWriteService, UserPostTagWriteService>();
+            builder.Services.AddScoped<IUserPostTagReadRepository, UserPostTagReadRepository>();
+            builder.Services.AddScoped<IUserPostTagWriteRepository, UserPostTagWriteRepository>();
 
             builder.Services.AddScoped<IReactionReadService, ReactionReadService>();
             builder.Services.AddScoped<IReactionWriteService, ReactionWriteService>();

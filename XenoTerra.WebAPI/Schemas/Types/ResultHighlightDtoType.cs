@@ -13,7 +13,7 @@ namespace XenoTerra.WebAPI.Schemas.Types
                 .Resolve(async context =>
                 {
                     var highlightDto = context.Parent<ResultHighlightWithRelationsDto>();
-                    var highlightStoryDataLoader = context.Service<HighlightStoryDataLoader>();
+                    var highlightStoryDataLoader = context.Service<StoryHighlightDataLoader>();
                     var resolver = context.Service<HighlightResolver>();
 
                     await resolver.PopulateHighlightStoriesAsync(highlightDto, highlightStoryDataLoader, context);

@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
     public class ReadService<TEntity, TKey> : IReadService<TEntity, TKey>
         where TEntity : class
     {
-        private readonly IReadRepository<TEntity, TKey> _repository;
+        protected readonly IReadRepository<TEntity, TKey> _repository;
 
         public ReadService(IReadRepository<TEntity, TKey> repository)
         {

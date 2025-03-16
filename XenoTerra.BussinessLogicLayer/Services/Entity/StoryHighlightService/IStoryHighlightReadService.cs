@@ -10,6 +10,12 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightService
 {
-    public interface IStoryHighlightReadService : IReadService<StoryHighlight, Guid> { }
+    public interface IStoryHighlightReadService : IReadService<StoryHighlight, Guid> 
+    {
+        public IQueryable<Story> FetchStoriesByHighlightIdsQueryable(IEnumerable<Guid> keys, IEnumerable<string> selectedProperties);
+        public IQueryable<Story> FetchStoryByHighlightIdQueryable(Guid key, IEnumerable<string> selectedProperties);
+        public IQueryable<Highlight> FetchHighlightsByStoryIdsQueryable(IEnumerable<Guid> keys, IEnumerable<string> selectedProperties);
+        public IQueryable<Highlight> FetchHighlightByStoryIdQueryable(Guid key, IEnumerable<string> selectedProperties);
+    }
 
 }

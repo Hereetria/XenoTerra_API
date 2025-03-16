@@ -55,6 +55,6 @@ namespace XenoTerra.EntityLayer.Entities
         public Note Note { get; set; }
 
         public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
-        public ICollection<PostTag> TaggedPosts { get; set; } = new List<PostTag>();
+        public ICollection<UserPostTag> TaggedPosts { get; set; } = new List<UserPostTag>();
     }
 }

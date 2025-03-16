@@ -35,7 +35,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries
         public NoteQuery Notes { get; }
         public NotificationQuery Notifications { get; }
         public PostQuery Posts { get; }
-        public PostTagQuery PostTags { get; }
+        public UserPostTagQuery PostTags { get; }
         public ReactionQuery Reactions { get; }
         public RecentChatsQuery RecentChats { get; }
         public ReportCommentQuery ReportComments { get; }
@@ -60,7 +60,7 @@ namespace XenoTerra.WebAPI.Schemas.Queries
             Notes = new NoteQuery();
             Notifications = new NotificationQuery();
             Posts = new PostQuery();
-            PostTags = new PostTagQuery();
+            PostTags = new UserPostTagQuery();
             Reactions = new ReactionQuery();
             RecentChats = new RecentChatsQuery();
             ReportComments = new ReportCommentQuery();

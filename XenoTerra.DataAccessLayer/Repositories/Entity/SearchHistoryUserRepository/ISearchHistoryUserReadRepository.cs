@@ -10,5 +10,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryUserReposit
 {
     public interface ISearchHistoryUserReadRepository : IReadRepository<SearchHistoryUser, Guid>
     {
+        public IQueryable<SearchHistory> GetSearchHistoriesByUserIdsQueryable(IEnumerable<Guid> keys);
+        public IQueryable<SearchHistory> GetSearchHistoryByUserIdQueryable(Guid key);
+        public IQueryable<User> GetUsersBySearchHistoryIdsQueryable(IEnumerable<Guid> keys);
+        public IQueryable<User> GetUserBySearchHistoryIdQueryable(Guid key);
     }
 }

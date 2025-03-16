@@ -8,10 +8,10 @@ using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostTagRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserPostTagRepository
 {
-    public class PostTagWriteRepository : WriteRepository<PostTag, Guid>, IPostTagWriteRepository
+    public class UserPostTagWriteRepository : WriteRepository<UserPostTag, Guid>, IUserPostTagWriteRepository
     {
-        public PostTagWriteRepository(AppDbContext context) : base(context) { }
+        public UserPostTagWriteRepository(AppDbContext context) : base(context) { }
     }
 }

@@ -11,7 +11,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers
     {
         public async Task PopulateHighlightStoriesAsync(
             [Parent] ResultHighlightWithRelationsDto highlightDto,
-            HighlightStoryDataLoader highlightStoryDataLoader,
+            StoryHighlightDataLoader highlightStoryDataLoader,
             IResolverContext context)
         {
             var selectedFields = GetSelectedFields(context);

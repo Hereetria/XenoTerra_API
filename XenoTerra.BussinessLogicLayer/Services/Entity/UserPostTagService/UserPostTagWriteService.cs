@@ -10,11 +10,11 @@ using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.PostTagDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostTagService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagService
 {
-    public class PostTagWriteService : WriteService<PostTag, ResultPostTagDto, CreatePostTagDto, UpdatePostTagDto, Guid>, IPostTagWriteService
+    public class UserPostTagWriteService : WriteService<UserPostTag, ResultUserPostTagDto, CreateUserPostTagDto, UpdateUserPostTagDto, Guid>, IUserPostTagWriteService
     {
-        public PostTagWriteService(IWriteRepository<PostTag, Guid> repository, IMapper mapper)
+        public UserPostTagWriteService(IWriteRepository<UserPostTag, Guid> repository, IMapper mapper)
             : base(repository, mapper) { }
     }
 
