@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.CommentQueryServices
 {
-    public class CommentQueryService : BaseQueryService<Comment, ResultCommentDto, Guid>, ICommentQueryService
+    public class CommentQueryService : QueryService<Comment, Guid>, ICommentQueryService
     {
         public CommentQueryService(IReadService<Comment, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }

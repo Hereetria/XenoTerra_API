@@ -1,66 +1,58 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.RoleService;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.RoleQueries
 {
     public class RoleQuery
     {
+        private readonly IMapper _mapper;
+
+        public RoleQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultRoleWithRelationsDto>> GetAllRolesAsync(
-            [Service] IRoleReadService roleReadService,
-            [Service] RoleResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IRoleQueryService service,
+            [Service] IRoleResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = roleReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Role>().AsQueryable();
-
-            var roles = await query.ToListAsync();
+            var roles = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(roles, context);
-
-            return mapper.Map<List<ResultRoleWithRelationsDto>>(roles);
+            var roleDtos = _mapper.Map<List<ResultRoleWithRelationsDto>>(roles);
+            return roleDtos;
         }
 
         public async Task<IEnumerable<ResultRoleWithRelationsDto>> GetRolesByIdsAsync(
-            [Service] IRoleReadService roleReadService,
-            [Service] RoleResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] IRoleQueryService service,
+            [Service] IRoleResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = roleReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Role>().AsQueryable();
-
-            var roles = await query.ToListAsync();
+            var roles = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(roles, context);
-
-            return mapper.Map<List<ResultRoleWithRelationsDto>>(roles);
+            var roleDtos = _mapper.Map<List<ResultRoleWithRelationsDto>>(roles);
+            return roleDtos;
         }
 
         public async Task<ResultRoleWithRelationsDto> GetRoleByIdAsync(
-            [Service] IRoleReadService roleReadService,
-            [Service] RoleResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IRoleQueryService service,
+            [Service] IRoleResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = roleReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Role>().AsQueryable();
-
-            var role = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"Role with ID {key} was not found in the database.");
-
+            var role = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(role, context);
-
-            return mapper.Map<ResultRoleWithRelationsDto>(role);
+            var roleDto = _mapper.Map<ResultRoleWithRelationsDto>(role);
+            return roleDto;
         }
-
     }
+
 }

@@ -1,6 +1,3 @@
-
-
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
@@ -12,6 +9,6 @@ namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
         public DateTime SearchedAt { get; set; }
 
         public ResultUserDto User { get; set; }
-        public ICollection<ResultSearchHistoryUserDto> SearchedUsers { get; set; }
+        public ICollection<ResultUserDto> SearchedUsers { get; set; }
     }
 }

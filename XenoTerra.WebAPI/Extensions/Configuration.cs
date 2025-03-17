@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
 using XenoTerra.DataAccessLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DTOLayer.Mappings;
@@ -8,9 +5,6 @@ using System.Reflection;
 using XenoTerra.WebAPI.Schemas.Mutations;
 using XenoTerra.WebAPI.Schemas.Queries;
 using XenoTerra.WebAPI.Schemas.Types;
-using XenoTerra.WebAPI.Schemas.DataLoaders;
-using XenoTerra.WebAPI.Schemas.Resolvers;
-using Microsoft.EntityFrameworkCore.Migrations;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentService;
@@ -35,7 +29,6 @@ using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService;
 using XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository;
-using XenoTerra.DataAccessLayer.Repositories.Entity.HighlightStoryRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.MediaRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository;
@@ -48,20 +41,81 @@ using XenoTerra.DataAccessLayer.Repositories.Entity.ReportCommentRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository;
-using XenoTerra.DataAccessLayer.Repositories.Entity.StoryHighlightRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository;
 using XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository;
-using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightService;
-using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserService;
-using XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryUserRepository;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
-using XenoTerra.WebAPI.Schemas.Resolvers.GenericResolvers;
-using XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagService;
-using XenoTerra.DataAccessLayer.Repositories.Entity.UserPostTagRepository;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
+using XenoTerra.WebAPI.Schemas.Queries.BlockUserQueries;
+using XenoTerra.WebAPI.Schemas.Queries.CommentQueries;
+using XenoTerra.WebAPI.Schemas.Queries.FollowQueries;
+using XenoTerra.WebAPI.Schemas.Queries.LikeQueries;
+using XenoTerra.WebAPI.Schemas.Queries.MediaQueries;
+using XenoTerra.WebAPI.Schemas.Queries.MessageQueries;
+using XenoTerra.WebAPI.Schemas.Queries.NoteQueries;
+using XenoTerra.WebAPI.Schemas.Queries.NotificationQueries;
+using XenoTerra.WebAPI.Schemas.Queries.PostQueries;
+using XenoTerra.WebAPI.Schemas.Queries.ReactionQueries;
+using XenoTerra.WebAPI.Schemas.Queries.RecentChatsQueries;
+using XenoTerra.WebAPI.Schemas.Queries.ReportCommentQueries;
+using XenoTerra.WebAPI.Schemas.Queries.RoleQueries;
+using XenoTerra.WebAPI.Schemas.Queries.SavedPostQueries;
+using XenoTerra.WebAPI.Schemas.Queries.SearchHistoryQueries;
+using XenoTerra.WebAPI.Schemas.Queries.StoryQueries;
+using XenoTerra.WebAPI.Schemas.Queries.UserQueries;
+using XenoTerra.WebAPI.Schemas.Queries.UserSettingQueries;
+using XenoTerra.WebAPI.Schemas.Queries.ViewStoryQueries;
+using XenoTerra.WebAPI.Schemas.Queries.HighlightQueries;
+using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.CommentQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.MediaQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.MessageQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.NoteQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.NotificationQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.PostQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.ReactionQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.RecentChatsQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.SavedPostQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryUserQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.StoryHighlightQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.UserPostTagQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.UserSettingQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.ViewStoryQueryServices;
+using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Generic.Write;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.CommentResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MediaResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MessageResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NoteResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NotificationResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.PostResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RecentChatsResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReportCommentResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SavedPostResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.StoryResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserSettingResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ViewStoryResolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -78,11 +132,32 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddProjections()
                 .AddFiltering()
                 .AddDataLoader<UserDataLoader>()
-                .AddDataLoader<StoryDataLoader>()
-                .AddDataLoader<StoryHighlightDataLoader>();
+                .AddDataLoader<StoryDataLoader>();
+
+            builder.Services.AddScoped<BlockUserQuery>();
+            builder.Services.AddScoped<CommentQuery>();
+            builder.Services.AddScoped<FollowQuery>();
+            builder.Services.AddScoped<HighlightQuery>();
+            builder.Services.AddScoped<LikeQuery>();
+            builder.Services.AddScoped<MediaQuery>();
+            builder.Services.AddScoped<MessageQuery>();
+            builder.Services.AddScoped<NoteQuery>();
+            builder.Services.AddScoped<NotificationQuery>();
+            builder.Services.AddScoped<PostQuery>();
+            builder.Services.AddScoped<ReactionQuery>();
+            builder.Services.AddScoped<RecentChatsQuery>();
+            builder.Services.AddScoped<ReportCommentQuery>();
+            builder.Services.AddScoped<RoleQuery>();
+            builder.Services.AddScoped<SavedPostQuery>();
+            builder.Services.AddScoped<SearchHistoryQuery>();
+            builder.Services.AddScoped<StoryQuery>();
+            builder.Services.AddScoped<UserQuery>();
+            builder.Services.AddScoped<UserSettingQuery>();
+            builder.Services.AddScoped<ViewStoryQuery>();
+
 
             builder.Services.AddScoped(typeof(EntityDataLoaderFactory));
-            builder.Services.AddScoped(typeof(EntityResolver<,>));
+            builder.Services.AddScoped(typeof(IEntityResolver<,>), typeof(EntityResolver<,>));
             builder.Services.AddScoped<BlockUserResolver>();
             builder.Services.AddScoped<HighlightResolver>();
 
@@ -93,6 +168,9 @@ namespace XenoTerra.WebAPI.Extensions
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+
+            builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));
+            builder.Services.AddScoped(typeof(IWriteService<,,,,>), typeof(WriteService<,,,,>));
 
             builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
             builder.Services.AddScoped(typeof(IWriteRepository<,>), typeof(WriteRepository<,>));
@@ -119,11 +197,6 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<IHighlightWriteService, HighlightWriteService>();
             builder.Services.AddScoped<IHighlightReadRepository, HighlightReadRepository>();
             builder.Services.AddScoped<IHighlightWriteRepository, HighlightWriteRepository>();
-
-            builder.Services.AddScoped<IStoryHighlightReadService, StoryHighlightReadService>();
-            builder.Services.AddScoped<IStoryHighlightWriteService, StoryHighlightWriteService>();
-            builder.Services.AddScoped<IStoryHighlightReadRepository, StoryHighlightReadRepository>();
-            builder.Services.AddScoped<IStoryHighlightWriteRepository, StoryHighlightWriteRepository>();
 
             builder.Services.AddScoped<ILikeReadService, LikeReadService>();
             builder.Services.AddScoped<ILikeWriteService, LikeWriteService>();
@@ -155,11 +228,6 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<IPostReadRepository, PostReadRepository>();
             builder.Services.AddScoped<IPostWriteRepository, PostWriteRepository>();
 
-            builder.Services.AddScoped<IUserPostTagReadService, UserPostTagReadService>();
-            builder.Services.AddScoped<IUserPostTagWriteService, UserPostTagWriteService>();
-            builder.Services.AddScoped<IUserPostTagReadRepository, UserPostTagReadRepository>();
-            builder.Services.AddScoped<IUserPostTagWriteRepository, UserPostTagWriteRepository>();
-
             builder.Services.AddScoped<IReactionReadService, ReactionReadService>();
             builder.Services.AddScoped<IReactionWriteService, ReactionWriteService>();
             builder.Services.AddScoped<IReactionReadRepository, ReactionReadRepository>();
@@ -190,11 +258,6 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<ISearchHistoryReadRepository, SearchHistoryReadRepository>();
             builder.Services.AddScoped<ISearchHistoryWriteRepository, SearchHistoryWriteRepository>();
 
-            builder.Services.AddScoped<ISearchHistoryUserReadService, SearchHistoryUserReadService>();
-            builder.Services.AddScoped<ISearchHistoryUserWriteService, SearchHistoryUserWriteService>();
-            builder.Services.AddScoped<ISearchHistoryUserReadRepository, SearchHistoryUserReadRepository>();
-            builder.Services.AddScoped<ISearchHistoryUserWriteRepository, SearchHistoryUserWriteRepository>();
-
             builder.Services.AddScoped<IStoryReadService, StoryReadService>();
             builder.Services.AddScoped<IStoryWriteService, StoryWriteService>();
             builder.Services.AddScoped<IStoryReadRepository, StoryReadRepository>();
@@ -215,7 +278,70 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<IViewStoryReadRepository, ViewStoryReadRepository>();
             builder.Services.AddScoped<IViewStoryWriteRepository, ViewStoryWriteRepository>();
 
+            builder.Services.AddScoped<IBlockUserQueryService, BlockUserQueryService>();
+            builder.Services.AddScoped<ICommentQueryService, CommentQueryService>();
+            builder.Services.AddScoped<IFollowQueryService, FollowQueryService>();
+            builder.Services.AddScoped<IHighlightQueryService, HighlightQueryService>();
+            builder.Services.AddScoped<ILikeQueryService, LikeQueryService>();
+            builder.Services.AddScoped<IMediaQueryService, MediaQueryService>();
+            builder.Services.AddScoped<IMessageQueryService, MessageQueryService>();
+            builder.Services.AddScoped<INoteQueryService, NoteQueryService>();
+            builder.Services.AddScoped<INotificationQueryService, NotificationQueryService>();
+            builder.Services.AddScoped<IPostQueryService, PostQueryService>();
+            builder.Services.AddScoped<IUserPostTagQueryService, UserPostTagQueryService>();
+            builder.Services.AddScoped<IReactionQueryService, ReactionQueryService>();
+            builder.Services.AddScoped<IRecentChatsQueryService, RecentChatsQueryService>();
+            builder.Services.AddScoped<IReportCommentQueryService, ReportCommentQueryService>();
+            builder.Services.AddScoped<IRoleQueryService, RoleQueryService>();
+            builder.Services.AddScoped<ISavedPostQueryService, SavedPostQueryService>();
+            builder.Services.AddScoped<ISearchHistoryQueryService, SearchHistoryQueryService>();
+            builder.Services.AddScoped<ISearchHistoryUserQueryService, SearchHistoryUserQueryService>();
+            builder.Services.AddScoped<IStoryHighlightQueryService, StoryHighlightQueryService>();
+            builder.Services.AddScoped<IStoryQueryService, StoryQueryService>();
+            builder.Services.AddScoped<IUserQueryService, UserQueryService>();
+            builder.Services.AddScoped<IUserSettingQueryService, UserSettingQueryService>();
+            builder.Services.AddScoped<IViewStoryQueryService, ViewStoryQueryService>();
 
+            builder.Services.AddScoped<IBlockUserResolver, BlockUserResolver>();
+            builder.Services.AddScoped<ICommentResolver, CommentResolver>();
+            builder.Services.AddScoped<IFollowResolver, FollowResolver>();
+            builder.Services.AddScoped<IHighlightResolver, HighlightResolver>();
+            builder.Services.AddScoped<ILikeResolver, LikeResolver>();
+            builder.Services.AddScoped<IMediaResolver, MediaResolver>();
+            builder.Services.AddScoped<IMessageResolver, MessageResolver>();
+            builder.Services.AddScoped<INoteResolver, NoteResolver>();
+            builder.Services.AddScoped<INotificationResolver, NotificationResolver>();
+            builder.Services.AddScoped<IPostResolver, PostResolver>();
+            builder.Services.AddScoped<IReactionResolver, ReactionResolver>();
+            builder.Services.AddScoped<IRecentChatsResolver, RecentChatsResolver>();
+            builder.Services.AddScoped<IReportCommentResolver, ReportCommentResolver>();
+            builder.Services.AddScoped<IRoleResolver, RoleResolver>();
+            builder.Services.AddScoped<ISavedPostResolver, SavedPostResolver>();
+            builder.Services.AddScoped<ISearchHistoryResolver, SearchHistoryResolver>();
+            builder.Services.AddScoped<IStoryResolver, StoryResolver>();
+            builder.Services.AddScoped<IUserResolver, UserResolver>();
+            builder.Services.AddScoped<IUserSettingResolver, UserSettingResolver>();
+            builder.Services.AddScoped<IViewStoryResolver, ViewStoryResolver>();
+
+            builder.Services.AddScoped<BlockUserDataLoader>();
+            builder.Services.AddScoped<CommentDataLoader>();
+            builder.Services.AddScoped<FollowDataLoader>();
+            builder.Services.AddScoped<HighlightDataLoader>();
+            builder.Services.AddScoped<LikeDataLoader>();
+            builder.Services.AddScoped<MediaDataLoader>();
+            builder.Services.AddScoped<MessageDataLoader>();
+            builder.Services.AddScoped<NoteDataLoader>();
+            builder.Services.AddScoped<NotificationDataLoader>();
+            builder.Services.AddScoped<ReactionDataLoader>();
+            builder.Services.AddScoped<RecentChatsDataLoader>();
+            builder.Services.AddScoped<ReportCommentDataLoader>();
+            builder.Services.AddScoped<RoleDataLoader>();
+            builder.Services.AddScoped<SavedPostDataLoader>();
+            builder.Services.AddScoped<SearchHistoryDataLoader>();
+            builder.Services.AddScoped<StoryDataLoader>();
+            builder.Services.AddScoped<UserDataLoader>();
+            builder.Services.AddScoped<UserSettingDataLoader>();
+            builder.Services.AddScoped<ViewStoryDataLoader>();
         }
     }
 }

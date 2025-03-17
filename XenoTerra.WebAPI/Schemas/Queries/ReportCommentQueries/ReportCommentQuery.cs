@@ -1,67 +1,59 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReportCommentResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.ReportCommentQueries
 {
     public class ReportCommentQuery
     {
+        private readonly IMapper _mapper;
+
+        public ReportCommentQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultReportCommentWithRelationsDto>> GetAllReportCommentsAsync(
-            [Service] IReportCommentReadService reportCommentReadService,
-            [Service] ReportCommentResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IReportCommentQueryService service,
+            [Service] IReportCommentResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = reportCommentReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<ReportComment>().AsQueryable();
-
-            var reportComments = await query.ToListAsync();
+            var reportComments = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(reportComments, context);
-
-            return mapper.Map<List<ResultReportCommentWithRelationsDto>>(reportComments);
+            var reportCommentDtos = _mapper.Map<List<ResultReportCommentWithRelationsDto>>(reportComments);
+            return reportCommentDtos;
         }
 
         public async Task<IEnumerable<ResultReportCommentWithRelationsDto>> GetReportCommentsByIdsAsync(
-            [Service] IReportCommentReadService reportCommentReadService,
-            [Service] ReportCommentResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] IReportCommentQueryService service,
+            [Service] IReportCommentResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = reportCommentReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<ReportComment>().AsQueryable();
-
-            var reportComments = await query.ToListAsync();
+            var reportComments = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(reportComments, context);
-
-            return mapper.Map<List<ResultReportCommentWithRelationsDto>>(reportComments);
+            var reportCommentDtos = _mapper.Map<List<ResultReportCommentWithRelationsDto>>(reportComments);
+            return reportCommentDtos;
         }
 
         public async Task<ResultReportCommentWithRelationsDto> GetReportCommentByIdAsync(
-            [Service] IReportCommentReadService reportCommentReadService,
-            [Service] ReportCommentResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IReportCommentQueryService service,
+            [Service] IReportCommentResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = reportCommentReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<ReportComment>().AsQueryable();
-
-            var reportComment = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"ReportComment with ID {key} was not found in the database.");
-
+            var reportComment = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(reportComment, context);
-
-            return mapper.Map<ResultReportCommentWithRelationsDto>(reportComment);
+            var reportCommentDto = _mapper.Map<ResultReportCommentWithRelationsDto>(reportComment);
+            return reportCommentDto;
         }
-
     }
+
 
 }

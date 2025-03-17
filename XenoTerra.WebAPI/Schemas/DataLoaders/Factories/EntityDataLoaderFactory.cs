@@ -1,6 +1,7 @@
 ﻿using GreenDonut;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
+using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories
 {
@@ -23,21 +24,18 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories
         { typeof(Comment), typeof(CommentDataLoader) },
         { typeof(Follow), typeof(FollowDataLoader) },
         { typeof(Highlight), typeof(HighlightDataLoader) },
-        { typeof(StoryHighlight), typeof(StoryHighlightDataLoader) },
         { typeof(Like), typeof(LikeDataLoader) },
         { typeof(Media), typeof(MediaDataLoader) },
         { typeof(Message), typeof(MessageDataLoader) },
         { typeof(Note), typeof(NoteDataLoader) },
         { typeof(Notification), typeof(NotificationDataLoader) },
         { typeof(Post), typeof(PostDataLoader) },
-        { typeof(UserPostTag), typeof(PostTagDataLoader) },
         { typeof(Reaction), typeof(ReactionDataLoader) },
         { typeof(RecentChats), typeof(RecentChatsDataLoader) },
         { typeof(ReportComment), typeof(ReportCommentDataLoader) },
         { typeof(Role), typeof(RoleDataLoader) },
         { typeof(SavedPost), typeof(SavedPostDataLoader) },
         { typeof(SearchHistory), typeof(SearchHistoryDataLoader) },
-        { typeof(SearchHistoryUser), typeof(SearchHistoryUserDataLoader) },
         { typeof(Story), typeof(StoryDataLoader) },
         { typeof(User), typeof(UserDataLoader) },
         { typeof(UserSetting), typeof(UserSettingDataLoader) },

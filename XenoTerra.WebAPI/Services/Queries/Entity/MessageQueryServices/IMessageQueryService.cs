@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.MessageQueryServices
 {
-    public interface IMessageQueryService : IBaseQueryService<Message, ResultMessageDto, Guid> { }
+    public interface IMessageQueryService : IQueryService<Message, Guid> { }
 
 }

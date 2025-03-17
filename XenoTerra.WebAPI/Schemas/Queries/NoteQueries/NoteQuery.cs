@@ -1,66 +1,58 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NoteResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.NoteQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.NoteQueries
 {
     public class NoteQuery
     {
+        private readonly IMapper _mapper;
+
+        public NoteQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultNoteWithRelationsDto>> GetAllNotesAsync(
-            [Service] INoteReadService noteReadService,
-            [Service] NoteResolver resolver,
-            [Service] IMapper mapper,
+            [Service] INoteQueryService service,
+            [Service] INoteResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = noteReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Note>().AsQueryable();
-
-            var notes = await query.ToListAsync();
+            var notes = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(notes, context);
-
-            return mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
+            var noteDtos = _mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
+            return noteDtos;
         }
 
         public async Task<IEnumerable<ResultNoteWithRelationsDto>> GetNotesByIdsAsync(
-            [Service] INoteReadService noteReadService,
-            [Service] NoteResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] INoteQueryService service,
+            [Service] INoteResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = noteReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Note>().AsQueryable();
-
-            var notes = await query.ToListAsync();
+            var notes = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(notes, context);
-
-            return mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
+            var noteDtos = _mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
+            return noteDtos;
         }
 
         public async Task<ResultNoteWithRelationsDto> GetNoteByIdAsync(
-            [Service] INoteReadService noteReadService,
-            [Service] NoteResolver resolver,
-            [Service] IMapper mapper,
+            [Service] INoteQueryService service,
+            [Service] INoteResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = noteReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Note>().AsQueryable();
-
-            var note = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"Note with ID {key} was not found in the database.");
-
+            var note = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(note, context);
-
-            return mapper.Map<ResultNoteWithRelationsDto>(note);
+            var noteDto = _mapper.Map<ResultNoteWithRelationsDto>(note);
+            return noteDto;
         }
-
     }
+
 }

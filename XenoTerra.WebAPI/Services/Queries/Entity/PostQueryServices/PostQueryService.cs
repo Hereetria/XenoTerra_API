@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.PostQueryServices
 {
-    public class PostQueryService : BaseQueryService<Post, ResultPostDto, Guid>, IPostQueryService
+    public class PostQueryService : QueryService<Post, Guid>, IPostQueryService
     {
         public PostQueryService(IReadService<Post, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }

@@ -1,67 +1,59 @@
 ﻿using AutoMapper;
 using HotChocolate;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.FollowService;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.FollowQueries
 {
     public class FollowQuery
     {
+        private readonly IMapper _mapper;
+
+        public FollowQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultFollowWithRelationsDto>> GetAllFollowsAsync(
-            [Service] IFollowReadService followReadService,
-            [Service] FollowResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IFollowQueryService service,
+            [Service] IFollowResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = followReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Follow>().AsQueryable();
-
-            var follows = await query.ToListAsync();
+            var follows = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(follows, context);
-
-            return mapper.Map<List<ResultFollowWithRelationsDto>>(follows);
+            var followDtos = _mapper.Map<List<ResultFollowWithRelationsDto>>(follows);
+            return followDtos;
         }
 
         public async Task<IEnumerable<ResultFollowWithRelationsDto>> GetFollowsByIdsAsync(
-            [Service] IFollowReadService followReadService,
-            [Service] FollowResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] IFollowQueryService service,
+            [Service] IFollowResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = followReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Follow>().AsQueryable();
-
-            var follows = await query.ToListAsync();
+            var follows = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(follows, context);
-
-            return mapper.Map<List<ResultFollowWithRelationsDto>>(follows);
+            var followDtos = _mapper.Map<List<ResultFollowWithRelationsDto>>(follows);
+            return followDtos;
         }
 
         public async Task<ResultFollowWithRelationsDto> GetFollowByIdAsync(
-            [Service] IFollowReadService followReadService,
-            [Service] FollowResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IFollowQueryService service,
+            [Service] IFollowResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = followReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Follow>().AsQueryable();
-
-            var follow = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"Follow with ID {key} was not found in the database.");
-
+            var follow = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(follow, context);
-
-            return mapper.Map<ResultFollowWithRelationsDto>(follow);
+            var followDto = _mapper.Map<ResultFollowWithRelationsDto>(follow);
+            return followDto;
         }
-
     }
+
 }

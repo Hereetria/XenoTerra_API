@@ -17,7 +17,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Schemas\Mutations\StoryHighlightMutations\" />
+    <Folder Include="Schemas\Inputs\" />
+    <Folder Include="Schemas\Extensions\" />
+    <Folder Include="Schemas\Middlewares\" />
+    <Folder Include="Schemas\Directives\" />
+    <Folder Include="Schemas\Errors\" />
+    <Folder Include="Schemas\Validators\" />
+    <Folder Include="Schemas\Sorters\" />
+    <Folder Include="Schemas\Payloads\" />
   </ItemGroup>
 
 </Project>

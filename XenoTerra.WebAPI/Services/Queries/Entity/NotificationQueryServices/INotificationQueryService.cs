@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.NotificationQueryServices
 {
-    public interface INotificationQueryService : IBaseQueryService<Notification, ResultNotificationDto, Guid> { }
+    public interface INotificationQueryService : IQueryService<Notification, Guid> { }
 
 }

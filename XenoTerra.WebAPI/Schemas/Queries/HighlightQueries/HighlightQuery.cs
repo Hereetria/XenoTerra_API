@@ -1,67 +1,61 @@
 ﻿using AutoMapper;
 using HotChocolate;
 using HotChocolate.Language;
-using HotChocolate.Resolvers;using XenoTerra.DataAccessLayer.Utils;
+using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
+using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService;
+using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.HighlightQueries
 {
     public class HighlightQuery
     {
+        private readonly IMapper _mapper;
+
+        public HighlightQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultHighlightWithRelationsDto>> GetAllHighlightsAsync(
-            [Service] IHighlightReadService highlightReadService,
-            [Service] HighlightResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IHighlightQueryService service,
+            [Service] IHighlightResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = highlightReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Highlight>().AsQueryable();
-
-            var highlights = await query.ToListAsync();
+            var highlights = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(highlights, context);
-
-            return mapper.Map<List<ResultHighlightWithRelationsDto>>(highlights);
+            var highlightDtos = _mapper.Map<List<ResultHighlightWithRelationsDto>>(highlights);
+            return highlightDtos;
         }
 
         public async Task<IEnumerable<ResultHighlightWithRelationsDto>> GetHighlightsByIdsAsync(
-            [Service] IHighlightReadService highlightReadService,
-            [Service] HighlightResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] IHighlightQueryService service,
+            [Service] IHighlightResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = highlightReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Highlight>().AsQueryable();
-
-            var highlights = await query.ToListAsync();
+            var highlights = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(highlights, context);
-
-            return mapper.Map<List<ResultHighlightWithRelationsDto>>(highlights);
+            var highlightDtos = _mapper.Map<List<ResultHighlightWithRelationsDto>>(highlights);
+            return highlightDtos;
         }
 
         public async Task<ResultHighlightWithRelationsDto> GetHighlightByIdAsync(
-            [Service] IHighlightReadService highlightReadService,
-            [Service] HighlightResolver resolver,
-            [Service] IMapper mapper,
+            [Service] IHighlightQueryService service,
+            [Service] IHighlightResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = highlightReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Highlight>().AsQueryable();
-
-            var highlight = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"Highlight with ID {key} was not found in the database.");
-
+            var highlight = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(highlight, context);
-
-            return mapper.Map<ResultHighlightWithRelationsDto>(highlight);
+            var highlightDto = _mapper.Map<ResultHighlightWithRelationsDto>(highlight);
+            return highlightDto;
         }
-
     }
+
 }

@@ -1,66 +1,58 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.LikeQueries
 {
     public class LikeQuery
     {
+        private readonly IMapper _mapper;
+
+        public LikeQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultLikeWithRelationsDto>> GetAllLikesAsync(
-            [Service] ILikeReadService likeReadService,
-            [Service] LikeResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ILikeQueryService service,
+            [Service] ILikeResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = likeReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Like>().AsQueryable();
-
-            var likes = await query.ToListAsync();
+            var likes = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(likes, context);
-
-            return mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
+            var likeDtos = _mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
+            return likeDtos;
         }
 
         public async Task<IEnumerable<ResultLikeWithRelationsDto>> GetLikesByIdsAsync(
-            [Service] ILikeReadService likeReadService,
-            [Service] LikeResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] ILikeQueryService service,
+            [Service] ILikeResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = likeReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Like>().AsQueryable();
-
-            var likes = await query.ToListAsync();
+            var likes = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(likes, context);
-
-            return mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
+            var likeDtos = _mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
+            return likeDtos;
         }
 
         public async Task<ResultLikeWithRelationsDto> GetLikeByIdAsync(
-            [Service] ILikeReadService likeReadService,
-            [Service] LikeResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ILikeQueryService service,
+            [Service] ILikeResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = likeReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Like>().AsQueryable();
-
-            var like = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"Like with ID {key} was not found in the database.");
-
+            var like = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(like, context);
-
-            return mapper.Map<ResultLikeWithRelationsDto>(like);
+            var likeDto = _mapper.Map<ResultLikeWithRelationsDto>(like);
+            return likeDto;
         }
-
     }
+
 }

@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices
 {
-    public interface IRoleQueryService : IBaseQueryService<Role, ResultRoleDto, Guid> { }
+    public interface IRoleQueryService : IQueryService<Role, Guid> { }
 
 }

@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices
 {
-    public class FollowQueryService : BaseQueryService<Follow, ResultFollowDto, Guid>, IFollowQueryService
+    public class FollowQueryService : QueryService<Follow, Guid>, IFollowQueryService
     {
         public FollowQueryService(IReadService<Follow, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }

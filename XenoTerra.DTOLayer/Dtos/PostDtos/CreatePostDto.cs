@@ -1,11 +1,3 @@
-
-
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
-using XenoTerra.DTOLayer.Dtos.LikeDtos;
-using XenoTerra.DTOLayer.Dtos.PostTagDtos;
-using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
-
 namespace XenoTerra.DTOLayer.Dtos.PostDtos
 {
     public class CreatePostDto

@@ -1,66 +1,58 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SavedPostResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.SavedPostQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.SavedPostQueries
 {
     public class SavedPostQuery
     {
+        private readonly IMapper _mapper;
+
+        public SavedPostQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultSavedPostWithRelationsDto>> GetAllSavedPostsAsync(
-            [Service] ISavedPostReadService savedPostReadService,
-            [Service] SavedPostResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ISavedPostQueryService service,
+            [Service] ISavedPostResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = savedPostReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<SavedPost>().AsQueryable();
-
-            var savedPosts = await query.ToListAsync();
+            var savedPosts = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(savedPosts, context);
-
-            return mapper.Map<List<ResultSavedPostWithRelationsDto>>(savedPosts);
+            var savedPostDtos = _mapper.Map<List<ResultSavedPostWithRelationsDto>>(savedPosts);
+            return savedPostDtos;
         }
 
         public async Task<IEnumerable<ResultSavedPostWithRelationsDto>> GetSavedPostsByIdsAsync(
-            [Service] ISavedPostReadService savedPostReadService,
-            [Service] SavedPostResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] ISavedPostQueryService service,
+            [Service] ISavedPostResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = savedPostReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<SavedPost>().AsQueryable();
-
-            var savedPosts = await query.ToListAsync();
+            var savedPosts = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(savedPosts, context);
-
-            return mapper.Map<List<ResultSavedPostWithRelationsDto>>(savedPosts);
+            var savedPostDtos = _mapper.Map<List<ResultSavedPostWithRelationsDto>>(savedPosts);
+            return savedPostDtos;
         }
 
         public async Task<ResultSavedPostWithRelationsDto> GetSavedPostByIdAsync(
-            [Service] ISavedPostReadService savedPostReadService,
-            [Service] SavedPostResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ISavedPostQueryService service,
+            [Service] ISavedPostResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = savedPostReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<SavedPost>().AsQueryable();
-
-            var savedPost = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"SavedPost with ID {key} was not found in the database.");
-
+            var savedPost = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(savedPost, context);
-
-            return mapper.Map<ResultSavedPostWithRelationsDto>(savedPost);
+            var savedPostDto = _mapper.Map<ResultSavedPostWithRelationsDto>(savedPost);
+            return savedPostDto;
         }
-
     }
+
 }

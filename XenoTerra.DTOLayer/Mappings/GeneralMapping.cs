@@ -11,14 +11,12 @@ using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
-using XenoTerra.DTOLayer.Dtos.PostTagDtos;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
@@ -120,11 +118,6 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<Post, CreatePostDto>().ReverseMap();
             CreateMap<Post, UpdatePostDto>().ReverseMap();
 
-            // PostTag Mappings
-            CreateMap<UserPostTag, ResultUserPostTagDto>().ReverseMap();
-            CreateMap<UserPostTag, CreateUserPostTagDto>().ReverseMap();
-            CreateMap<UserPostTag, UpdateUserPostTagDto>().ReverseMap();
-
             // Reaction Mappings
             CreateMap<Reaction, ResultReactionWithRelationsDto>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
@@ -171,12 +164,6 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<SearchHistory, ResultSearchHistoryDto>().ReverseMap();
             CreateMap<SearchHistory, CreateSearchHistoryDto>().ReverseMap();
             CreateMap<SearchHistory, UpdateSearchHistoryDto>().ReverseMap();
-
-            // SearchHistoryUser Mappings
-            CreateMap<SearchHistoryUser, ResultSearchHistoryUserWithRelationsDto>().ReverseMap();
-            CreateMap<SearchHistoryUser, ResultSearchHistoryUserDto>().ReverseMap();
-            CreateMap<SearchHistoryUser, CreateSearchHistoryUserDto>().ReverseMap();
-            CreateMap<SearchHistoryUser, UpdateSearchHistoryUserDto>().ReverseMap();
 
             // Story Mappings
             CreateMap<Story, ResultStoryWithRelationsDto>()

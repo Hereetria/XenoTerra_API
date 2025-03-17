@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices
 {
-    public class HighlightQueryService : BaseQueryService<Highlight, ResultHighlightDto, Guid>, IHighlightQueryService
+    public class HighlightQueryService : QueryService<Highlight, Guid>, IHighlightQueryService
     {
         public HighlightQueryService(IReadService<Highlight, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }

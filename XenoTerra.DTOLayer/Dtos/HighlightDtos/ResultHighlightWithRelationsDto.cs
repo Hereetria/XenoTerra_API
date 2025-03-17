@@ -1,7 +1,6 @@
 
 
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
 {

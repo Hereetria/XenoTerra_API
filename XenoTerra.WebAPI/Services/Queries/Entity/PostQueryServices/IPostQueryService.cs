@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.PostQueryServices
 {
-    public interface IPostQueryService : IBaseQueryService<Post, ResultPostDto, Guid> { }
+    public interface IPostQueryService : IQueryService<Post, Guid> { }
 
 }

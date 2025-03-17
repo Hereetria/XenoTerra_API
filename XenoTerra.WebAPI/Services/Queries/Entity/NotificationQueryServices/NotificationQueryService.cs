@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.NotificationQueryServices
 {
-    public class NotificationQueryService : BaseQueryService<Notification, ResultNotificationDto, Guid>, INotificationQueryService
+    public class NotificationQueryService : QueryService<Notification, Guid>, INotificationQueryService
     {
         public NotificationQueryService(IReadService<Notification, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }

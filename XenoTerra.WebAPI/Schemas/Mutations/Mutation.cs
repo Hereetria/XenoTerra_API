@@ -8,14 +8,12 @@ using XenoTerra.WebAPI.Schemas.Mutations.MessageMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.NoteMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.NotificationMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.PostMutations;
-using XenoTerra.WebAPI.Schemas.Mutations.PostTagMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.ReactionMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.RecentChatsMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.ReportCommentMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.RoleMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.SavedPostMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.SearchHistoryMutations;
-using XenoTerra.WebAPI.Schemas.Mutations.SearchHistoryUserMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.StoryMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.UserMutations;
 using XenoTerra.WebAPI.Schemas.Mutations.UserSettingMutations;
@@ -35,14 +33,12 @@ namespace XenoTerra.WebAPI.Schemas.Mutations
         public NoteMutation Notes { get; }
         public NotificationMutation Notifications { get; }
         public PostMutation Posts { get; }
-        public PostTagMutation PostTags { get; }
         public ReactionMutation Reactions { get; }
         public RecentChatsMutation RecentChats { get; }
         public ReportCommentMutation ReportComments { get; }
         public RoleMutation Roles { get; }
         public SavedPostMutation SavedPosts { get; }
         public SearchHistoryMutation SearchHistories { get; }
-        public SearchHistoryUserMutation SearchHistoryUsers { get; }
         public StoryMutation Stories { get; }
         public UserMutation Users { get; }
         public UserSettingMutation UserSettings { get; }
@@ -60,14 +56,12 @@ namespace XenoTerra.WebAPI.Schemas.Mutations
             Notes = new NoteMutation();
             Notifications = new NotificationMutation();
             Posts = new PostMutation();
-            PostTags = new PostTagMutation();
             Reactions = new ReactionMutation();
             RecentChats = new RecentChatsMutation();
             ReportComments = new ReportCommentMutation();
             Roles = new RoleMutation();
             SavedPosts = new SavedPostMutation();
             SearchHistories = new SearchHistoryMutation();
-            SearchHistoryUsers = new SearchHistoryUserMutation();
             Stories = new StoryMutation();
             Users = new UserMutation();
             UserSettings = new UserSettingMutation();

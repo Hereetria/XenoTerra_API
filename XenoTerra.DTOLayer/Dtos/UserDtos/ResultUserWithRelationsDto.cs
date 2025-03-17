@@ -8,12 +8,10 @@ using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
-using XenoTerra.DTOLayer.Dtos.PostTagDtos;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
@@ -49,10 +47,10 @@ namespace XenoTerra.DTOLayer.Dtos.UserDtos
         public ICollection<ResultReportCommentDto> ReportComments { get; set; }
         public ICollection<ResultViewStoryDto> ViewStories { get; set; }
         public ICollection<ResultUserSettingDto> UserSettings { get; set; }
-        public ICollection<ResultSearchHistoryUserDto> SearchedBy { get; set; }
+        public ICollection<ResultUserDto> SearchedBy { get; set; }
         public ICollection<ResultRecentChatsDto> RecentChats { get; set; }
         public ResultNoteDto Note { get; set; }
         public ICollection<ResultReactionDto> Reactions { get; set; }
-        public ICollection<ResultUserPostTagDto> TaggedPosts { get; set; }
+        public ICollection<ResultPostDto> TaggedPosts { get; set; }
     }
 }

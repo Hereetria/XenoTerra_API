@@ -1,8 +1,3 @@
-
-
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
-
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
 {
     public class UpdateSearchHistoryDto

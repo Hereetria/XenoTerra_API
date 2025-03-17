@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.UserSettingQueryServices
 {
-    public interface IUserSettingQueryService : IBaseQueryService<UserSetting, ResultUserSettingDto, Guid> { }
+    public interface IUserSettingQueryService : IQueryService<UserSetting, Guid> { }
 
 }

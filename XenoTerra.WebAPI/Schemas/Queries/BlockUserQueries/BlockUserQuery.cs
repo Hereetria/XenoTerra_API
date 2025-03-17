@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
 using XenoTerra.WebAPI.Utils;
 
@@ -12,34 +12,45 @@ namespace XenoTerra.WebAPI.Schemas.Queries.BlockUserQueries
 {
     public class BlockUserQuery
     {
-        private readonly IBlockUserQueryService _blockUserQueryService;
-        private readonly BlockUserResolver _resolver;
+        private readonly IMapper _mapper;
 
-        public BlockUserQuery(IBlockUserQueryService blockUserQueryService, BlockUserResolver resolver)
+        public BlockUserQuery(IMapper mapper)
         {
-            _blockUserQueryService = blockUserQueryService;
-            _resolver = resolver;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetAllBlockUsersAsync([Service] IResolverContext context)
+        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetAllBlockUsersAsync(
+            [Service] IBlockUserQueryService service,
+            [Service] IBlockUserResolver resolver, 
+            IResolverContext context)
         {
-            var result = await _blockUserQueryService.GetAllAsync(context);
-            await _resolver.PopulateRelatedFieldsAsync(result, context);
-            return result;
+            var blockUsers = await service.GetAllAsync(context);
+            await resolver.PopulateRelatedFieldsAsync(blockUsers, context);
+            var blockUserDtos = _mapper.Map<List<ResultBlockUserWithRelationsDto>>(blockUsers);
+            return blockUserDtos;
         }
 
-        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersByIdsAsync(List<Guid> keys, IResolverContext context)
+        public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersByIdsAsync(
+            [Service] IBlockUserQueryService service,
+            [Service] IBlockUserResolver resolver,
+            IEnumerable<Guid> keys,
+            IResolverContext context)
         {
-            var result = await _blockUserQueryService.GetByIdsAsync(keys, context);
-            await _resolver.PopulateRelatedFieldsAsync(result, context);
-            return result;
+            var blockUsers = await service.GetByIdsAsync(keys, context);
+            await resolver.PopulateRelatedFieldsAsync(blockUsers, context);
+            var blockUserDtos = _mapper.Map<List<ResultBlockUserWithRelationsDto>>(blockUsers);
+            return blockUserDtos;
         }
 
-        public async Task<ResultBlockUserWithRelationsDto> GetBlockUserByIdAsync(Guid key, IResolverContext context)
+        public async Task<ResultBlockUserWithRelationsDto> GetBlockUserByIdAsync([Service] IBlockUserQueryService service,
+            [Service] IBlockUserResolver resolver,
+            Guid key,
+            IResolverContext context)
         {
-            var result = await _blockUserQueryService.GetByIdAsync(key, context);
-            await _resolver.PopulateRelatedFieldAsync(result, context);
-            return result;
+            var blockUser = await service.GetByIdAsync(key, context);
+            await resolver.PopulateRelatedFieldAsync(blockUser, context);
+            var blockUserDto = _mapper.Map<ResultBlockUserWithRelationsDto>(blockUser);
+            return blockUserDto;
         }
     }
 }

@@ -1,66 +1,59 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryService;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.SearchHistoryQueries
 {
     public class SearchHistoryQuery
     {
+        private readonly IMapper _mapper;
+
+        public SearchHistoryQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultSearchHistoryWithRelationsDto>> GetAllSearchHistoriesAsync(
-            [Service] ISearchHistoryReadService searchHistoryReadService,
-            [Service] SearchHistoryResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ISearchHistoryQueryService service,
+            [Service] ISearchHistoryResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = searchHistoryReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<SearchHistory>().AsQueryable();
-
-            var searchHistories = await query.ToListAsync();
+            var searchHistories = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(searchHistories, context);
-
-            return mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(searchHistories);
+            var searchHistoryDtos = _mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(searchHistories);
+            return searchHistoryDtos;
         }
 
         public async Task<IEnumerable<ResultSearchHistoryWithRelationsDto>> GetSearchHistoriesByIdsAsync(
-            [Service] ISearchHistoryReadService searchHistoryReadService,
-            [Service] SearchHistoryResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] ISearchHistoryQueryService service,
+            [Service] ISearchHistoryResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = searchHistoryReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<SearchHistory>().AsQueryable();
-
-            var searchHistories = await query.ToListAsync();
+            var searchHistories = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(searchHistories, context);
-
-            return mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(searchHistories);
+            var searchHistoryDtos = _mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(searchHistories);
+            return searchHistoryDtos;
         }
 
         public async Task<ResultSearchHistoryWithRelationsDto> GetSearchHistoryByIdAsync(
-            [Service] ISearchHistoryReadService searchHistoryReadService,
-            [Service] SearchHistoryResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ISearchHistoryQueryService service,
+            [Service] ISearchHistoryResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = searchHistoryReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<SearchHistory>().AsQueryable();
-
-            var searchHistory = await query.FirstOrDefaultAsync()
-                ?? throw new KeyNotFoundException($"SearchHistory with ID {key} was not found in the database.");
-
+            var searchHistory = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(searchHistory, context);
-
-            return mapper.Map<ResultSearchHistoryWithRelationsDto>(searchHistory);
+            var searchHistoryDto = _mapper.Map<ResultSearchHistoryWithRelationsDto>(searchHistory);
+            return searchHistoryDto;
         }
-
     }
+
 }

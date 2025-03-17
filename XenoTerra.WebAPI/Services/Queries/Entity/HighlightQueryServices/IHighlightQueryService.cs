@@ -4,6 +4,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices
 {
-    public interface IHighlightQueryService : IBaseQueryService<Highlight, ResultHighlightDto, Guid> { }
+    public interface IHighlightQueryService : IQueryService<Highlight, Guid> { }
 
 }

@@ -5,63 +5,55 @@ using XenoTerra.BussinessLogicLayer.Services.Entity.CommentService;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.Resolvers;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.CommentResolvers;
+using XenoTerra.WebAPI.Services.Queries.Entity.CommentQueryServices;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Schemas.Queries.CommentQueries
 {
     public class CommentQuery
     {
+        private readonly IMapper _mapper;
+
+        public CommentQuery(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
+
         public async Task<IEnumerable<ResultCommentWithRelationsDto>> GetAllCommentsAsync(
-            [Service] ICommentReadService commentReadService,
-            [Service] CommentResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ICommentQueryService service,
+            [Service] ICommentResolver resolver,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = commentReadService.FetchAllQueryable(selectedFields)
-                ?? Enumerable.Empty<Comment>().AsQueryable();
-
-            var comments = await query.ToListAsync();
+            var comments = await service.GetAllAsync(context);
             await resolver.PopulateRelatedFieldsAsync(comments, context);
-
-            return mapper.Map<List<ResultCommentWithRelationsDto>>(comments);
+            var commentDtos = _mapper.Map<List<ResultCommentWithRelationsDto>>(comments);
+            return commentDtos;
         }
 
         public async Task<IEnumerable<ResultCommentWithRelationsDto>> GetCommentsByIdsAsync(
-            [Service] ICommentReadService commentReadService,
-            [Service] CommentResolver resolver,
-            [Service] IMapper mapper,
-            List<Guid> keys,
+            [Service] ICommentQueryService service,
+            [Service] ICommentResolver resolver,
+            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = commentReadService.FetchByIdsQueryable(keys, selectedFields)
-                ?? Enumerable.Empty<Comment>().AsQueryable();
-
-            var comments = await query.ToListAsync();
+            var comments = await service.GetByIdsAsync(keys, context);
             await resolver.PopulateRelatedFieldsAsync(comments, context);
-
-            return mapper.Map<List<ResultCommentWithRelationsDto>>(comments);
+            var commentDtos = _mapper.Map<List<ResultCommentWithRelationsDto>>(comments);
+            return commentDtos;
         }
 
         public async Task<ResultCommentWithRelationsDto> GetCommentByIdAsync(
-            [Service] ICommentReadService commentReadService,
-            [Service] CommentResolver resolver,
-            [Service] IMapper mapper,
+            [Service] ICommentQueryService service,
+            [Service] ICommentResolver resolver,
             Guid key,
             IResolverContext context)
         {
-            var selectedFields = SelectedFieldsProvider.GetSelectedFields(context);
-            var query = commentReadService.FetchByIdQueryable(key, selectedFields)
-                ?? Enumerable.Empty<Comment>().AsQueryable();
-
-            var comment = await query.FirstOrDefaultAsync()
-                ?? throw new System.Collections.Generic.KeyNotFoundException($"Comment with ID {key} was not found in the database.");
-
+            var comment = await service.GetByIdAsync(key, context);
             await resolver.PopulateRelatedFieldAsync(comment, context);
-
-            return mapper.Map<ResultCommentWithRelationsDto>(comment);
+            var commentDto = _mapper.Map<ResultCommentWithRelationsDto>(comment);
+            return commentDto;
         }
-
     }
+
 }

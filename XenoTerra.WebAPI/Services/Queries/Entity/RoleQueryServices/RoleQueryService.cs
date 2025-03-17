@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices
 {
-    public class RoleQueryService : BaseQueryService<Role, ResultRoleDto, Guid>, IRoleQueryService
+    public class RoleQueryService : QueryService<Role, Guid>, IRoleQueryService
     {
         public RoleQueryService(IReadService<Role, Guid> readService, IMapper mapper)
             : base(readService, mapper) { }
