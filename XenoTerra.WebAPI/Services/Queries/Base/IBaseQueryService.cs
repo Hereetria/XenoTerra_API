@@ -1,15 +1,14 @@
 ﻿using HotChocolate.Resolvers;
 
-namespace XenoTerra.WebAPI.Services.Queries
+namespace XenoTerra.WebAPI.Services.Queries.Base
 {
-    public interface IBaseQueryService<TEntity, TResultDto, TKey>
+    public interface IBaseQueryService<TEntity, TKey>
         where TEntity : class
-        where TResultDto : class
         where TKey : notnull
     {
-        Task<IEnumerable<TResultDto>> GetAllAsync(IResolverContext context);
-        Task<IEnumerable<TResultDto>> GetByIdsAsync(List<TKey> keys, IResolverContext context);
-        Task<TResultDto> GetByIdAsync(TKey key, IResolverContext context);
+        Task<IEnumerable<TEntity>> GetAllAsync(IResolverContext context);
+        Task<IEnumerable<TEntity>> GetByIdsAsync(List<TKey> keys, IResolverContext context);
+        Task<TEntity> GetByIdAsync(TKey key, IResolverContext context);
 
         IQueryable<TEntity> ModifyQueryBeforeExecutionForGetAll(IQueryable<TEntity> query);
         IQueryable<TEntity> ModifyQueryBeforeExecutionForGetByIds(IQueryable<TEntity> query);
@@ -19,8 +18,8 @@ namespace XenoTerra.WebAPI.Services.Queries
         List<TEntity> TransformEntitiesBeforeMappingForGetByIds(List<TEntity> entities);
         TEntity TransformEntityBeforeMappingForGetById(TEntity entity);
 
-        List<TResultDto> ModifyDtosAfterMappingForGetAll(List<TResultDto> dtos);
-        List<TResultDto> ModifyDtosAfterMappingForGetByIds(List<TResultDto> dtos);
-        TResultDto ModifyDtoAfterMappingForGetById(TResultDto dto);
+        List<TEntity> ModifyDtosAfterMappingForGetAll(List<TEntity> dtos);
+        List<TEntity> ModifyDtosAfterMappingForGetByIds(List<TEntity> dtos);
+        TEntity ModifyDtoAfterMappingForGetById(TEntity dto);
     }
 }

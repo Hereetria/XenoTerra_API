@@ -36,7 +36,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.GenericResolvers
         }
 
         public async Task PopulateRelatedFieldsAsync(
-            List<TEntity> resultList,
+            IEnumerable<TEntity> resultList,
             IResolverContext context)
         {
             var dbContext = context.Service<AppDbContext>();
@@ -119,7 +119,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.GenericResolvers
         }
 
         private Dictionary<Type, (HashSet<TKey>, HashSet<string>)> GetEntityMap(
-            List<TEntity> resultEntityList,
+            IEnumerable<TEntity> resultEntityList,
             IResolverContext context)
         {
             var dbContext = context.Service<AppDbContext>();
