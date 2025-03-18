@@ -10,7 +10,7 @@ namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
         public string Name { get; set; }
         public string ProfilePicturePath { get; set; }
 
-        public ICollection<ResultStoryDto?> Stories { get; set; }
+        public ICollection<ResultStoryDto>? Stories { get; set; }
     }
 
 }

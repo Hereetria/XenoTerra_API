@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using GreenDonut.DependencyInjection;
 using HotChocolate.Resolvers;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -126,7 +129,9 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
             var dbContext = context.Service<AppDbContext>();
             var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
 
-            var entityType = dbContext.Model.FindEntityType(typeof(TEntity));
+            var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
+                ?? throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
+
             string? crossTableName = GetCrossTableName(dbContext, typeof(TEntity));
 
 
@@ -166,111 +171,116 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                 }
                 else
                 {
+                    var pluralCrossTableName = PluralWordProvider.ConvertToPlural(crossTableName);
 
-                    var entityMetadata = dbContext.Model.FindEntityType(typeof(TEntity));
-                    if (entityMetadata == null)
+                    PropertyInfo navigationProperty = typeof(TEntity)
+                        .GetProperties()
+                        .FirstOrDefault(p => string.Equals(p.Name, pluralCrossTableName, StringComparison.OrdinalIgnoreCase))
+                        ?? throw new ArgumentNullException($"Navigation property '{pluralCrossTableName}' not found in entity '{typeof(TEntity).Name}'.");
+
+                    Type navigationPropertyType = navigationProperty.PropertyType;
+
+                    if (navigationPropertyType.IsGenericType && navigationPropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
                     {
-                        throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
+                        navigationPropertyType = navigationPropertyType.GetGenericArguments().First();
                     }
 
-                    // Continue over here
-                    var navigationProperties = entityMetadata.GetNavigations().Select(n => n.Name).ToList();
+                    var entityPrimaryKey = entityType.FindPrimaryKey()?.Properties.FirstOrDefault()?.Name
+                        ?? throw new Exception($"Primary key not found for entity '{typeof(TEntity).Name}'.");
 
-                    var crossTableProperty = entityMetadata.GetProperties()
-                        .FirstOrDefault(p => string.Equals(
-                            p.Name.Normalize(NormalizationForm.FormC), // **Unicode Normalization ile Standartlaştır**
-                            crossTableName.Normalize(NormalizationForm.FormC), // **Karşılaştırılacak String de Standartlaştır**
-                            StringComparison.InvariantCultureIgnoreCase));
+                    var navigationEntityType = dbContext.Model.FindEntityType(navigationPropertyType)
+                        ?? throw new ArgumentNullException($"Entity '{navigationPropertyType}' not found in DbContext.");
 
+                    var navigationPrimaryKeys = navigationEntityType.FindPrimaryKey()?.Properties.Select(p => p.Name).ToList()
+                        ?? throw new Exception($"Primary keys not found for entity '{navigationPropertyType.Name}'.");
 
-                    if (crossTableProperty == null)
-                    {
-                        throw new Exception($"Property '{crossTableName}' not found in table '{entityMetadata.ClrType.Name}'.");
-                    }
+                    var otherPrimaryKey = navigationPrimaryKeys.Where(pk => !pk.Equals(entityPrimaryKey, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
 
-                    // **3️⃣ Property'nin Türünü 'crossTableType' Olarak Ata**
-                    Type crossTableType = crossTableProperty.ClrType;
+                    var a = navigationEntityType.GetForeignKeys();
 
-                    // **4️⃣ crossTableType'in EF Core Modelini Al**
-                    var crossTableEntityMetadata = dbContext.Model.FindEntityType(crossTableType);
-                    if (crossTableEntityMetadata == null)
-                    {
-                        throw new Exception($"Cross Table Entity '{crossTableType.Name}' not found in DbContext.");
-                    }
+                    var entityPrimaryKeyProperty = entityType.FindPrimaryKey()?.Properties.FirstOrDefault()
+    ?? throw new Exception($"Primary key not found for entity '{typeof(TEntity).Name}'.");
 
-                    // **5️⃣ Primary Key’leri Bul ve primaryKeys Değişkenine Ata**
-                    var primaryKeys = crossTableEntityMetadata.GetProperties()
-                        .Where(p => p.IsPrimaryKey())
-                        .Select(p => p.Name)
+                    string entityPrimaryKeyName = entityPrimaryKeyProperty.Name;
+
+                    var entityPrimaryKeyValues = resultEntityList
+                        .Select(entity => entity.GetType().GetProperty(entityPrimaryKeyName)?.GetValue(entity))
+                        .Where(value => value != null) // Null olmayanları al
+                        .Distinct() // Benzersiz değerleri sakla
                         .ToList();
 
-                    if (primaryKeys == null || primaryKeys.Count != 2)
+                    // EntityPrimaryKey'e karşılık gelen foreign key değerlerini bul
+                    var relatedOtherPrimaryKeys = new List<TKey>();
+
+                    foreach (var primaryKeyValue in entityPrimaryKeyValues)
                     {
-                        throw new Exception($"Cross Table Entity '{crossTableType.Name}' should have exactly 2 primary keys.");
+                        var matchingOtherPrimaryKeys = dbContext.Set(navigationPropertyType)
+                            .Where(e => EF.Property<TKey>(e, entityPrimaryKeyName).Equals(primaryKeyValue))
+                            .Select(e => EF.Property<TKey>(e, otherPrimaryKey))
+                            .ToList();
+
+                        relatedOtherPrimaryKeys.AddRange(matchingOtherPrimaryKeys);
                     }
 
-                    //// **Cross Table’daki Foreign Key’leri Bul**
-                    //string leftKey = primaryKeys[0];
-                    //string rightKey = primaryKeys[1];
 
-                    //Type leftEntityType = crossTableEntityType.ClrType.GetProperty(leftKey)?.PropertyType;
-                    //Type rightEntityType = crossTableEntityType.ClrType.GetProperty(rightKey)?.PropertyType;
 
-                    //if (leftEntityType == null || rightEntityType == null)
-                    //{
-                    //    throw new Exception($"Could not determine related entities for cross-table {crossTableType.Name}");
-                    //}
 
-                    //// **Eğer `TEntity` Cross-Table İçinde ise, İlişkili Entity'yi Çek**
-                    //Type targetEntityType;
-                    //string foreignKey;
 
-                    //if (leftEntityType == typeof(TEntity))
-                    //{
-                    //    targetEntityType = rightEntityType;
-                    //    foreignKey = rightKey;
-                    //}
-                    //else
-                    //{
-                    //    targetEntityType = leftEntityType;
-                    //    foreignKey = leftKey;
-                    //}
 
-                    //// **İlişkili Entity İçinde `relatedField` Var Mı Kontrol Et**
-                    //PropertyInfo relatedEntityProperty = targetEntityType.GetProperty(relationalField);
 
-                    //if (relatedEntityProperty == null)
-                    //{
-                    //    throw new Exception($"Property '{relationalField}' not found in related entity '{targetEntityType.Name}'.");
-                    //}
 
-                    //PropertyInfo foreignKeyProperty = crossTableType.GetProperty(foreignKey)
-                    //    ?? throw new Exception($"Foreign key '{foreignKey}' not found in cross-table '{crossTableType.Name}'.");
+                    //var navigationProperties = navigationEntityType.GetNavigations();
+
+                    //var singularRelatedField = PluralWordProvider.ConvertToSingular(relationalField);
+
+                    //var matchingNavigation = navigationProperties
+                    //    .FirstOrDefault(p => string.Equals(p.Name, singularRelatedField, StringComparison.OrdinalIgnoreCase))
+                    //    ?? throw new Exception($"Navigation property '{singularRelatedField}' not found in entity '{navigationEntityType.ClrType.Name}'.");
+
+                    //PropertyInfo navigationPropertyInfo = navigationEntityType.ClrType
+                    //    .GetProperty(matchingNavigation.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
+                    //    ?? throw new Exception($"PropertyInfo for '{matchingNavigation.Name}' not found in '{navigationEntityType.ClrType.Name}'.");
+
+
+                    //Type navigationEntityPropertyType = navigationPropertyInfo.PropertyType;
+
+                    //MethodInfo methodInfo = typeof(TypeProviders)
+                    //    .GetMethod(nameof(TypeProviders.GetForeignKeyProperty), BindingFlags.Public | BindingFlags.Static)
+                    //    ?.MakeGenericMethod(navigationEntityType.ClrType)
+                    //    ?? throw new Exception("Could not find the generic method 'GetForeignKeyProperty'.");
+
+                    //PropertyInfo navigationForeignKeyProperty = methodInfo.Invoke(null, new object[] { dbContext, singularRelatedField }) as PropertyInfo
+                    //?? throw new Exception($"Foreign key property not found for '{singularRelatedField}' in DTO.");
+
+
 
                     //var navigationIds = resultEntityList
-                    //    .Select(e => foreignKeyProperty.GetValue(e))
+                    //    .Select(e => navigationForeignKeyProperty.GetValue(e))
                     //    .Where(value => value is TKey)
                     //    .Cast<TKey>()
                     //    .ToHashSet();
 
+
                     //var nestedSelectedFields = GraphQLFieldProvider.GetNestedSelectedFields(context, relationalField);
 
-                    //if (!entityMap.TryGetValue(targetEntityType, out var crossTableData))
+                    //if (!entityMap.TryGetValue(navigationEntityPropertyType, out var entityData))
                     //{
-                    //    crossTableData = (new HashSet<TKey>(), new HashSet<string>());
-                    //    entityMap[targetEntityType] = crossTableData;
+                    //    entityData = (new HashSet<TKey>(), new HashSet<string>());
+                    //    entityMap[navigationEntityPropertyType] = entityData;
                     //}
 
-                    //crossTableData.NavigationIds.UnionWith(navigationIds);
-                    //crossTableData.SelectedFields.UnionWith(nestedSelectedFields);
+                    //entityData.NavigationIds.UnionWith(navigationIds);
+                    //entityData.SelectedFields.UnionWith(nestedSelectedFields);
+
                 }
- 
+
+
             }
 
             return entityMap;
         }
 
-        private string GetCrossTableName(AppDbContext dbContext, Type entityType)
+        private string? GetCrossTableName(AppDbContext dbContext, Type entityType)
         {
             var crossTableEntities = dbContext.Model.GetEntityTypes()
                 .Where(e => e.FindPrimaryKey()?.Properties.Count == 2) // **Sadece Cross Table'ları Al**
@@ -289,7 +299,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                 }
             }
 
-            return string.Empty; // **Eğer bir cross-table bulunamazsa boş string döndür**
+            return null; // **Eğer bir cross-table bulunamazsa boş string döndür**
         }
 
 
