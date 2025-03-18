@@ -32,6 +32,12 @@
             if (string.IsNullOrWhiteSpace(singularWord))
                 throw new ArgumentException("Input cannot be null or empty.", nameof(singularWord));
 
+            // Eğer kelime zaten çoğulsa, tekrar ekleme yapma
+            if (singularWord.EndsWith("ies") || singularWord.EndsWith("ves") || singularWord.EndsWith("es") || singularWord.EndsWith("s"))
+            {
+                return singularWord; // Zaten çoğulsa değişiklik yapma
+            }
+
             if (singularWord.EndsWith("y") && singularWord.Length > 1 && !"aeiou".Contains(singularWord[singularWord.Length - 2]))
             {
                 return singularWord.Substring(0, singularWord.Length - 1) + "ies";
@@ -53,6 +59,5 @@
                 return singularWord + "s";
             }
         }
-
     }
 }

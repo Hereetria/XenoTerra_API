@@ -2,11 +2,12 @@
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
 {
-    public interface IEntityResolver<TEntity, TKey>
+    public interface IEntityResolver<TEntity, TDtoResult, TKey>
         where TEntity : class
+        where TDtoResult : class
         where TKey : notnull
     {
-        Task PopulateRelatedFieldAsync(TEntity result, IResolverContext context);
-        Task PopulateRelatedFieldsAsync(IEnumerable<TEntity> resultList, IResolverContext context);
+        Task PopulateRelatedFieldAsync(TDtoResult result, IResolverContext context);
+        Task PopulateRelatedFieldsAsync(IEnumerable<TDtoResult> resultList, IResolverContext context);
     }
 }
