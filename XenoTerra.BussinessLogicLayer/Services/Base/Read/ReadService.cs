@@ -11,44 +11,41 @@ using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
 {
-    public class ReadService<TEntity, TKey> : IReadService<TEntity, TKey>
+    public class ReadService<TEntity, TDtoResult, TKey> : IReadService<TEntity, TDtoResult, TKey>
         where TEntity : class
+        where TDtoResult : class
+        where TKey : notnull
     {
-        protected readonly IReadRepository<TEntity, TKey> _repository;
+        protected readonly IReadRepository<TEntity, TDtoResult, TKey> _readRepository;
 
-        public ReadService(IReadRepository<TEntity, TKey> repository)
+        public ReadService(IReadRepository<TEntity, TDtoResult, TKey> readRepository)
         {
-            _repository = repository;
+            _readRepository = readRepository;
         }
         
-        public IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties)
+        public IQueryable<TDtoResult> FetchAllQueryable(IEnumerable<string> selectedProperties)
         {
-
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_repository.GetDbContext(), selectedProperties);
-            return _repository.GetAllQueryable()
-                .Select(selector);
+            var query = _readRepository.GetAllQueryable(selectedProperties);
+            return query;
         }
 
-        public IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
+        public IQueryable<TDtoResult> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_repository.GetDbContext(), selectedProperties);
-
-            return _repository.GetByIdQueryable(key)
-                        .Select(selector);
+            var query = _readRepository.GetByIdQueryable(key, selectedProperties);
+            return query;
         }
 
-        public IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
+        public IQueryable<TDtoResult> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
         {
-            if (keys == null || !keys.Any())
+            if (keys is null || !keys.Any())
                 throw new ArgumentNullException(nameof(keys), "The keys collection cannot be null or empty.");
 
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_repository.GetDbContext(), selectedProperties);
 
-            return _repository.GetByIdsQueryable(keys)
-                .Select(selector);
+            var query = _readRepository.GetByIdsQueryable(keys, selectedProperties);
+            return query;
         }
     }
 }

@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository
 {
-    public interface IStoryWriteRepository : IWriteRepository<Story, Guid> { }
-
+    public interface IStoryWriteRepository : IWriteRepository<Story, ResultStoryDto, Guid>
+    {
+    }
 }

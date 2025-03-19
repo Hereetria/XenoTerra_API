@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
 {
-    public class CommentReadService : ReadService<Comment, Guid>, ICommentReadService
+    public class CommentReadService : ReadService<Comment, ResultCommentWithRelationsDto, Guid>, ICommentReadService
     {
-        public CommentReadService(IReadRepository<Comment, Guid> repository, IMapper mapper)
+        public CommentReadService(IReadRepository<Comment, ResultCommentWithRelationsDto, Guid> repository)
             : base(repository) { }
     }
 }

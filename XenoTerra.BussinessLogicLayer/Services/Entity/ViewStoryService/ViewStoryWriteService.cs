@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService
 {
     public class ViewStoryWriteService : WriteService<ViewStory, ResultViewStoryDto, CreateViewStoryDto, UpdateViewStoryDto, Guid>, IViewStoryWriteService
     {
-        public ViewStoryWriteService(IWriteRepository<ViewStory, Guid> repository, IMapper mapper) : base(repository, mapper)
+        public ViewStoryWriteService(IWriteRepository<ViewStory, ResultViewStoryDto, Guid> repository, IMapper mapper) : base(repository, mapper)
         {
         }
     }

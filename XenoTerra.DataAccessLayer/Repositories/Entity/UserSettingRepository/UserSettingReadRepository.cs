@@ -5,13 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
 {
-    public class UserSettingReadRepository : ReadRepository<UserSetting, Guid>, IUserSettingReadRepository
+    public class UserSettingReadRepository : ReadRepository<UserSetting, ResultUserSettingWithRelationsDto, Guid>, IUserSettingReadRepository
     {
-        public UserSettingReadRepository(AppDbContext context) : base(context) { }
+        public UserSettingReadRepository(AppDbContext context) : base(context)
+        {
+        }
     }
-
 }

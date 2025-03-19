@@ -4,6 +4,8 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices
 {
-    public interface ILikeQueryService : IQueryService<Like, Guid> { }
+    public interface ILikeQueryService : IQueryService<Like, ResultLikeWithRelationsDto, Guid>
+    {
+    }
 
 }

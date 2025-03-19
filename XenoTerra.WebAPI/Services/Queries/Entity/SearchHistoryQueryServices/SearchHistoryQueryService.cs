@@ -6,9 +6,11 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryQueryServices
 {
-    public class SearchHistoryQueryService : QueryService<SearchHistory, Guid>, ISearchHistoryQueryService
+    public class SearchHistoryQueryService : QueryService<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>, ISearchHistoryQueryService
     {
-        public SearchHistoryQueryService(IReadService<SearchHistory, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public SearchHistoryQueryService(IReadService<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid> readService, IMapper mapper)
+            : base(readService, mapper)
+        {
+        }
     }
 }

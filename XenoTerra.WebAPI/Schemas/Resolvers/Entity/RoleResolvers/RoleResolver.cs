@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
+using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers
 {
-    public class RoleResolver : EntityResolver<Role, Guid>, IRoleResolver
+    public class RoleResolver : EntityResolver<Role, ResultRoleWithRelationsDto, Guid>, IRoleResolver
     {
-        public RoleResolver(EntityDataLoaderFactory entityDataLoaderFactory, IMapper mapper)
-            : base(entityDataLoaderFactory, mapper) { }
+        public RoleResolver(EntityDataLoaderFactory entityDataLoaderFactory) : base(entityDataLoaderFactory)
+        {
+        }
     }
-
 }

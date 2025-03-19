@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReportCommentRepository
 {
-    public interface IReportCommentReadRepository : IReadRepository<ReportComment, Guid> { }
-
+    public interface IReportCommentReadRepository : IReadRepository<ReportComment, ResultReportCommentWithRelationsDto, Guid>
+    {
+    }
 }

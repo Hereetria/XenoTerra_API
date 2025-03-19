@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository
 {
-    public class SavedPostReadRepository : ReadRepository<SavedPost, Guid>, ISavedPostReadRepository
+    public class SavedPostReadRepository : ReadRepository<SavedPost, ResultSavedPostWithRelationsDto, Guid>, ISavedPostReadRepository
     {
-        public SavedPostReadRepository(AppDbContext context) : base(context) { }
+        public SavedPostReadRepository(AppDbContext context) : base(context)
+        {
+        }
     }
 }

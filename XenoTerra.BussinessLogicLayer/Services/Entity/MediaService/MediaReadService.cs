@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaService
 {
-    public class MediaReadService : ReadService<Media, Guid>, IMediaReadService
+    public class MediaReadService : ReadService<Media, ResultMediaWithRelationsDto, Guid>, IMediaReadService
     {
-        public MediaReadService(IReadRepository<Media, Guid> repository)
+        public MediaReadService(IReadRepository<Media, ResultMediaWithRelationsDto, Guid> repository)
             : base(repository) { }
     }
 

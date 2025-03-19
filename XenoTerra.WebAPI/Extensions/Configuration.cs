@@ -157,7 +157,7 @@ namespace XenoTerra.WebAPI.Extensions
 
 
             builder.Services.AddScoped(typeof(EntityDataLoaderFactory));
-            builder.Services.AddScoped(typeof(IEntityResolver<,>), typeof(EntityResolver<,>));
+            builder.Services.AddScoped(typeof(IEntityResolver<,,>), typeof(EntityResolver<,,>));
             builder.Services.AddScoped<BlockUserResolver>();
             builder.Services.AddScoped<HighlightResolver>();
 
@@ -169,11 +169,11 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
 
-            builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));
+            builder.Services.AddScoped(typeof(IReadService<,,>), typeof(ReadService<,,>));
             builder.Services.AddScoped(typeof(IWriteService<,,,,>), typeof(WriteService<,,,,>));
 
-            builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
-            builder.Services.AddScoped(typeof(IWriteRepository<,>), typeof(WriteRepository<,>));
+            builder.Services.AddScoped(typeof(IReadRepository<,,>), typeof(ReadRepository<,,>));
+            builder.Services.AddScoped(typeof(IWriteRepository<,,>), typeof(WriteRepository<,,>));
 
 
 

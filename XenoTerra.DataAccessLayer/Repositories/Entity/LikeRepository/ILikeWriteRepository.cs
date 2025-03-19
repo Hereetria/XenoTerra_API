@@ -6,10 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
 {
-    public interface ILikeWriteRepository : IWriteRepository<Like, Guid> { }
-
+    public interface ILikeWriteRepository : IWriteRepository<Like, ResultLikeDto, Guid>
+    {
+    }
 }

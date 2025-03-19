@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Concurrent;
 using System.Linq.Expressions;
 using XenoTerra.DataAccessLayer.Contexts;
@@ -8,13 +9,13 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-
-    public class StoryDataLoader : EntityDataLoader<Story, Guid>
+    public class StoryDataLoader : EntityDataLoader<Story, ResultStoryWithRelationsDto, Guid>
     {
-        public StoryDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
-            : base(batchScheduler, options, dbContext)
+        public StoryDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
+            : base(batchScheduler, options, mapper, dbContext)
         {
         }
     }
+
 
 }

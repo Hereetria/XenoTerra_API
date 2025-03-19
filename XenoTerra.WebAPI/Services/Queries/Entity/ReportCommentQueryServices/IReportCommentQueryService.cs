@@ -4,6 +4,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices
 {
-    public interface IReportCommentQueryService : IQueryService<ReportComment, Guid> { }
-
+    public interface IReportCommentQueryService : IQueryService<ReportComment, ResultReportCommentWithRelationsDto, Guid>
+    {
+    }
 }

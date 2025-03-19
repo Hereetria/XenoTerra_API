@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
 {
-    public interface IUserSettingWriteRepository : IWriteRepository<UserSetting, Guid> { }
-
-
+    public interface IUserSettingWriteRepository : IWriteRepository<UserSetting, ResultUserSettingDto, Guid>
+    {
+    }
 }

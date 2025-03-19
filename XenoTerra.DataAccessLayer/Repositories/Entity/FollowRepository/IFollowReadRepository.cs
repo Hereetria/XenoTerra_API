@@ -4,9 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
 {
-    public interface IFollowReadRepository : IReadRepository<Follow, Guid> { }
+    public interface IFollowReadRepository : IReadRepository<Follow, ResultFollowWithRelationsDto, Guid>
+    {
+    }
+
 }

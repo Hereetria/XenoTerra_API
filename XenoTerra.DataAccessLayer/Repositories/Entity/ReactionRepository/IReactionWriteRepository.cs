@@ -6,10 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
 {
-    public interface IReactionWriteRepository : IWriteRepository<Reaction, Guid> { }
+    public interface IReactionWriteRepository : IWriteRepository<Reaction, ResultReactionDto, Guid>
+    {
+    }
 
 }

@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-
-    public interface IPostWriteRepository : IWriteRepository<Post, Guid> { }
-
+    public interface IPostWriteRepository : IWriteRepository<Post, ResultPostDto, Guid>
+    {
+    }
 }

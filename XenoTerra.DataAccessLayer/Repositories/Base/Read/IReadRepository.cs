@@ -7,12 +7,14 @@ using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 {
-    public interface IReadRepository<TEntity, TKey>
+    public interface IReadRepository<TEntity, TDtoResult, TKey>
+        where TDtoResult : class
         where TEntity : class
+        where TKey : notnull
     {
         AppDbContext GetDbContext();
-        IQueryable<TEntity> GetAllQueryable();
-        IQueryable<TEntity> GetByIdQueryable(TKey key);
-        IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys);
+        IQueryable<TDtoResult> GetAllQueryable(IEnumerable<string> selectedFields);
+        IQueryable<TDtoResult> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields);
+        IQueryable<TDtoResult> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields);
     }
 }

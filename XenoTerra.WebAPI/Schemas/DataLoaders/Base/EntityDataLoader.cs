@@ -56,8 +56,13 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders.Base
 
             var dtoResults = _mapper.Map<List<TDtoResult>>(entities);
 
+            var dtoPrimaryKeyProperty = typeof(TDtoResult)
+                .GetProperties()
+                .FirstOrDefault(p => p.Name.Equals(primaryKeyProperty.Name, StringComparison.OrdinalIgnoreCase))
+                ?? throw new InvalidOperationException($"Primary key property not found in DTO {typeof(TDtoResult).Name}");
+
             entityDict = dtoResults
-                .Select(entity => new { Key = primaryKeyProperty.GetValue(entity), Entity = entity })
+                .Select(entity => new { Key = dtoPrimaryKeyProperty.GetValue(entity), Entity = entity })
                 .Where(x => x.Key != null && x.Key is TKey)
                 .ToDictionary(x => (TKey)x.Key!, x => x.Entity);
 

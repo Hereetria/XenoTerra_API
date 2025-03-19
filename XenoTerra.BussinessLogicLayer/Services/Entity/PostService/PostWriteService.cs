@@ -15,7 +15,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostService
 
     public class PostWriteService : WriteService<Post, ResultPostDto, CreatePostDto, UpdatePostDto, Guid>, IPostWriteService
     {
-        public PostWriteService(IWriteRepository<Post, Guid> repository, IMapper mapper)
+        public PostWriteService(IWriteRepository<Post, ResultPostDto, Guid> repository, IMapper mapper)
             : base(repository, mapper) { }
     }
 }

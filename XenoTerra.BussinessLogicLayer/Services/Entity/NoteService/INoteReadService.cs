@@ -14,6 +14,6 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteService
 {
 
-    public interface INoteReadService : IReadService<Note, Guid> { }
+    public interface INoteReadService : IReadService<Note, ResultNoteWithRelationsDto, Guid> { }
 
 }

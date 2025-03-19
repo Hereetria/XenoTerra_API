@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService
 {
     public class SavedPostWriteService : WriteService<SavedPost, ResultSavedPostDto, CreateSavedPostDto, UpdateSavedPostDto, Guid>, ISavedPostWriteService
     {
-        public SavedPostWriteService(IWriteRepository<SavedPost, Guid> repository, IMapper mapper)
+        public SavedPostWriteService(IWriteRepository<SavedPost, ResultSavedPostDto, Guid> repository, IMapper mapper)
             : base(repository, mapper) { }
     }
 }

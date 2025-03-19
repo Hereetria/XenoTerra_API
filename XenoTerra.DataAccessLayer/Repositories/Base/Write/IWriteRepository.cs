@@ -7,12 +7,14 @@ using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
 {
-    public interface IWriteRepository<TEntity, TKey>
+    public interface IWriteRepository<TEntity, TDtoResult, TKey>
         where TEntity : class
+        where TDtoResult : class
+        where TKey : notnull
     {
         AppDbContext GetDbContext();
-        Task<TEntity> InsertAsync(TEntity entity);
-        Task<TEntity> ModifyAsync(TEntity entity);
+        Task<TDtoResult> InsertAsync(TEntity entity);
+        Task<TDtoResult> ModifyAsync(TEntity entity);
         Task<bool> RemoveAsync(TKey key);
     }
 }

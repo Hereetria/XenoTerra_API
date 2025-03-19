@@ -9,14 +9,20 @@ using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
 {
-    public class WriteRepository<TEntity, TKey> : IWriteRepository<TEntity, TKey>
+    public class WriteRepository<TEntity, TDtoResult, TKey> : IWriteRepository<TEntity, TDtoResult, TKey>
         where TEntity : class
+        where TDtoResult : class
+        where TKey : notnull
     {
+        private readonly IMapper _mapper;
         protected readonly AppDbContext _context;
+        private readonly DbSet<TEntity> _dbSet;
 
-        public WriteRepository(AppDbContext context)
+        public WriteRepository(IMapper mapper, AppDbContext context)
         {
+            _mapper = mapper;
             _context = context;
+            _dbSet = _context.Set<TEntity>();
         }
 
         public AppDbContext GetDbContext()
@@ -24,41 +30,41 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
             return _context;
         }
 
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async Task<TDtoResult> InsertAsync(TEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
                 throw new ArgumentNullException(nameof(entity), "The entity to create cannot be null.");
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                await _context.Set<TEntity>().AddAsync(entity);
+                await _dbSet.AddAsync(entity);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return entity;
+                return _mapper.Map<TDtoResult>(entity);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 Console.WriteLine($"[ERROR] Insert failed: {ex.Message}");
-                throw;
+                throw new InvalidOperationException("An error occurred while inserting the entity.", ex);
             }
         }
 
         public async Task<bool> RemoveAsync(TKey key)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
-            var entity = await _context.Set<TEntity>().FindAsync(key);
-            if (entity == null)
+            var entity = await _dbSet.FindAsync(key);
+            if (entity is null)
                 return false;
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                _context.Set<TEntity>().Remove(entity);
+                _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
@@ -68,29 +74,29 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
             {
                 await transaction.RollbackAsync();
                 Console.WriteLine($"[ERROR] Delete failed: {ex.Message}");
-                throw;
+                throw new InvalidOperationException("An error occurred while deleting the entity.", ex);
             }
         }
 
-        public async Task<TEntity> ModifyAsync(TEntity entity)
+        public async Task<TDtoResult> ModifyAsync(TEntity entity)
         {
-            if (entity == null)
+            if (entity is null)
                 throw new ArgumentNullException(nameof(entity), "The entity to update cannot be null.");
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                _context.Set<TEntity>().Update(entity);
+                _dbSet.Update(entity);
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return entity;
+                return _mapper.Map<TDtoResult>(entity);
             }
             catch (Exception ex)
             {
                 await transaction.RollbackAsync();
                 Console.WriteLine($"[ERROR] Update failed: {ex.Message}");
-                throw;
+                throw new InvalidOperationException("An error occurred while updating the entity.", ex);
             }
         }
     }

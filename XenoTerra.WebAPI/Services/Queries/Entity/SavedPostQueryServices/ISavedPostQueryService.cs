@@ -4,6 +4,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.SavedPostQueryServices
 {
-    public interface ISavedPostQueryService : IQueryService<SavedPost, Guid> { }
-
+    public interface ISavedPostQueryService : IQueryService<SavedPost, ResultSavedPostWithRelationsDto, Guid>
+    {
+    }
 }

@@ -15,35 +15,35 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Write
         where TResultDto : class, new()
         where TCreateDto : class
         where TUpdateDto : class
+        where TKey : notnull
     {
-        private readonly IWriteRepository<TEntity, TKey> _repository;
+        private readonly IWriteRepository<TEntity, TResultDto, TKey> _writeRepository;
         private readonly IMapper _mapper;
 
-        public WriteService(IWriteRepository<TEntity, TKey> repository, IMapper mapper)
+        public WriteService(IWriteRepository<TEntity, TResultDto, TKey> writeRepository, IMapper mapper)
         {
-            _repository = repository;
+            _writeRepository = writeRepository;
             _mapper = mapper;
         }
 
         public async Task<TResultDto> CreateAsync(TCreateDto createDto) 
         {
-            if(createDto is null)
+            if (createDto is null)
                throw new ArgumentNullException(nameof(createDto), "The create dto cannot be null.");
 
-            var entity = _mapper.Map<TEntity>(createDto);
-             
-            return await _repository.InsertAsync(entity).ContinueWith(task =>
-                _mapper.Map<TResultDto>(task.Result)
-            );
+            var createEntity = _mapper.Map<TEntity>(createDto)
+                ?? throw new ArgumentNullException(nameof(createDto), "The create entity cannot be null.");
 
+            var dtoResult = await _writeRepository.InsertAsync(createEntity);
+            return dtoResult;
         }
 
         public async Task<bool> DeleteAsync(TKey key)
         {
-            if (key == null)
-                throw new ArgumentNullException(nameof(key), "The key cannot be null.");
+            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
-            var result = await _repository.RemoveAsync(key);
+            var result = await _writeRepository.RemoveAsync(key);
 
             if (!result)
                 Console.WriteLine($"[INFO] Delete operation failed: No entity found with key {key}");
@@ -57,10 +57,11 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Write
             if(updateDto is null)
                 throw new ArgumentNullException(nameof(updateDto), "The create dto cannot be null.");
 
-            var entity = _mapper.Map<TEntity>(updateDto);
+            var updateEntity = _mapper.Map<TEntity>(updateDto)
+                ?? throw new ArgumentNullException(nameof(updateDto), "The update entity cannot be null.");
 
-            return await _repository.ModifyAsync(entity).ContinueWith(task =>
-                _mapper.Map<TResultDto>(task.Result));
+            var dtoResult = await _writeRepository.ModifyAsync(updateEntity);
+            return dtoResult;
         }
     }
 }

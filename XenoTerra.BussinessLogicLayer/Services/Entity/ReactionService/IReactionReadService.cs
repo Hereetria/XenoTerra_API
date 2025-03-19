@@ -9,5 +9,5 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
 {
-    public interface IReactionReadService : IReadService<Reaction, Guid> { }
+    public interface IReactionReadService : IReadService<Reaction, ResultReactionWithRelationsDto, Guid> { }
 }

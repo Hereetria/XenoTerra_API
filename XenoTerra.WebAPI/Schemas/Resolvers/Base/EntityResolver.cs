@@ -40,11 +40,11 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
         }
 
         public async Task PopulateRelatedFieldsAsync(
-            IEnumerable<TDtoResult> resultList,
+            IEnumerable<TDtoResult> dtoResultList,
             IResolverContext context)
         {
             var dbContext = context.Service<AppDbContext>();
-            var entityMaps = GetEntityMap(resultList, context);
+            var entityMaps = GetEntityMap(dtoResultList, context);
 
             foreach (var entry in entityMaps)
             {
@@ -65,45 +65,52 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                 var relatedEntityKeyType = genericArguments[0];
                 var relatedEntityType = genericArguments[1]; 
 
-                var assignMethod = typeof(EntityResolver<TEntity, TKey>)
+                var assignMethod = typeof(EntityResolver<TEntity, TDtoResult, TKey>)
                     .GetMethod(nameof(AssignRelatedEntities), BindingFlags.NonPublic | BindingFlags.Instance)
                     ?.MakeGenericMethod(relatedEntityKeyType, relatedEntityType)
                     ?? throw new InvalidOperationException($"AssignRelatedEntities method not found for {relatedEntityKeyType} and {relatedEntityType}.");
 
-                assignMethod.Invoke(this, new object[] { dbContext, resultList, resultsDict });
+                assignMethod.Invoke(this, new object[] { dbContext, dtoResultList, resultsDict });
             }
 
         }
 
-        private List<TEntity> AssignRelatedEntities<TRelatedEntityKey, TRelatedEntity>(
+        private List<TDtoResult> AssignRelatedEntities<TRelatedDtoResultKey, TRelatedDtoResult>(
             AppDbContext dbContext,
-            List<TEntity> resultList,
-            IReadOnlyDictionary<TRelatedEntityKey, TRelatedEntity> resultsDict)
-            where TRelatedEntity : class
-            where TRelatedEntityKey : notnull
+            List<TDtoResult> resultList,
+            IReadOnlyDictionary<TRelatedDtoResultKey, TRelatedDtoResult> resultsDict)
+            where TRelatedDtoResult : class
+            where TRelatedDtoResultKey : notnull
         {
             var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
                 ?? throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
 
             string? crossTableName = GetCrossTableName(dbContext, typeof(TEntity));
-            if (crossTableName is not null)
+            if (crossTableName is null)
             {
-                var fkProperties = typeof(TEntity)
+                //Buradan devam et
+                var fkProperties = typeof(TDtoResult)
                     .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(prop => prop.PropertyType == typeof(TRelatedEntity))
+                    .Where(prop =>
+                        string.Equals(prop.PropertyType.Name, typeof(TRelatedDtoResult).Name, StringComparison.OrdinalIgnoreCase) || // Non-nullable eşleşme
+                        (Nullable.GetUnderlyingType(prop.PropertyType) != null &&
+                         string.Equals(Nullable.GetUnderlyingType(prop.PropertyType).Name, typeof(TRelatedDtoResult).Name, StringComparison.OrdinalIgnoreCase)) // Nullable eşleşme
+                    )
                     .ToList();
+
+
 
                 List<(PropertyInfo fkProperty, PropertyInfo relatedProperty)> mappings = new();
 
                 foreach (var fkProperty in fkProperties)
                 {
-                    var fkPropertyInfo = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, fkProperty.Name);
+                    var fkPropertyInfo = TypeProviders.GetForeignKeyProperty<TRelatedDtoResult>(dbContext, fkProperty.Name);
 
                     if (fkPropertyInfo != null)
                     {
-                        var relatedProperty = typeof(TEntity)
+                        var relatedProperty = typeof(TRelatedDtoResult)
                             .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                            .FirstOrDefault(prop => prop.PropertyType == typeof(TRelatedEntity) && prop.Name.Contains(fkProperty.Name.Replace("Id", "")));
+                            .FirstOrDefault(prop => prop.PropertyType == typeof(TRelatedDtoResult) && prop.Name.Contains(fkProperty.Name.Replace("Id", "")));
 
                         if (relatedProperty != null)
                         {
@@ -118,7 +125,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                     {
                         object? rawValue = fkProperty.GetValue(entity);
 
-                        if (rawValue != null && resultsDict.TryGetValue((TRelatedEntityKey)rawValue, out var relatedEntity))
+                        if (rawValue != null && resultsDict.TryGetValue((TRelatedDtoResultKey)rawValue, out var relatedEntity))
                         {
                             relatedProperty.SetValue(entity, relatedEntity);
                         }
@@ -160,7 +167,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
         }
 
         private Dictionary<Type, (HashSet<TKey>, HashSet<string>)> GetEntityMap(
-            IEnumerable<TEntity> resultEntityList,
+            IEnumerable<TDtoResult> resultEntityList,
             IResolverContext context)
         {
             var dbContext = context.Service<AppDbContext>();
@@ -185,11 +192,16 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
 
                     Type entityPropertyType = entityProperty.PropertyType;
 
-                    PropertyInfo foreignKeyProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, relationalField)
+                    PropertyInfo entityForeignKeyProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, relationalField)
                         ?? throw new Exception($"Foreign key property not found for '{relationalField}' in DTO.");
 
+                    PropertyInfo dtoForeignKeyProperty = typeof(TDtoResult)
+                        .GetProperties()
+                        .FirstOrDefault(p => p.Name.Equals(entityForeignKeyProperty.Name, StringComparison.OrdinalIgnoreCase))
+                        ?? throw new ArgumentNullException($"{entityForeignKeyProperty} not found in the {typeof(TDtoResult)} class");
+
                     var navigationIds = resultEntityList
-                        .Select(e => foreignKeyProperty.GetValue(e))
+                        .Select(e => dtoForeignKeyProperty.GetValue(e))
                         .Where(value => value is TKey)
                         .Cast<TKey>()
                         .ToHashSet();

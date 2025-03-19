@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService
 {
-    public interface IViewStoryReadService : IReadService<ViewStory, Guid> { }
+    public interface IViewStoryReadService : IReadService<ViewStory, ResultViewStoryWithRelationsDto, Guid> { }
 
 }

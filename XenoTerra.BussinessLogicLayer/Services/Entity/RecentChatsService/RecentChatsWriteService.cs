@@ -14,7 +14,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService
 {
     public class RecentChatsWriteService : WriteService<RecentChats, ResultRecentChatsDto, CreateRecentChatsDto, UpdateRecentChatsDto, Guid>, IRecentChatsWriteService
     {
-        public RecentChatsWriteService(IWriteRepository<RecentChats, Guid> repository, IMapper mapper)
+        public RecentChatsWriteService(IWriteRepository<RecentChats, ResultRecentChatsDto, Guid> repository, IMapper mapper)
             : base(repository, mapper) { }
     }
 }

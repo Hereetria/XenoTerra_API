@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService
 {
-    public interface IUserSettingReadService : IReadService<UserSetting, Guid> { }
+    public interface IUserSettingReadService : IReadService<UserSetting, ResultUserSettingWithRelationsDto, Guid> { }
 
 }

@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 {
-    public interface IRoleReadRepository : IReadRepository<Role, Guid> { }
-
+    public interface IRoleReadRepository : IReadRepository<Role, ResultRoleWithRelationsDto, Guid>
+    {
+    }
 }

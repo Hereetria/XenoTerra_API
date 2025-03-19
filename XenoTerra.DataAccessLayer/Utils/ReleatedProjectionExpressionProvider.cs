@@ -13,10 +13,11 @@ namespace XenoTerra.DataAccessLayer.Utils
 {
     public static class ReleatedProjectionExpressionProvider
     {
-        public static Expression<Func<TEntity, TEntity>> CreateSelectorExpression<TEntity>(
+        public static Expression<Func<TEntity, TDtoResult>> CreateSelectorExpression<TEntity, TDtoResult>(
             AppDbContext context,
             IEnumerable<string> selectedFields)
             where TEntity : class
+            where TDtoResult : class
         {
             var parameter = Expression.Parameter(typeof(TEntity), "entity");
             var bindings = new List<MemberBinding>();
@@ -31,13 +32,14 @@ namespace XenoTerra.DataAccessLayer.Utils
             {
                 var field = fieldQueue.Dequeue();
                 var entityProperty = FindPropertyIgnoreCase(typeof(TEntity), field);
+                var dtoProperty = FindPropertyIgnoreCase(typeof(TDtoResult), field);
 
-                if (entityProperty == null)
+                if (entityProperty == null || dtoProperty == null)
                     continue;
 
-                if (IsPrimitiveOrSimpleType(entityProperty.PropertyType))
+                if (IsPrimitiveOrSimpleType(entityProperty.PropertyType) && dtoProperty.PropertyType == entityProperty.PropertyType)
                 {
-                    bindings.Add(Expression.Bind(entityProperty, Expression.Property(parameter, entityProperty)));
+                    bindings.Add(Expression.Bind(dtoProperty, Expression.Property(parameter, entityProperty)));
                     continue;
                 }
 
@@ -53,8 +55,8 @@ namespace XenoTerra.DataAccessLayer.Utils
                 }
             }
 
-            var body = Expression.MemberInit(Expression.New(typeof(TEntity)), bindings);
-            return Expression.Lambda<Func<TEntity, TEntity>>(body, parameter);
+            var body = Expression.MemberInit(Expression.New(typeof(TDtoResult)), bindings);
+            return Expression.Lambda<Func<TEntity, TDtoResult>>(body, parameter);
         }
 
         private static PropertyInfo? FindPropertyIgnoreCase(Type type, string propertyName)
@@ -82,5 +84,4 @@ namespace XenoTerra.DataAccessLayer.Utils
                    type == typeof(int);
         }
     }
-
 }

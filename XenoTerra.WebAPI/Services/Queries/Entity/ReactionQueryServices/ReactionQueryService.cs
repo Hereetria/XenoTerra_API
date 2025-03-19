@@ -6,9 +6,11 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.ReactionQueryServices
 {
-    public class ReactionQueryService : QueryService<Reaction, Guid>, IReactionQueryService
+    public class ReactionQueryService : QueryService<Reaction, ResultReactionWithRelationsDto, Guid>, IReactionQueryService
     {
-        public ReactionQueryService(IReadService<Reaction, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public ReactionQueryService(IReadService<Reaction, ResultReactionWithRelationsDto, Guid> readService, IMapper mapper)
+            : base(readService, mapper)
+        {
+        }
     }
 }

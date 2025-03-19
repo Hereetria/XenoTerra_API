@@ -12,6 +12,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaService
 {
-    public interface IMediaReadService : IReadService<Media, Guid> { }
+    public interface IMediaReadService : IReadService<Media, ResultMediaWithRelationsDto, Guid> { }
 
 }

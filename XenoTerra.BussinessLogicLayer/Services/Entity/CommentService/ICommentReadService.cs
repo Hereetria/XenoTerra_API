@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
 {
-    public interface ICommentReadService : IReadService<Comment, Guid> { }
+    public interface ICommentReadService : IReadService<Comment, ResultCommentWithRelationsDto, Guid> { }
 
 }

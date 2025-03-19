@@ -6,9 +6,11 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.NoteQueryServices
 {
-    public class NoteQueryService : QueryService<Note, Guid>, INoteQueryService
+    public class NoteQueryService : QueryService<Note, ResultNoteWithRelationsDto, Guid>, INoteQueryService
     {
-        public NoteQueryService(IReadService<Note, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public NoteQueryService(IReadService<Note, ResultNoteWithRelationsDto, Guid> readService, IMapper mapper)
+            : base(readService, mapper)
+        {
+        }
     }
 }

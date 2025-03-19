@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
-    public class LikeReadService : ReadService<Like, Guid>, ILikeReadService
+    public class LikeReadService : ReadService<Like, ResultLikeWithRelationsDto, Guid>, ILikeReadService
     {
-        public LikeReadService(IReadRepository<Like, Guid> repository)
+        public LikeReadService(IReadRepository<Like, ResultLikeWithRelationsDto, Guid> repository)
             : base(repository) { }
     }
 

@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
 {
-    public class HighlightReadService : ReadService<Highlight, Guid>, IHighlightReadService
+    public class HighlightReadService : ReadService<Highlight, ResultHighlightWithRelationsDto, Guid>, IHighlightReadService
     {
-        public HighlightReadService(IReadRepository<Highlight, Guid> repository)
+        public HighlightReadService(IReadRepository<Highlight, ResultHighlightWithRelationsDto, Guid> repository)
             : base(repository) { }
     }
 }

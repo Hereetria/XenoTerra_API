@@ -6,9 +6,11 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.MediaQueryServices
 {
-    public class MediaQueryService : QueryService<Media, Guid>, IMediaQueryService
+    public class MediaQueryService : QueryService<Media, ResultMediaWithRelationsDto, Guid>, IMediaQueryService
     {
-        public MediaQueryService(IReadService<Media, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public MediaQueryService(IReadService<Media, ResultMediaWithRelationsDto, Guid> readService, IMapper mapper)
+            : base(readService, mapper)
+        {
+        }
     }
 }

@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
 {
-    public interface IRoleReadService : IReadService<Role, Guid> { }
+    public interface IRoleReadService : IReadService<Role, ResultRoleWithRelationsDto, Guid> { }
 
 }

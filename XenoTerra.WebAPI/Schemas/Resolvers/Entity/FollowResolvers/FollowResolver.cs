@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
+using XenoTerra.DTOLayer.Dtos.FollowDtos;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers
 {
-    public class FollowResolver : EntityResolver<Follow, Guid>, IFollowResolver
+    public class FollowResolver : EntityResolver<Follow, ResultFollowWithRelationsDto, Guid>, IFollowResolver
     {
-        public FollowResolver(EntityDataLoaderFactory entityDataLoaderFactory, IMapper mapper)
-            : base(entityDataLoaderFactory, mapper) { }
+        public FollowResolver(EntityDataLoaderFactory entityDataLoaderFactory) : base(entityDataLoaderFactory)
+        {
+        }
     }
 }

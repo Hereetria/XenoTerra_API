@@ -6,9 +6,9 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices
 {
-    public class BlockUserQueryService : QueryService<BlockUser, Guid>, IBlockUserQueryService
+    public class BlockUserQueryService : QueryService<BlockUser, ResultBlockUserWithRelationsDto, Guid>, IBlockUserQueryService
     {
-        public BlockUserQueryService(IReadService<BlockUser, Guid> readService, IMapper mapper) : base(readService, mapper)
+        public BlockUserQueryService(IReadService<BlockUser, ResultBlockUserWithRelationsDto, Guid> readService, IMapper mapper) : base(readService, mapper)
         {
         }
     }

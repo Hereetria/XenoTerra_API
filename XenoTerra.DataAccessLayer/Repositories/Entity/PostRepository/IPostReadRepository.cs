@@ -5,10 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-    public interface IPostReadRepository : IReadRepository<Post, Guid> { }
-
+    public interface IPostReadRepository : IReadRepository<Post, ResultPostWithRelationsDto, Guid>
+    {
+    }
 }
