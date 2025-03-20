@@ -1,6 +1,6 @@
 ﻿using HotChocolate;
 using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 
 namespace XenoTerra.WebAPI.Schemas.Mutations.HighlightMutations
 {

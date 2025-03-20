@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class SavedPostDataLoader : EntityDataLoader<SavedPost, ResultSavedPostWithRelationsDto, Guid>
+    public class SavedPostDataLoader : EntityDataLoader<SavedPost, ResultSavedPostDto, Guid>
     {
         public SavedPostDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
             : base(batchScheduler, options, mapper, dbContext)

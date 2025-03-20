@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
 

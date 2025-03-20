@@ -1,8 +1,6 @@
-
-
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 
-namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos
 {
     public class UpdateHighlightDto
     {

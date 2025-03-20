@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;

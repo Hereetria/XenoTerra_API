@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos
 {
     public class ResultHighlightDto
     {

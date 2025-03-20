@@ -14,6 +14,7 @@ using System.Text;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
@@ -67,7 +68,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
 
                 var assignMethod = typeof(EntityResolver<TEntity, TDtoResult, TKey>)
                     .GetMethod(nameof(AssignRelatedEntities), BindingFlags.NonPublic | BindingFlags.Instance)
-                    ?.MakeGenericMethod(relatedEntityKeyType, relatedEntityType)
+                    ?.MakeGenericMethod(relatedEntityType, relatedEntityKeyType)
                     ?? throw new InvalidOperationException($"AssignRelatedEntities method not found for {relatedEntityKeyType} and {relatedEntityType}.");
 
                 assignMethod.Invoke(this, new object[] { dbContext, dtoResultList, resultsDict });
@@ -75,9 +76,9 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
 
         }
 
-        private List<TDtoResult> AssignRelatedEntities<TRelatedDtoResultKey, TRelatedDtoResult>(
+        private List<TDtoResult> AssignRelatedEntities<TRelatedDtoResult, TRelatedDtoResultKey>(
             AppDbContext dbContext,
-            List<TDtoResult> resultList,
+            List<TDtoResult> resultDtoList,
             IReadOnlyDictionary<TRelatedDtoResultKey, TRelatedDtoResult> resultsDict)
             where TRelatedDtoResult : class
             where TRelatedDtoResultKey : notnull
@@ -85,85 +86,71 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
             var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
                 ?? throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
 
-            string? crossTableName = GetCrossTableName(dbContext, typeof(TEntity));
-            if (crossTableName is null)
-            {
-                //Buradan devam et
-                var fkProperties = typeof(TDtoResult)
-                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(prop =>
-                        string.Equals(prop.PropertyType.Name, typeof(TRelatedDtoResult).Name, StringComparison.OrdinalIgnoreCase) || // Non-nullable eşleşme
-                        (Nullable.GetUnderlyingType(prop.PropertyType) != null &&
-                         string.Equals(Nullable.GetUnderlyingType(prop.PropertyType).Name, typeof(TRelatedDtoResult).Name, StringComparison.OrdinalIgnoreCase)) // Nullable eşleşme
-                    )
-                    .ToList();
+            var crossTableName = GetCrossTableName(dbContext, typeof(TEntity));
 
+            var navigationProperties = typeof(TDtoResult)
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(prop => prop.PropertyType == typeof(TRelatedDtoResult) ||
+                               (prop.PropertyType.IsGenericType &&
+                                prop.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) &&
+                                prop.PropertyType.GetGenericArguments()[0] == typeof(TRelatedDtoResult)))
+                .ToList();
 
 
                 List<(PropertyInfo fkProperty, PropertyInfo relatedProperty)> mappings = new();
 
-                foreach (var fkProperty in fkProperties)
-                {
-                    var fkPropertyInfo = TypeProviders.GetForeignKeyProperty<TRelatedDtoResult>(dbContext, fkProperty.Name);
-
-                    if (fkPropertyInfo != null)
-                    {
-                        var relatedProperty = typeof(TRelatedDtoResult)
-                            .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                            .FirstOrDefault(prop => prop.PropertyType == typeof(TRelatedDtoResult) && prop.Name.Contains(fkProperty.Name.Replace("Id", "")));
-
-                        if (relatedProperty != null)
-                        {
-                            mappings.Add((fkPropertyInfo, relatedProperty));
-                        }
-                    }
-                }
-
-                foreach (var entity in resultList)
-                {
-                    foreach (var (fkProperty, relatedProperty) in mappings)
-                    {
-                        object? rawValue = fkProperty.GetValue(entity);
-
-                        if (rawValue != null && resultsDict.TryGetValue((TRelatedDtoResultKey)rawValue, out var relatedEntity))
-                        {
-                            relatedProperty.SetValue(entity, relatedEntity);
-                        }
-                    }
-                }
-            }
-            else
+            foreach (var navigationProperty in navigationProperties)
             {
-                var crossTableMap = new Dictionary<Guid, HashSet<Guid>>();
-                foreach (var resultField in resultList)
+                if (crossTableName != null)
                 {
-                    var entityPrimaryKey = entityType.FindPrimaryKey()
-                        ?? throw new InvalidOperationException("Primary key not found");
 
-                    var entityPrimaryKeyProperty = entityPrimaryKey.Properties.FirstOrDefault()
-                        ?? throw new InvalidOperationException("Primary key could'nt taked");
+                }
+                else if (true) {
 
-                    var entityCrossTableProperty = entityType.GetProperties().FirstOrDefault(p => p.Name == crossTableName)
-                        ?? throw new Exception($"Property '{crossTableName}' not found in entity '{entityType.Name}'.");
-
-                    var entityPrimaryKeyValue = entityPrimaryKeyProperty?.PropertyInfo?.GetValue(resultField)
-                        ?? throw new ArgumentNullException($"EntityPrimaryKeyValue not found in {resultField}");
-
-                    var crossTableCollection = entityCrossTableProperty?.PropertyInfo?.GetValue(resultField) as IEnumerable<object>;
-                    if (crossTableCollection == null)
-                        continue;
-
-                    Type crossTableItemType = entityCrossTableProperty.PropertyInfo.PropertyType.GetGenericArguments().First();
-                    var newCrossTableCollection = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(crossTableItemType));
-
-
+                }
+                else
+                {
 
                 }
 
+                    var fkEntityPropertyName = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, navigationProperty.Name, crossTableName).Name;
 
+
+                    var fkPropertyInfo = typeof(TDtoResult)
+                    .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .FirstOrDefault(prop => prop.Name.Equals(fkEntityPropertyName, StringComparison.OrdinalIgnoreCase))
+                    ?? throw new ArgumentNullException($"{fkEntityPropertyName} not found in the {typeof(TEntity)}");
+
+                
+
+
+                if (fkPropertyInfo != null)
+                {
+                    var relatedProperty = typeof(TDtoResult)
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                        .FirstOrDefault(prop => prop.Name.Equals(navigationProperty.Name, StringComparison.OrdinalIgnoreCase))
+                        ?? throw new Exception($"Related property '{navigationProperty.Name}' not found in {typeof(TEntity).Name}.");
+
+                    if (relatedProperty != null)
+                    {
+                        mappings.Add((navigationProperty, relatedProperty));
+                    }
+                }
             }
 
-            return resultList;
+            foreach (var resultDto in resultDtoList)
+            {
+                foreach (var (fkProperty, relatedProperty) in mappings)
+                {
+                    object? rawValue = fkProperty.GetValue(resultDto);
+
+                    if (rawValue != null && resultsDict.TryGetValue((TRelatedDtoResultKey)rawValue, out var relatedEntity))
+                    {
+                        relatedProperty.SetValue(resultDto, relatedEntity);
+                    }
+                }
+            }
+            return resultDtoList;
         }
 
         private Dictionary<Type, (HashSet<TKey>, HashSet<string>)> GetEntityMap(

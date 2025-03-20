@@ -4,7 +4,6 @@ using XenoTerra.EntityLayer.Entities;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
@@ -21,6 +20,7 @@ using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 
 namespace XenoTerra.DTOLayer.Mappings
 {

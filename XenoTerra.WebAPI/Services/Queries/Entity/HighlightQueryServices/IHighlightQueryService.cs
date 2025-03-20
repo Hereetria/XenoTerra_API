@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;
 

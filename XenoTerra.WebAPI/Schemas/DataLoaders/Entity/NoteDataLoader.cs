@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class NoteDataLoader : EntityDataLoader<Note, ResultNoteWithRelationsDto, Guid>
+    public class NoteDataLoader : EntityDataLoader<Note, ResultNoteDto, Guid>
     {
         public NoteDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
             : base(batchScheduler, options, mapper, dbContext)

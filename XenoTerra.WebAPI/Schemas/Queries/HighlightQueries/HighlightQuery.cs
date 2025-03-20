@@ -5,7 +5,7 @@ using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService;
 using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;

@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 

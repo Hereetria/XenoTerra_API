@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Contexts;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.DataAccessLayer.Utils
 {
@@ -67,29 +68,34 @@ namespace XenoTerra.DataAccessLayer.Utils
             return propertyInfo ?? throw new InvalidOperationException($"Property {pkPropertyName} bulunamadı.");
         }
 
-        public static PropertyInfo GetForeignKeyProperty<TEntity>(AppDbContext dbContext, string navigationPropertyName)
+        public static PropertyInfo GetForeignKeyProperty<TEntity>(AppDbContext dbContext, string navigationPropertyName, string? crossTableName = null)
             where TEntity : class
         {
-            var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
-                ?? throw new Exception($"Entity type '{typeof(TEntity).Name}' not found in DbContext.");
+            navigationPropertyName = crossTableName != null ? PluralWordProvider.ConvertToSingular(navigationPropertyName) : navigationPropertyName;
 
-            // **TEntity içindeki Navigation Property'yi bul**
+            var entityType = crossTableName == null
+                ? dbContext.Model.FindEntityType(typeof(TEntity)) // Normal Many-to-One veya One-to-Many için
+                : dbContext.Model.GetEntityTypes()
+                    .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.OrdinalIgnoreCase)); // Many-to-Many için
+
+            if (entityType == null)
+                throw new Exception($"Entity type '{(crossTableName ?? typeof(TEntity).Name)}' not found in DbContext.");
+
+            // Navigation property'yi bulma
             var navigation = entityType.GetNavigations()
                 .FirstOrDefault(n => n.Name.Equals(navigationPropertyName, StringComparison.OrdinalIgnoreCase))
-                ?? throw new Exception($"Navigation property '{navigationPropertyName}' not found in entity '{typeof(TEntity).Name}'.");
+                ?? throw new Exception($"Navigation property '{navigationPropertyName}' not found in entity '{entityType.ClrType.Name}'.");
 
-            // **Foreign Key property'yi bul (EF Core metadatası üzerinden)**
+            // Foreign key bulma
             var foreignKey = navigation.ForeignKey.Properties.FirstOrDefault()
-                ?? throw new Exception($"Foreign key not found for navigation '{navigationPropertyName}' in entity '{typeof(TEntity).Name}'.");
+                ?? throw new Exception($"Foreign key not found for navigation '{navigationPropertyName}' in entity '{entityType.ClrType.Name}'.");
 
-            // **TEntity içindeki karşılık gelen foreign key property'sini bul**
-            var foreignKeyProperty = typeof(TEntity).GetProperties()
+            var foreignKeyProperty = entityType.ClrType.GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(foreignKey.Name, StringComparison.OrdinalIgnoreCase))
-                ?? throw new Exception($"Foreign key '{foreignKey.Name}' not found in entity '{typeof(TEntity).Name}'.");
+                ?? throw new Exception($"Foreign key '{foreignKey.Name}' not found in entity '{entityType.ClrType.Name}'.");
 
             return foreignKeyProperty;
         }
-
 
         public static bool IsPrimitiveOrValueType(this Type type)
         {

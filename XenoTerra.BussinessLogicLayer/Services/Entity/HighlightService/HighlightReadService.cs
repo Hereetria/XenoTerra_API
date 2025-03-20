@@ -8,7 +8,7 @@ using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
 using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService

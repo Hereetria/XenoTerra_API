@@ -1,5 +1,4 @@
 ﻿using XenoTerra.DTOLayer.Dtos.FollowDtos;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;
 
