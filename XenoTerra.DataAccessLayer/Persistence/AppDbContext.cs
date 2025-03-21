@@ -33,15 +33,15 @@ namespace XenoTerra.DataAccessLayer.Contexts
                 .HasForeignKey(sh => sh.HighlightId);
 
             modelBuilder.Entity<BlockUser>()
-                .HasOne(bu => bu.BlockingUser)
-                .WithMany()
-                .HasForeignKey(bu => bu.BlockingUserId)
+                .HasOne(b => b.BlockingUser)
+                .WithMany(u => u.BlockedUsers)
+                .HasForeignKey(b => b.BlockingUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<BlockUser>()
-                .HasOne(bu => bu.BlockedUser)
-                .WithMany()
-                .HasForeignKey(bu => bu.BlockedUserId)
+                .HasOne(b => b.BlockedUser)
+                .WithMany(u => u.BlockedByUsers)
+                .HasForeignKey(b => b.BlockedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Follow>()

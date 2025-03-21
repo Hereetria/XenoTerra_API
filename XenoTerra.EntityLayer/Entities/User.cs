@@ -20,6 +20,10 @@ namespace XenoTerra.EntityLayer.Entities
         public bool IsVerified { get; set; }
         public DateTime LastActive { get; set; }
 
+
+        public ICollection<BlockUser> BlockedUsers { get; set; } = new List<BlockUser>();
+
+        public ICollection<BlockUser> BlockedByUsers { get; set; } = new List<BlockUser>();
         public ICollection<Post> Posts { get; set; } = new List<Post>();
 
         public ICollection<Follow> Followers { get; set; } = new List<Follow>();

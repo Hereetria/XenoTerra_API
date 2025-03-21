@@ -47,7 +47,7 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders.Base
             var selector = CreateSelectorExpression(selectedFields);
 
             var keySet = new HashSet<TKey>(keys);
-
+            Type a = typeof(TEntity);
             var query = _dbContext.Set<TEntity>()
                                   .Where(e => keySet.Contains(EF.Property<TKey>(e, primaryKeyProperty.Name)))
                                   .Select(selector);

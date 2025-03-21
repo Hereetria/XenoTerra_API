@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using XenoTerra.DataAccessLayer.Contexts;
 
@@ -11,9 +12,11 @@ using XenoTerra.DataAccessLayer.Contexts;
 namespace XenoTerra.DataAccessLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250321064251_mig5")]
+    partial class mig5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,11 +158,21 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<Guid>("BlockingUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("UserId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("BlockUserId");
 
                     b.HasIndex("BlockedUserId");
 
                     b.HasIndex("BlockingUserId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("BlockUsers");
                 });
@@ -827,16 +840,24 @@ namespace XenoTerra.DataAccessLayer.Migrations
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.BlockUser", b =>
                 {
                     b.HasOne("XenoTerra.EntityLayer.Entities.User", "BlockedUser")
-                        .WithMany("BlockedByUsers")
+                        .WithMany()
                         .HasForeignKey("BlockedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("XenoTerra.EntityLayer.Entities.User", "BlockingUser")
-                        .WithMany("BlockedUsers")
+                        .WithMany()
                         .HasForeignKey("BlockingUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                        .WithMany("BlockedByUsers")
+                        .HasForeignKey("UserId");
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                        .WithMany("BlockedUsers")
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("BlockedUser");
 
