@@ -40,7 +40,7 @@ namespace XenoTerra.DataAccessLayer.Contexts
 
             modelBuilder.Entity<BlockUser>()
                 .HasOne(b => b.BlockedUser)
-                .WithMany(u => u.BlockedByUsers)
+                .WithMany(u => u.BlockingUsers)
                 .HasForeignKey(b => b.BlockedUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

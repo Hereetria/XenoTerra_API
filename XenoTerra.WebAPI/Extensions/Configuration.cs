@@ -116,6 +116,9 @@ using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ViewStoryResolvers;
 using XenoTerra.WebAPI.Schemas.Resolvers;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
+using XenoTerra.WebAPI.Services.Common.EntityMapping;
+using XenoTerra.WebAPI.Services.Common.DataLoading;
+using XenoTerra.WebAPI.Services.Common.EntityAssignment;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -342,6 +345,11 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped<UserDataLoader>();
             builder.Services.AddScoped<UserSettingDataLoader>();
             builder.Services.AddScoped<ViewStoryDataLoader>();
+
+
+            builder.Services.AddScoped(typeof(IEntityFieldMapBuilder<,,>), typeof(EntityFieldMapBuilder<,,>));
+            builder.Services.AddScoped(typeof(IEntityAssignmentService<,,,>), typeof(EntityAssignmentService<,,,>));
+            builder.Services.AddScoped(typeof(IDataLoaderInvoker), typeof(DataLoaderInvoker));
         }
     }
 }

@@ -23,7 +23,7 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<BlockUser> BlockedUsers { get; set; } = new List<BlockUser>();
 
-        public ICollection<BlockUser> BlockedByUsers { get; set; } = new List<BlockUser>();
+        public ICollection<BlockUser> BlockingUsers { get; set; } = new List<BlockUser>();
         public ICollection<Post> Posts { get; set; } = new List<Post>();
 
         public ICollection<Follow> Followers { get; set; } = new List<Follow>();

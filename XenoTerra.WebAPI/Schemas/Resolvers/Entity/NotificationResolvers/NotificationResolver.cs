@@ -3,12 +3,14 @@ using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+using XenoTerra.WebAPI.Services.Common.DataLoading;
+using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NotificationResolvers
 {
     public class NotificationResolver : EntityResolver<Notification, ResultNotificationWithRelationsDto, Guid>, INotificationResolver
     {
-        public NotificationResolver(EntityDataLoaderFactory entityDataLoaderFactory) : base(entityDataLoaderFactory)
+        public NotificationResolver(IEntityFieldMapBuilder<Notification, ResultNotificationWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

@@ -14,8 +14,8 @@ namespace XenoTerra.DTOLayer.Dtos.StoryDtos
         public Guid UserId { get; set; }
         public DateTime CreatedAt { get; set; }
 
-        public ResultUserDto User { get; set; }
-        public ICollection<ResultViewStoryDto> ViewStories { get; set; }
-        public ICollection<ResultHighlightDto> Highlights { get; set; }
+        public ResultUserDto? User { get; set; }
+        public ICollection<ResultViewStoryDto>? ViewStories { get; set; }
+        public ICollection<ResultHighlightDto>? Highlights { get; set; }
     }
 }
