@@ -9,10 +9,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class UserDataLoader : EntityDataLoader<User, ResultUserDto, Guid>
+    public class UserDataLoader : EntityDataLoader<User, Guid>
     {
-        public UserDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public UserDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

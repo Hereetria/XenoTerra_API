@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers
 {
-    public class RoleResolver : EntityResolver<Role, ResultRoleWithRelationsDto, Guid>, IRoleResolver
+    public class RoleResolver : EntityResolver<Role, Guid>, IRoleResolver
     {
-        public RoleResolver(IEntityFieldMapBuilder<Role, ResultRoleWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public RoleResolver(IEntityFieldMapBuilder<Role, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

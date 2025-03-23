@@ -13,6 +13,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
-    public interface ILikeReadService : IReadService<Like, ResultLikeWithRelationsDto, Guid> { }
+    public interface ILikeReadService : IReadService<Like, Guid> { }
 
 }

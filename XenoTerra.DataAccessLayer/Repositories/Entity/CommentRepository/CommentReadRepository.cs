@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
 {
-    public class CommentReadRepository : ReadRepository<Comment, ResultCommentWithRelationsDto, Guid>, ICommentReadRepository
+    public class CommentReadRepository : ReadRepository<Comment, Guid>, ICommentReadRepository
     {
         public CommentReadRepository(AppDbContext context) : base(context)
         {

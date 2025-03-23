@@ -9,9 +9,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.StoryResolvers
 {
 
-    public class StoryResolver : EntityResolver<Story, ResultStoryWithRelationsDto, Guid>, IStoryResolver
+    public class StoryResolver : EntityResolver<Story, Guid>, IStoryResolver
     {
-        public StoryResolver(IEntityFieldMapBuilder<Story, ResultStoryWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public StoryResolver(IEntityFieldMapBuilder<Story, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

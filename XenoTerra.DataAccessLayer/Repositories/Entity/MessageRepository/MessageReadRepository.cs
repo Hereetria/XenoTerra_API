@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository
 {
-    public class MessageReadRepository : ReadRepository<Message, ResultMessageWithRelationsDto, Guid>, IMessageReadRepository
+    public class MessageReadRepository : ReadRepository<Message, Guid>, IMessageReadRepository
     {
         public MessageReadRepository(AppDbContext context) : base(context)
         {

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -95,7 +96,79 @@ namespace XenoTerra.DataAccessLayer.Utils
             return result;
         }
 
+        public static HashSet<TKey> GetRelatedEntityIds<TKey>(DbContext dbContext, Type crossEntityType, PropertyInfo sourceKeyProp, PropertyInfo targetKeyProp, HashSet<TKey> entityIds)
+        {
+            var setMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set), Type.EmptyTypes)!
+                .MakeGenericMethod(crossEntityType);
 
+            var dbSet = (IQueryable)setMethod.Invoke(dbContext, null)!;
+
+            var parameter = Expression.Parameter(crossEntityType, "x");
+            var sourceProperty = Expression.Property(parameter, sourceKeyProp.Name);
+            var containsMethod = typeof(HashSet<TKey>).GetMethod("Contains", new[] { typeof(TKey) })!;
+            var entityIdsConst = Expression.Constant(entityIds);
+
+            var containsCall = Expression.Call(entityIdsConst, containsMethod, sourceProperty);
+            var lambda = Expression.Lambda(containsCall, parameter);
+
+            var whereMethod = typeof(Queryable)
+                .GetMethods()
+                .First(m => m.Name == "Where" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(crossEntityType);
+
+            var filteredQuery = (IQueryable)whereMethod.Invoke(null, new object[] { dbSet, lambda })!;
+
+            var selectorParam = Expression.Parameter(crossEntityType, "x");
+            var targetPropAccess = Expression.Property(selectorParam, targetKeyProp.Name);
+            var selectLambda = Expression.Lambda(targetPropAccess, selectorParam);
+
+            var selectMethod = typeof(Queryable)
+                .GetMethods()
+                .First(m => m.Name == "Select" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(crossEntityType, typeof(TKey));
+
+            var selectedQuery = (IQueryable<TKey>)selectMethod.Invoke(null, new object[] { filteredQuery, selectLambda })!;
+
+            return selectedQuery.ToHashSet();
+        }
+
+        public static Dictionary<object, List<object>> GetEntityIdToRelatedIds(
+            DbContext dbContext,
+            Type crossTableType,
+            string entityKeyPropertyName,
+            string relatedEntityKeyPropertyName)
+        {
+            var setMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set), Type.EmptyTypes)!
+                .MakeGenericMethod(crossTableType);
+
+            var dbSet = (IQueryable)setMethod.Invoke(dbContext, null)!;
+
+            var parameter = Expression.Parameter(crossTableType, "x");
+            var entityIdProp = Expression.Property(parameter, entityKeyPropertyName);
+            var relatedIdProp = Expression.Property(parameter, relatedEntityKeyPropertyName);
+
+            var anonymousType = typeof(ValueTuple<object, object>);
+            var newExpr = Expression.New(
+                anonymousType.GetConstructor(new[] { typeof(object), typeof(object) })!,
+                Expression.Convert(entityIdProp, typeof(object)),
+                Expression.Convert(relatedIdProp, typeof(object)));
+
+            var lambda = Expression.Lambda(newExpr, parameter);
+
+            var selectMethod = typeof(Queryable).GetMethods()
+                .First(m => m.Name == "Select" && m.GetParameters().Length == 2)
+                .MakeGenericMethod(crossTableType, anonymousType);
+
+            var selected = (IQueryable<ValueTuple<object, object>>)selectMethod.Invoke(null, new object[] { dbSet, lambda })!;
+
+            return selected
+                .ToList()
+                .GroupBy(t => t.Item1)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(t => t.Item2).ToList()
+                );
+        }
 
 
 

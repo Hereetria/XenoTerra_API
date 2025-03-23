@@ -4,86 +4,103 @@ using HotChocolate.Resolvers;
 namespace XenoTerra.WebAPI.Utils
 {
     public static class GraphQLFieldProvider
-
     {
-
-        public static IReadOnlyList<string> GetSelectedFields(IResolverContext context)
-
+        public static List<string> GetSelectedFields(IResolverContext context)
         {
+            var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
 
-            return context.Selection.SyntaxNode.SelectionSet?.Selections
+            if (selections == null)
+                return new List<string>();
 
-                .OfType<FieldNode>()
+            var fields = new List<string>();
 
-                .Select(s => s.Name.Value)
+            foreach (var selection in selections.OfType<FieldNode>())
+            {
+                if (!selection.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase))
+                    continue;
 
-                .ToList() ?? new List<string>();
+                var nodeSelection = selection.SelectionSet?.Selections
+                    .OfType<FieldNode>()
+                    .FirstOrDefault(f => f.Name.Value.Equals("node", StringComparison.OrdinalIgnoreCase));
 
+                if (nodeSelection == null)
+                    continue;
+
+                var nestedFields = nodeSelection.SelectionSet?.Selections
+                    .OfType<FieldNode>()
+                    .Select(f => f.Name.Value)
+                    .Where(name => !name.StartsWith("__", StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                if (nestedFields != null)
+                    fields.AddRange(nestedFields);
+            }
+
+            return fields.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
         }
-
-
 
         public static IEnumerable<string> GetNestedSelectedFields(IResolverContext context, string fieldName)
-
         {
-
             fieldName = fieldName.ToLowerInvariant();
 
+            var nodeFields = GetNodeFields(context);
 
-
-            var field = context.Selection.SyntaxNode.SelectionSet?.Selections
-
-                .OfType<FieldNode>()
-
-                .FirstOrDefault(f => f.Name.Value.ToLowerInvariant() == fieldName);
-
-
+            var field = nodeFields
+                .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
 
             return field?.SelectionSet?.Selections
-
                 .OfType<FieldNode>()
-
                 .Select(f => f.Name.Value.ToLowerInvariant())
-
+                .Where(name => !name.StartsWith("__"))
                 .ToList() ?? new List<string>();
-
         }
-
-
 
         public static int GetRelationalFieldsCount(IResolverContext context)
-
         {
+            var nodeFields = GetNodeFields(context);
 
-            return context.Selection.SyntaxNode.SelectionSet?.Selections
-
-                .OfType<FieldNode>()
-
-                .Count(f => f.SelectionSet != null) ?? 0;
-
+            return nodeFields.Count(f => f.SelectionSet != null);
         }
-
-
 
         public static bool IsNonRelationalField(IResolverContext context, string fieldName)
-
         {
+            var nodeFields = GetNodeFields(context);
 
-            var field = context.Selection.SyntaxNode.SelectionSet?.Selections
-
-                .OfType<FieldNode>()
-
-                .FirstOrDefault(f => f.Name.Value.ToLowerInvariant() == fieldName.ToLowerInvariant());
-
-
+            var field = nodeFields
+                .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
 
             return field != null && field.SelectionSet == null;
-
         }
 
-        public static IReadOnlyList<string> GetRelationalFields(IResolverContext context) =>
-           GetSelectedFields(context)
-               .Where(field => !IsNonRelationalField(context, field))
-               .ToList();
+        public static IReadOnlyList<string> GetRelationalFields(IResolverContext context)
+        {
+            var fields = GetSelectedFields(context);
+
+            return fields
+                .Where(field => !IsNonRelationalField(context, field))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+        }
+
+        private static IEnumerable<FieldNode> GetNodeFields(IResolverContext context)
+        {
+            var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
+
+            if (selections == null)
+                return Enumerable.Empty<FieldNode>();
+
+            var node = selections
+                .OfType<FieldNode>()
+                .FirstOrDefault(f => f.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase))
+                ?.SelectionSet?.Selections
+                .OfType<FieldNode>()
+                .FirstOrDefault(f => f.Name.Value.Equals("node", StringComparison.OrdinalIgnoreCase));
+
+            return node?.SelectionSet?.Selections
+                .OfType<FieldNode>()
+                .Where(f => !f.Name.Value.StartsWith("__", StringComparison.OrdinalIgnoreCase))
+                ?? Enumerable.Empty<FieldNode>();
+        }
     }
+
 }

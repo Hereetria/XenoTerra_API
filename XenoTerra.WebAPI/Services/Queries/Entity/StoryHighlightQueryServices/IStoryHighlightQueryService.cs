@@ -5,6 +5,6 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 namespace XenoTerra.WebAPI.Services.Queries.Entity.StoryHighlightQueryServices
 {
 
-    public interface IStoryHighlightQueryService : IQueryService<StoryHighlight, ResultStoryHighlightWithRelationsDto, Guid> { }
+    public interface IStoryHighlightQueryService : IQueryService<StoryHighlight, Guid> { }
 
 }

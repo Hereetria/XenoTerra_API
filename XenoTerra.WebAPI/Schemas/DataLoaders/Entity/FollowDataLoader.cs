@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class FollowDataLoader : EntityDataLoader<Follow, ResultFollowDto, Guid>
+    public class FollowDataLoader : EntityDataLoader<Follow, Guid>
     {
-        public FollowDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public FollowDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

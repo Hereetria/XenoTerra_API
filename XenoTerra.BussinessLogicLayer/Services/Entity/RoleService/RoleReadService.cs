@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
 {
-    public class RoleReadService : ReadService<Role, ResultRoleWithRelationsDto, Guid>, IRoleReadService
+    public class RoleReadService : ReadService<Role, Guid>, IRoleReadService
     {
-        public RoleReadService(IReadRepository<Role, ResultRoleWithRelationsDto, Guid> repository, IMapper mapper)
+        public RoleReadService(IReadRepository<Role, Guid> repository, IMapper mapper)
             : base(repository) { }
     }
 }

@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
 {
-    public class HighlightReadService : ReadService<Highlight, ResultHighlightWithRelationsDto, Guid>, IHighlightReadService
+    public class HighlightReadService : ReadService<Highlight, Guid>, IHighlightReadService
     {
-        public HighlightReadService(IReadRepository<Highlight, ResultHighlightWithRelationsDto, Guid> repository)
+        public HighlightReadService(IReadRepository<Highlight, Guid> repository)
             : base(repository) { }
     }
 }

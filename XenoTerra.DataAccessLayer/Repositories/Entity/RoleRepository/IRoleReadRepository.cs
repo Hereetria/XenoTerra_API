@@ -11,7 +11,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 {
-    public interface IRoleReadRepository : IReadRepository<Role, ResultRoleWithRelationsDto, Guid>
+    public interface IRoleReadRepository : IReadRepository<Role, Guid>
     {
     }
 }

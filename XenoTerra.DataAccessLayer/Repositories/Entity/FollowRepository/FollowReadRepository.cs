@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
 {
-    public class FollowReadRepository : ReadRepository<Follow, ResultFollowWithRelationsDto, Guid>, IFollowReadRepository
+    public class FollowReadRepository : ReadRepository<Follow, Guid>, IFollowReadRepository
     {
         public FollowReadRepository(AppDbContext context) : base(context)
         {

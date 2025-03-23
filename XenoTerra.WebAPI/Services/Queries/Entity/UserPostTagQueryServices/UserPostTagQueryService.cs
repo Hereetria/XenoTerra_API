@@ -6,9 +6,9 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.UserPostTagQueryServices
 {
-    public class UserPostTagQueryService : QueryService<UserPostTag, ResultUserPostTagWithRelationsDto, Guid>, IUserPostTagQueryService
+    public class UserPostTagQueryService : QueryService<UserPostTag, Guid>, IUserPostTagQueryService
     {
-        public UserPostTagQueryService(IReadService<UserPostTag, ResultUserPostTagWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public UserPostTagQueryService(IReadService<UserPostTag, Guid> readService)
+            : base(readService) { }
     }
 }

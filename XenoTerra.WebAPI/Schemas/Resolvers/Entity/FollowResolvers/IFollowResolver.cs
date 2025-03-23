@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers
 {
-    public interface IFollowResolver : IEntityResolver<Follow, ResultFollowWithRelationsDto, Guid>
+    public interface IFollowResolver : IEntityResolver<Follow, Guid>
     {
     }
 }

@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices
 {
-    public interface IUserQueryService : IQueryService<User, ResultUserWithRelationsDto, Guid>
+    public interface IUserQueryService : IQueryService<User, Guid>
     {
     }
 }

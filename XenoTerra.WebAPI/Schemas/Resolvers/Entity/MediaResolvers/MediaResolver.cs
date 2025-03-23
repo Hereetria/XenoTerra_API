@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MediaResolvers
 {
-    public class MediaResolver : EntityResolver<Media, ResultMediaWithRelationsDto, Guid>, IMediaResolver
+    public class MediaResolver : EntityResolver<Media, Guid>, IMediaResolver
     {
-        public MediaResolver(IEntityFieldMapBuilder<Media, ResultMediaWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public MediaResolver(IEntityFieldMapBuilder<Media, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

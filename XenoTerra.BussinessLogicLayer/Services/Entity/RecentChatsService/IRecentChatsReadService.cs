@@ -10,5 +10,5 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService
 {
-    public interface IRecentChatsReadService : IReadService<RecentChats, ResultRecentChatsWithRelationsDto, Guid> { }
+    public interface IRecentChatsReadService : IReadService<RecentChats, Guid> { }
 }

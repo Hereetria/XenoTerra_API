@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
 {
-    public interface INotificationReadRepository : IReadRepository<Notification, ResultNotificationWithRelationsDto, Guid>
+    public interface INotificationReadRepository : IReadRepository<Notification, Guid>
     {
     }
 }

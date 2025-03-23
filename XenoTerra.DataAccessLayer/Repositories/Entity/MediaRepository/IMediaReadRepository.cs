@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.MediaRepository
 {
-    public interface IMediaReadRepository : IReadRepository<Media, ResultMediaWithRelationsDto, Guid>
+    public interface IMediaReadRepository : IReadRepository<Media, Guid>
     {
     }
 }

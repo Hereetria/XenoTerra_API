@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NoteResolvers
 {
-    public class NoteResolver : EntityResolver<Note, ResultNoteWithRelationsDto, Guid>, INoteResolver
+    public class NoteResolver : EntityResolver<Note, Guid>, INoteResolver
     {
-        public NoteResolver(IEntityFieldMapBuilder<Note, ResultNoteWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public NoteResolver(IEntityFieldMapBuilder<Note, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

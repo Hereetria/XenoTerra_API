@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class SavedPostDataLoader : EntityDataLoader<SavedPost, ResultSavedPostDto, Guid>
+    public class SavedPostDataLoader : EntityDataLoader<SavedPost, Guid>
     {
-        public SavedPostDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public SavedPostDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

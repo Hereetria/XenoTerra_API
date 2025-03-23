@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserSettingResolvers
 {
-    public interface IUserSettingResolver : IEntityResolver<UserSetting, ResultUserSettingWithRelationsDto, Guid>
+    public interface IUserSettingResolver : IEntityResolver<UserSetting, Guid>
     {
     }
 }

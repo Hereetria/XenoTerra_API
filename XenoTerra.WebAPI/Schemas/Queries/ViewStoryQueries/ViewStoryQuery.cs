@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ViewStoryResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ViewStoryQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,46 +14,50 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ViewStoryQueries
     public class ViewStoryQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<ViewStory, Guid> _queryResolver;
 
-        public ViewStoryQuery(IMapper mapper)
+        public ViewStoryQuery(IMapper mapper, IQueryResolverHelper<ViewStory, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(ViewStoryFilterType))]
+        [UseSorting(typeof(ViewStorySortType))]
         public async Task<IEnumerable<ResultViewStoryWithRelationsDto>> GetAllViewStoriesAsync(
             [Service] IViewStoryQueryService service,
             [Service] IViewStoryResolver resolver,
             IResolverContext context)
         {
-            var viewStories = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(viewStories, context);
-            var viewStoryDtos = _mapper.Map<List<ResultViewStoryWithRelationsDto>>(viewStories);
-            return viewStoryDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultViewStoryWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(ViewStoryFilterType))]
+        [UseSorting(typeof(ViewStorySortType))]
         public async Task<IEnumerable<ResultViewStoryWithRelationsDto>> GetViewStoriesByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] IViewStoryQueryService service,
             [Service] IViewStoryResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var viewStories = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(viewStories, context);
-            var viewStoryDtos = _mapper.Map<List<ResultViewStoryWithRelationsDto>>(viewStories);
-            return viewStoryDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultViewStoryWithRelationsDto>>(entities);
         }
 
         public async Task<ResultViewStoryWithRelationsDto> GetViewStoryByIdAsync(
+            Guid key,
             [Service] IViewStoryQueryService service,
             [Service] IViewStoryResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var viewStory = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(viewStory, context);
-            var viewStoryDto = _mapper.Map<ResultViewStoryWithRelationsDto>(viewStory);
-            return viewStoryDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultViewStoryWithRelationsDto>(entity);
         }
     }
-
 }

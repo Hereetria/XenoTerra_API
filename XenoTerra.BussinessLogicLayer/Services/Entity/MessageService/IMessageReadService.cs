@@ -12,6 +12,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.MessageService
 {
-    public interface IMessageReadService : IReadService<Message, ResultMessageWithRelationsDto, Guid> { }
+    public interface IMessageReadService : IReadService<Message, Guid> { }
 
 }

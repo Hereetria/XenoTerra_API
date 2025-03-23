@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReactionQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,46 +14,50 @@ namespace XenoTerra.WebAPI.Schemas.Queries.ReactionQueries
     public class ReactionQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<Reaction, Guid> _queryResolver;
 
-        public ReactionQuery(IMapper mapper)
+        public ReactionQuery(IMapper mapper, IQueryResolverHelper<Reaction, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(ReactionFilterType))]
+        [UseSorting(typeof(ReactionSortType))]
         public async Task<IEnumerable<ResultReactionWithRelationsDto>> GetAllReactionsAsync(
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
             IResolverContext context)
         {
-            var reactions = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(reactions, context);
-            var reactionDtos = _mapper.Map<List<ResultReactionWithRelationsDto>>(reactions);
-            return reactionDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultReactionWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(ReactionFilterType))]
+        [UseSorting(typeof(ReactionSortType))]
         public async Task<IEnumerable<ResultReactionWithRelationsDto>> GetReactionsByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var reactions = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(reactions, context);
-            var reactionDtos = _mapper.Map<List<ResultReactionWithRelationsDto>>(reactions);
-            return reactionDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultReactionWithRelationsDto>>(entities);
         }
 
         public async Task<ResultReactionWithRelationsDto> GetReactionByIdAsync(
+            Guid key,
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var reaction = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(reaction, context);
-            var reactionDto = _mapper.Map<ResultReactionWithRelationsDto>(reaction);
-            return reactionDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultReactionWithRelationsDto>(entity);
         }
     }
-
 }

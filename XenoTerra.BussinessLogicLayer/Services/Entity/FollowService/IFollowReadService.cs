@@ -10,6 +10,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowService
 {
-    public interface IFollowReadService : IReadService<Follow, ResultFollowWithRelationsDto, Guid> { }
+    public interface IFollowReadService : IReadService<Follow, Guid> { }
 
 }

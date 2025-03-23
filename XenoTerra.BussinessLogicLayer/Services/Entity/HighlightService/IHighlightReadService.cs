@@ -10,6 +10,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
 {
-    public interface IHighlightReadService : IReadService<Highlight, ResultHighlightWithRelationsDto, Guid> { }
+    public interface IHighlightReadService : IReadService<Highlight, Guid> { }
 
 }

@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
-    public class LikeReadService : ReadService<Like, ResultLikeWithRelationsDto, Guid>, ILikeReadService
+    public class LikeReadService : ReadService<Like, Guid>, ILikeReadService
     {
-        public LikeReadService(IReadRepository<Like, ResultLikeWithRelationsDto, Guid> repository)
+        public LikeReadService(IReadRepository<Like, Guid> repository)
             : base(repository) { }
     }
 

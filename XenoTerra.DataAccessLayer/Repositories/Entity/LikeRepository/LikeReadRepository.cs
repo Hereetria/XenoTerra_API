@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
 {
-    public class LikeReadRepository : ReadRepository<Like, ResultLikeWithRelationsDto, Guid>, ILikeReadRepository
+    public class LikeReadRepository : ReadRepository<Like, Guid>, ILikeReadRepository
     {
         public LikeReadRepository(AppDbContext context) : base(context)
         {

@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers
 {
-    public class FollowResolver : EntityResolver<Follow, ResultFollowWithRelationsDto, Guid>, IFollowResolver
+    public class FollowResolver : EntityResolver<Follow, Guid>, IFollowResolver
     {
-        public FollowResolver(IEntityFieldMapBuilder<Follow, ResultFollowWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public FollowResolver(IEntityFieldMapBuilder<Follow, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

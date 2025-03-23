@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class RoleDataLoader : EntityDataLoader<Role, ResultRoleDto, Guid>
+    public class RoleDataLoader : EntityDataLoader<Role, Guid>
     {
-        public RoleDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public RoleDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

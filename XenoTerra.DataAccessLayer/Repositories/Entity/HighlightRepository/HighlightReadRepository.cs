@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
 {
-    public class HighlightReadRepository : ReadRepository<Highlight, ResultHighlightWithRelationsDto, Guid>, IHighlightReadRepository
+    public class HighlightReadRepository : ReadRepository<Highlight, Guid>, IHighlightReadRepository
     {
         public HighlightReadRepository(AppDbContext context) : base(context)
         {

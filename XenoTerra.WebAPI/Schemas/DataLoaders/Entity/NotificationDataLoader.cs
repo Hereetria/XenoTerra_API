@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class NotificationDataLoader : EntityDataLoader<Notification, ResultNotificationDto, Guid>
+    public class NotificationDataLoader : EntityDataLoader<Notification, Guid>
     {
-        public NotificationDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public NotificationDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

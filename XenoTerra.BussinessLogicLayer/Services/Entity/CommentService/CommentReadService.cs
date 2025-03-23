@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
 {
-    public class CommentReadService : ReadService<Comment, ResultCommentWithRelationsDto, Guid>, ICommentReadService
+    public class CommentReadService : ReadService<Comment, Guid>, ICommentReadService
     {
-        public CommentReadService(IReadRepository<Comment, ResultCommentWithRelationsDto, Guid> repository)
+        public CommentReadService(IReadRepository<Comment, Guid> repository)
             : base(repository) { }
     }
 }

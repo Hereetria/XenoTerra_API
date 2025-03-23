@@ -9,9 +9,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers
 {
 
-    public class ReactionResolver : EntityResolver<Reaction, ResultReactionWithRelationsDto, Guid>, IReactionResolver
+    public class ReactionResolver : EntityResolver<Reaction, Guid>, IReactionResolver
     {
-        public ReactionResolver(IEntityFieldMapBuilder<Reaction, ResultReactionWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public ReactionResolver(IEntityFieldMapBuilder<Reaction, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
 {
-    public interface IUserSettingReadRepository : IReadRepository<UserSetting, ResultUserSettingWithRelationsDto, Guid>
+    public interface IUserSettingReadRepository : IReadRepository<UserSetting, Guid>
     {
     }
 }

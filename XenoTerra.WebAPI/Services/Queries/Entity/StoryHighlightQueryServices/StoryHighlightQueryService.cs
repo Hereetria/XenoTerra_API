@@ -6,9 +6,9 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.StoryHighlightQueryServices
 {
-    public class StoryHighlightQueryService : QueryService<StoryHighlight, ResultStoryHighlightWithRelationsDto, Guid>, IStoryHighlightQueryService
+    public class StoryHighlightQueryService : QueryService<StoryHighlight, Guid>, IStoryHighlightQueryService
     {
-        public StoryHighlightQueryService(IReadService<StoryHighlight, ResultStoryHighlightWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper) { }
+        public StoryHighlightQueryService(IReadService<StoryHighlight, Guid> readService)
+            : base(readService) { }
     }
 }

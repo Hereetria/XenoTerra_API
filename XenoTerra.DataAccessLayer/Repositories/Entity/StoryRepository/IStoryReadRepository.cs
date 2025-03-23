@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository
 {
-    public interface IStoryReadRepository : IReadRepository<Story, ResultStoryWithRelationsDto, Guid>
+    public interface IStoryReadRepository : IReadRepository<Story, Guid>
     {
     }
 }

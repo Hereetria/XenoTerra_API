@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository
 {
-    public interface IViewStoryReadRepository : IReadRepository<ViewStory, ResultViewStoryWithRelationsDto, Guid>
+    public interface IViewStoryReadRepository : IReadRepository<ViewStory, Guid>
     {
     }
 }

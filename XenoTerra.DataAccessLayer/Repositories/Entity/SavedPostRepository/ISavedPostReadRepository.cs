@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository
 {
-    public interface ISavedPostReadRepository : IReadRepository<SavedPost, ResultSavedPostWithRelationsDto, Guid>
+    public interface ISavedPostReadRepository : IReadRepository<SavedPost, Guid>
     {
     }
 }

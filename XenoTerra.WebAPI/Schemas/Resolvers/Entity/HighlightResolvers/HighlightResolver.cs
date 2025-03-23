@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers
 {
-    public class HighlightResolver : EntityResolver<Highlight, ResultHighlightWithRelationsDto, Guid>, IHighlightResolver
+    public class HighlightResolver : EntityResolver<Highlight, Guid>, IHighlightResolver
     {
-        public HighlightResolver(IEntityFieldMapBuilder<Highlight, ResultHighlightWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public HighlightResolver(IEntityFieldMapBuilder<Highlight, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
         //public async Task PopulateHighlightStoriesAsync(

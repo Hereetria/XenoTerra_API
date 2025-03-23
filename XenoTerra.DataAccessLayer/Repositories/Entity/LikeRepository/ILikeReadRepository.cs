@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
 {
-    public interface ILikeReadRepository : IReadRepository<Like, ResultLikeWithRelationsDto, Guid>
+    public interface ILikeReadRepository : IReadRepository<Like, Guid>
     {
     }
 }

@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
 {
-    public class SearchHistoryReadRepository : ReadRepository<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>, ISearchHistoryReadRepository
+    public class SearchHistoryReadRepository : ReadRepository<SearchHistory, Guid>, ISearchHistoryReadRepository
     {
         public SearchHistoryReadRepository(AppDbContext context) : base(context)
         {

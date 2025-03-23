@@ -2,15 +2,14 @@
 
 namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
 {
-    public interface IEntityAssignmentService<TEntity, TDtoResult, TRelatedDtoResult, TRelatedKey>
-    where TEntity : class
-        where TDtoResult : class
-        where TRelatedDtoResult : class
+    public interface IEntityAssignmentService<TEntity, TRelatedEntity, TRelatedKey>
+        where TEntity : class
+        where TRelatedEntity : class
         where TRelatedKey : notnull
     {
-        List<TDtoResult> AssignRelatedEntities(
+        List<TEntity> AssignRelatedEntities(
             AppDbContext dbContext,
-            List<TDtoResult> dtoList,
-            IReadOnlyDictionary<TRelatedKey, TRelatedDtoResult> relatedEntities);
+            List<TEntity> entityList,
+            IReadOnlyDictionary<TRelatedKey, TRelatedEntity> relatedEntities);
     }
 }

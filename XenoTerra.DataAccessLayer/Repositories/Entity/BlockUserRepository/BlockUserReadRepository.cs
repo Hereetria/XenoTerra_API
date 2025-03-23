@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
 {
-    public class BlockUserReadRepository : ReadRepository<BlockUser, ResultBlockUserWithRelationsDto, Guid>, IBlockUserReadRepository
+    public class BlockUserReadRepository : ReadRepository<BlockUser, Guid>, IBlockUserReadRepository
     {
         public BlockUserReadRepository(AppDbContext context) : base(context)
         {

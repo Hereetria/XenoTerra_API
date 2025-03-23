@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices
 {
-    public interface IStoryQueryService : IQueryService<Story, ResultStoryWithRelationsDto, Guid>
+    public interface IStoryQueryService : IQueryService<Story, Guid>
     {
     }
 

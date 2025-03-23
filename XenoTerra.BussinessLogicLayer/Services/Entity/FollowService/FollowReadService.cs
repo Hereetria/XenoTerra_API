@@ -5,9 +5,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowService
 {
-    public class FollowReadService : ReadService<Follow, ResultFollowWithRelationsDto, Guid>, IFollowReadService
+    public class FollowReadService : ReadService<Follow, Guid>, IFollowReadService
     {
-        public FollowReadService(IReadRepository<Follow, ResultFollowWithRelationsDto, Guid> repository)
+        public FollowReadService(IReadRepository<Follow, Guid> repository)
             : base(repository) { }
     }
 }

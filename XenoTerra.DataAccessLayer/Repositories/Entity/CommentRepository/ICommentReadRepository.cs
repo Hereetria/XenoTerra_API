@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
 {
-    public interface ICommentReadRepository : IReadRepository<Comment, ResultCommentWithRelationsDto, Guid>
+    public interface ICommentReadRepository : IReadRepository<Comment, Guid>
     {
     }
 }

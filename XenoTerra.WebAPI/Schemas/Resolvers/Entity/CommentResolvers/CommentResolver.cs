@@ -10,9 +10,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers
 {
-    public class CommentResolver : EntityResolver<Comment, ResultCommentWithRelationsDto, Guid>, ICommentResolver
+    public class CommentResolver : EntityResolver<Comment, Guid>, ICommentResolver
     {
-        public CommentResolver(IEntityFieldMapBuilder<Comment, ResultCommentWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public CommentResolver(IEntityFieldMapBuilder<Comment, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

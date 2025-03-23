@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
 {
-    public class ReactionReadRepository : ReadRepository<Reaction, ResultReactionWithRelationsDto, Guid>, IReactionReadRepository
+    public class ReactionReadRepository : ReadRepository<Reaction, Guid>, IReactionReadRepository
     {
         public ReactionReadRepository(AppDbContext context) : base(context)
         {

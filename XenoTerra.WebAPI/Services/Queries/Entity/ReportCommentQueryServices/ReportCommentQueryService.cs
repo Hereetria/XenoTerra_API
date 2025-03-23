@@ -7,10 +7,10 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 namespace XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices
 {
 
-    public class ReportCommentQueryService : QueryService<ReportComment, ResultReportCommentWithRelationsDto, Guid>, IReportCommentQueryService
+    public class ReportCommentQueryService : QueryService<ReportComment, Guid>, IReportCommentQueryService
     {
-        public ReportCommentQueryService(IReadService<ReportComment, ResultReportCommentWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper)
+        public ReportCommentQueryService(IReadService<ReportComment, Guid> readService)
+            : base(readService)
         {
         }
     }

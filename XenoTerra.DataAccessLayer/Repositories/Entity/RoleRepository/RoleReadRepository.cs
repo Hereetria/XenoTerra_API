@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 {
-    public class RoleReadRepository : ReadRepository<Role, ResultRoleWithRelationsDto, Guid>, IRoleReadRepository
+    public class RoleReadRepository : ReadRepository<Role, Guid>, IRoleReadRepository
     {
         public RoleReadRepository(AppDbContext context) : base(context)
         {

@@ -9,9 +9,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers
 {
-    public class SearchHistoryResolver : EntityResolver<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>, ISearchHistoryResolver
+    public class SearchHistoryResolver : EntityResolver<SearchHistory, Guid>, ISearchHistoryResolver
     {
-        public SearchHistoryResolver(IEntityFieldMapBuilder<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public SearchHistoryResolver(IEntityFieldMapBuilder<SearchHistory, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

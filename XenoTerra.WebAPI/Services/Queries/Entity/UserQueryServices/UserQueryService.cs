@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices
 {
-    public class UserQueryService : QueryService<User, ResultUserWithRelationsDto, Guid>, IUserQueryService
+    public class UserQueryService : QueryService<User, Guid>, IUserQueryService
     {
-        public UserQueryService(IReadService<User, ResultUserWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper)
+        public UserQueryService(IReadService<User, Guid> readService)
+            : base(readService)
         {
         }
     }

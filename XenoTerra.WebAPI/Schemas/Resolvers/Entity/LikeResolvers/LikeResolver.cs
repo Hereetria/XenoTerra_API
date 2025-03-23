@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers
 {
-    public class LikeResolver : EntityResolver<Like, ResultLikeWithRelationsDto, Guid>, ILikeResolver
+    public class LikeResolver : EntityResolver<Like, Guid>, ILikeResolver
     {
-        public LikeResolver(IEntityFieldMapBuilder<Like, ResultLikeWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public LikeResolver(IEntityFieldMapBuilder<Like, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

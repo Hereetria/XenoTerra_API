@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.StoryResolvers
 {
-    public interface IStoryResolver : IEntityResolver<Story, ResultStoryWithRelationsDto, Guid>
+    public interface IStoryResolver : IEntityResolver<Story, Guid>
     {
     }
 }

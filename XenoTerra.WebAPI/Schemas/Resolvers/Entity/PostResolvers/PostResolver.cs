@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.PostResolvers
 {
-    public class PostResolver : EntityResolver<Post, ResultPostWithRelationsDto, Guid>, IPostResolver
+    public class PostResolver : EntityResolver<Post, Guid>, IPostResolver
     {
-        public PostResolver(IEntityFieldMapBuilder<Post, ResultPostWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public PostResolver(IEntityFieldMapBuilder<Post, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class BlockUserDataLoader : EntityDataLoader<BlockUser, ResultBlockUserDto, Guid>
+    public class BlockUserDataLoader : EntityDataLoader<BlockUser, Guid>
     {
-        public BlockUserDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext) : base(batchScheduler, options, mapper, dbContext)
+        public BlockUserDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext) : base(batchScheduler, options, dbContext)
         {
         }
     }

@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers
 {
-    public interface ISearchHistoryResolver : IEntityResolver<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>
+    public interface ISearchHistoryResolver : IEntityResolver<SearchHistory, Guid>
     {
     }
 }

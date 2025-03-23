@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RecentChatsResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.RecentChatsQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,46 +14,50 @@ namespace XenoTerra.WebAPI.Schemas.Queries.RecentChatsQueries
     public class RecentChatsQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<RecentChat, Guid> _queryResolver;
 
-        public RecentChatsQuery(IMapper mapper)
+        public RecentChatsQuery(IMapper mapper, IQueryResolverHelper<RecentChat, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
-        public async Task<IEnumerable<ResultRecentChatsWithRelationsDto>> GetAllRecentChatsAsync(
-            [Service] IRecentChatsQueryService service,
-            [Service] IRecentChatsResolver resolver,
+        [UsePaging]
+        [UseFiltering(typeof(RecentChatFilterType))]
+        [UseSorting(typeof(RecentChatSortType))]
+        public async Task<IEnumerable<ResultRecentChatWithRelationsDto>> GetAllRecentChatsAsync(
+            [Service] IRecentChatQueryService service,
+            [Service] IRecentChatResolver resolver,
             IResolverContext context)
         {
-            var recentChats = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(recentChats, context);
-            var recentChatsDtos = _mapper.Map<List<ResultRecentChatsWithRelationsDto>>(recentChats);
-            return recentChatsDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultRecentChatWithRelationsDto>>(entities);
         }
 
-        public async Task<IEnumerable<ResultRecentChatsWithRelationsDto>> GetRecentChatsByIdsAsync(
-            [Service] IRecentChatsQueryService service,
-            [Service] IRecentChatsResolver resolver,
+        [UsePaging]
+        [UseFiltering(typeof(RecentChatFilterType))]
+        [UseSorting(typeof(RecentChatSortType))]
+        public async Task<IEnumerable<ResultRecentChatWithRelationsDto>> GetRecentChatsByIdsAsync(
             IEnumerable<Guid> keys,
+            [Service] IRecentChatQueryService service,
+            [Service] IRecentChatResolver resolver,
             IResolverContext context)
         {
-            var recentChats = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(recentChats, context);
-            var recentChatsDtos = _mapper.Map<List<ResultRecentChatsWithRelationsDto>>(recentChats);
-            return recentChatsDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultRecentChatWithRelationsDto>>(entities);
         }
 
-        public async Task<ResultRecentChatsWithRelationsDto> GetRecentChatByIdAsync(
-            [Service] IRecentChatsQueryService service,
-            [Service] IRecentChatsResolver resolver,
+        public async Task<ResultRecentChatWithRelationsDto> GetRecentChatByIdAsync(
             Guid key,
+            [Service] IRecentChatQueryService service,
+            [Service] IRecentChatResolver resolver,
             IResolverContext context)
         {
-            var recentChat = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(recentChat, context);
-            var recentChatDto = _mapper.Map<ResultRecentChatsWithRelationsDto>(recentChat);
-            return recentChatDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultRecentChatWithRelationsDto>(entity);
         }
     }
-
 }

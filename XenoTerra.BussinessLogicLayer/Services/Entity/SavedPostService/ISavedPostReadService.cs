@@ -9,6 +9,6 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService
 {
-    public interface ISavedPostReadService : IReadService<SavedPost, ResultSavedPostWithRelationsDto, Guid> { }
+    public interface ISavedPostReadService : IReadService<SavedPost, Guid> { }
 
 }

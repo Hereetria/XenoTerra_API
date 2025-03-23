@@ -11,7 +11,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository
 {
-    public interface INoteReadRepository : IReadRepository<Note, ResultNoteWithRelationsDto, Guid>
+    public interface INoteReadRepository : IReadRepository<Note, Guid>
     {
     }
 }

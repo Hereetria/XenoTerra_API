@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryService
 {
-    public class StoryReadService : ReadService<Story, ResultStoryWithRelationsDto, Guid>, IStoryReadService
+    public class StoryReadService : ReadService<Story, Guid>, IStoryReadService
     {
-        public StoryReadService(IReadRepository<Story, ResultStoryWithRelationsDto, Guid> repository)
+        public StoryReadService(IReadRepository<Story, Guid> repository)
             : base(repository) { }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,45 +14,50 @@ namespace XenoTerra.WebAPI.Schemas.Queries.LikeQueries
     public class LikeQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<Like, Guid> _queryResolver;
 
-        public LikeQuery(IMapper mapper)
+        public LikeQuery(IMapper mapper, IQueryResolverHelper<Like, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(LikeFilterType))]
+        [UseSorting(typeof(LikeSortType))]
         public async Task<IEnumerable<ResultLikeWithRelationsDto>> GetAllLikesAsync(
             [Service] ILikeQueryService service,
             [Service] ILikeResolver resolver,
             IResolverContext context)
         {
-            var likes = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(likes, context);
-            var likeDtos = _mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
-            return likeDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultLikeWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(LikeFilterType))]
+        [UseSorting(typeof(LikeSortType))]
         public async Task<IEnumerable<ResultLikeWithRelationsDto>> GetLikesByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] ILikeQueryService service,
             [Service] ILikeResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var likes = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(likes, context);
-            var likeDtos = _mapper.Map<List<ResultLikeWithRelationsDto>>(likes);
-            return likeDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultLikeWithRelationsDto>>(entities);
         }
 
         public async Task<ResultLikeWithRelationsDto> GetLikeByIdAsync(
+            Guid key,
             [Service] ILikeQueryService service,
             [Service] ILikeResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var like = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(like, context);
-            var likeDto = _mapper.Map<ResultLikeWithRelationsDto>(like);
-            return likeDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultLikeWithRelationsDto>(entity);
         }
     }
 

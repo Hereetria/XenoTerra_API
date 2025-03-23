@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NotificationResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.NotificationQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,46 +14,52 @@ namespace XenoTerra.WebAPI.Schemas.Queries.NotificationQueries
     public class NotificationQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<Notification, Guid> _queryResolver;
 
-        public NotificationQuery(IMapper mapper)
+        public NotificationQuery(IMapper mapper, IQueryResolverHelper<Notification, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(NotificationFilterType))]
+        [UseSorting(typeof(NotificationSortType))]
         public async Task<IEnumerable<ResultNotificationWithRelationsDto>> GetAllNotificationsAsync(
             [Service] INotificationQueryService service,
             [Service] INotificationResolver resolver,
             IResolverContext context)
         {
-            var notifications = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(notifications, context);
-            var notificationDtos = _mapper.Map<List<ResultNotificationWithRelationsDto>>(notifications);
-            return notificationDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultNotificationWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(NotificationFilterType))]
+        [UseSorting(typeof(NotificationSortType))]
         public async Task<IEnumerable<ResultNotificationWithRelationsDto>> GetNotificationsByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] INotificationQueryService service,
             [Service] INotificationResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var notifications = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(notifications, context);
-            var notificationDtos = _mapper.Map<List<ResultNotificationWithRelationsDto>>(notifications);
-            return notificationDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultNotificationWithRelationsDto>>(entities);
         }
 
         public async Task<ResultNotificationWithRelationsDto> GetNotificationByIdAsync(
+            Guid key,
             [Service] INotificationQueryService service,
             [Service] INotificationResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var notification = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(notification, context);
-            var notificationDto = _mapper.Map<ResultNotificationWithRelationsDto>(notification);
-            return notificationDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultNotificationWithRelationsDto>(entity);
         }
     }
+
 
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MessageResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.MessageQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -14,46 +15,52 @@ namespace XenoTerra.WebAPI.Schemas.Queries.MessageQueries
     public class MessageQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<Message, Guid> _queryResolver;
 
-        public MessageQuery(IMapper mapper)
+        public MessageQuery(IMapper mapper, IQueryResolverHelper<Message, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(MessageFilterType))]
+        [UseSorting(typeof(MessageSortType))]
         public async Task<IEnumerable<ResultMessageWithRelationsDto>> GetAllMessagesAsync(
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
             IResolverContext context)
         {
-            var messages = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(messages, context);
-            var messageDtos = _mapper.Map<List<ResultMessageWithRelationsDto>>(messages);
-            return messageDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultMessageWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(MessageFilterType))]
+        [UseSorting(typeof(MessageSortType))]
         public async Task<IEnumerable<ResultMessageWithRelationsDto>> GetMessagesByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var messages = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(messages, context);
-            var messageDtos = _mapper.Map<List<ResultMessageWithRelationsDto>>(messages);
-            return messageDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultMessageWithRelationsDto>>(entities);
         }
 
         public async Task<ResultMessageWithRelationsDto> GetMessageByIdAsync(
+            Guid key,
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var message = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(message, context);
-            var messageDto = _mapper.Map<ResultMessageWithRelationsDto>(message);
-            return messageDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultMessageWithRelationsDto>(entity);
         }
     }
+
 
 }

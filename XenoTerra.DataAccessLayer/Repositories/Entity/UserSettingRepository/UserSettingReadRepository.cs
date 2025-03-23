@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
 {
-    public class UserSettingReadRepository : ReadRepository<UserSetting, ResultUserSettingWithRelationsDto, Guid>, IUserSettingReadRepository
+    public class UserSettingReadRepository : ReadRepository<UserSetting, Guid>, IUserSettingReadRepository
     {
         public UserSettingReadRepository(AppDbContext context) : base(context)
         {

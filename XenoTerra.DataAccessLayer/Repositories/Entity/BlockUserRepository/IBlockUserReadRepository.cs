@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
 {
-    public interface IBlockUserReadRepository : IReadRepository<BlockUser, ResultBlockUserWithRelationsDto, Guid>
+    public interface IBlockUserReadRepository : IReadRepository<BlockUser, Guid>
     {
     }
 }

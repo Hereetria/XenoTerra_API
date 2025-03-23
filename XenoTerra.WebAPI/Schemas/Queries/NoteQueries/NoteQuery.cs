@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Schemas.Queries._Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NoteResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.NoteQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -13,46 +14,52 @@ namespace XenoTerra.WebAPI.Schemas.Queries.NoteQueries
     public class NoteQuery
     {
         private readonly IMapper _mapper;
+        private readonly IQueryResolverHelper<Note, Guid> _queryResolver;
 
-        public NoteQuery(IMapper mapper)
+        public NoteQuery(IMapper mapper, IQueryResolverHelper<Note, Guid> queryResolver)
         {
             _mapper = mapper;
+            _queryResolver = queryResolver;
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(NoteFilterType))]
+        [UseSorting(typeof(NoteSortType))]
         public async Task<IEnumerable<ResultNoteWithRelationsDto>> GetAllNotesAsync(
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
             IResolverContext context)
         {
-            var notes = await service.GetAllAsync(context);
-            await resolver.PopulateRelatedFieldsAsync(notes, context);
-            var noteDtos = _mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
-            return noteDtos;
+            var query = service.GetAllQueryable(context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultNoteWithRelationsDto>>(entities);
         }
 
+        [UsePaging]
+        [UseFiltering(typeof(NoteFilterType))]
+        [UseSorting(typeof(NoteSortType))]
         public async Task<IEnumerable<ResultNoteWithRelationsDto>> GetNotesByIdsAsync(
+            IEnumerable<Guid> keys,
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
-            IEnumerable<Guid> keys,
             IResolverContext context)
         {
-            var notes = await service.GetByIdsAsync(keys, context);
-            await resolver.PopulateRelatedFieldsAsync(notes, context);
-            var noteDtos = _mapper.Map<List<ResultNoteWithRelationsDto>>(notes);
-            return noteDtos;
+            var query = service.GetByIdsQueryable(keys, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            return _mapper.Map<List<ResultNoteWithRelationsDto>>(entities);
         }
 
         public async Task<ResultNoteWithRelationsDto> GetNoteByIdAsync(
+            Guid key,
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
-            Guid key,
             IResolverContext context)
         {
-            var note = await service.GetByIdAsync(key, context);
-            await resolver.PopulateRelatedFieldAsync(note, context);
-            var noteDto = _mapper.Map<ResultNoteWithRelationsDto>(note);
-            return noteDto;
+            var query = service.GetByIdQueryable(key, context);
+            var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+            return _mapper.Map<ResultNoteWithRelationsDto>(entity);
         }
     }
+
 
 }

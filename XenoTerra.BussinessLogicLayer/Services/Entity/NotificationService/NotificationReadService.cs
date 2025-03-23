@@ -12,9 +12,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService
 {
-    public class NotificationReadService : ReadService<Notification, ResultNotificationWithRelationsDto, Guid>, INotificationReadService
+    public class NotificationReadService : ReadService<Notification, Guid>, INotificationReadService
     {
-        public NotificationReadService(IReadRepository<Notification, ResultNotificationWithRelationsDto, Guid> repository)
+        public NotificationReadService(IReadRepository<Notification, Guid> repository)
             : base(repository) { }
     }
 }

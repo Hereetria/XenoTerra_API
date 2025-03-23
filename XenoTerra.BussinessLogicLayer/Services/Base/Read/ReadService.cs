@@ -11,25 +11,24 @@ using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
 {
-    public class ReadService<TEntity, TDtoResult, TKey> : IReadService<TEntity, TDtoResult, TKey>
+    public class ReadService<TEntity, TKey> : IReadService<TEntity, TKey>
         where TEntity : class
-        where TDtoResult : class
         where TKey : notnull
     {
-        protected readonly IReadRepository<TEntity, TDtoResult, TKey> _readRepository;
+        protected readonly IReadRepository<TEntity, TKey> _readRepository;
 
-        public ReadService(IReadRepository<TEntity, TDtoResult, TKey> readRepository)
+        public ReadService(IReadRepository<TEntity, TKey> readRepository)
         {
             _readRepository = readRepository;
         }
         
-        public IQueryable<TDtoResult> FetchAllQueryable(IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties)
         {
             var query = _readRepository.GetAllQueryable(selectedProperties);
             return query;
         }
 
-        public IQueryable<TDtoResult> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
         {
             if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
                 throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
@@ -38,7 +37,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
             return query;
         }
 
-        public IQueryable<TDtoResult> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
         {
             if (keys is null || !keys.Any())
                 throw new ArgumentNullException(nameof(keys), "The keys collection cannot be null or empty.");

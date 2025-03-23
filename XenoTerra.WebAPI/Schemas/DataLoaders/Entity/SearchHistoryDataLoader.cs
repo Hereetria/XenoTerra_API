@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
 {
-    public class SearchHistoryDataLoader : EntityDataLoader<SearchHistory, ResultSearchHistoryDto, Guid>
+    public class SearchHistoryDataLoader : EntityDataLoader<SearchHistory, Guid>
     {
-        public SearchHistoryDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, IMapper mapper, AppDbContext dbContext)
-            : base(batchScheduler, options, mapper, dbContext)
+        public SearchHistoryDataLoader(IBatchScheduler batchScheduler, DataLoaderOptions options, AppDbContext dbContext)
+            : base(batchScheduler, options, dbContext)
         {
         }
     }

@@ -11,8 +11,7 @@ using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 {
-    public class ReadRepository<TEntity, TDtoResult, TKey> : IReadRepository<TEntity, TDtoResult, TKey>
-        where TDtoResult : class
+    public class ReadRepository<TEntity, TKey> : IReadRepository<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
@@ -30,19 +29,19 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             return _context;
         }
 
-        public IQueryable<TDtoResult> GetAllQueryable(IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetAllQueryable(IEnumerable<string> selectedFields)
         {
             if (selectedFields is null || !selectedFields.Any())
                 throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
 
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity, TDtoResult>(_context, selectedFields);
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
             return _dbSet.AsNoTracking()
                 .Select(selector);
 
         }
 
-        public IQueryable<TDtoResult> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields)
         {
             if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
                 throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
@@ -50,7 +49,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             if (selectedFields is null || !selectedFields.Any())
                 throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
 
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity, TDtoResult>(_context, selectedFields);
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
@@ -64,7 +63,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
                 .Select(selector);
         }
 
-        public IQueryable<TDtoResult> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
         {
             if (keys is null || !keys.Any())
                 throw new ArgumentException("At least one ID must be provided.", nameof(keys));
@@ -72,7 +71,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             if (selectedFields is null || !selectedFields.Any())
                 throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
 
-            var selector = ReleatedProjectionExpressionProvider.CreateSelectorExpression<TEntity, TDtoResult>(_context, selectedFields);
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");

@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices
 {
-    public class LikeQueryService : QueryService<Like, ResultLikeWithRelationsDto, Guid>, ILikeQueryService
+    public class LikeQueryService : QueryService<Like, Guid>, ILikeQueryService
     {
-        public LikeQueryService(IReadService<Like, ResultLikeWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper)
+        public LikeQueryService(IReadService<Like, Guid> readService)
+            : base(readService)
         {
         }
     }

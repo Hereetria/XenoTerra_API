@@ -6,10 +6,10 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.RecentChatsQueryServices
 {
-    public class RecentChatsQueryService : QueryService<RecentChats, ResultRecentChatsWithRelationsDto, Guid>, IRecentChatsQueryService
+    public class RecentChatsQueryService : QueryService<RecentChats, Guid>, IRecentChatsQueryService
     {
-        public RecentChatsQueryService(IReadService<RecentChats, ResultRecentChatsWithRelationsDto, Guid> readService, IMapper mapper)
-            : base(readService, mapper)
+        public RecentChatsQueryService(IReadService<RecentChats, Guid> readService)
+            : base(readService)
         {
         }
     }

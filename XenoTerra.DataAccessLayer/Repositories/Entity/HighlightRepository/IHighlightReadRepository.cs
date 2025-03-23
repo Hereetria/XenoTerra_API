@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
 {
-    public interface IHighlightReadRepository : IReadRepository<Highlight, ResultHighlightWithRelationsDto, Guid>
+    public interface IHighlightReadRepository : IReadRepository<Highlight, Guid>
     {
     }
 }

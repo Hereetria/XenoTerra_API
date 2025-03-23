@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-    public class PostReadRepository : ReadRepository<Post, ResultPostWithRelationsDto, Guid>, IPostReadRepository
+    public class PostReadRepository : ReadRepository<Post, Guid>, IPostReadRepository
     {
         public PostReadRepository(AppDbContext context) : base(context)
         {

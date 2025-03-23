@@ -11,7 +11,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
 {
 
-    public class NotificationReadRepository : ReadRepository<Notification, ResultNotificationWithRelationsDto, Guid>, INotificationReadRepository
+    public class NotificationReadRepository : ReadRepository<Notification, Guid>, INotificationReadRepository
     {
         public NotificationReadRepository(AppDbContext context) : base(context)
         {

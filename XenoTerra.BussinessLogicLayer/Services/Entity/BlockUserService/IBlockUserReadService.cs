@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
 {
-    public interface IBlockUserReadService : IReadService<BlockUser, ResultBlockUserWithRelationsDto, Guid>
+    public interface IBlockUserReadService : IReadService<BlockUser, Guid>
     {
     }
 }

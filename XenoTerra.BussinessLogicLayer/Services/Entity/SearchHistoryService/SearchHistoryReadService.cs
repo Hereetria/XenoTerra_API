@@ -13,9 +13,9 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryService
 {
 
-    public class SearchHistoryReadService : ReadService<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>, ISearchHistoryReadService
+    public class SearchHistoryReadService : ReadService<SearchHistory, Guid>, ISearchHistoryReadService
     {
-        public SearchHistoryReadService(IReadRepository<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid> repository)
+        public SearchHistoryReadService(IReadRepository<SearchHistory, Guid> repository)
             : base(repository) { }
     }
 }

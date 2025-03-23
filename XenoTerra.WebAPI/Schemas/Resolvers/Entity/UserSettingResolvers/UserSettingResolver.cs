@@ -8,9 +8,9 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserSettingResolvers
 {
-    public class UserSettingResolver : EntityResolver<UserSetting, ResultUserSettingWithRelationsDto, Guid>, IUserSettingResolver
+    public class UserSettingResolver : EntityResolver<UserSetting, Guid>, IUserSettingResolver
     {
-        public UserSettingResolver(IEntityFieldMapBuilder<UserSetting, ResultUserSettingWithRelationsDto, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
+        public UserSettingResolver(IEntityFieldMapBuilder<UserSetting, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
         {
         }
     }

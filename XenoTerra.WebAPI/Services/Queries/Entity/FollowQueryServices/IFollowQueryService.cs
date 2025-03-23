@@ -4,7 +4,7 @@ using XenoTerra.WebAPI.Services.Queries.Base;
 
 namespace XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices
 {
-    public interface IFollowQueryService : IQueryService<Follow, ResultFollowWithRelationsDto, Guid>
+    public interface IFollowQueryService : IQueryService<Follow, Guid>
     {
     }
 

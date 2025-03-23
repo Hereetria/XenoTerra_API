@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository
 {
-    public interface IRecentChatsReadRepository : IReadRepository<RecentChats, ResultRecentChatsWithRelationsDto, Guid>
+    public interface IRecentChatsReadRepository : IReadRepository<RecentChats, Guid>
     {
     }
 }

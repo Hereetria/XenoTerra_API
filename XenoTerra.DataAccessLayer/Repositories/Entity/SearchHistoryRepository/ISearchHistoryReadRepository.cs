@@ -10,7 +10,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
 {
-    public interface ISearchHistoryReadRepository : IReadRepository<SearchHistory, ResultSearchHistoryWithRelationsDto, Guid>
+    public interface ISearchHistoryReadRepository : IReadRepository<SearchHistory, Guid>
     {
     }
 }
