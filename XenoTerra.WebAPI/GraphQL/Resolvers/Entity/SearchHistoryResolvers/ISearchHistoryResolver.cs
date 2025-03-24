@@ -1,0 +1,11 @@
+﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
+using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
+using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+
+namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers
+{
+    public interface ISearchHistoryResolver : IEntityResolver<SearchHistory, Guid>
+    {
+    }
+}

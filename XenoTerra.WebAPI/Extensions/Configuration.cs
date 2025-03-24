@@ -2,8 +2,6 @@ using XenoTerra.DataAccessLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DTOLayer.Mappings;
 using System.Reflection;
-using XenoTerra.WebAPI.Schemas.Mutations;
-using XenoTerra.WebAPI.Schemas.Queries;
 using XenoTerra.WebAPI.Schemas.Types;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
@@ -24,6 +22,11 @@ using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
 using XenoTerra.WebAPI.Extensions.Helpers;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.BlockUserResolvers;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.HighlightResolvers;
+using XenoTerra.WebAPI.GraphQL.Schemas;
 
 namespace XenoTerra.WebAPI.Extensions
 {

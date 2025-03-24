@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XenoTerra.WebAPI", "XenoTer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XenoTerra.BussinessLogicLayer", "XenoTerra.BussinessLogicLayer\XenoTerra.BussinessLogicLayer.csproj", "{F9F30434-2BBB-4C3B-8585-491434D8E18F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Schemas", "Schemas", "{29BFF6E3-6E7E-46D2-B692-7BD249E3E6A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

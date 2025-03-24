@@ -1,4 +1,5 @@
 ﻿using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 
 namespace XenoTerra.WebAPI.Services.Common.DataLoading
