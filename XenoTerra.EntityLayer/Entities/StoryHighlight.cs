@@ -9,10 +9,10 @@ namespace XenoTerra.EntityLayer.Entities
     public class StoryHighlight
     {
         public Guid StoryId { get; set; }
-        public Story Story { get; set; }
+        public Story Story { get; set; } = null!;
 
         public Guid HighlightId { get; set; }
-        public Highlight Highlight { get; set; }
+        public Highlight Highlight { get; set; } = null!;
     }
 
 }

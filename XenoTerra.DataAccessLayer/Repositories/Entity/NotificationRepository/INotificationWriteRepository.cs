@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
 {
-    public interface INotificationWriteRepository : IWriteRepository<Notification, ResultNotificationDto, Guid>
+    public interface INotificationWriteRepository : IWriteRepository<Notification, Guid>
     {
     }
 }

@@ -6,17 +6,11 @@ using Microsoft.Extensions.Configuration;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Contexts
+namespace XenoTerra.DataAccessLayer.Persistence
 {
     
-    public class AppDbContext : IdentityDbContext<User, Role, Guid>
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User, Role, Guid>(options)
     {
-
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-            : base(options)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StoryHighlight>()
@@ -186,13 +180,11 @@ namespace XenoTerra.DataAccessLayer.Contexts
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<RecentChats> RecentChatses { get; set; }
         public DbSet<ReportComment> ReportComments { get; set; }
-        public DbSet<Role> Roles { get; set; }
         public DbSet<SavedPost> SavedPosts { get; set; }
         public DbSet<SearchHistory> SearchHistories { get; set; }
         public DbSet<SearchHistoryUser> SearchHistoryUsers { get; set; }
         public DbSet<Story> Stories { get; set; }
         public DbSet<StoryHighlight> StoryHighlights { get; set; }
-        public DbSet<User> Users { get; set; }
         public DbSet<UserSetting> UserSettings { get; set; }
         public DbSet<ViewStory> ViewStories { get; set; }
 

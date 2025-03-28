@@ -10,11 +10,11 @@ namespace XenoTerra.EntityLayer.Entities
     {
         public Guid BlockUserId { get; set; }
 
-        public Guid BlockingUserId { get; set; } 
-        public User BlockingUser { get; set; }
+        public Guid BlockingUserId { get; set; }
+        public User BlockingUser { get; set; } = null!;
 
         public Guid BlockedUserId { get; set; }
-        public User BlockedUser { get; set; }
+        public User BlockedUser { get; set; } = null!;
 
         public DateTime BlockedAt { get; set; }
     }

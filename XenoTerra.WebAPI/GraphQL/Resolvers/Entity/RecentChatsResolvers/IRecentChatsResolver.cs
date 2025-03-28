@@ -1,7 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.ReactionDtos;
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
-using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RecentChatsResolvers

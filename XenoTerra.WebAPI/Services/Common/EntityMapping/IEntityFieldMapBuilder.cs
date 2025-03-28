@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Persistence;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {

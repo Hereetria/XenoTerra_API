@@ -7,9 +7,8 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos
 {
-    public class ResultStoryHighlightDto
-    {
-        public Guid StoryId { get; set; }
-        public Guid HighlightId { get; set; }
-    }
+    public record ResultStoryHighlightDto(
+        Guid StoryId,
+        Guid HighlightId
+    );
 }

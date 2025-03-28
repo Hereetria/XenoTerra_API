@@ -1,27 +1,14 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
-using XenoTerra.DataAccessLayer.Utils;
+﻿using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
+namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
 {
-    public class ReadService<TEntity, TKey> : IReadService<TEntity, TKey>
+    public class ReadService<TEntity, TKey>(IReadRepository<TEntity, TKey> readRepository) : IReadService<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
-        protected readonly IReadRepository<TEntity, TKey> _readRepository;
+        protected readonly IReadRepository<TEntity, TKey> _readRepository = readRepository
+            ?? throw new ArgumentNullException(nameof(readRepository), $"{nameof(readRepository)} cannot be null");
 
-        public ReadService(IReadRepository<TEntity, TKey> readRepository)
-        {
-            _readRepository = readRepository;
-        }
-        
         public IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties)
         {
             var query = _readRepository.GetAllQueryable(selectedProperties);
@@ -30,7 +17,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
 
         public IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
         {
-            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
                 throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
             var query = _readRepository.GetByIdQueryable(key, selectedProperties);
@@ -40,7 +27,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
         public IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
         {
             if (keys is null || !keys.Any())
-                throw new ArgumentNullException(nameof(keys), "The keys collection cannot be null or empty.");
+                throw new ArgumentException("The keys collection cannot be null or empty.", nameof(keys));
 
 
             var query = _readRepository.GetByIdsQueryable(keys, selectedProperties);

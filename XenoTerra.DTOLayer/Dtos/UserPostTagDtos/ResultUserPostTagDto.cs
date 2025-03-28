@@ -7,9 +7,8 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos
 {
-    public class ResultUserPostTagDto
-    {
-        public Guid PostId { get; set; }
-        public Guid UserId { get; set; }
-    }
+    public record ResultUserPostTagDto(
+        Guid PostId,
+        Guid UserId
+    );
 }

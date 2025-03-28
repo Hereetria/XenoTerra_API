@@ -6,10 +6,10 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
+namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 {
     public class ReadRepository<TEntity, TKey> : IReadRepository<TEntity, TKey>
         where TEntity : class
@@ -20,7 +20,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 
         public ReadRepository(AppDbContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
             _dbSet = _context.Set<TEntity>();
         }
 
@@ -43,7 +43,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
 
         public IQueryable<TEntity> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields)
         {
-            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
                 throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
             if (selectedFields is null || !selectedFields.Any())
@@ -52,11 +52,11 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
-                              ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
+                              ?? throw new InvalidOperationException($"Entity type '{typeof(TEntity).Name}' not found in the current DbContext model.");
 
             var primaryKey = entityType.FindPrimaryKey();
             if (primaryKey is null || primaryKey.Properties.Count != 1)
-                throw new NotSupportedException("This method only supports entities with a single primary key.");
+                throw new NotSupportedException($"Entity '{typeof(TEntity).Name}' must define a single primary key");
 
             return _dbSet.AsNoTracking()
                 .Where(e => EF.Property<TKey>(e, primaryKey.Properties[0].Name)!.Equals(key))
@@ -74,11 +74,11 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
-                              ?? throw new InvalidOperationException("Entity type not found in the current DbContext model.");
+                              ?? throw new InvalidOperationException($"Entity type '{typeof(TEntity).Name}' not found in the current DbContext model.");
 
             var primaryKey = entityType.FindPrimaryKey();
             if (primaryKey is null || primaryKey.Properties.Count != 1)
-                throw new NotSupportedException("This method only supports entities with a single primary key.");
+                throw new NotSupportedException($"Entity '{typeof(TEntity).Name}' must define a single primary key");
 
             var keySet = new HashSet<TKey>(keys);
 

@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
 {
-    public class RoleReadService : ReadService<Role, Guid>, IRoleReadService
+    public class RoleReadService(IReadRepository<Role, Guid> readRepository) : ReadService<Role, Guid>(readRepository), IRoleReadService
     {
-        public RoleReadService(IReadRepository<Role, Guid> repository, IMapper mapper)
-            : base(repository) { }
     }
 }

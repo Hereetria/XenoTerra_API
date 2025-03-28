@@ -9,6 +9,9 @@
         Resolver,
         ReadRepository,
         WriteRepository,
-        DataLoader
+        DataLoader,
+        Validator,
+        QueryResolverHelper
+         
     }
 }

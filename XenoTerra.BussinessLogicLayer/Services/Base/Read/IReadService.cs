@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Generic.Read
+namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
 {
     public interface IReadService<TEntity, TKey>
         where TEntity : class

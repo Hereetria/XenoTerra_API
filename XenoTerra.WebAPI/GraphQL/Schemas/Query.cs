@@ -1,4 +1,4 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.BlockUserQueries;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries;

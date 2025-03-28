@@ -2,7 +2,6 @@
 using HotChocolate.Execution.Options;
 using System.Reflection;
 using XenoTerra.WebAPI.Extensions.Enums;
-using XenoTerra.WebAPI.Schemas.Mutations;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace XenoTerra.WebAPI.Extensions.Helpers

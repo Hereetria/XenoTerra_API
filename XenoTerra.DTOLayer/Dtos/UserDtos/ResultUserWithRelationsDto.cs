@@ -20,21 +20,22 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.UserDtos
 {
-    public class ResultUserWithRelationsDto
+    public record ResultUserWithRelationsDto(
+        Guid Id,
+        string UserName,
+        string Password,
+        string Email,
+        string FullName,
+        string Bio,
+        string ProfilePicture,
+        string Website,
+        DateTime BirthDate,
+        int FollowersCount,
+        int FollowingCount,
+        bool IsVerified,
+        DateTime LastActive
+    )
     {
-        public Guid Id { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
-        public string FullName { get; set; }
-        public string Bio { get; set; }
-        public string ProfilePicture { get; set; }
-        public string Website { get; set; }
-        public DateTime BirthDate { get; set; }
-        public int FollowersCount { get; set; }
-        public int FollowingCount { get; set; }
-        public bool IsVerified { get; set; }
-        public DateTime LastActive { get; set; }
-
         public ICollection<ResultBlockUserDto>? BlockedUsers { get; set; }
         public ICollection<ResultBlockUserDto>? BlockingUsers { get; set; }
         public ICollection<ResultPostDto>? Posts { get; set; }

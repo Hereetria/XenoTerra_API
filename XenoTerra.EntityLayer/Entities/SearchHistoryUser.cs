@@ -9,10 +9,10 @@ namespace XenoTerra.EntityLayer.Entities
     public class SearchHistoryUser
     {
         public Guid SearchHistoryId { get; set; }
-        public SearchHistory SearchHistory { get; set; }
+        public SearchHistory SearchHistory { get; set; } = null!;
 
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
     }
 
 }

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos
+namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
 {
-    public class ResultHighlightDto
+    public record ResultHighlightDto
     {
-        public Guid HighlightId { get; set; }
-        public string Name { get; set; }
-        public string ProfilePicturePath { get; set; }
+        public Guid HighlightId { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public string ProfilePicturePath { get; init; } = string.Empty;
     }
 }

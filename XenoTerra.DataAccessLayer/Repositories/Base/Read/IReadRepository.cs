@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Persistence;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Generic.Read
+namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 {
     public interface IReadRepository<TEntity, TKey>
         where TEntity : class

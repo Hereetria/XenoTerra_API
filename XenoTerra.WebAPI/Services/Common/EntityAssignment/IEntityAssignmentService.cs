@@ -1,4 +1,4 @@
-﻿using XenoTerra.DataAccessLayer.Contexts;
+﻿using XenoTerra.DataAccessLayer.Persistence;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
 {

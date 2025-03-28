@@ -1,5 +1,4 @@
 ﻿using HotChocolate.Resolvers;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers

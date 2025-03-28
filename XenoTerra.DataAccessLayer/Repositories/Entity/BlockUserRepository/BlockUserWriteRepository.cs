@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
 {
-    public class BlockUserWriteRepository : WriteRepository<BlockUser, ResultBlockUserDto, Guid>, IBlockUserWriteRepository
+    public class BlockUserWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<BlockUser, Guid>(mapper, context), IBlockUserWriteRepository
     {
-        public BlockUserWriteRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
-        {
-        }
     }
 }

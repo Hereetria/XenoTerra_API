@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository
 {
-    public class ViewStoryWriteRepository : WriteRepository<ViewStory, ResultViewStoryDto, Guid>, IViewStoryWriteRepository
+    public class ViewStoryWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<ViewStory, Guid>(mapper, context), IViewStoryWriteRepository
     {
-        public ViewStoryWriteRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
-        {
-        }
     }
 }

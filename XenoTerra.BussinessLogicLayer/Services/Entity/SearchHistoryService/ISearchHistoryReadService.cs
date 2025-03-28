@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 

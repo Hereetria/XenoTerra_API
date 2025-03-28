@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos
 {
-    public class ResultSearchHistoryDto
-    {
-        public Guid SearchHistoryId { get; set; }
-        public Guid UserId { get; set; }
-        public DateTime SearchedAt { get; set; }
-    }
+    public record ResultSearchHistoryDto(
+        Guid SearchHistoryId,
+        Guid UserId,
+        DateTime SearchedAt
+    );
 }

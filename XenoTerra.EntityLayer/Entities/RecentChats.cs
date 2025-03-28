@@ -10,10 +10,10 @@ namespace XenoTerra.EntityLayer.Entities
     public class RecentChats
     {
         public Guid RecentChatsId { get; set; }
-        public string LastMessage { get; set; }
+        public string LastMessage { get; set; } = string.Empty;
 
         public Guid UserId { get; set; }
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<User> Users { get; set; } = [];
 
         public DateTime LastMessageAt { get; set; }
     }

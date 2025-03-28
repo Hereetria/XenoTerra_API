@@ -1,20 +1,31 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Write;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.LikeService
 {
-    public class LikeWriteService : WriteService<Like, ResultLikeDto, CreateLikeDto, UpdateLikeDto, Guid>, ILikeWriteService
+    public class LikeWriteService(
+            IWriteRepository<Like, Guid> writeRepository,
+            IMapper mapper,
+            IValidator<CreateLikeDto> createValidator,
+            IValidator<UpdateLikeDto> updateValidator
+        )
+            : WriteService<Like, CreateLikeDto, UpdateLikeDto, Guid>(
+                writeRepository,
+                mapper,
+                createValidator,
+                updateValidator
+            ),
+            ILikeWriteService
     {
-        public LikeWriteService(IWriteRepository<Like, ResultLikeDto, Guid> repository, IMapper mapper)
-            : base(repository, mapper) { }
     }
 }

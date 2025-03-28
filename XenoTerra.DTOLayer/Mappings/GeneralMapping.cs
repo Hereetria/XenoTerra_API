@@ -21,6 +21,7 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
 namespace XenoTerra.DTOLayer.Mappings
 {

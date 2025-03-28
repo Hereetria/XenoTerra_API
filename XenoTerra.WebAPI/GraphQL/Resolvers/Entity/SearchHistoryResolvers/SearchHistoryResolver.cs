@@ -1,9 +1,4 @@
-﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
-using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.SearchHistoryResolvers;
-using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers;
 using XenoTerra.WebAPI.Services.Common.DataLoading;

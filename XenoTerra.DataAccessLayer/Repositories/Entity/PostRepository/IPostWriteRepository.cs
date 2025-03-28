@@ -1,17 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+﻿using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-    public interface IPostWriteRepository : IWriteRepository<Post, ResultPostDto, Guid>
+    public interface IPostWriteRepository : IWriteRepository<Post, Guid>
     {
     }
 }

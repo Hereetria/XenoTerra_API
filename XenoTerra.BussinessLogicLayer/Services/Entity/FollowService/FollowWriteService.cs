@@ -1,21 +1,31 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Write;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowService
 {
-
-    public class FollowWriteService : WriteService<Follow, ResultFollowDto, CreateFollowDto, UpdateFollowDto, Guid>, IFollowWriteService
+    public class FollowWriteService(
+            IWriteRepository<Follow, Guid> writeRepository,
+            IMapper mapper,
+            IValidator<CreateFollowDto> createValidator,
+            IValidator<UpdateFollowDto> updateValidator
+        )
+            : WriteService<Follow, CreateFollowDto, UpdateFollowDto, Guid>(
+                writeRepository,
+                mapper,
+                createValidator,
+                updateValidator
+            ),
+            IFollowWriteService
     {
-        public FollowWriteService(IWriteRepository<Follow, ResultFollowDto, Guid> repository, IMapper mapper)
-            : base(repository, mapper) { }
     }
 }

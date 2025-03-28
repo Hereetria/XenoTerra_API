@@ -6,10 +6,10 @@ namespace XenoTerra.DTOLayer.Dtos.MessageDtos
 {
     public class CreateMessageDto
     {
-        public string Content { get; set; }
+        public required string Content { get; set; }
         public Guid SenderId { get; set; }
         public Guid ReceiverId { get; set; }
-        public string Header { get; set; }
+        public required string Header { get; set; }
         public DateTime SentAt { get; set; }
     }
 }

@@ -11,12 +11,12 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid ReportCommentId { get; set; }
 
         public Guid ReporterUserId { get; set; }
-        public User ReporterUser { get; set; }
+        public  User ReporterUser { get; set; } = null!;
 
         public Guid CommentId { get; set; }
-        public Comment Comment { get; set; }
-        
-        public string Reason { get; set; }
+        public Comment Comment { get; set; } = null!;
+
+        public string Reason { get; set; } = string.Empty;
 
         public DateTime ReportedAt { get; set; }
     }

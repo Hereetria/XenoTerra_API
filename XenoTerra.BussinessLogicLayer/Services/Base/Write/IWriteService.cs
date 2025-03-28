@@ -4,17 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Generic.Write
+namespace XenoTerra.BussinessLogicLayer.Services.Base.Write
 {
-    public interface IWriteService<TEntity, TResultDto, TCreateDto, TUpdateDto, TKey>
+    public interface IWriteService<TEntity, TCreateDto, TUpdateDto, TKey>
         where TEntity : class
-        where TResultDto : class
         where TCreateDto : class
         where TUpdateDto : class
         where TKey : notnull
     {
-        Task<TResultDto> CreateAsync(TCreateDto createDto);
-        Task<TResultDto> UpdateAsync(TUpdateDto updateDto);
+        Task<TEntity> CreateAsync(TCreateDto createDto);
+        Task<TEntity> UpdateAsync(TUpdateDto updateDto);
         Task<bool> DeleteAsync(TKey key);
     }
 }

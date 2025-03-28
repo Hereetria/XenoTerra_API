@@ -5,13 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Persistence;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
+namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
 {
-    public class WriteRepository<TEntity, TDtoResult, TKey> : IWriteRepository<TEntity, TDtoResult, TKey>
+    public class WriteRepository<TEntity, TKey> : IWriteRepository<TEntity, TKey>
         where TEntity : class
-        where TDtoResult : class
         where TKey : notnull
     {
         private readonly IMapper _mapper;
@@ -20,8 +19,8 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
 
         public WriteRepository(IMapper mapper, AppDbContext context)
         {
-            _mapper = mapper;
-            _context = context;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} cannot be null.");
+            _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
             _dbSet = _context.Set<TEntity>();
         }
 
@@ -30,7 +29,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
             return _context;
         }
 
-        public async Task<TDtoResult> InsertAsync(TEntity entity)
+        public async Task<TEntity> InsertAsync(TEntity entity)
         {
             if (entity is null)
                 throw new ArgumentNullException(nameof(entity), "The entity to create cannot be null.");
@@ -42,7 +41,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return _mapper.Map<TDtoResult>(entity);
+                return entity;
             }
             catch (Exception ex)
             {
@@ -54,7 +53,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
 
         public async Task<bool> RemoveAsync(TKey key)
         {
-            if (key is null || (EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid)))
+            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
                 throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
 
             var entity = await _dbSet.FindAsync(key);
@@ -78,7 +77,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
             }
         }
 
-        public async Task<TDtoResult> ModifyAsync(TEntity entity)
+        public async Task<TEntity> ModifyAsync(TEntity entity)
         {
             if (entity is null)
                 throw new ArgumentNullException(nameof(entity), "The entity to update cannot be null.");
@@ -90,7 +89,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
 
-                return _mapper.Map<TDtoResult>(entity);
+                return entity;
             }
             catch (Exception ex)
             {

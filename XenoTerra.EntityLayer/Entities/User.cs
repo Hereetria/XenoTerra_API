@@ -10,10 +10,10 @@ namespace XenoTerra.EntityLayer.Entities
 {
     public class User : IdentityUser<Guid>
     {
-        public string FullName { get; set; }
-        public string Bio { get; set; }
-        public string ProfilePicture { get; set; }
-        public string Website { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public string Bio { get; set; } = string.Empty;
+        public string ProfilePicture { get; set; } = string.Empty;
+        public string Website { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
@@ -21,44 +21,44 @@ namespace XenoTerra.EntityLayer.Entities
         public DateTime LastActive { get; set; }
 
 
-        public ICollection<BlockUser> BlockedUsers { get; set; } = new List<BlockUser>();
+        public ICollection<BlockUser> BlockedUsers { get; set; } = [];
 
-        public ICollection<BlockUser> BlockingUsers { get; set; } = new List<BlockUser>();
-        public ICollection<Post> Posts { get; set; } = new List<Post>();
+        public ICollection<BlockUser> BlockingUsers { get; set; } = [];
+        public ICollection<Post> Posts { get; set; } = [];
 
-        public ICollection<Follow> Followers { get; set; } = new List<Follow>();
+        public ICollection<Follow> Followers { get; set; } = [];
 
-        public ICollection<Follow> Followings { get; set; } = new List<Follow>();
+        public ICollection<Follow> Followings { get; set; } = [];
 
-        public ICollection<Like> Likes { get; set; } = new List<Like>();
+        public ICollection<Like> Likes { get; set; } = [];
 
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; } = [];
 
-        public ICollection<Message> SentMessages { get; set; } = new List<Message>();
+        public ICollection<Message> SentMessages { get; set; } = [];
 
-        public ICollection<Message> ReceivedMessages { get; set; } = new List<Message>();
+        public ICollection<Message> ReceivedMessages { get; set; } = [];
 
-        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<Notification> Notifications { get; set; } = [];
 
-        public ICollection<Media> Medias { get; set; } = new List<Media>();
+        public ICollection<Media> Medias { get; set; } = [];
 
-        public ICollection<Story> Stories { get; set; } = new List<Story>();
+        public ICollection<Story> Stories { get; set; } = [];
 
-        public ICollection<SavedPost> SavedPosts { get; set; } = new List<SavedPost>();
+        public ICollection<SavedPost> SavedPosts { get; set; } = [];
 
-        public ICollection<ReportComment> ReportComments { get; set; } = new List<ReportComment>();
+        public ICollection<ReportComment> ReportComments { get; set; } = [];
 
-        public ICollection<ViewStory> ViewStories { get; set; } = new List<ViewStory>();
+        public ICollection<ViewStory> ViewStories { get; set; } = [];
 
-        public ICollection<UserSetting> UserSettings { get; set; } = new List<UserSetting>();
+        public ICollection<UserSetting> UserSettings { get; set; } = [];
 
-        public ICollection<SearchHistoryUser> SearchedBy { get; set; } = new List<SearchHistoryUser>();
+        public ICollection<SearchHistoryUser> SearchedBy { get; set; } = [];
 
-        public ICollection<RecentChats> RecentChats { get; set; } = new List<RecentChats>();
+        public ICollection<RecentChats> RecentChats { get; set; } = [];
 
-        public Note Note { get; set; }
+        public required Note Note { get; set; }
 
-        public ICollection<Reaction> Reactions { get; set; } = new List<Reaction>();
-        public ICollection<UserPostTag> TaggedPosts { get; set; } = new List<UserPostTag>();
+        public ICollection<Reaction> Reactions { get; set; } = [];
+        public ICollection<UserPostTag> TaggedPosts { get; set; } = [];
     }
 }

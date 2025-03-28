@@ -10,12 +10,12 @@ namespace XenoTerra.EntityLayer.Entities
     public class Reaction
     {
         public Guid ReactionId { get; set; }
-        public string Payload { get; set; }
+        public string Payload { get; set; } = string.Empty;
 
         public Guid MessageId { get; set; }
-        public Message Message { get; set; }
+        public Message Message { get; set; } = null!;
 
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
     }
 }

@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.DataLoaders.Base;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity

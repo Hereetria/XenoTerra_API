@@ -9,12 +9,12 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos
 {
-    public class ResultUserPostTagWithRelationsDto
+    public record ResultUserPostTagWithRelationsDto(
+        Guid PostId,
+        Guid UserId
+    )
     {
-        public Guid PostId { get; set; }
         public ResultPostDto? Post { get; set; }
-
-        public Guid UserId { get; set; }
         public ResultUserDto? User { get; set; }
     }
 }

@@ -2,8 +2,6 @@
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.CommentResolvers;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.CommentResolvers;

@@ -1,5 +1,4 @@
 ﻿using HotChocolate.Resolvers;
-using XenoTerra.DataAccessLayer.Contexts;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
 {

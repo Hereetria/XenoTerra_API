@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryService
 {
-    public class StoryReadService : ReadService<Story, Guid>, IStoryReadService
+    public class StoryReadService(IReadRepository<Story, Guid> readRepository) : ReadService<Story, Guid>(readRepository), IStoryReadService
     {
-        public StoryReadService(IReadRepository<Story, Guid> repository)
-            : base(repository) { }
     }
 }

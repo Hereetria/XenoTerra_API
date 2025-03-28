@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
+using XenoTerra.DataAccessLayer.Persistence;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Generic.Write
+namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
 {
-    public interface IWriteRepository<TEntity, TDtoResult, TKey>
+    public interface IWriteRepository<TEntity, TKey>
         where TEntity : class
-        where TDtoResult : class
         where TKey : notnull
     {
         AppDbContext GetDbContext();
-        Task<TDtoResult> InsertAsync(TEntity entity);
-        Task<TDtoResult> ModifyAsync(TEntity entity);
+        Task<TEntity> InsertAsync(TEntity entity);
+        Task<TEntity> ModifyAsync(TEntity entity);
         Task<bool> RemoveAsync(TKey key);
     }
 }

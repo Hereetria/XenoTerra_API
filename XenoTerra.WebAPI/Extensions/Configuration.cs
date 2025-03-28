@@ -1,20 +1,10 @@
-using XenoTerra.DataAccessLayer.Contexts;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DTOLayer.Mappings;
 using System.Reflection;
-using XenoTerra.WebAPI.Schemas.Types;
-using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
-using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
-using XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Write;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
-using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
@@ -22,11 +12,15 @@ using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
 using XenoTerra.WebAPI.Extensions.Helpers;
-using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.BlockUserResolvers;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.HighlightResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.WebAPI.Extensions.Helpers.Strategies.Abstract;
+using XenoTerra.WebAPI.Extensions.Helpers.Strategies;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -53,9 +47,9 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddAutoMapper(typeof(GeneralMapping));
 
             builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));
-            builder.Services.AddScoped(typeof(IWriteService<,,,,>), typeof(WriteService<,,,,>));
+            builder.Services.AddScoped(typeof(IWriteService<,,,>), typeof(WriteService<,,,>));
             builder.Services.AddScoped(typeof(IReadRepository<,>), typeof(ReadRepository<,>));
-            builder.Services.AddScoped(typeof(IWriteRepository<,,>), typeof(WriteRepository<,,>));
+            builder.Services.AddScoped(typeof(IWriteRepository<,>), typeof(WriteRepository<,>));
 
             builder.Services.AddScoped(typeof(EntityDataLoaderFactory));
             builder.Services.AddScoped(typeof(IEntityResolver<,>), typeof(EntityResolver<,>));
@@ -66,6 +60,8 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped(typeof(IEntityAssignmentService<,,>), typeof(EntityAssignmentService<,,>));
             builder.Services.AddScoped(typeof(IDataLoaderInvoker), typeof(DataLoaderInvoker));
 
+            builder.Services.AddScoped(typeof(IQueryResolverHelper<,>), typeof(QueryResolverHelper<,>));
+
 
             var targetAssemblies = new[]
             {
@@ -74,7 +70,13 @@ namespace XenoTerra.WebAPI.Extensions
             typeof(IBlockUserQueryService).Assembly    // WebApi
         };
 
-            builder.Services.RegisterAllScopedServices(targetAssemblies);
+            builder.Services.RegisterAllScopedServices(
+                targetAssemblies,
+        [
+            new InterfaceToImplementationStrategy(),
+            new GenericTypeStrategy(),
+            new ConcreteTypeStrategy()
+        ]);
         }
     }
 }

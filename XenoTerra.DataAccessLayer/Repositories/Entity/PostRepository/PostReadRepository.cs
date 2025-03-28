@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-    public class PostReadRepository : ReadRepository<Post, Guid>, IPostReadRepository
+    public class PostReadRepository(AppDbContext context) : ReadRepository<Post, Guid>(context), IPostReadRepository
     {
-        public PostReadRepository(AppDbContext context) : base(context)
-        {
-        }
     }
 }

@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository
 {
-    public class SavedPostWriteRepository : WriteRepository<SavedPost, ResultSavedPostDto, Guid>, ISavedPostWriteRepository
+    public class SavedPostWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<SavedPost, Guid>(mapper, context), ISavedPostWriteRepository
     {
-        public SavedPostWriteRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
-        {
-        }
     }
 }

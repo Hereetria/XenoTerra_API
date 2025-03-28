@@ -1,22 +1,16 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.Services.Queries.Base
 {
-    public class QueryService<TEntity, TKey> : IQueryService<TEntity, TKey>
+    public class QueryService<TEntity, TKey>(IReadService<TEntity, TKey> readService) : IQueryService<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
-        protected readonly IReadService<TEntity, TKey> _readService;
-
-        public QueryService(IReadService<TEntity, TKey> readService)
-        {
-            _readService = readService;
-        }
+        protected readonly IReadService<TEntity, TKey> _readService = readService;
 
         public IQueryable<TEntity> GetAllQueryable(IResolverContext context)
         {

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;

@@ -4,13 +4,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
 {
-    public class ResultRecentChatsWithRelationsDto
+    public record ResultRecentChatsWithRelationsDto(
+        Guid RecentChatsId,
+        string LastMessage,
+        Guid UserId,
+        DateTime LastMessageAt
+    )
     {
-        public Guid RecentChatsId { get; set; }
-        public string LastMessage { get; set; }
-        public Guid UserId { get; set; }
-        public DateTime LastMessageAt { get; set; }
-
-        public ICollection<ResultUserDto> Users { get; set; }
+        public ICollection<ResultUserDto>? Users { get; set; }
     }
 }

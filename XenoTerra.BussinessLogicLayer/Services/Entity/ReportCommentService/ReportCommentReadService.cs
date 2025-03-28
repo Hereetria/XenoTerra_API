@@ -4,17 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.BussinessLogicLayer.Services.Generic.Read;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService
 {
-    public class ReportCommentReadService : ReadService<ReportComment, Guid>, IReportCommentReadService
+    public class ReportCommentReadService(IReadRepository<ReportComment, Guid> readRepository) : ReadService<ReportComment, Guid>(readRepository), IReportCommentReadService
     {
-        public ReportCommentReadService(IReadRepository<ReportComment, Guid> repository)
-            : base(repository) { }
     }
 }

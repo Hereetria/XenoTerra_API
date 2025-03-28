@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Read;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
 {
-    public class UserSettingReadRepository : ReadRepository<UserSetting, Guid>, IUserSettingReadRepository
+    public class UserSettingReadRepository(AppDbContext context) : ReadRepository<UserSetting, Guid>(context), IUserSettingReadRepository
     {
-        public UserSettingReadRepository(AppDbContext context) : base(context)
-        {
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.BlockUserMutations;
+﻿using AutoMapper;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightMutations;
@@ -44,9 +45,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas
         public UserSettingMutation UserSettings { get; }
         public ViewStoryMutation ViewStories { get; }
 
-        public Mutation()
+        public Mutation(IMapper mapper)
         {
-            BlockUsers = new BlockUserMutation();
+            BlockUsers = new BlockUserMutation(mapper);
             Comments = new CommentMutation();
             Follows = new FollowMutation();
             Highlights = new HighlightMutation();

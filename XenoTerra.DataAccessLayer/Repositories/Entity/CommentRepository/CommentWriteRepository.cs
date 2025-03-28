@@ -5,17 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Contexts;
-using XenoTerra.DataAccessLayer.Repositories.Generic.Write;
+using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
 {
-    public class CommentWriteRepository : WriteRepository<Comment, ResultCommentDto, Guid>, ICommentWriteRepository
+    public class CommentWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Comment, Guid>(mapper, context), ICommentWriteRepository
     {
-        public CommentWriteRepository(IMapper mapper, AppDbContext context) : base(mapper, context)
-        {
-        }
     }
 }

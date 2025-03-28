@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
 using HotChocolate.Types.Pagination;
-using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
@@ -10,7 +9,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
         where TEntity : class
         where TKey : notnull
     {
-        public async Task<List<TEntity>> ResolveListAsync(
+        public async Task<List<TEntity>> ResolveEntitiesAsync(
             IQueryable<TEntity> query,
             IEntityResolver<TEntity, TKey> resolver,
             IResolverContext context)
@@ -25,7 +24,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
             return entities;
         }
 
-        public async Task<TEntity> ResolveSingleAsync(
+        public async Task<TEntity> ResolveEntityAsync(
             IQueryable<TEntity> query,
             IEntityResolver<TEntity, TKey> resolver,
             IResolverContext context)

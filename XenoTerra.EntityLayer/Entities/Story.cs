@@ -10,15 +10,15 @@ namespace XenoTerra.EntityLayer.Entities
     public class Story
     {
         public Guid StoryId { get; set; }
-        public string Path { get; set; }
-        public bool isVideo { get; set; }
+        public string Path { get; set; } = string.Empty;
+        public bool IsVideo { get; set; }
 
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
-        public ICollection<ViewStory> ViewStories { get; set; } = new List<ViewStory>();
+        public ICollection<ViewStory> ViewStories { get; set; } = [];
 
-        public ICollection<StoryHighlight> StoryHighlights { get; set; } = new List<StoryHighlight>();
+        public ICollection<StoryHighlight> StoryHighlights { get; set; } = [];
 
         public DateTime CreatedAt { get; set; }
     }

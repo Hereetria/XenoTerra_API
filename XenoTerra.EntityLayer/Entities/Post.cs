@@ -9,20 +9,20 @@ namespace XenoTerra.EntityLayer.Entities
     public class Post
     {
         public Guid PostId { get; set; }
-        public string Caption { get; set; }
-        public string Path { get; set; }
-        public bool isVideo { get; set; }
+        public string Caption { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+        public bool IsVideo { get; set; }
 
         public Guid UserId { get; set; }
-        public User User { get; set; }
+        public User User { get; set; } = null!;
 
-        public ICollection<Like> Likes { get; set; } = new List<Like>();
+        public ICollection<Like> Likes { get; set; } = [];
         
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        public ICollection<Comment> Comments { get; set; } = [];
 
-        public ICollection<SavedPost> SavedPosts { get; set; } = new List<SavedPost>();
+        public ICollection<SavedPost> SavedPosts { get; set; } = [];
 
-        public ICollection<UserPostTag> TaggedUsers { get; set; } = new List<UserPostTag>();
+        public ICollection<UserPostTag> TaggedUsers { get; set; } = [];
         public DateTime CreatedAt { get; set; }
     }
 }

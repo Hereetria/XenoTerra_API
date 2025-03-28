@@ -9,7 +9,5 @@ namespace XenoTerra.EntityLayer.Entities
 {
     public class Role : IdentityRole<Guid>
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
     }
 }

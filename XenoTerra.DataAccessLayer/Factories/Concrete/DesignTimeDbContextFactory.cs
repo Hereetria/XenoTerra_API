@@ -1,5 +1,4 @@
-﻿using XenoTerra.DataAccessLayer.Contexts;
-using Microsoft.EntityFrameworkCore.Design;
+﻿using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Text.Json;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DataAccessLayer.Persistence;
 
 namespace XenoTerra.DataAccessLayer.Factories.Concrete
 {

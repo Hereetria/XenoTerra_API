@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.NotificationDtos
 {
-    public class ResultNotificationDto
-    {
-        public Guid NotificationId { get; set; }
-        public Guid UserId { get; set; }
-        public Guid Message { get; set; }
-        public string Image { get; set; }
-        public DateTime CreatedAt { get; set; }
-    }
+    public record ResultNotificationDto(
+        Guid NotificationId,
+        Guid UserId,
+        Guid Message,
+        string Image,
+        DateTime CreatedAt
+    );
 }
