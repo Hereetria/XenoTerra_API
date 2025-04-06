@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace XenoTerra.DataAccessLayer.Utils
             var primaryKey = model.FindPrimaryKey()
                 ?? throw new InvalidOperationException($"Entity {entityType.Name} için Primary Key bulunamadı.");
 
-            string pkPropertyName = (primaryKey.Properties.FirstOrDefault()?.Name)
+            string pkPropertyName = (primaryKey.Properties[0].Name)
                 ?? throw new InvalidOperationException($"Entity {entityType.Name} için geçerli bir Primary Key property bulunamadı.");
 
             var propertyInfo = entityType.GetProperty(pkPropertyName, BindingFlags.Public | BindingFlags.Instance);
@@ -44,20 +45,18 @@ namespace XenoTerra.DataAccessLayer.Utils
         {
             navigationPropertyName = crossTableName != null ? PluralWordProvider.ConvertToSingular(navigationPropertyName) : navigationPropertyName;
 
-            var entityType = crossTableName == null
+            var entityType = (crossTableName == null
                 ? dbContext.Model.FindEntityType(typeof(TEntity))
                 : dbContext.Model.GetEntityTypes()
-                    .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.OrdinalIgnoreCase));
-
-            if (entityType == null)
-                throw new Exception($"Entity type '{(crossTableName ?? typeof(TEntity).Name)}' not found in DbContext.");
-
+                    .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.OrdinalIgnoreCase))) ?? throw new Exception($"Entity type '{(crossTableName ?? typeof(TEntity).Name)}' not found in DbContext.");
+            
             var navigation = entityType.GetNavigations()
                 .FirstOrDefault(n => n.Name.Equals(navigationPropertyName, StringComparison.OrdinalIgnoreCase))
                 ?? throw new Exception($"Navigation property '{navigationPropertyName}' not found in entity '{entityType.ClrType.Name}'.");
 
-            var foreignKey = navigation.ForeignKey.Properties.FirstOrDefault()
+            IProperty foreignKey = navigation.ForeignKey.Properties[0]
                 ?? throw new Exception($"Foreign key not found for navigation '{navigationPropertyName}' in entity '{entityType.ClrType.Name}'.");
+
 
             var foreignKeyProperty = entityType.ClrType.GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(foreignKey.Name, StringComparison.OrdinalIgnoreCase))
@@ -78,7 +77,7 @@ namespace XenoTerra.DataAccessLayer.Utils
             var primaryKey = entityType.FindPrimaryKey()
                 ?? throw new InvalidOperationException($"Primary key not found for '{typeof(TRelatedEntity).Name}'.");
 
-            var primaryKeyName = primaryKey.Properties.FirstOrDefault()?.Name
+            var primaryKeyName = primaryKey.Properties[0].Name
                 ?? throw new InvalidOperationException($"Primary key name not found for '{typeof(TRelatedEntity).Name}'.");
 
             var foreignKeyName = foreignKeyProperty.Name;
@@ -102,7 +101,7 @@ namespace XenoTerra.DataAccessLayer.Utils
 
             var parameter = Expression.Parameter(crossEntityType, "x");
             var sourceProperty = Expression.Property(parameter, sourceKeyProp.Name);
-            var containsMethod = typeof(HashSet<TKey>).GetMethod("Contains", new[] { typeof(TKey) })!;
+            var containsMethod = typeof(HashSet<TKey>).GetMethod("Contains", [typeof(TKey)])!;
             var entityIdsConst = Expression.Constant(entityIds);
 
             var containsCall = Expression.Call(entityIdsConst, containsMethod, sourceProperty);
@@ -113,7 +112,7 @@ namespace XenoTerra.DataAccessLayer.Utils
                 .First(m => m.Name == "Where" && m.GetParameters().Length == 2)
                 .MakeGenericMethod(crossEntityType);
 
-            var filteredQuery = (IQueryable)whereMethod.Invoke(null, new object[] { dbSet, lambda })!;
+            var filteredQuery = (IQueryable)whereMethod.Invoke(null, [dbSet, lambda])!;
 
             var selectorParam = Expression.Parameter(crossEntityType, "x");
             var targetPropAccess = Expression.Property(selectorParam, targetKeyProp.Name);
@@ -124,7 +123,7 @@ namespace XenoTerra.DataAccessLayer.Utils
                 .First(m => m.Name == "Select" && m.GetParameters().Length == 2)
                 .MakeGenericMethod(crossEntityType, typeof(TKey));
 
-            var selectedQuery = (IQueryable<TKey>)selectMethod.Invoke(null, new object[] { filteredQuery, selectLambda })!;
+            var selectedQuery = (IQueryable<TKey>)selectMethod.Invoke(null, [filteredQuery, selectLambda])!;
 
             return [.. selectedQuery];
         }
@@ -146,7 +145,7 @@ namespace XenoTerra.DataAccessLayer.Utils
 
             var anonymousType = typeof(ValueTuple<object, object>);
             var newExpr = Expression.New(
-                anonymousType.GetConstructor(new[] { typeof(object), typeof(object) })!,
+                anonymousType.GetConstructor([typeof(object), typeof(object)])!,
                 Expression.Convert(entityIdProp, typeof(object)),
                 Expression.Convert(relatedIdProp, typeof(object)));
 
@@ -156,7 +155,7 @@ namespace XenoTerra.DataAccessLayer.Utils
                 .First(m => m.Name == "Select" && m.GetParameters().Length == 2)
                 .MakeGenericMethod(crossTableType, anonymousType);
 
-            var selected = (IQueryable<ValueTuple<object, object>>)selectMethod.Invoke(null, new object[] { dbSet, lambda })!;
+            var selected = (IQueryable<ValueTuple<object, object>>)selectMethod.Invoke(null, [dbSet, lambda])!;
 
             return selected
                 .ToList()

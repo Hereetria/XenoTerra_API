@@ -7,6 +7,7 @@ using XenoTerra.WebAPI.Utils;
 using GreenDonut;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.DataAccessLayer.Persistence;
+using System.Linq;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {
@@ -14,17 +15,14 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
         where TEntity : class
         where TKey : notnull
     {
-        private Dictionary<Type, List<TKey>> _entityKeyMap = new();
-        private HashSet<TKey> _idsCache = new();
+        private readonly Dictionary<Type, List<TKey>> _entityKeyMap = [];
+        private readonly HashSet<TKey> _idsCache = [];
         public Dictionary<Type, (HashSet<TKey>, HashSet<string>)> Build(
             IEnumerable<TEntity> entityList,
             IResolverContext context,
             AppDbContext dbContext)
         {
-            var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
-                ?? throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
             var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
-            var a = relationalFields.ToList();
             var entityMap = new Dictionary<Type, (HashSet<TKey>, HashSet<string>)>();
 
             foreach (var field in relationalFields)
@@ -33,7 +31,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
                 if (crossTableName != null)
                 {
-                    HandleManyToMany(dbContext, entityList, entityType, field, crossTableName, entityMap, context);
+                    HandleManyToMany(dbContext, entityList, field, crossTableName, entityMap, context);
                 }
                 else if (TypeProviders.HasForeignKeyTo<TEntity>(dbContext, field))
                 {
@@ -50,7 +48,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             return entityMap;
         }
 
-        private void HandleManyToOne(
+        private static void HandleManyToOne(
             AppDbContext dbContext,
             IEnumerable<TEntity> entityList,
             string field,
@@ -71,7 +69,12 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
                 .Cast<TKey>()
                 .ToHashSet();
 
-            var selectedFields = GraphQLFieldProvider.GetNestedSelectedFields(context, field);
+            var selectedFields = GraphQLFieldProvider
+                .GetNestedSelectedFields(context, field)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (!selectedFields.Contains(foreignKeyProperty.Name))
+                selectedFields.Add(foreignKeyProperty.Name);
 
             AddOrUpdateMap(entityMap, entityProperty.PropertyType, ids, selectedFields);
         }
@@ -110,7 +113,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
             var singularField = PluralWordProvider.ConvertToSingular(field);
 
-            var fkProp = genericFkMethod.Invoke(null, new object[] { dbContext, singularField, null }) as PropertyInfo
+            var fkProp = genericFkMethod.Invoke(null, [dbContext, singularField, null]) as PropertyInfo
                 ?? throw new InvalidOperationException($"Foreign key property not found on related entity '{relatedType.Name}'.");
 
             var method = typeof(TypeProviders)
@@ -121,7 +124,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             {
                 var result = method.Invoke(
                     null,
-                    new object[] { dbContext, fkProp, primaryKeys.ToList() }
+                    [dbContext, fkProp, primaryKeys.ToList()]
                 ) as List<TKey>;
 
                 if (result is not List<TKey> resolved)
@@ -144,10 +147,9 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             AddOrUpdateMap(entityMap, relatedType, relatedIds, selectedFields);
         }
 
-        private void HandleManyToMany(
+        private static void HandleManyToMany(
             AppDbContext dbContext,
             IEnumerable<TEntity> entityList,
-            IEntityType entityType,
             string field,
             string crossTableName,
             Dictionary<Type, (HashSet<TKey>, HashSet<string>)> entityMap,
@@ -192,13 +194,11 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             );
 
             var singularFieldName = PluralWordProvider.ConvertToSingular(field);
-            var relatedEntityType = crossEntityType
+            var relatedEntityType = (crossEntityType
                 .GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(singularFieldName, StringComparison.OrdinalIgnoreCase))
-                ?.PropertyType;
-
-            if (relatedEntityType == null)
-                throw new Exception($"Could not resolve related entity type from field '{field}' in cross entity '{crossEntityType.Name}'");
+                ?.PropertyType)
+                ?? throw new Exception($"Could not resolve related entity type from field '{field}' in cross entity '{crossEntityType.Name}'");
 
             if (relatedEntityType.IsGenericType &&
                 relatedEntityType.GetInterfaces().Any(i =>
@@ -214,7 +214,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             AddOrUpdateMap(entityMap, relatedEntityType, relatedIds, selectedFields);
         }
 
-        private void AddOrUpdateMap(
+        private static void AddOrUpdateMap(
             Dictionary<Type, (HashSet<TKey>, HashSet<string>)> map,
             Type type,
             IEnumerable<TKey> ids,
@@ -222,7 +222,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
         {
             if (!map.TryGetValue(type, out var entry))
             {
-                entry = (new HashSet<TKey>(), new HashSet<string>());
+                entry = ([], []);
                 map[type] = entry;
             }
 

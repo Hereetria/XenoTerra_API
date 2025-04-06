@@ -2,7 +2,7 @@
 
 namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Payloads
 {
-    public abstract record class Payload<TResult> where TResult : class
+    public abstract record Payload<TResult> where TResult : class
     {
         public bool Success { get; init; }
         public string Message { get; init; } = "";

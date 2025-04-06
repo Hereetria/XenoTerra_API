@@ -3,6 +3,7 @@ using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Models;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions;
@@ -23,28 +24,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
             CreateBlockUserInput? input)
         {
             if (!InputValidator.ValidateInputFields<BlockUser, CreateBlockUserInput, ResultBlockUserDto, CreateBlockUserPayload>(
-                input, context, out var validationPayload))
+                    input, context, out var validationPayload))
                 return validationPayload;
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateBlockUserInput, CreateBlockUserDto>(input);
             var payload = await mutationService.CreateAsync<CreateBlockUserPayload>(writeService, createDto);
-            var payloadEntityResult = payload.Result!;
 
-            var createdEvent = BlockUserCreatedEvent.From<BlockUserCreatedEvent>(
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow
-            );
-
-            var changedEvent = BlockUserChangedEvent.From<BlockUserChangedEvent>(
-                ChangedEventType.Created,
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow
-            );
-
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserCreated), createdEvent);
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged), changedEvent);
+            if (payload.Result is not null)
+                await SendBlockUserCreatedEvents(eventSender, payload.Result);
 
             return payload;
         }
@@ -57,32 +44,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
             UpdateBlockUserInput? input)
         {
             if (!InputValidator.ValidateInputFields<BlockUser, UpdateBlockUserInput, ResultBlockUserDto, UpdateBlockUserPayload>(
-                input, context, out var validationPayload))
+                    input, context, out var validationPayload))
                 return validationPayload;
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateBlockUserInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateBlockUserInput, UpdateBlockUserDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateBlockUserPayload>(writeService, updateDto, modifiedFields);
-            var payloadEntityResult = payload.Result!;
 
-            var updatedEvent = BlockUserUpdatedEvent.From<BlockUserUpdatedEvent>(
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow,
-                modifiedFields
-            );
-
-            var changedEvent = BlockUserChangedEvent.From<BlockUserChangedEvent>(
-                ChangedEventType.Updated,
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow,
-                modifiedFields
-            );
-
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserUpdated), updatedEvent);
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged), changedEvent);
+            if (payload.Result is not null)
+                await SendBlockUserUpdatedEvents(eventSender, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -99,25 +70,39 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
 
             _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteBlockUserPayload>(writeService, parsedKey);
-            var payloadEntityResult = payload.Result!;
 
-            var deletedEvent = BlockUserDeletedEvent.From<BlockUserDeletedEvent>(
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow
-            );
-
-            var changedEvent = BlockUserChangedEvent.From<BlockUserChangedEvent>(
-                ChangedEventType.Deleted,
-                payloadEntityResult,
-                Guid.NewGuid(),
-                DateTime.UtcNow
-            );
-
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserDeleted), deletedEvent);
-            await eventSender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged), changedEvent);
+            
+            if (payload.Result is not null)
+                await SendBlockUserDeletedEvents(eventSender, payload.Result);
 
             return payload;
+        }
+
+        private async Task SendBlockUserCreatedEvents(ITopicEventSender sender, ResultBlockUserDto result)
+        {
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserCreated),
+                BlockUserCreatedEvent.From<BlockUserCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged),
+                BlockUserChangedEvent.From<BlockUserChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
+        }
+
+        private async Task SendBlockUserUpdatedEvents(ITopicEventSender sender, ResultBlockUserDto result, IEnumerable<string> modifiedFields)
+        {
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserUpdated),
+                BlockUserUpdatedEvent.From<BlockUserUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
+
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged),
+                BlockUserChangedEvent.From<BlockUserChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
+        }
+
+        private async Task SendBlockUserDeletedEvents(ITopicEventSender sender, ResultBlockUserDto result)
+        {
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserDeleted),
+                BlockUserDeletedEvent.From<BlockUserDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
+
+            await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserChanged),
+                BlockUserChangedEvent.From<BlockUserChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
         }
     }
 }

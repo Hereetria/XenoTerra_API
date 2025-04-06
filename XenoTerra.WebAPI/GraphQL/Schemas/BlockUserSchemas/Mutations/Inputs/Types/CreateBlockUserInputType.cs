@@ -7,16 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs.Typ
     {
         protected override void Configure(IInputObjectTypeDescriptor<CreateBlockUserInput> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.BlockingUserId)
-                .Type<NonNullType<IdType>>();
-
-            descriptor.Field(f => f.BlockedUserId)
-                .Type<NonNullType<IdType>>();
-
-            descriptor.Field(f => f.BlockedAt)
-                .Type<NonNullType<StringType>>();
         }
     }
 

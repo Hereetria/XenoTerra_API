@@ -8,18 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<BlockUser> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.BlockUserId);
-            descriptor.Field(f => f.BlockingUserId);
-            descriptor.Field(f => f.BlockedUserId);
-            descriptor.Field(f => f.BlockedAt);
-
-            descriptor.Field(f => f.BlockingUser)
-                .Type<UserNestedSortType>();
-
-            descriptor.Field(f => f.BlockedUser)
-                .Type<UserNestedSortType>();
         }
     }
 }

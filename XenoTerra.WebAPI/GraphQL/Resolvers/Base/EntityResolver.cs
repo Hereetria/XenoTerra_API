@@ -5,25 +5,20 @@ using System.Collections;
 using System.Reflection;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 using XenoTerra.WebAPI.Utils;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Base
 {
-    public class EntityResolver<TEntity, TKey> : IEntityResolver<TEntity, TKey>
+    public class EntityResolver<TEntity, TKey>(IEntityFieldMapBuilder<TEntity, TKey> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : IEntityResolver<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
-        private readonly IEntityFieldMapBuilder<TEntity, TKey> _entityFieldMapBuilder;
-        private readonly IDataLoaderInvoker _dataLoaderInvoker;
-
-        public EntityResolver(IEntityFieldMapBuilder<TEntity, TKey> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker)
-        {
-            _entityFieldMapBuilder = entityFieldMapBuilder;
-            _dataLoaderInvoker = dataLoaderInvoker;
-        }
+        private readonly IEntityFieldMapBuilder<TEntity, TKey> _entityFieldMapBuilder = entityFieldMapBuilder;
+        private readonly IDataLoaderInvoker _dataLoaderInvoker = dataLoaderInvoker;
 
         public async Task PopulateRelatedFieldAsync(TEntity entityResult, IResolverContext context)
         {
@@ -42,9 +37,9 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
             {
                 var entityType = entry.Key;
                 var (entityIds, selectedFields) = entry.Value;
-                var entityIdsList = entityIds?.Cast<object>().ToList() ?? new List<object>();
+                var entityIdsList = entityIds?.Cast<object>().ToList() ?? [];
 
-                var resultsDict = await _dataLoaderInvoker.InvokeLoadAsync(entityType, dbContext, entityIdsList, selectedFields.ToList())
+                var resultsDict = await _dataLoaderInvoker.InvokeLoadAsync(entityType, dbContext, entityIdsList, [.. selectedFields])
                     ?? throw new InvalidOperationException("InvokeLoadAsync returned null.");
 
                 var resultsDictType = resultsDict.GetType();
@@ -68,7 +63,7 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                     ?? throw new InvalidOperationException("AssignRelatedEntities method not found.");
 
                 var entityResultListMaterialized = entityResultList.ToList();
-                assignMethod.Invoke(assignmentService, new object[] { dbContext, entityResultListMaterialized, resultsDict });
+                assignMethod.Invoke(assignmentService, [dbContext, entityResultListMaterialized, resultsDict]);
             }
         }
     }

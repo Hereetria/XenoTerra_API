@@ -2,6 +2,7 @@
 using HotChocolate.Resolvers;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Utils;
 
@@ -16,14 +17,9 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
         public IQueryable<TEntity> GetAllQueryable(IResolverContext context)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
-            if (selectedFields is null || selectedFields.Count == 0)
-            {
-                throw GraphQLExceptionFactory.Create(
-                    "No fields were selected in the GraphQL query.",
-                    ["You must select at least one field to query."],
-                    "INVALID_SELECTION"
-                );
-            }
+            selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
+
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
                 _readService.FetchAllQueryable(selectedFields)
@@ -35,6 +31,8 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
         public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IResolverContext context)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
+            selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
+
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
@@ -44,17 +42,14 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             return ModifyQueryForGetByIds(query);
         }
 
+
+
         public IQueryable<TEntity> GetByIdQueryable(TKey key, IResolverContext context)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
-            if (selectedFields is null || selectedFields.Count == 0)
-            {
-                throw GraphQLExceptionFactory.Create(
-                    "No fields were selected in the GraphQL query.",
-                    ["You must select at least one field to query."],
-                    "INVALID_SELECTION"
-                );
-            }
+            selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
+
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
                 _readService.FetchByIdQueryable(key, selectedFields)
@@ -81,6 +76,27 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
                     "QUERY_EXECUTION_ERROR"
                 );
             }
+        }
+
+        public static IEnumerable<string> EnsureForeignKeysForRelations(IEnumerable<string> selectedFields, IResolverContext context)
+        {
+            var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
+
+            var dbContext = context.Service<AppDbContext>();
+            var fieldSet = selectedFields.ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            foreach (var field in relationalFields)
+            {
+                var foreignKeyProp = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, field)
+                    ?? throw new InvalidOperationException($"Foreign key property not found for field: {field}");
+
+                if (!fieldSet.Contains(foreignKeyProp.Name))
+                {
+                    fieldSet.Add(foreignKeyProp.Name);
+                }
+            }
+
+            return fieldSet;
         }
     }
 }

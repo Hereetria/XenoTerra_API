@@ -10,18 +10,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Types
     {
         protected override void Configure(IObjectTypeDescriptor<ResultBlockUserWithRelationsDto> descriptor)
         {
-            descriptor.Name("BlockUserWithRelations");
+            descriptor.Name("ResultBlockUserWithRelations");
 
-            descriptor.Field(f => f.BlockUserId).Type<NonNullType<IdType>>();
-            descriptor.Field(f => f.BlockingUserId).Type<NonNullType<IdType>>();
-            descriptor.Field(f => f.BlockedUserId).Type<NonNullType<IdType>>();
-            descriptor.Field(f => f.BlockedAt).Type<NonNullType<DateTimeType>>();
-
-            descriptor.Field(f => f.BlockingUser)
-                .Type<NestedUserType>();
-
-            descriptor.Field(f => f.BlockedUser)
-                .Type<NestedUserType>();
         }
     }
 }

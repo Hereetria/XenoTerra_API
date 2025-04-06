@@ -9,11 +9,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Pagina
     {
         protected override void Configure(IObjectTypeDescriptor<BlockUserEdge> descriptor)
         {
-            descriptor.Field(x => x.Node)
-                .Type<NonNullType<BlockUserWithRelationsType>>();
-
-            descriptor.Field(x => x.Cursor)
-                .Type<NonNullType<StringType>>();
         }
     }
 }

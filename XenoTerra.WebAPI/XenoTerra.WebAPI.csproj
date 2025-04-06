@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
+    <Content Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
+    <EmbeddedResource Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
+    <None Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
     <PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.0.3" />
@@ -16,7 +23,6 @@
   <ItemGroup>
     <Folder Include="GraphQL\Schemas\SearchHistoryUserSchemas\Types\" />
     <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\" />
-    <Folder Include="GraphQL\Schemas\_Helpers\MutationHelpers\" />
   </ItemGroup>
 
   <ItemGroup>

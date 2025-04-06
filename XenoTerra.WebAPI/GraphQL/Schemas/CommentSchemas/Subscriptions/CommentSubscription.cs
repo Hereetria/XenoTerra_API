@@ -1,4 +1,4 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentSubscriptions
+﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Subscriptions
 {
     public class CommentSubscription
     {

@@ -33,6 +33,9 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.BlockUserMutationServices;
 using HotChocolate.Execution;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions;
 using XenoTerra.WebAPI.GraphQL;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -45,6 +48,8 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddSubscriptionType<BlockUserSubscription>()
+                .AddType<BlockUserFilterType>()
+                .AddType<BlockUserSortType>()
                 .AddInMemorySubscriptions()
                 .AddProjections()
                 .AddFiltering()

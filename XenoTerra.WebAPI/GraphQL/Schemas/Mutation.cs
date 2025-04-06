@@ -10,7 +10,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.PostMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsMutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Queries.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations;
