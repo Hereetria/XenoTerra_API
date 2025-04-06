@@ -16,7 +16,7 @@
   <ItemGroup>
     <Folder Include="GraphQL\Schemas\SearchHistoryUserSchemas\Types\" />
     <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\" />
-    <Folder Include="Services\Mutations\Entity\" />
+    <Folder Include="GraphQL\Schemas\_Helpers\MutationHelpers\" />
   </ItemGroup>
 
   <ItemGroup>

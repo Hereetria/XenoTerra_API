@@ -13,7 +13,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Base.Write
         where TKey : notnull
     {
         Task<TEntity> CreateAsync(TCreateDto createDto);
-        Task<TEntity> UpdateAsync(TUpdateDto updateDto);
-        Task<bool> DeleteAsync(TKey key);
+        Task<TEntity> UpdateAsync(TUpdateDto updateDto, IEnumerable<string> modifiedFields);
+        Task<TEntity> DeleteAsync(TKey key);
     }
 }

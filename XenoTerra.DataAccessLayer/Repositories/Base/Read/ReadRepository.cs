@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -31,23 +34,17 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 
         public IQueryable<TEntity> GetAllQueryable(IEnumerable<string> selectedFields)
         {
-            if (selectedFields is null || !selectedFields.Any())
-                throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
-            return _dbSet.AsNoTracking()
-                .Select(selector);
-
+            return ExecuteSafely(() => _dbSet.AsNoTracking().Select(selector));
         }
 
         public IQueryable<TEntity> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields)
         {
-            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
-                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
-
-            if (selectedFields is null || !selectedFields.Any())
-                throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
+            ArgumentGuard.EnsureValidKey(key);
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
@@ -58,18 +55,15 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
             if (primaryKey is null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException($"Entity '{typeof(TEntity).Name}' must define a single primary key");
 
-            return _dbSet.AsNoTracking()
+            return ExecuteSafely(() => _dbSet.AsNoTracking()
                 .Where(e => EF.Property<TKey>(e, primaryKey.Properties[0].Name)!.Equals(key))
-                .Select(selector);
+                .Select(selector));
         }
 
         public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
         {
-            if (keys is null || !keys.Any())
-                throw new ArgumentException("At least one ID must be provided.", nameof(keys));
-
-            if (selectedFields is null || !selectedFields.Any())
-                throw new ArgumentException("At least one field must be selected.", nameof(selectedFields));
+            ArgumentGuard.EnsureNotNullOrEmpty(keys, "Key list cannot be null.", "At least one key must in keys.");
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
@@ -82,10 +76,41 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 
             var keySet = new HashSet<TKey>(keys);
 
-            return _dbSet.AsNoTracking()
+            return ExecuteSafely(() => _dbSet.AsNoTracking()
                 .Where(entity => keySet.Contains(EF.Property<TKey>(entity, primaryKey.Properties[0].Name)))
-                .Select(selector);
+                .Select(selector));
         }
 
+        private static TResult ExecuteSafely<TResult>(Func<TResult> query)
+        {
+            try
+            {
+                return query();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                throw new InvalidOperationException("A concurrency conflict occurred during data access.", ex);
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new InvalidOperationException("An invalid operation was attempted during query execution.", ex);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException("An invalid argument was provided to the query.", ex);
+            }
+            catch (TimeoutException ex)
+            {
+                throw new TimeoutException("The query has timed out while accessing the database.", ex);
+            }
+            catch (SqlException ex)
+            {
+                throw new InvalidOperationException("A SQL error occurred while executing the query.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An unexpected error occurred while executing the query.", ex);
+            }
+        }
     }
 }

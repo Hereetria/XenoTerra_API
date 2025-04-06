@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
 {
-    public class CommentWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Comment, Guid>(mapper, context), ICommentWriteRepository
+    public class CommentWriteRepository(AppDbContext context) : WriteRepository<Comment, Guid>(context), ICommentWriteRepository
     {
     }
 }

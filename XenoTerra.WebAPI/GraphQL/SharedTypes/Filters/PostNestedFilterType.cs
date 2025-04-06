@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Post> descriptor)
         {
+            descriptor.Name("PostNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.PostId);

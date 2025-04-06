@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Note> descriptor)
         {
+            descriptor.Name("NoteNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.NoteId);

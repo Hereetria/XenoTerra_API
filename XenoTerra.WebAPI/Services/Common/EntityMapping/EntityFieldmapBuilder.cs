@@ -24,6 +24,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
                 ?? throw new Exception($"Entity '{typeof(TEntity).Name}' not found in DbContext.");
             var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
+            var a = relationalFields.ToList();
             var entityMap = new Dictionary<Type, (HashSet<TKey>, HashSet<string>)>();
 
             foreach (var field in relationalFields)

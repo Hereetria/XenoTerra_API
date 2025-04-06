@@ -17,9 +17,7 @@ namespace XenoTerra.WebAPI.Extensions.Helpers.Strategies
                 var implementation = types.FirstOrDefault(t =>
                     t.IsClass && !t.IsAbstract &&
                     interfaceType.IsAssignableFrom(t) &&
-                    ServiceRegistrationExtensions.ValidSuffixes.Any(suffix =>
-                        SafeEndsWithExtension.SafeEndsWith(t.Name, suffix.Replace("I", ""))
-                    )
+                    string.Equals(t.Name, interfaceType.Name.TrimStart('I'), StringComparison.OrdinalIgnoreCase)
                 );
 
                 if (implementation != null && !services.Any(s => s.ServiceType == interfaceType))

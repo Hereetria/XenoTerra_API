@@ -1,4 +1,6 @@
-﻿using XenoTerra.DataAccessLayer.Repositories.Base.Read;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
+using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
 {
@@ -9,29 +11,39 @@ namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
         protected readonly IReadRepository<TEntity, TKey> _readRepository = readRepository
             ?? throw new ArgumentNullException(nameof(readRepository), $"{nameof(readRepository)} cannot be null");
 
-        public IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedFields)
         {
-            var query = _readRepository.GetAllQueryable(selectedProperties);
-            return query;
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
+            return _readRepository.GetAllQueryable(selectedFields);
         }
 
-        public IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedFields)
         {
-            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
-                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
+            ArgumentGuard.EnsureValidKey(key);
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
-            var query = _readRepository.GetByIdQueryable(key, selectedProperties);
-            return query;
+            return _readRepository.GetByIdQueryable(key, selectedFields);
         }
 
-        public IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties)
+        public IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
         {
-            if (keys is null || !keys.Any())
-                throw new ArgumentException("The keys collection cannot be null or empty.", nameof(keys));
+            ArgumentGuard.EnsureNotNullOrEmpty(keys);
+            ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
+            var query = _readRepository.GetByIdsQueryable(keys, selectedFields);
+            return ExecuteSafely(() => query);
+        }
 
-            var query = _readRepository.GetByIdsQueryable(keys, selectedProperties);
-            return query;
+        private static IQueryable<TEntity> ExecuteSafely(Func<IQueryable<TEntity>> operation)
+        {
+            try
+            {
+                return operation();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

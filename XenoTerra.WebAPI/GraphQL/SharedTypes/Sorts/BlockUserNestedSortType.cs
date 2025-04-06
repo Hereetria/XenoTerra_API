@@ -8,6 +8,8 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<BlockUser> descriptor)
         {
+            descriptor.Name("BlockUserNestedSortInput");
+
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.BlockUserId);

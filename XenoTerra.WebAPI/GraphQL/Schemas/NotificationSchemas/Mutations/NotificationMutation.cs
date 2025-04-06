@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationMutat
 {
     public class NotificationMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

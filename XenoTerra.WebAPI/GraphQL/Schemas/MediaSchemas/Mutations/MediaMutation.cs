@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.MediaMutations
 {
     public class MediaMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

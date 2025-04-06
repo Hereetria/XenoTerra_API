@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
 {
-    public class NotificationWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Notification, Guid>(mapper, context), INotificationWriteRepository
+    public class NotificationWriteRepository(AppDbContext context) : WriteRepository<Notification, Guid>(context), INotificationWriteRepository
     {
     }
 

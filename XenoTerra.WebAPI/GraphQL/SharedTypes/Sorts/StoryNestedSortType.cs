@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Story> descriptor)
         {
+            descriptor.Name("StoryNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.StoryId);

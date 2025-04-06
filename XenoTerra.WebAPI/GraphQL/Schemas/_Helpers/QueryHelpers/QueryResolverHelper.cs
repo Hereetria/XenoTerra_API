@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
 using HotChocolate.Types.Pagination;
+using Microsoft.EntityFrameworkCore;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
 {
@@ -14,11 +16,28 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
             IEntityResolver<TEntity, TKey> resolver,
             IResolverContext context)
         {
-            var connection = await query.ApplyCursorPaginationAsync(context);
-            var entities = connection.Edges.Select(e => e.Node).ToList();
+            List<TEntity> entities;
+
+            if (GraphQLFieldProvider.IsPaginatedMethod(context))
+            {
+                var connection = await query.ApplyCursorPaginationAsync(context);
+                entities = [.. connection.Edges
+                    .Select(e => e.Node)
+                    .Where(e => e is not null)];
+            }
+            else
+            {
+                entities = await query.ToListAsync();
+            }
 
             if (entities.Count == 0)
-                return [];
+            {
+                throw GraphQLExceptionFactory.Create(
+                    $"{typeof(TEntity).Name} not found.",
+                    [$"No {typeof(TEntity).Name} entities were found for the given IDs."],
+                    "ENTITIES_NOT_FOUND"
+                );
+            }
 
             await resolver.PopulateRelatedFieldsAsync(entities, context);
             return entities;
@@ -29,9 +48,32 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
             IEntityResolver<TEntity, TKey> resolver,
             IResolverContext context)
         {
-            var connection = await query.ApplyCursorPaginationAsync(context);
-            var entity = connection.Edges.Select(e => e.Node).FirstOrDefault()
-                ?? throw new InvalidOperationException($"{typeof(TEntity).Name} not found");
+            TEntity? entity;
+
+            if (GraphQLFieldProvider.IsPaginatedMethod(context))
+            {
+                var connection = await query.ApplyCursorPaginationAsync(context);
+                var firstEdge = connection?.Edges != null && connection.Edges.Count > 0
+                ? connection.Edges[0]
+                : null;
+
+                entity = firstEdge?.Node;
+
+            }
+            else
+            {
+                entity = await query.FirstOrDefaultAsync();
+            }
+
+            if (entity is null)
+            {
+                throw GraphQLExceptionFactory.Create(
+                    $"{typeof(TEntity).Name} not found.",
+                    [$"No {typeof(TEntity).Name} entity was found for the given ID."],
+                    "ENTITY_NOT_FOUND"
+                );
+            }
+
 
             await resolver.PopulateRelatedFieldAsync(entity, context);
             return entity;

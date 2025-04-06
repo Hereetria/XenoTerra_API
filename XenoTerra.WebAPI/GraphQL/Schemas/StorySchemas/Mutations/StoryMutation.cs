@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.StoryMutations
 {
     public class StoryMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

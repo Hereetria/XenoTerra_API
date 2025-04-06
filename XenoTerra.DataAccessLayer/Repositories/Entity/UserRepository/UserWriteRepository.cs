@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository
 {
-    public class UserWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<User, Guid>(mapper, context), IUserWriteRepository
+    public class UserWriteRepository(AppDbContext context) : WriteRepository<User, Guid>(context), IUserWriteRepository
     {
     }
 }

@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.MediaRepository
 {
-    public class MediaWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Media, Guid>(mapper, context), IMediaWriteRepository
+    public class MediaWriteRepository(AppDbContext context) : WriteRepository<Media, Guid>(context), IMediaWriteRepository
     {
     }
 }

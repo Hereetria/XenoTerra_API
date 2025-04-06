@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class HighlightEdge
     {
-        public ResultHighlightWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultHighlightWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

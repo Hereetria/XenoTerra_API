@@ -1,6 +1,24 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.BlockUserSubscriptions
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions.Events;
+
+namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions
 {
     public class BlockUserSubscription
     {
+        [Subscribe]
+        public BlockUserCreatedEvent OnBlockUserCreated(
+            [EventMessage] BlockUserCreatedEvent evt) => evt;
+
+        [Subscribe]
+        public BlockUserUpdatedEvent OnBlockUserUpdated(
+            [EventMessage] BlockUserUpdatedEvent evt) => evt;
+
+        [Subscribe]
+        public BlockUserDeletedEvent OnBlockUserDeleted(
+            [EventMessage] BlockUserDeletedEvent evt) => evt;
+
+        [Subscribe]
+        public BlockUserChangedEvent OnBlockUserChanged(
+            [EventMessage] BlockUserChangedEvent evt) => evt;
     }
 }

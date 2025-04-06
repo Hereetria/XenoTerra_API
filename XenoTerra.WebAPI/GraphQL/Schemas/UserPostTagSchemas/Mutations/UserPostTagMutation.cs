@@ -2,5 +2,6 @@
 {
     public class UserPostTagMutation
     {
+        public string ReturnStaticString() => "123";
     }
 }

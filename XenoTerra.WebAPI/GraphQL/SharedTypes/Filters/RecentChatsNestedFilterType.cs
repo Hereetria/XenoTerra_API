@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<RecentChats> descriptor)
         {
+            descriptor.Name("RecentChatsNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.RecentChatsId);

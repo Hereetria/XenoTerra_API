@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionMutations
 {
     public class ReactionMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

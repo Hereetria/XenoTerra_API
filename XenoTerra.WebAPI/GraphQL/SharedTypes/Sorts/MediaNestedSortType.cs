@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Media> descriptor)
         {
+            descriptor.Name("MediaNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.MediaId);

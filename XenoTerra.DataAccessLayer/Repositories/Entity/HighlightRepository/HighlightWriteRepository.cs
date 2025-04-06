@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
 {
-    public class HighlightWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Highlight, Guid>(mapper, context), IHighlightWriteRepository
+    public class HighlightWriteRepository(AppDbContext context) : WriteRepository<Highlight, Guid>(context), IHighlightWriteRepository
     {
     }
 }

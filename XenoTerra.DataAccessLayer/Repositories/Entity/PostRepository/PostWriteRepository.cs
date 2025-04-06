@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
 {
-    public class PostWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Post, Guid>(mapper, context), IPostWriteRepository
+    public class PostWriteRepository(AppDbContext context) : WriteRepository<Post, Guid>(context), IPostWriteRepository
     {
     }
 }

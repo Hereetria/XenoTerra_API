@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<ReportComment> descriptor)
         {
+            descriptor.Name("ReportCommentNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.ReportCommentId);

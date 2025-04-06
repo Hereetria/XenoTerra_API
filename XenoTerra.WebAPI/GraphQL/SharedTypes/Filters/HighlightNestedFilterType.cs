@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Highlight> descriptor)
         {
+            descriptor.Name("HighlightNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.HighlightId);

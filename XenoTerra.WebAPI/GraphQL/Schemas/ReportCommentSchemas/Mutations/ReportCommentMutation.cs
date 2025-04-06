@@ -6,10 +6,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMut
 {
     public class ReportCommentMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

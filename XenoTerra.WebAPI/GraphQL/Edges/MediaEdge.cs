@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class MediaEdge
     {
-        public ResultMediaWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultMediaWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

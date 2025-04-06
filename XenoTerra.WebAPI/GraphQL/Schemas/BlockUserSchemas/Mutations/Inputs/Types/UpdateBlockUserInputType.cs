@@ -1,10 +1,11 @@
 ﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Models;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs
+namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs.Types
 {
-    public class UpdateBlockUserInputType : InputObjectType<UpdateBlockUserDto>
+    public class UpdateBlockUserInputType : InputObjectType<UpdateBlockUserInput>
     {
-        protected override void Configure(IInputObjectTypeDescriptor<UpdateBlockUserDto> descriptor)
+        protected override void Configure(IInputObjectTypeDescriptor<UpdateBlockUserInput> descriptor)
         {
             descriptor.Field(x => x.BlockUserId)
                 .Type<NonNullType<IdType>>();
@@ -16,7 +17,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs
                 .Type<IdType>();
 
             descriptor.Field(x => x.BlockedAt)
-                .Type<DateTimeType>();
+                .Type<StringType>();
         }
     }
 }

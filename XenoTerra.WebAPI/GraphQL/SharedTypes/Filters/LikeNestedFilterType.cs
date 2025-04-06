@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Like> descriptor)
         {
+            descriptor.Name("LikeNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.LikeId);

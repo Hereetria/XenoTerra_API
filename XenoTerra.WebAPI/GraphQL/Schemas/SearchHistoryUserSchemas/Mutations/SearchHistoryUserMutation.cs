@@ -2,5 +2,6 @@
 {
     public class SearchHistoryUserMutation
     {
+        public string ReturnStaticString() => "123";
     }
 }

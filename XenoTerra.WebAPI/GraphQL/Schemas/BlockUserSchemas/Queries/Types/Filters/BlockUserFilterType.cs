@@ -2,7 +2,7 @@
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filters
 {
     public class BlockUserFilterType : FilterInputType<BlockUser>
     {

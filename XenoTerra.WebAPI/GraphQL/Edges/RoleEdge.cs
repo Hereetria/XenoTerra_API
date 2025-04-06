@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class RoleEdge
     {
-        public ResultRoleWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultRoleWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

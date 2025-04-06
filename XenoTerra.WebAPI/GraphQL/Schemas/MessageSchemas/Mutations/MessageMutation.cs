@@ -6,9 +6,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageMutations
 {
     public class MessageMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
     }
 }

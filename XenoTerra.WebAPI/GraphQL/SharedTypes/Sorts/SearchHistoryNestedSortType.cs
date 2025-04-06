@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<SearchHistory> descriptor)
         {
+            descriptor.Name("SearchHistoryNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.SearchHistoryId);

@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Like> descriptor)
         {
+            descriptor.Name("LikeNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.LikeId);

@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Post> descriptor)
         {
+            descriptor.Name("PostNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.PostId);

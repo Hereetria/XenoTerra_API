@@ -2,5 +2,6 @@
 {
     public class StoryHighlightMutation
     {
+        public string ReturnStaticString() => "123";
     }
 }

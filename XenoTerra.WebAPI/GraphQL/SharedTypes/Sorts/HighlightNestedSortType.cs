@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Highlight> descriptor)
         {
+            descriptor.Name("HighlightNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.HighlightId);

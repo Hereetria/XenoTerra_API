@@ -17,26 +17,23 @@ namespace XenoTerra.DataAccessLayer.Utils
         public static PropertyInfo GetPrimaryKeyProperty(AppDbContext context, Type entityType)
         {
             var method = typeof(TypeProviders)
-                .GetMethod(nameof(GetPrimaryKeyProperty), new[] { typeof(AppDbContext) })!
+                .GetMethod(nameof(GetPrimaryKeyProperty), [typeof(AppDbContext)])!
                 .MakeGenericMethod(entityType);
 
-            return (PropertyInfo)method.Invoke(null, new object[] { context })!;
+            return (PropertyInfo)method.Invoke(null, [context])!;
         }
 
         public static PropertyInfo GetPrimaryKeyProperty<TEntity>(AppDbContext context)
         {
             var entityType = typeof(TEntity);
-            var model = context.Model.FindEntityType(entityType);
-            if (model == null)
-                throw new InvalidOperationException($"EntityType {entityType.Name} için model bulunamadı.");
+            var model = context.Model.FindEntityType(entityType)
+                ?? throw new InvalidOperationException($"EntityType {entityType.Name} için model bulunamadı.");
 
-            var primaryKey = model.FindPrimaryKey();
-            if (primaryKey == null)
-                throw new InvalidOperationException($"Entity {entityType.Name} için Primary Key bulunamadı.");
+            var primaryKey = model.FindPrimaryKey()
+                ?? throw new InvalidOperationException($"Entity {entityType.Name} için Primary Key bulunamadı.");
 
-            var pkPropertyName = primaryKey.Properties.FirstOrDefault()?.Name;
-            if (pkPropertyName == null)
-                throw new InvalidOperationException($"Entity {entityType.Name} için geçerli bir Primary Key property bulunamadı.");
+            string pkPropertyName = (primaryKey.Properties.FirstOrDefault()?.Name)
+                ?? throw new InvalidOperationException($"Entity {entityType.Name} için geçerli bir Primary Key property bulunamadı.");
 
             var propertyInfo = entityType.GetProperty(pkPropertyName, BindingFlags.Public | BindingFlags.Instance);
             return propertyInfo ?? throw new InvalidOperationException($"Property {pkPropertyName} bulunamadı.");
@@ -129,7 +126,7 @@ namespace XenoTerra.DataAccessLayer.Utils
 
             var selectedQuery = (IQueryable<TKey>)selectMethod.Invoke(null, new object[] { filteredQuery, selectLambda })!;
 
-            return selectedQuery.ToHashSet();
+            return [.. selectedQuery];
         }
 
         public static Dictionary<object, List<object>> GetEntityIdToRelatedIds(
@@ -199,9 +196,20 @@ namespace XenoTerra.DataAccessLayer.Utils
             return false;
         }
 
+
+
         public static bool IsPrimitiveOrValueType(this Type type)
         {
-            return type.IsPrimitive || type.IsValueType || type == typeof(string) || type == typeof(DateTime) || type == typeof(Guid);
+            type = Nullable.GetUnderlyingType(type) ?? type;
+
+            return type.IsPrimitive
+                || type.IsEnum
+                || type == typeof(string)
+                || type == typeof(decimal)
+                || type == typeof(DateTime)
+                || type == typeof(Guid)
+                || type == typeof(DateTimeOffset)
+                || type == typeof(TimeSpan);
         }
 
         public static Type? GetEntityType<TEntity>(string field)

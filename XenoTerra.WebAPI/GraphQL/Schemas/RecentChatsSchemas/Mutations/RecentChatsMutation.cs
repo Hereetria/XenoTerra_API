@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsMutatio
 {
     public class RecentChatsMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

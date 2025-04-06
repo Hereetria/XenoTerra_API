@@ -5,14 +5,11 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
 {
-    public record ResultBlockUserWithRelationsDto(
+    public record class ResultBlockUserWithRelationsDto(
         Guid BlockUserId,
         Guid BlockingUserId,
         Guid BlockedUserId,
-        DateTime BlockedAt
-    )
-    {
-        public ResultUserDto? BlockingUser { get; set; }
-        public ResultUserDto? BlockedUser { get; set; }
-    }
+        DateTime BlockedAt,
+        ResultUserDto BlockingUser,
+        ResultUserDto BlockedUser);
 }

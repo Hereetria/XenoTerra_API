@@ -31,8 +31,9 @@ namespace XenoTerra.DTOLayer.Mappings
         {
             // BlockUser Mappings
             CreateMap<BlockUser, ResultBlockUserWithRelationsDto>()
-                .ForMember(dest => dest.BlockingUser, opt => opt.MapFrom(src => src.BlockingUser)) 
-                .ForMember(dest => dest.BlockedUser, opt => opt.MapFrom(src => src.BlockedUser)) 
+                .ForMember(dest => dest.BlockingUser, opt => opt.MapFrom(src => src.BlockingUser ?? null))
+                .ForMember(dest => dest.BlockedUser, opt => opt.MapFrom(src => src.BlockedUser ?? null))
+
                 .ReverseMap();
             CreateMap<BlockUser, ResultBlockUserDto>().ReverseMap();
             CreateMap<BlockUser, CreateBlockUserDto>().ReverseMap();

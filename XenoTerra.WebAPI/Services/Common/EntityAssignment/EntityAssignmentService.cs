@@ -228,10 +228,10 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
         {
             return typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p =>
-                    p.PropertyType == typeof(TEntity) ||
+                    p.PropertyType == typeof(TRelatedEntity ) ||
                     (p.PropertyType.IsGenericType &&
                      p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) &&
-                     p.PropertyType.GetGenericArguments()[0] == typeof(TEntity)))
+                     p.PropertyType.GetGenericArguments()[0] == typeof(TRelatedEntity)))
                 .ToList();
         }
 

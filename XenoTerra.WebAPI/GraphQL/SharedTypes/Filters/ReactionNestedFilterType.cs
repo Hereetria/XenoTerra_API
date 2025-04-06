@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Reaction> descriptor)
         {
+            descriptor.Name("ReactionNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.ReactionId);

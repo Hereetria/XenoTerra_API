@@ -1,3 +1,4 @@
+using System.Net.WebSockets;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Extensions;
 
@@ -22,23 +23,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-
-app.UseHttpsRedirection();
 
 app.UseCors(MyAllowSpecificOrigins);
 
-app.UseAuthorization();
-
 app.UseWebSockets();
+
+app.UseRouting();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
 
 app.MapControllers();
 

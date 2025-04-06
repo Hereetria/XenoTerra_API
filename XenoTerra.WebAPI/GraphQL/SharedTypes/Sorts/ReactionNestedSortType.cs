@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Reaction> descriptor)
         {
+            descriptor.Name("ReactionNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.ReactionId);

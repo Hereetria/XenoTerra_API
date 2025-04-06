@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations
 {
     public class NoteMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

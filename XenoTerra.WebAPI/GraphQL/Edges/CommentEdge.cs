@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class CommentEdge
     {
-        public ResultCommentWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultCommentWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

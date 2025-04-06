@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository
 {
-    public class MessageWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Message, Guid>(mapper, context), IMessageWriteRepository
+    public class MessageWriteRepository(AppDbContext context) : WriteRepository<Message, Guid>(context), IMessageWriteRepository
     {
     }
 

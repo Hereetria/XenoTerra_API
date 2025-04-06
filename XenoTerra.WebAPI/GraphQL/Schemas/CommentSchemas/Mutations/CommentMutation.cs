@@ -7,9 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentMutations
 {
     public class CommentMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
     }
 }

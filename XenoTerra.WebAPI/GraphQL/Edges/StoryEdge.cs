@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class StoryEdge
     {
-        public ResultStoryWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultStoryWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

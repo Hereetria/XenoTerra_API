@@ -7,8 +7,8 @@ using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
 using XenoTerra.WebAPI.Utils;
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
+            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);                                                
             return _mapper.Map<List<ResultBlockUserWithRelationsDto>>(entities);
         }
 
@@ -37,26 +37,30 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries
         [UseFiltering(typeof(BlockUserFilterType))]
         [UseSorting(typeof(BlockUserSortType))]
         public async Task<IEnumerable<ResultBlockUserWithRelationsDto>> GetBlockUsersByIdsAsync(
-            IEnumerable<Guid> keys,
+            IEnumerable<string>? keys,
             [Service] IBlockUserQueryService service,
             [Service] IBlockUserResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
             var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
             return _mapper.Map<List<ResultBlockUserWithRelationsDto>>(entities);
         }
 
-        public async Task<ResultBlockUserWithRelationsDto> GetBlockUserByIdAsync(
-            Guid key,
+        public async Task<ResultBlockUserWithRelationsDto?> GetBlockUserByIdAsync(
+            string? key,
             [Service] IBlockUserQueryService service,
             [Service] IBlockUserResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultBlockUserWithRelationsDto>(entity);
         }
     }
-
 }

@@ -6,10 +6,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowMutations
 {
     public class FollowMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

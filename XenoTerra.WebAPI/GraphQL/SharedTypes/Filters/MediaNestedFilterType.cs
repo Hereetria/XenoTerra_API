@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Media> descriptor)
         {
+            descriptor.Name("MediaNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.MediaId);

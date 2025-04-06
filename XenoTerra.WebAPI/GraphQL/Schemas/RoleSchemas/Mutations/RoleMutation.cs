@@ -6,10 +6,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleMutations
 {
     public class RoleMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

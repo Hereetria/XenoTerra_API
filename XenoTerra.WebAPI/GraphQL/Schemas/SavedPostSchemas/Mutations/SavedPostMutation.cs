@@ -5,9 +5,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations
 {
     public class SavedPostMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
     }
 }

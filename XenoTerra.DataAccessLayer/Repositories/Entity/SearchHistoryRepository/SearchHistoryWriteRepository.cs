@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
 {
-    public class SearchHistoryWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<SearchHistory, Guid>(mapper, context), ISearchHistoryWriteRepository
+    public class SearchHistoryWriteRepository(AppDbContext context) : WriteRepository<SearchHistory, Guid>(context), ISearchHistoryWriteRepository
     {
     }
 }

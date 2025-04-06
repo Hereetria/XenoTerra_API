@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Notification> descriptor)
         {
+            descriptor.Name("NotificationNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.NotificationId);

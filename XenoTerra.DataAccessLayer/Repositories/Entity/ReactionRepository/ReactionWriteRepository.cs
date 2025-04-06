@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
 {
-    public class ReactionWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Reaction, Guid>(mapper, context), IReactionWriteRepository
+    public class ReactionWriteRepository(AppDbContext context) : WriteRepository<Reaction, Guid>(context), IReactionWriteRepository
     {
     }
 }

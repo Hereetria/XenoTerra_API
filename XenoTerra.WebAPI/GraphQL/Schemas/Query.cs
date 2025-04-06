@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.PostQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries;
+using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.StoryQueries;
@@ -19,86 +19,49 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.UserQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryQueries;
 
-
-
-
-
-
-
-
-
-
-
-//using XenoTerra.WebAPI.Schemas.Queries.PostTagQueries;
-
 namespace XenoTerra.WebAPI.GraphQL.Schemas
 {
-        public class Query
-        {
-            public BlockUserQuery BlockUsers { get; }
-            public CommentQuery Comments { get; }
-            public FollowQuery Follows { get; }
-            public HighlightQuery Highlights { get; }
-            public LikeQuery Likes { get; }
-            public MediaQuery Media { get; }
-            public MessageQuery Messages { get; }
-            public NoteQuery Notes { get; }
-            public NotificationQuery Notifications { get; }
-            public PostQuery Posts { get; }
-            public ReactionQuery Reactions { get; }
-            public RecentChatsQuery RecentChats { get; }
-            public ReportCommentQuery ReportComments { get; }
-            public RoleQuery Roles { get; }
-            public SavedPostQuery SavedPosts { get; }
-            public SearchHistoryQuery SearchHistories { get; }
-            public StoryQuery Stories { get; }
-            public UserQuery Users { get; }
-            public UserSettingQuery UserSettings { get; }
-            public ViewStoryQuery ViewStories { get; }
-
-            public Query(
-                BlockUserQuery blockUsers,
-                CommentQuery comments,
-                FollowQuery follows,
-                HighlightQuery highlights,
-                LikeQuery likes,
-                MediaQuery media,
-                MessageQuery messages,
-                NoteQuery notes,
-                NotificationQuery notifications,
-                PostQuery posts,
-                ReactionQuery reactions,
-                RecentChatsQuery recentChats,
-                ReportCommentQuery reportComments,
-                RoleQuery roles,
-                SavedPostQuery savedPosts,
-                SearchHistoryQuery searchHistories,
-                StoryQuery stories,
-                UserQuery users,
-                UserSettingQuery userSettings,
-                ViewStoryQuery viewStories)
-            {
-                BlockUsers = blockUsers;
-                Comments = comments;
-                Follows = follows;
-                Highlights = highlights;
-                Likes = likes;
-                Media = media;
-                Messages = messages;
-                Notes = notes;
-                Notifications = notifications;
-                Posts = posts;
-                Reactions = reactions;
-                RecentChats = recentChats;
-                ReportComments = reportComments;
-                Roles = roles;
-                SavedPosts = savedPosts;
-                SearchHistories = searchHistories;
-                Stories = stories;
-                Users = users;
-                UserSettings = userSettings;
-                ViewStories = viewStories;
-            }
-        }
+    public class Query(
+        BlockUserQuery blockUsers,
+        CommentQuery comments,
+        FollowQuery follows,
+        HighlightQuery highlights,
+        LikeQuery likes,
+        MediaQuery media,
+        MessageQuery messages,
+        NoteQuery notes,
+        NotificationQuery notifications,
+        PostQuery posts,
+        ReactionQuery reactions,
+        RecentChatsQuery recentChats,
+        ReportCommentQuery reportComments,
+        RoleQuery roles,
+        SavedPostQuery savedPosts,
+        SearchHistoryQuery searchHistories,
+        StoryQuery stories,
+        UserQuery users,
+        UserSettingQuery userSettings,
+        ViewStoryQuery viewStories)
+    {
+        public BlockUserQuery BlockUsers { get; } = blockUsers;
+        public CommentQuery Comments { get; } = comments;
+        public FollowQuery Follows { get; } = follows;
+        public HighlightQuery Highlights { get; } = highlights;
+        public LikeQuery Likes { get; } = likes;
+        public MediaQuery Media { get; } = media;
+        public MessageQuery Messages { get; } = messages;
+        public NoteQuery Notes { get; } = notes;
+        public NotificationQuery Notifications { get; } = notifications;
+        public PostQuery Posts { get; } = posts;
+        public ReactionQuery Reactions { get; } = reactions;
+        public RecentChatsQuery RecentChats { get; } = recentChats;
+        public ReportCommentQuery ReportComments { get; } = reportComments;
+        public RoleQuery Roles { get; } = roles;
+        public SavedPostQuery SavedPosts { get; } = savedPosts;
+        public SearchHistoryQuery SearchHistories { get; } = searchHistories;
+        public StoryQuery Stories { get; } = stories;
+        public UserQuery Users { get; } = users;
+        public UserSettingQuery UserSettings { get; } = userSettings;
+        public ViewStoryQuery ViewStories { get; } = viewStories;
     }
-
+}

@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<ViewStory> descriptor)
         {
+            descriptor.Name("ViewStoryNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.ViewStoryId);

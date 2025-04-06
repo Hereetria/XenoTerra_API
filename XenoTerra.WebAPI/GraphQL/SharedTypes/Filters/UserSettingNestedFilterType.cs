@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<UserSetting> descriptor)
         {
+            descriptor.Name("UserSettingNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.UserSettingId);

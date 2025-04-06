@@ -1,6 +1,6 @@
 ﻿namespace XenoTerra.WebAPI.GraphQL.Directives
 {
-    public class test
+    public class Test
     {
     }
 }

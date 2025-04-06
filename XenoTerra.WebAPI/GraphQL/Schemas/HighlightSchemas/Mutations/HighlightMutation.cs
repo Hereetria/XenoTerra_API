@@ -7,10 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightMutations
 {
     public class HighlightMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
-
+        public string ReturnStaticString() => "123";
     }
 }

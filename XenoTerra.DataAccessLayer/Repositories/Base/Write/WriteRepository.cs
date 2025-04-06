@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
 {
@@ -13,13 +14,11 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
         where TEntity : class
         where TKey : notnull
     {
-        private readonly IMapper _mapper;
         protected readonly AppDbContext _context;
         private readonly DbSet<TEntity> _dbSet;
 
-        public WriteRepository(IMapper mapper, AppDbContext context)
+        public WriteRepository(AppDbContext context)
         {
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper), $"{nameof(mapper)} cannot be null.");
             _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
             _dbSet = _context.Set<TEntity>();
         }
@@ -31,71 +30,109 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
 
         public async Task<TEntity> InsertAsync(TEntity entity)
         {
-            if (entity is null)
-                throw new ArgumentNullException(nameof(entity), "The entity to create cannot be null.");
+            ArgumentGuard.EnsureNotNull(entity);
 
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            return await ExecuteWithTransactionAsync(async () =>
             {
                 await _dbSet.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
                 return entity;
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"[ERROR] Insert failed: {ex.Message}");
-                throw new InvalidOperationException("An error occurred while inserting the entity.", ex);
-            }
+            }, "inserting");
         }
 
-        public async Task<bool> RemoveAsync(TKey key)
+        public async Task<TEntity> RemoveAsync(TKey key)
         {
-            if (key is null || EqualityComparer<TKey>.Default.Equals(key, default) && typeof(TKey) == typeof(Guid))
-                throw new ArgumentException("The key cannot be null or an empty GUID.", nameof(key));
+            ArgumentGuard.EnsureNotNullOrEmpty(key);
+            var entity = await _dbSet.FindAsync(key)
+                         ?? throw new KeyNotFoundException($"Entity with key '{key}' not found.");
 
-            var entity = await _dbSet.FindAsync(key);
-            if (entity is null)
-                return false;
-
-            await using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            return await ExecuteWithTransactionAsync(async () =>
             {
                 _dbSet.Remove(entity);
                 await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"[ERROR] Delete failed: {ex.Message}");
-                throw new InvalidOperationException("An error occurred while deleting the entity.", ex);
-            }
+                return entity;
+            }, "deleting");
         }
 
-        public async Task<TEntity> ModifyAsync(TEntity entity)
+        public async Task<TEntity> ModifyAsync(TEntity entity, IEnumerable<string> modifiedFields)
         {
-            if (entity is null)
-                throw new ArgumentNullException(nameof(entity), "The entity to update cannot be null.");
+            ArgumentGuard.EnsureNotNull(entity);
 
+            return await ExecuteWithTransactionAsync(async () =>
+            {
+                _dbSet.Attach(entity);
+                var entry = _context.Entry(entity);
+
+                var keyProps = entry.Metadata.FindPrimaryKey()?.Properties;
+                var keyNames = keyProps?.Select(p => p.Name).ToHashSet(StringComparer.OrdinalIgnoreCase) ?? [];
+
+                foreach (var field in modifiedFields)
+                {
+                    if (keyNames.Contains(field))
+                        continue;
+
+                    var property = entry.Metadata.GetProperties()
+                        .FirstOrDefault(p => string.Equals(p.Name, field, StringComparison.OrdinalIgnoreCase));
+
+                    if (property is not null)
+                    {
+                        entry.Property(property.Name).IsModified = true;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return entity;
+            }, "updating");
+        }
+
+        private async Task<TEntity> ExecuteWithTransactionAsync(Func<Task<TEntity>> operation, string operationName)
+        {
             await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            return await ExecuteSafelyAsync(async () =>
+            {
+                var result = await operation();
+                await transaction.CommitAsync();
+                return result;
+            }, async () =>
+            {
+                await transaction.RollbackAsync();
+            }, operationName);
+        }
+
+        private static async Task<TEntity> ExecuteSafelyAsync(
+            Func<Task<TEntity>> operation,
+            Func<Task> rollback,
+            string operationName)
+        {
             try
             {
-                _dbSet.Update(entity);
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-
-                return entity;
+                return await operation();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                await rollback();
+                throw new InvalidOperationException("A concurrency conflict occurred during data operation.", ex);
+            }
+            catch (DbUpdateException ex)
+            {
+                await rollback();
+                throw new InvalidOperationException("A database update error occurred.", ex);
+            }
+            catch (ArgumentException ex)
+            {
+                await rollback();
+                throw new ArgumentException("Invalid argument provided to the operation.", ex);
+            }
+            catch (TimeoutException ex)
+            {
+                await rollback();
+                throw new TimeoutException("The operation timed out while writing to the database.", ex);
             }
             catch (Exception ex)
             {
-                await transaction.RollbackAsync();
-                Console.WriteLine($"[ERROR] Update failed: {ex.Message}");
-                throw new InvalidOperationException("An error occurred while updating the entity.", ex);
+                await rollback();
+                throw new Exception($"An unexpected error occurred while {operationName} the entity.", ex);
             }
         }
     }

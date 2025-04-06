@@ -1,33 +1,19 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
-using Microsoft.EntityFrameworkCore;
-using XenoTerra.BussinessLogicLayer.Services.Entity.RoleService;
-using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries.Sorts;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers;
-using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices;
-using XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices;
-using XenoTerra.WebAPI.Utils;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Queries
 {
-    public class RoleQuery
+    public class RoleQuery(IMapper mapper, IQueryResolverHelper<Role, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<Role, Guid> _queryResolver;
-
-        public RoleQuery(IMapper mapper, IQueryResolverHelper<Role, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<Role, Guid> _queryResolver = queryResolver;
 
         [UsePaging]
         [UseFiltering(typeof(RoleFilterType))]

@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
 {
-    public class LikeWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Like, Guid>(mapper, context), ILikeWriteRepository
+    public class LikeWriteRepository(AppDbContext context) : WriteRepository<Like, Guid>(context), ILikeWriteRepository
     {
     }
 }

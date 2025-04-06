@@ -13,7 +13,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository
 {
 
-    public class NoteWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Note, Guid>(mapper, context), INoteWriteRepository
+    public class NoteWriteRepository(AppDbContext context) : WriteRepository<Note, Guid>(context), INoteWriteRepository
     {
     }
 

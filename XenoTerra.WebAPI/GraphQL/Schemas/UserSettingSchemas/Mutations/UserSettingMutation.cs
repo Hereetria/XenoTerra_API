@@ -5,10 +5,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingMutatio
 {
     public class UserSettingMutation
     {
-        public class ExampleMutation
-        {
-            public string ReturnStaticString() => "123";
-        }
+        public string ReturnStaticString() => "123";
 
     }
 }

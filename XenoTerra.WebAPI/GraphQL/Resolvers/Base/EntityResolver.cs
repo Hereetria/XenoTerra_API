@@ -67,7 +67,8 @@ namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
                 var assignMethod = assignmentServiceType.GetMethod("AssignRelatedEntities")
                     ?? throw new InvalidOperationException("AssignRelatedEntities method not found.");
 
-                assignMethod.Invoke(assignmentService, new object[] { dbContext, entityResultList, resultsDict });
+                var entityResultListMaterialized = entityResultList.ToList();
+                assignMethod.Invoke(assignmentService, new object[] { dbContext, entityResultListMaterialized, resultsDict });
             }
         }
     }

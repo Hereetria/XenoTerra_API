@@ -19,6 +19,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.StoryMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.UserMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingMutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryMutations;
+using XenoTerra.WebAPI.Services.Mutations.Base;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas
 {
@@ -45,9 +46,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas
         public UserSettingMutation UserSettings { get; }
         public ViewStoryMutation ViewStories { get; }
 
-        public Mutation(IMapper mapper)
+        public Mutation()
         {
-            BlockUsers = new BlockUserMutation(mapper);
+            BlockUsers = new BlockUserMutation();
             Comments = new CommentMutation();
             Follows = new FollowMutation();
             Highlights = new HighlightMutation();

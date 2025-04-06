@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Role> descriptor)
         {
+            descriptor.Name("RoleNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.Id);

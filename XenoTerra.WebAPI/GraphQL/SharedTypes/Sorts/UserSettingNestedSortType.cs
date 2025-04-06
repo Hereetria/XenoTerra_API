@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<UserSetting> descriptor)
         {
+            descriptor.Name("UserSettingNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.UserSettingId);

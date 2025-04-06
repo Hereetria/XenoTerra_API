@@ -11,16 +11,23 @@ namespace XenoTerra.WebAPI.Services.Mutations.Base
         where TUpdateDto : class
         where TKey : notnull
     {
-        Task<OperationResult<TResultDto>> CreateAsync(
+        Task<TPayload> CreateAsync<TPayload>(
             IWriteService<TEntity, TCreateDto, TUpdateDto, TKey> writeService,
-            TCreateDto? input);
+            TCreateDto createDto
+        )
+            where TPayload : Payload<TResultDto>, new();
 
-        Task<OperationResult<TResultDto>> UpdateAsync(
+        Task<TPayload> UpdateAsync<TPayload>(
             IWriteService<TEntity, TCreateDto, TUpdateDto, TKey> writeService,
-            TUpdateDto? input);
+            TUpdateDto updateDto,
+            IEnumerable<string> modifiedFields
+        )
+            where TPayload : Payload<TResultDto>, new();
 
-        Task<OperationResult<object>> DeleteAsync(
+        Task<TPayload> DeleteAsync<TPayload>(
             IWriteService<TEntity, TCreateDto, TUpdateDto, TKey> writeService,
-            TKey key);
+            TKey key
+        )
+            where TPayload : Payload<TResultDto>, new();
     }
 }

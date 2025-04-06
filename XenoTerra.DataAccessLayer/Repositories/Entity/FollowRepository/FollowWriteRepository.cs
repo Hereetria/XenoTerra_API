@@ -13,7 +13,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
 {
 
-    public class FollowWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<Follow, Guid>(mapper, context), IFollowWriteRepository
+    public class FollowWriteRepository(AppDbContext context) : WriteRepository<Follow, Guid>(context), IFollowWriteRepository
     {
     }
 

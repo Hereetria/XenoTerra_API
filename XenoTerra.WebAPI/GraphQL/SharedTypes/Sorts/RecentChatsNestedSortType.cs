@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<RecentChats> descriptor)
         {
+            descriptor.Name("RecentChatsNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.RecentChatsId);

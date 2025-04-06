@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Edges
 {
     public class BlockUserEdge
     {
-        public ResultBlockUserWithRelationsDto Node { get; set; }
-        public string Cursor { get; set; }
+        public ResultBlockUserWithRelationsDto Node { get; set; } = null!;
+        public string Cursor { get; set; } = string.Empty;
     }
 }

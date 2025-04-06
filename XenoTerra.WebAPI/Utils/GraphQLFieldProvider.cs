@@ -1,58 +1,86 @@
 ﻿using HotChocolate.Language;
 using HotChocolate.Resolvers;
+using System.Reflection;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 
 namespace XenoTerra.WebAPI.Utils
 {
     public static class GraphQLFieldProvider
     {
-        public static List<string> GetSelectedFields(IResolverContext context)
+        public static IReadOnlyList<string> GetSelectedFields(IResolverContext context)
         {
             var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
-
             if (selections == null)
-                return new List<string>();
+                return [];
 
             var fields = new List<string>();
 
-            foreach (var selection in selections.OfType<FieldNode>())
+            if (IsPaginatedMethod(context))
             {
-                if (!selection.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase))
-                    continue;
+                // CASE: Pagination (edges > node > fields)
+                var edgesField = selections.OfType<FieldNode>()
+                    .FirstOrDefault(f => f.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase));
 
-                var nodeSelection = selection.SelectionSet?.Selections
+                var nodeField = edgesField?.SelectionSet?.Selections
                     .OfType<FieldNode>()
                     .FirstOrDefault(f => f.Name.Value.Equals("node", StringComparison.OrdinalIgnoreCase));
 
-                if (nodeSelection == null)
-                    continue;
-
-                var nestedFields = nodeSelection.SelectionSet?.Selections
+                var nestedFields = nodeField?.SelectionSet?.Selections
                     .OfType<FieldNode>()
                     .Select(f => f.Name.Value)
-                    .Where(name => !name.StartsWith("__", StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+                    .Where(name => !name.StartsWith("__", StringComparison.OrdinalIgnoreCase));
 
                 if (nestedFields != null)
                     fields.AddRange(nestedFields);
             }
+            else
+            {
+                // CASE: Non-pagination (flat field selection)
+                var directFields = selections
+                    .OfType<FieldNode>()
+                    .Select(f => f.Name.Value)
+                    .Where(name => !name.StartsWith("__", StringComparison.OrdinalIgnoreCase));
 
-            return fields.Distinct(StringComparer.OrdinalIgnoreCase).ToList();
+                fields.AddRange(directFields);
+            }
+
+            return [.. fields.Distinct(StringComparer.OrdinalIgnoreCase)];
         }
+
 
         public static IEnumerable<string> GetNestedSelectedFields(IResolverContext context, string fieldName)
         {
             fieldName = fieldName.ToLowerInvariant();
 
-            var nodeFields = GetNodeFields(context);
+            if (IsPaginatedMethod(context))
+            {
+                var nodeFields = GetNodeFields(context);
 
-            var field = nodeFields
-                .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
+                var field = nodeFields
+                    .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
 
-            return field?.SelectionSet?.Selections
-                .OfType<FieldNode>()
-                .Select(f => f.Name.Value.ToLowerInvariant())
-                .Where(name => !name.StartsWith("__"))
-                .ToList() ?? new List<string>();
+                return field?.SelectionSet?.Selections
+                    .OfType<FieldNode>()
+                    .Select(f => f.Name.Value.ToLowerInvariant())
+                    .Where(name => !name.StartsWith("__"))
+                    .ToList() ?? [];
+            }
+            else
+            {
+                var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
+                if (selections is null)
+                    return [];
+
+                var targetField = selections
+                    .OfType<FieldNode>()
+                    .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
+
+                return targetField?.SelectionSet?.Selections
+                    .OfType<FieldNode>()
+                    .Select(f => f.Name.Value.ToLowerInvariant())
+                    .Where(name => !name.StartsWith("__"))
+                    .ToList() ?? [];
+            }
         }
 
         public static int GetRelationalFieldsCount(IResolverContext context)
@@ -64,22 +92,38 @@ namespace XenoTerra.WebAPI.Utils
 
         public static bool IsNonRelationalField(IResolverContext context, string fieldName)
         {
-            var nodeFields = GetNodeFields(context);
+            if (IsPaginatedMethod(context))
+            {
+                // CASE: Pagination → use nodeFields via edges > node
+                var nodeFields = GetNodeFields(context);
 
-            var field = nodeFields
-                .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
+                var field = nodeFields
+                    .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
 
-            return field != null && field.SelectionSet == null;
+                return field != null && field.SelectionSet == null;
+            }
+            else
+            {
+                // CASE: No pagination → read from top-level field selections
+                var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
+                if (selections == null)
+                    return false;
+
+                var directField = selections
+                    .OfType<FieldNode>()
+                    .FirstOrDefault(f => f.Name.Value.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
+
+                return directField != null && directField.SelectionSet == null;
+            }
         }
 
         public static IReadOnlyList<string> GetRelationalFields(IResolverContext context)
         {
             var fields = GetSelectedFields(context);
 
-            return fields
+            return [.. fields
                 .Where(field => !IsNonRelationalField(context, field))
-                .Distinct(StringComparer.OrdinalIgnoreCase)
-                .ToList();
+                .Distinct(StringComparer.OrdinalIgnoreCase)];
         }
 
         private static IEnumerable<FieldNode> GetNodeFields(IResolverContext context)
@@ -87,7 +131,7 @@ namespace XenoTerra.WebAPI.Utils
             var selections = context.Selection.SyntaxNode.SelectionSet?.Selections;
 
             if (selections == null)
-                return Enumerable.Empty<FieldNode>();
+                return [];
 
             var node = selections
                 .OfType<FieldNode>()
@@ -99,8 +143,77 @@ namespace XenoTerra.WebAPI.Utils
             return node?.SelectionSet?.Selections
                 .OfType<FieldNode>()
                 .Where(f => !f.Name.Value.StartsWith("__", StringComparison.OrdinalIgnoreCase))
-                ?? Enumerable.Empty<FieldNode>();
+                ?? [];
+        }
+
+        public static IReadOnlyList<string> GetIdFieldNamesFromInputType<TInput>(ISchema schema)
+        {
+            var typeName = typeof(TInput).Name;
+
+            var inputType = schema.GetType<INamedInputType>(typeName);
+
+            if (inputType is not IInputObjectType objectType)
+                return [];
+
+            var idFields = new List<string>();
+
+            foreach (var field in objectType.Fields)
+            {
+                if (IsIdType(field.Type))
+                {
+                    idFields.Add(field.Name);
+                }
+            }
+
+            return idFields;
+        }
+
+        public static IReadOnlyList<string> GetFieldNamesByAttribute<TInput, TAttribute>()
+            where TInput : class
+            where TAttribute : Attribute
+        {
+            var type = typeof(TInput);
+            var fields = new List<string>();
+
+            foreach (var prop in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+            {
+                if (prop.GetCustomAttribute<TAttribute>() is not null)
+                {
+                    fields.Add(prop.Name);
+                }
+            }
+
+            return fields;
+        }
+
+        private static bool IsIdType(IType type)
+        {
+            if (type is NonNullType nonNull)
+                type = nonNull.Type;
+
+            return type.NamedType() is IdType;
+        }
+
+        public static IEnumerable<string> GetSelectedParameterFields<TInput>(
+            IResolverContext context,
+            string inputArgumentName)
+        {
+            var variable = context.Selection.SyntaxNode.Arguments
+                .FirstOrDefault(arg => arg.Name.Value.Equals(inputArgumentName, StringComparison.OrdinalIgnoreCase));
+
+            if (variable?.Value is not ObjectValueNode inputNode)
+                return [];
+
+            return inputNode.Fields
+                .Select(f => f.Name.Value)
+                .Distinct(StringComparer.OrdinalIgnoreCase);
+        }
+
+        public static bool IsPaginatedMethod(IResolverContext context)
+        {
+            return context.Selection.SyntaxNode.SelectionSet?.Selections
+            .OfType<FieldNode>()
+            .Any(f => f.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase)) == true;
         }
     }
-
 }

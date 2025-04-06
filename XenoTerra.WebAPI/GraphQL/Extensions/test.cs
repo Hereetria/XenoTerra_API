@@ -1,6 +1,6 @@
 ﻿namespace XenoTerra.WebAPI.GraphQL.Extensions
 {
-    public class test
+    public class Test
     {
     }
 }

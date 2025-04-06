@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Follow> descriptor)
         {
+            descriptor.Name("FollowNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.FollowId);

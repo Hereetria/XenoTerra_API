@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Notification> descriptor)
         {
+            descriptor.Name("NotificationNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.NotificationId);

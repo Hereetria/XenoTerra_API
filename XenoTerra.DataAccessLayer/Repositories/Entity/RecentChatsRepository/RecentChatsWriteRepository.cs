@@ -12,7 +12,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository
 {
-    public class RecentChatsWriteRepository(IMapper mapper, AppDbContext context) : WriteRepository<RecentChats, Guid>(mapper, context), IRecentChatsWriteRepository
+    public class RecentChatsWriteRepository(AppDbContext context) : WriteRepository<RecentChats, Guid>(context), IRecentChatsWriteRepository
     {
     }
 }

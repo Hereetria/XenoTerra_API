@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Comment> descriptor)
         {
+            descriptor.Name("CommentNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.CommentId);

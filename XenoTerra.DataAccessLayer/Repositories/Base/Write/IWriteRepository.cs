@@ -13,7 +13,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
     {
         AppDbContext GetDbContext();
         Task<TEntity> InsertAsync(TEntity entity);
-        Task<TEntity> ModifyAsync(TEntity entity);
-        Task<bool> RemoveAsync(TKey key);
+        Task<TEntity> ModifyAsync(TEntity entity, IEnumerable<string> modifiedFields);
+        Task<TEntity> RemoveAsync(TKey key);
     }
 }

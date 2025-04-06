@@ -11,8 +11,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
         where TEntity : class
         where TKey : notnull
     {
-        IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedProperties);
-        IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedProperties);
-        IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedProperties);
+        IQueryable<TEntity> FetchAllQueryable(IEnumerable<string> selectedFields);
+        IQueryable<TEntity> FetchByIdQueryable(TKey key, IEnumerable<string> selectedFields);
+        IQueryable<TEntity> FetchByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields);
     }
 }

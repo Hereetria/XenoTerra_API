@@ -21,6 +21,18 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.WebAPI.Extensions.Helpers.Strategies.Abstract;
 using XenoTerra.WebAPI.Extensions.Helpers.Strategies;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
+using XenoTerra.WebAPI.Services.Queries.Base;
+using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
+using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;
+using XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.StoryResolvers;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Entity;
+using XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserResolvers;
+using XenoTerra.WebAPI.Services.Mutations.Entity.BlockUserMutationServices;
+using HotChocolate.Execution;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions;
+using XenoTerra.WebAPI.GraphQL;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -32,9 +44,13 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddGraphQLServer()
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
+                .AddSubscriptionType<BlockUserSubscription>()
+                .AddInMemorySubscriptions()
                 .AddProjections()
                 .AddFiltering()
                 .AddSorting();
+
+            builder.Services.AddScoped<BlockUserSubscription>();
 
             builder.Services.AddAllDataLoaders(typeof(Query).Assembly);
             builder.Services.AddAllObjectTypes(typeof(Query).Assembly);
@@ -44,7 +60,7 @@ namespace XenoTerra.WebAPI.Extensions
                 ServiceLifetime.Scoped);
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddAutoMapper(typeof(GeneralMapping));
+            builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
 
             builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));
             builder.Services.AddScoped(typeof(IWriteService<,,,>), typeof(WriteService<,,,>));
@@ -60,8 +76,32 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped(typeof(IEntityAssignmentService<,,>), typeof(EntityAssignmentService<,,>));
             builder.Services.AddScoped(typeof(IDataLoaderInvoker), typeof(DataLoaderInvoker));
 
+            builder.Services.AddScoped(typeof(IQueryService<,>), typeof(QueryService<,>));
             builder.Services.AddScoped(typeof(IQueryResolverHelper<,>), typeof(QueryResolverHelper<,>));
 
+
+
+
+            builder.Services.AddScoped(typeof(IBlockUserQueryService), typeof(BlockUserQueryService));
+            builder.Services.AddScoped(typeof(IBlockUserResolver), typeof(BlockUserResolver));
+            builder.Services.AddScoped(typeof(BlockUserDataLoader));
+
+            builder.Services.AddScoped(typeof(IUserQueryService), typeof(UserQueryService));
+            builder.Services.AddScoped(typeof(IUserResolver), typeof(UserResolver));
+            builder.Services.AddScoped(typeof(UserDataLoader));
+
+            builder.Services.AddScoped(typeof(IHighlightQueryService), typeof(HighlightQueryService));
+            builder.Services.AddScoped(typeof(IHighlightResolver), typeof(HighlightResolver));
+            builder.Services.AddScoped(typeof(HighlightDataLoader));
+
+            builder.Services.AddScoped(typeof(IStoryQueryService), typeof(StoryQueryService));
+            builder.Services.AddScoped(typeof(IStoryResolver), typeof(StoryResolver));
+            builder.Services.AddScoped(typeof(StoryDataLoader));
+
+            builder.Services.AddScoped(typeof(IBlockUserMutationService), typeof(BlockUserMutationService));
+            builder.Services.AddScoped(typeof(IBlockUserWriteService), typeof(BlockUserWriteService));
+
+            builder.Services.AddScoped(typeof(BlockUserSubscription));
 
             var targetAssemblies = new[]
             {

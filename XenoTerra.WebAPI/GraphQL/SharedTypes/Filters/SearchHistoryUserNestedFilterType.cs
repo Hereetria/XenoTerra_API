@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<SearchHistoryUser> descriptor)
         {
+            descriptor.Name("SearchHistoryUserNestedFilterInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.SearchHistoryId);

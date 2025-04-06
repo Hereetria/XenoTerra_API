@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Follow> descriptor)
         {
+            descriptor.Name("FollowNestedSortInput");
             descriptor.BindFieldsExplicitly();
 
             descriptor.Field(f => f.FollowId);
