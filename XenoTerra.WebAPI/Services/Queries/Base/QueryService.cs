@@ -22,10 +22,20 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
-                _readService.FetchAllQueryable(selectedFields)
-            ) ?? Enumerable.Empty<TEntity>().AsQueryable();
+            {
+                var rawQuery = _readService.GetRawQueryable();
+                var baseQuery = rawQuery.ApplyDefaultFiltering(context);
+                baseQuery = baseQuery.ApplyDefaultSorting(context);
 
-            return ModifyQueryForGetAll(query);
+                baseQuery = _readService.FetchAllQueryable(baseQuery, selectedFields)
+                                ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+                baseQuery = ModifyQueryForGetAll(baseQuery);
+
+                return baseQuery;
+            }) ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+            return query;
         }
 
         public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IResolverContext context)
@@ -36,10 +46,21 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
-                _readService.FetchByIdsQueryable(keys, selectedFields)
-            ) ?? Enumerable.Empty<TEntity>().AsQueryable();
+            {
+                var rawQuery = _readService.GetRawQueryable();
+                var baseQuery = rawQuery.ApplyDefaultFiltering(context);
+                baseQuery = baseQuery.ApplyDefaultSorting(context);
 
-            return ModifyQueryForGetByIds(query);
+                baseQuery = baseQuery.ApplyDefaultFiltering(context);
+                baseQuery = _readService.FetchByIdsQueryable(baseQuery, keys, selectedFields)
+                                ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+                baseQuery = ModifyQueryForGetAll(baseQuery);
+
+                return baseQuery;
+            }) ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+            return query;
         }
 
 
@@ -52,8 +73,12 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
-                _readService.FetchByIdQueryable(key, selectedFields)
-            ) ?? Enumerable.Empty<TEntity>().AsQueryable();
+            {
+                var rawQuery = _readService.GetRawQueryable();
+                var baseQuery =_readService.FetchByIdQueryable(rawQuery, key, selectedFields);
+
+                return baseQuery;
+            }) ?? Enumerable.Empty<TEntity>().AsQueryable();
 
             return ModifyQueryForGetById(query);
         }
@@ -68,13 +93,33 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             {
                 return action();
             }
+            catch (InvalidOperationException ex)
+            {
+                throw GraphQLExceptionFactory.Create(
+                    "A filtering operation failed due to invalid operation.",
+                    [ex.Message],
+                    "INVALID_OPERATION");
+            }
+            catch (NotSupportedException ex)
+            {
+                throw GraphQLExceptionFactory.Create(
+                    "An unsupported operation was used in the query.",
+                    [ex.Message],
+                    "UNSUPPORTED_OPERATION");
+            }
+            catch (InvalidCastException ex)
+            {
+                throw GraphQLExceptionFactory.Create(
+                    "Failed to cast a filter value to the expected type.",
+                    [ex.Message],
+                    "INVALID_CAST");
+            }
             catch (Exception ex)
             {
                 throw GraphQLExceptionFactory.Create(
                     "An error occurred while executing the query.",
                     [ex.Message],
-                    "QUERY_EXECUTION_ERROR"
-                );
+                    "QUERY_EXECUTION_ERROR");
             }
         }
 

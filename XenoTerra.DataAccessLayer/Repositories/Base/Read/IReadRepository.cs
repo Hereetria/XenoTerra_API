@@ -12,8 +12,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
         where TKey : notnull
     {
         AppDbContext GetDbContext();
-        IQueryable<TEntity> GetAllQueryable(IEnumerable<string> selectedFields);
-        IQueryable<TEntity> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields);
-        IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields);
+        IQueryable<TEntity> GetRawQueryable();
+        IQueryable<TEntity> GetAllQueryable(IQueryable<TEntity> query, IEnumerable<string> selectedFields);
+        IQueryable<TEntity> GetByIdQueryable(IQueryable<TEntity> query, TKey key, IEnumerable<string> selectedFields);
+        IQueryable<TEntity> GetByIdsQueryable(IQueryable<TEntity> query, IEnumerable<TKey> keys, IEnumerable<string> selectedFields);
     }
 }

@@ -14,34 +14,33 @@ using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 {
-    public class ReadRepository<TEntity, TKey> : IReadRepository<TEntity, TKey>
+    public class ReadRepository<TEntity, TKey>(AppDbContext context) : IReadRepository<TEntity, TKey>
         where TEntity : class
         where TKey : notnull
     {
-        protected readonly AppDbContext _context;
-        private readonly DbSet<TEntity> _dbSet;
-
-        public ReadRepository(AppDbContext context)
-        {
-            _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
-            _dbSet = _context.Set<TEntity>();
-        }
+        protected readonly AppDbContext _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
 
         public AppDbContext GetDbContext()
         {
             return _context;
         }
 
-        public IQueryable<TEntity> GetAllQueryable(IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetRawQueryable()
+        {
+            return _context.Set<TEntity>();
+        }
+
+
+        public IQueryable<TEntity> GetAllQueryable(IQueryable<TEntity> query, IEnumerable<string> selectedFields)
         {
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
-            return ExecuteSafely(() => _dbSet.AsNoTracking().Select(selector));
+            return ExecuteSafely(() => query.AsNoTracking().Select(selector));
         }
 
-        public IQueryable<TEntity> GetByIdQueryable(TKey key, IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetByIdQueryable(IQueryable<TEntity> query, TKey key, IEnumerable<string> selectedFields)
         {
             ArgumentGuard.EnsureValidKey(key);
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
@@ -55,12 +54,12 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
             if (primaryKey is null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException($"Entity '{typeof(TEntity).Name}' must define a single primary key");
 
-            return ExecuteSafely(() => _dbSet.AsNoTracking()
+            return ExecuteSafely(() => query.AsNoTracking()
                 .Where(e => EF.Property<TKey>(e, primaryKey.Properties[0].Name)!.Equals(key))
                 .Select(selector));
         }
 
-        public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
+        public IQueryable<TEntity> GetByIdsQueryable(IQueryable<TEntity> query, IEnumerable<TKey> keys, IEnumerable<string> selectedFields)
         {
             ArgumentGuard.EnsureNotNullOrEmpty(keys, "Key list cannot be null.", "At least one key must in keys.");
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
@@ -76,7 +75,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 
             var keySet = new HashSet<TKey>(keys);
 
-            return ExecuteSafely(() => _dbSet.AsNoTracking()
+            return ExecuteSafely(() => query.AsNoTracking()
                 .Where(entity => keySet.Contains(EF.Property<TKey>(entity, primaryKey.Properties[0].Name)))
                 .Select(selector));
         }

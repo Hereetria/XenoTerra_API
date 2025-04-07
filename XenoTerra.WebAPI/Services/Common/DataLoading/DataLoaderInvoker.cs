@@ -3,14 +3,9 @@ using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 
 namespace XenoTerra.WebAPI.Services.Common.DataLoading
 {
-    public class DataLoaderInvoker : IDataLoaderInvoker
+    public class DataLoaderInvoker(EntityDataLoaderFactory factory) : IDataLoaderInvoker
     {
-        private readonly EntityDataLoaderFactory _factory;
-
-        public DataLoaderInvoker(EntityDataLoaderFactory factory)
-        {
-            _factory = factory;
-        }
+        private readonly EntityDataLoaderFactory _factory = factory;
 
         public async Task<object> InvokeLoadAsync(Type entityType, AppDbContext dbContext, List<object> keys, List<string> selectedFields)
         {
@@ -33,13 +28,13 @@ namespace XenoTerra.WebAPI.Services.Common.DataLoading
             var addMethod = genericKeyListType.GetMethod("Add")!;
             foreach (var key in keys)
             {
-                addMethod.Invoke(castedKeys, new[] { key });
+                addMethod.Invoke(castedKeys, [key]);
             }
 
-            var loadAsyncMethod = loader.GetType().GetMethod("LoadAsync", new[] { genericKeyListType, typeof(List<string>) })
+            var loadAsyncMethod = loader.GetType().GetMethod("LoadAsync", [genericKeyListType, typeof(List<string>)])
                 ?? throw new InvalidOperationException("LoadAsync method not found.");
 
-            var task = (Task)loadAsyncMethod.Invoke(loader, new object[] { castedKeys, selectedFields })!;
+            var task = (Task)loadAsyncMethod.Invoke(loader, [castedKeys, selectedFields])!;
             await task.ConfigureAwait(false);
 
             var resultProp = task.GetType().GetProperty("Result")

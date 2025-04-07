@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using GreenDonut.Data;
 using HotChocolate.Resolvers;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
+using System.Reflection;
 using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Utils;
 
@@ -20,7 +23,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
 
             if (GraphQLFieldProvider.IsPaginatedMethod(context))
             {
-                var connection = await query.ApplyCursorPaginationAsync(context);
+
+                //Connection nesnesinin yapisini ve mantigini inceleh
+                var connection = ConnectionBuilder.BuildConnection(query, context);
+
                 entities = [.. connection.Edges
                     .Select(e => e.Node)
                     .Where(e => e is not null)];
@@ -32,11 +38,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
 
             if (entities.Count == 0)
             {
-                throw GraphQLExceptionFactory.Create(
-                    $"{typeof(TEntity).Name} not found.",
-                    [$"No {typeof(TEntity).Name} entities were found for the given IDs."],
-                    "ENTITIES_NOT_FOUND"
-                );
+                return [];
             }
 
             await resolver.PopulateRelatedFieldsAsync(entities, context);
@@ -53,6 +55,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
             if (GraphQLFieldProvider.IsPaginatedMethod(context))
             {
                 var connection = await query.ApplyCursorPaginationAsync(context);
+
                 var firstEdge = connection?.Edges != null && connection.Edges.Count > 0
                 ? connection.Edges[0]
                 : null;

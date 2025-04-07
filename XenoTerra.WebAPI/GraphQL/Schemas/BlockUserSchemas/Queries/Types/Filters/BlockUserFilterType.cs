@@ -9,10 +9,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filter
     {
         protected override void Configure(IFilterInputTypeDescriptor<BlockUser> descriptor)
         {
-            descriptor.Field(f => f.BlockUserId);
-            descriptor.Field(f => f.BlockingUserId);
-            descriptor.Field(f => f.BlockedUserId);
-            descriptor.Field(f => f.BlockedAt);
         }
     }
 }
