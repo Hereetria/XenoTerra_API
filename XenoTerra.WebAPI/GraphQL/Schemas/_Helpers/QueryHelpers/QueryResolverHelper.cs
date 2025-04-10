@@ -5,7 +5,7 @@ using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using System.Reflection;
-using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
@@ -14,6 +14,25 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
         where TEntity : class
         where TKey : notnull
     {
+        public async Task<Connection<TEntity>> ResolveEntityConnectionAsync(
+            IQueryable<TEntity> query,
+            IEntityResolver<TEntity, TKey> resolver,
+            IResolverContext context)
+        {
+            var connection = ConnectionBuilder.BuildConnection(query, context);
+
+            var entities = connection.Edges.Select(e => e.Node).Where(e => e is not null).ToList();
+
+            if (entities.Count > 0)
+                await resolver.PopulateRelatedFieldsAsync(entities, context);
+
+            return new Connection<TEntity>(
+                connection.Edges,
+                connection.Info,
+                connection.TotalCount
+            );
+        }
+
         public async Task<List<TEntity>> ResolveEntitiesAsync(
             IQueryable<TEntity> query,
             IEntityResolver<TEntity, TKey> resolver,
@@ -23,8 +42,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
 
             if (GraphQLFieldProvider.IsPaginatedMethod(context))
             {
-
-                //Connection nesnesinin yapisini ve mantigini inceleh
                 var connection = ConnectionBuilder.BuildConnection(query, context);
 
                 entities = [.. connection.Edges

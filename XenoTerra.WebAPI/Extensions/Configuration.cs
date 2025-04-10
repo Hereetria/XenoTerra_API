@@ -4,7 +4,6 @@ using System.Reflection;
 using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
-using XenoTerra.WebAPI.Schemas.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
@@ -36,6 +35,7 @@ using XenoTerra.WebAPI.GraphQL;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Paginations;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -50,6 +50,7 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddSubscriptionType<BlockUserSubscription>()
                 .AddType<BlockUserFilterType>()
                 .AddType<BlockUserSortType>()
+                .AddType<BlockUserConnectionType>()
                 .AddInMemorySubscriptions()
                 .AddProjections()
                 .AddFiltering()

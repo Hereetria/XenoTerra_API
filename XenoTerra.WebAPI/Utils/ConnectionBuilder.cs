@@ -9,16 +9,30 @@ namespace XenoTerra.WebAPI.Utils
             IQueryable<T> query,
             IResolverContext context)
         {
-            int? first = context.ArgumentValue<int?>("first");
-            int? last = context.ArgumentValue<int?>("last");
-            string? after = context.ArgumentValue<string>("after");
-            string? before = context.ArgumentValue<string>("before");
+            int? first = context.GetScopedStateOrDefault<int?>("first");
+            int? last = context.GetScopedStateOrDefault<int?>("last");
+            string? after = context.GetScopedStateOrDefault<string?>("after");
+            string? before = context.GetScopedStateOrDefault<string?>("before");
 
-            // Validation
-            if (first is null && last is null)
-                throw new ArgumentException("Must provide 'first' or 'last' for pagination.");
+            bool hasPagination = first.HasValue || last.HasValue || !string.IsNullOrEmpty(after) || !string.IsNullOrEmpty(before);
 
-            // Decode cursors
+            if (!hasPagination)
+            {
+                var items = query.ToList();
+                List<Edge<T>> edgeList = [.. items.Select((item, index) => new Edge<T>(item, EncodeCursor(index)))];
+                var pageInfoResult = new ConnectionPageInfo(false, false, edgeList.FirstOrDefault()?.Cursor, edgeList.LastOrDefault()?.Cursor);
+
+                if (ShouldIncludeTotalCount(context))
+                {
+                    int totalCount = GetTotalCount(query);
+                    return new Connection<T>(edgeList, pageInfoResult, totalCount);
+                }
+                else
+                {
+                    return new Connection<T>(edgeList, pageInfoResult);
+                }
+            }
+
             int? afterIndex = DecodeCursor(after);
             int? beforeIndex = DecodeCursor(before);
 
@@ -30,7 +44,6 @@ namespace XenoTerra.WebAPI.Utils
                 take = beforeIndex.Value - skip;
             }
 
-            // +1 to determine hasNextPage or hasPreviousPage
             var pageItems = query.Skip(skip).Take(take + 1).ToList();
 
             bool isForward = first.HasValue;
@@ -55,7 +68,15 @@ namespace XenoTerra.WebAPI.Utils
                 endCursor: endCursor
             );
 
-            return new Connection<T>(edges, pageInfo);
+            if (ShouldIncludeTotalCount(context))
+            {
+                int totalCount = GetTotalCount(query);
+                return new Connection<T>(edges, pageInfo, totalCount);
+            }
+            else
+            {
+                return new Connection<T>(edges, pageInfo);
+            }
         }
 
         private static string EncodeCursor(int index)
@@ -77,6 +98,18 @@ namespace XenoTerra.WebAPI.Utils
             {
                 return null;
             }
+        }
+
+        private static int GetTotalCount<T>(IQueryable<T> query)
+        {
+            return query.Count();
+        }
+
+        private static bool ShouldIncludeTotalCount(IResolverContext context)
+        {
+            return context.Selection.SyntaxNode.SelectionSet?.Selections
+                .OfType<HotChocolate.Language.FieldNode>()
+                .Any(f => f.Name.Value == "totalCount") == true;
         }
     }
 }

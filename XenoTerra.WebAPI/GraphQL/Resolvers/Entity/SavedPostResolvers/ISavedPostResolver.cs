@@ -1,5 +1,5 @@
 ﻿using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.Resolvers.Base;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SavedPostResolvers
 {

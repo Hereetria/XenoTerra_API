@@ -1,6 +1,6 @@
 ﻿using HotChocolate.Resolvers;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.Base
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Base
 {
     public interface IEntityResolver<TEntity, TKey>
         where TEntity : class

@@ -17,11 +17,11 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             List<TEntity> entityList,
             IReadOnlyDictionary<TRelatedKey, TRelatedEntity> relatedEntities)
         {
-            var navProperties = GetMatchingNavigationProperties();
+            var navProperties = EntityAssignmentService<TEntity, TRelatedEntity, TRelatedKey>.GetMatchingNavigationProperties();
 
             foreach (var navProperty in navProperties)
             {
-                var relatedEntityType = GetNavigationEntityType(navProperty);
+                var relatedEntityType = EntityAssignmentService<TEntity, TRelatedEntity, TRelatedKey>.GetNavigationEntityType(navProperty);
                 if (relatedEntityType == null)
                     continue;
 
@@ -34,25 +34,26 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 }
                 else if (TypeProviders.HasForeignKeyTo<TEntity>(dbContext, navProperty.Name))
                 {
-                    AssignManyToOne(entityList, relatedEntities, navProperty);
+                    AssignManyToOne(dbContext, entityList, relatedEntities, navProperty);
                 }
                 else
                 {
-                    AssignOneToMany(dbContext, entityList, relatedEntities, navProperty);
+                    EntityAssignmentService<TEntity, TRelatedEntity, TRelatedKey>.AssignOneToMany(dbContext, entityList, relatedEntities, navProperty);
                 }
             }
 
             return entityList;
         }
-        private void AssignManyToOne(
+        private static void AssignManyToOne(
+            AppDbContext dbContext,
             List<TEntity> entityList,
             IReadOnlyDictionary<TRelatedKey, TRelatedEntity> relatedEntities,
             PropertyInfo navProperty)
         {
             foreach (var entity in entityList)
             {
-//Mark
-                var fkProperty = typeof(TEntity).GetProperty(navProperty.Name + "Id", BindingFlags.Public | BindingFlags.Instance);
+                var fkProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, navProperty.Name);
+                //var fkProperty = typeof(TEntity).GetProperty(navProperty.Name + "Id", BindingFlags.Public | BindingFlags.Instance);
 
                 if (fkProperty == null || fkProperty.PropertyType != typeof(TRelatedKey))
                     continue;
@@ -64,7 +65,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 }
             }
         }
-        private void AssignOneToMany(
+        private static void AssignOneToMany(
             AppDbContext dbContext,
             List<TEntity> entityList,
             IReadOnlyDictionary<TRelatedKey, TRelatedEntity> relatedEntities,
@@ -108,12 +109,11 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 var matches = relatedEntities.Values
                     .Where(rel => Equals(fkProperty.GetValue(rel), entityId))
                     .ToList();
-                if (!matches.Any())
+                if (matches.Count == 0)
                     continue;
 
                 var listType = typeof(List<>).MakeGenericType(relatedEntityType);
-                var list = Activator.CreateInstance(listType) as System.Collections.IList;
-                if (list == null)
+                if (Activator.CreateInstance(listType) is not System.Collections.IList list)
                     continue;
 
                 foreach (var item in matches)
@@ -124,7 +124,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 navProperty.SetValue(entity, list);
             }
         }
-        private void AssignManyToMany(
+        private static void AssignManyToMany(
             AppDbContext dbContext,
             List<TEntity> entityList,
             IReadOnlyDictionary<TRelatedKey, TRelatedEntity> resultsDict,
@@ -133,7 +133,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
         {
             var entityKeyProperty = dbContext.Model.FindEntityType(typeof(TEntity))!
                 .FindPrimaryKey()!
-                .Properties.First();
+                .Properties[0];
             var entityKeyPropertyName = entityKeyProperty.Name;
 
             var crossNavProp = typeof(TEntity)
@@ -207,7 +207,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
         }
 
 
-        private Type? GetNavigationEntityType(PropertyInfo navProperty)
+        private static Type? GetNavigationEntityType(PropertyInfo navProperty)
         {
             var propertyType = navProperty.PropertyType;
 
@@ -224,15 +224,14 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             return propertyType;
         }
 
-        private List<PropertyInfo> GetMatchingNavigationProperties()
+        private static List<PropertyInfo> GetMatchingNavigationProperties()
         {
-            return typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            return [.. typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p =>
                     p.PropertyType == typeof(TRelatedEntity ) ||
                     (p.PropertyType.IsGenericType &&
                      p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) &&
-                     p.PropertyType.GetGenericArguments()[0] == typeof(TRelatedEntity)))
-                .ToList();
+                     p.PropertyType.GetGenericArguments()[0] == typeof(TRelatedEntity)))];
         }
 
     }
