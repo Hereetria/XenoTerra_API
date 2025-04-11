@@ -12,7 +12,7 @@ namespace XenoTerra.DataAccessLayer.Utils
     public static class CrossTableNameProvider
     {
 
-        public static string? GetCrossTableName<TEntity>(AppDbContext dbContext, string targetEntityName)
+        public static string? GetCrossTableName<TEntity>(string targetEntityName)
         {
             targetEntityName = PluralWordProvider.ConvertToSingular(targetEntityName);
 

@@ -2,7 +2,7 @@
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Sorts
 {
     public class BlockUserSortType : SortInputType<BlockUser>
     {

@@ -1,6 +1,6 @@
 ﻿namespace XenoTerra.WebAPI.Utils
 {
-    public static class PluralWordProvider
+    public static class WordInflector
     {
         public static string ConvertToSingular(string pluralWord)
         {
@@ -32,10 +32,9 @@
             if (string.IsNullOrWhiteSpace(singularWord))
                 throw new ArgumentException("Input cannot be null or empty.", nameof(singularWord));
 
-            // Eğer kelime zaten çoğulsa, tekrar ekleme yapma
             if (singularWord.EndsWith("ies") || singularWord.EndsWith("ves") || singularWord.EndsWith("es") || singularWord.EndsWith("s"))
             {
-                return singularWord; // Zaten çoğulsa değişiklik yapma
+                return singularWord;
             }
 
             if (singularWord.EndsWith("y") && singularWord.Length > 1 && !"aeiou".Contains(singularWord[singularWord.Length - 2]))

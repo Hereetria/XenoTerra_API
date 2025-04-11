@@ -1,6 +1,6 @@
 ﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Edges
+namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Paginations
 {
     public class BlockUserEdge
     {

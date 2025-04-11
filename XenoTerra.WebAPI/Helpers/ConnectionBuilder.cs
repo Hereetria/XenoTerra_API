@@ -13,6 +13,9 @@ namespace XenoTerra.WebAPI.Utils
             int? last = context.GetScopedStateOrDefault<int?>("last");
             string? after = context.GetScopedStateOrDefault<string?>("after");
             string? before = context.GetScopedStateOrDefault<string?>("before");
+            string? order = context.GetScopedStateOrDefault<string?>("order");
+            string? where = context.GetScopedStateOrDefault<string?>("where");
+
 
             bool hasPagination = first.HasValue || last.HasValue || !string.IsNullOrEmpty(after) || !string.IsNullOrEmpty(before);
 

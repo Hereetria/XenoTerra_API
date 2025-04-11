@@ -20,7 +20,7 @@ namespace XenoTerra.WebAPI.Utils
             IMapper mapper)
         {
             var mappedEdges = MapEdges<TSource, TDestination>(sourceConnection.Edges, mapper);
-            return new Connection<TDestination>(mappedEdges, sourceConnection.Info);
+            return new Connection<TDestination>(mappedEdges, sourceConnection.Info, sourceConnection.TotalCount);
         }
     }
 }

@@ -17,7 +17,6 @@ namespace XenoTerra.WebAPI.Utils
 
             if (IsPaginatedMethod(context))
             {
-                // CASE: Pagination (edges > node > fields)
                 var edgesField = selections.OfType<FieldNode>()
                     .FirstOrDefault(f => f.Name.Value.Equals("edges", StringComparison.OrdinalIgnoreCase));
 

@@ -33,9 +33,9 @@ using HotChocolate.Execution;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions;
 using XenoTerra.WebAPI.GraphQL;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Sorts;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Types.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Sorts;
 
 namespace XenoTerra.WebAPI.Extensions
 {

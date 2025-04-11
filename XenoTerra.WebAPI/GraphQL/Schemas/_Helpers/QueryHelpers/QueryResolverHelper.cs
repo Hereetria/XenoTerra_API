@@ -67,33 +67,11 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
             IEntityResolver<TEntity, TKey> resolver,
             IResolverContext context)
         {
-            TEntity? entity;
-
-            if (GraphQLFieldProvider.IsPaginatedMethod(context))
-            {
-                var connection = await query.ApplyCursorPaginationAsync(context);
-
-                var firstEdge = connection?.Edges != null && connection.Edges.Count > 0
-                ? connection.Edges[0]
-                : null;
-
-                entity = firstEdge?.Node;
-
-            }
-            else
-            {
-                entity = await query.FirstOrDefaultAsync();
-            }
-
-            if (entity is null)
-            {
-                throw GraphQLExceptionFactory.Create(
+            TEntity? entity = await query.FirstOrDefaultAsync() ?? throw GraphQLExceptionFactory.Create(
                     $"{typeof(TEntity).Name} not found.",
                     [$"No {typeof(TEntity).Name} entity was found for the given ID."],
                     "ENTITY_NOT_FOUND"
                 );
-            }
-
 
             await resolver.PopulateRelatedFieldAsync(entity, context);
             return entity;
