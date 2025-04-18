@@ -25,7 +25,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 if (relatedEntityType == null)
                     continue;
 
-                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(dbContext, navProperty.Name);
+                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(navProperty.Name);
 
 
                 if (crossTableName != null)
@@ -91,7 +91,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             if (entityIdProp == null)
                 return;
 
-            var singularNavPropertyName = PluralWordProvider.ConvertToSingular(navProperty.Name);
+            var singularNavPropertyName = WordInflector.ConvertToSingular(navProperty.Name);
             var fkPropName = TypeProviders.GetForeignKeyProperty<TRelatedEntity>(dbContext, singularNavPropertyName)?.Name;
             if (fkPropName == null)
                 return;
@@ -157,7 +157,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 ?.Name
                 ?? throw new Exception("Could not determine related entity key property.");
 
-            crossTableName = PluralWordProvider.ConvertToSingular(crossTableName);
+            crossTableName = WordInflector.ConvertToSingular(crossTableName);
             var crossTableType = dbContext.Model.GetEntityTypes()
                 .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.InvariantCultureIgnoreCase))
                 ?.ClrType

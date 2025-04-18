@@ -14,7 +14,7 @@ namespace XenoTerra.DataAccessLayer.Utils
 
         public static string? GetCrossTableName<TEntity>(string targetEntityName)
         {
-            targetEntityName = PluralWordProvider.ConvertToSingular(targetEntityName);
+            targetEntityName = WordInflector.ConvertToSingular(targetEntityName);
 
             var entityType = typeof(TEntity);
 

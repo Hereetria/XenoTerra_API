@@ -27,7 +27,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
             foreach (var field in relationalFields)
             {
-                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(dbContext, field);
+                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(field);
 
                 if (crossTableName != null)
                 {
@@ -111,7 +111,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
             var genericFkMethod = getFkMethod.MakeGenericMethod(relatedType);
 
-            var singularField = PluralWordProvider.ConvertToSingular(field);
+            var singularField = WordInflector.ConvertToSingular(field);
 
             var fkProp = genericFkMethod.Invoke(null, [dbContext, singularField, null]) as PropertyInfo
                 ?? throw new InvalidOperationException($"Foreign key property not found on related entity '{relatedType.Name}'.");
@@ -193,7 +193,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
                 entityIds.ToHashSet()
             );
 
-            var singularFieldName = PluralWordProvider.ConvertToSingular(field);
+            var singularFieldName = WordInflector.ConvertToSingular(field);
             var relatedEntityType = (crossEntityType
                 .GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(singularFieldName, StringComparison.OrdinalIgnoreCase))
