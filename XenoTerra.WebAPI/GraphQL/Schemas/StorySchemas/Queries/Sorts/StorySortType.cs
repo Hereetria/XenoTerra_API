@@ -8,16 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.StoryQueries.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Story> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.StoryId);
-            descriptor.Field(f => f.Path);
-            descriptor.Field(f => f.IsVideo);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.CreatedAt);
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedSortType>();
         }
     }
 }

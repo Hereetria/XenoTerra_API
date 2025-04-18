@@ -8,18 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostQueries.Sor
     {
         protected override void Configure(ISortInputTypeDescriptor<SavedPost> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.SavedPostId);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.PostId);
-            descriptor.Field(f => f.SavedAt);
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedSortType>();
-
-            descriptor.Field(f => f.Post)
-                .Type<PostNestedSortType>();
         }
     }
 }

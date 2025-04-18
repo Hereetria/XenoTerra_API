@@ -8,16 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Queries.Filt
     {
         protected override void Configure(IFilterInputTypeDescriptor<SearchHistoryUser> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.SearchHistoryId);
-            descriptor.Field(f => f.UserId);
-
-            descriptor.Field(f => f.SearchHistory)
-                .Type<SearchHistoryNestedFilterType>();
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedFilterType>();
         }
     }
 }

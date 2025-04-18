@@ -8,14 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries.Fil
     {
         protected override void Configure(IFilterInputTypeDescriptor<Highlight> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.HighlightId);
-            descriptor.Field(f => f.Name);
-            descriptor.Field(f => f.ProfilePicturePath);
-
-            descriptor.Field(f => f.StoryHighlights)
-                .Type<StoryHighlightNestedFilterType>();
         }
     }
 }

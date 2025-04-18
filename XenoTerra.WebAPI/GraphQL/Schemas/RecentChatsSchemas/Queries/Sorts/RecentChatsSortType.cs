@@ -7,12 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsQueries
     {
         protected override void Configure(ISortInputTypeDescriptor<RecentChats> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.RecentChatsId);
-            descriptor.Field(f => f.LastMessage);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.LastMessageAt);
         }
     }
 }

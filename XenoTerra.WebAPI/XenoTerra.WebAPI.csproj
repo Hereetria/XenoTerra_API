@@ -21,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\Schemas\SearchHistoryUserSchemas\Types\" />
-    <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\" />
+    <Folder Include="GraphQL\Schemas\RecentChatsSchemas\Mutations\" />
   </ItemGroup>
 
   <ItemGroup>

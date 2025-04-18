@@ -8,16 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Queries.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<StoryHighlight> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.StoryId);
-            descriptor.Field(f => f.HighlightId);
-
-            descriptor.Field(f => f.Story)
-                .Type<StoryNestedSortType>();
-
-            descriptor.Field(f => f.Highlight)
-                .Type<HighlightNestedSortType>();
         }
     }
 }

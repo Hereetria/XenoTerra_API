@@ -8,11 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries.Sor
     {
         protected override void Configure(ISortInputTypeDescriptor<Highlight> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.HighlightId);
-            descriptor.Field(f => f.Name);
-            descriptor.Field(f => f.ProfilePicturePath);
         }
     }
 }

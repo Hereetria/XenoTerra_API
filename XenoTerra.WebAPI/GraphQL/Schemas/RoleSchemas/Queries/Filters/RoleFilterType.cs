@@ -7,10 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries.Filters
     {
         protected override void Configure(IFilterInputTypeDescriptor<Role> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.Id);
-            descriptor.Field(f => f.Name);
         }
     }
 }

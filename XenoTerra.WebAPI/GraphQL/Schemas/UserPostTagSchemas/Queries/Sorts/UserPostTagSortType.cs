@@ -8,16 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.UserPostTagQueries
     {
         protected override void Configure(ISortInputTypeDescriptor<UserPostTag> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.PostId);
-            descriptor.Field(f => f.UserId);
-
-            descriptor.Field(f => f.Post)
-                .Type<PostNestedSortType>();
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedSortType>();
         }
     }
 }

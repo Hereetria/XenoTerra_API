@@ -7,10 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.RoleQueries.Sorts
     {
         protected override void Configure(ISortInputTypeDescriptor<Role> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.Id);
-            descriptor.Field(f => f.Name);
         }
     }
 }

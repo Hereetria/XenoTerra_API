@@ -8,16 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationQueri
     {
         protected override void Configure(IFilterInputTypeDescriptor<Notification> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.NotificationId);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.Message);
-            descriptor.Field(f => f.Image);
-            descriptor.Field(f => f.CreatedAt);
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedFilterType>();
         }
     }
 }

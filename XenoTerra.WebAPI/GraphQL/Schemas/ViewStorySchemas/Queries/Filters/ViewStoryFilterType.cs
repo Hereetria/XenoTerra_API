@@ -8,18 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryQueries.Fil
     {
         protected override void Configure(IFilterInputTypeDescriptor<ViewStory> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.ViewStoryId);
-            descriptor.Field(f => f.StoryId);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.ViewedAt);
-
-            descriptor.Field(f => f.Story)
-                .Type<StoryNestedFilterType>();
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedFilterType>();
         }
     }
 }

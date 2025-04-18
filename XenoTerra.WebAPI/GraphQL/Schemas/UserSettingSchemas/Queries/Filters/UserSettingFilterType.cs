@@ -8,17 +8,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingQueries
     {
         protected override void Configure(IFilterInputTypeDescriptor<UserSetting> descriptor)
         {
-            descriptor.BindFieldsExplicitly();
-
-            descriptor.Field(f => f.UserSettingId);
-            descriptor.Field(f => f.UserId);
-            descriptor.Field(f => f.IsPrivate);
-            descriptor.Field(f => f.ReceiveNotifications);
-            descriptor.Field(f => f.ShowActivityStatus);
-            descriptor.Field(f => f.LastUpdated);
-
-            descriptor.Field(f => f.User)
-                .Type<UserNestedFilterType>();
         }
     }
 }
