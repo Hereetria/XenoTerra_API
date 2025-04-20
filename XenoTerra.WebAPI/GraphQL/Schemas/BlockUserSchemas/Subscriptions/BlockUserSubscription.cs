@@ -3,6 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions
 {
+    [ExtendObjectType(typeof(Subscription))]
     public class BlockUserSubscription
     {
         [Subscribe]

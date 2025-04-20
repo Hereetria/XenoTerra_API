@@ -5,14 +5,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.LikeDtos
 {
-    public record ResultLikeWithRelationsDto(
-        Guid LikeId,
-        Guid PostId,
-        Guid UserId,
-        DateTime LikedAt
-    )
+    public record class ResultLikeWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
-        public ResultPostDto? Post { get; set; }
+        public Guid LikeId { get; init; }
+        public Guid PostId { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime LikedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
+        public ResultPostDto Post { get; init; } = new();
     }
 }

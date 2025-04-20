@@ -1,5 +1,5 @@
 ﻿using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
 
 namespace XenoTerra.WebAPI.Services.Common.DataLoading
 {

@@ -1,13 +1,8 @@
 ﻿using HotChocolate.Resolvers;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.WebAPI.Utils;
-using GreenDonut;
-using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using System.Linq;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {

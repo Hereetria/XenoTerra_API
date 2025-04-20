@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Queries.Filters
 {
     public class NoteFilterType : FilterInputType<Note>
     {

@@ -5,13 +5,13 @@ namespace XenoTerra.DTOLayer.Dtos.UserDtos
     public class UpdateUserDto
     {
         public Guid Id { get; set; }
-        public required string UserName { get; set; }
-        public required string Password { get; set; }
-        public required string Email { get; set; }
-        public required string FullName { get; set; }
-        public required string Bio { get; set; }
-        public required string ProfilePicture { get; set; }
-        public required string Website { get; set; }
+        public string UserName { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Bio { get; set; } = string.Empty;
+        public string ProfilePicture { get; set; } = string.Empty;
+        public string Website { get; set; } = string.Empty;
         public DateTime BirthDate { get; set; }
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }

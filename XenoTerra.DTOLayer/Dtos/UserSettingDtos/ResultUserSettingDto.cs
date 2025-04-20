@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
 {
-    public record ResultUserSettingDto(
-        Guid UserSettingId,
-        Guid UserId,
-        bool IsPrivate,
-        bool ReceiveNotifications,
-        bool ShowActivityStatus,
-        DateTime LastUpdated
-    );
+    public record class ResultUserSettingDto
+    {
+        public Guid UserSettingId { get; init; }
+        public Guid UserId { get; init; }
+        public bool IsPrivate { get; init; }
+        public bool ReceiveNotifications { get; init; }
+        public bool ShowActivityStatus { get; init; }
+        public DateTime LastUpdated { get; init; }
+    }
 }

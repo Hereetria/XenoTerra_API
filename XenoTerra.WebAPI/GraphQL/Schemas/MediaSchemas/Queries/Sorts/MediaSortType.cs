@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.MediaQueries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Queries.Sorts
 {
     public class MediaSortType : SortInputType<Media>
     {

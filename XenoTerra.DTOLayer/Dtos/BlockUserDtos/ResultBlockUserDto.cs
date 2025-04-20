@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
 {
-    public record ResultBlockUserDto(
-        Guid BlockUserId,
-        Guid BlockingUserId,
-        Guid BlockedUserId,
-        DateTime BlockedAt
-    );
+    public record class ResultBlockUserDto
+    {
+        public Guid BlockUserId { get; init; }
+        public Guid BlockingUserId { get; init; }
+        public Guid BlockedUserId { get; init; }
+        public DateTime BlockedAt { get; init; }
+    }
 }

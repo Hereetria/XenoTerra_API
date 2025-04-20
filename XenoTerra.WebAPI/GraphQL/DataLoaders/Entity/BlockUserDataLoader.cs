@@ -2,7 +2,7 @@
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 
-namespace XenoTerra.WebAPI.Schemas.DataLoaders.Entity
+namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Entity
 {
     public class BlockUserDataLoader : EntityDataLoader<BlockUser, Guid>
     {

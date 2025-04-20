@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries.Filters
 {
     public class SearchHistoryFilterType : FilterInputType<SearchHistory>
     {

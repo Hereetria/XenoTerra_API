@@ -1,0 +1,7 @@
+﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
+using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
+
+namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Mutations.Payloads
+{
+    public record CreateSearchHistoryPayload : Payload<ResultSearchHistoryDto>;
+}

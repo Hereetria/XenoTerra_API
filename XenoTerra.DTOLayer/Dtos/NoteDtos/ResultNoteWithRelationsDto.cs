@@ -4,13 +4,12 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.NoteDtos
 {
-    public record ResultNoteWithRelationsDto(
-        Guid NoteId,
-        string Text,
-        Guid UserId,
-        DateTime CreatedAt
-    )
+    public record class ResultNoteWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
+        public Guid NoteId { get; init; }
+        public string Text { get; init; } = string.Empty;
+        public Guid UserId { get; init; }
+        public DateTime CreatedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
     }
 }

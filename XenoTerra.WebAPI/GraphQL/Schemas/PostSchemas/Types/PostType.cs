@@ -1,12 +1,12 @@
-﻿using XenoTerra.DTOLayer.Dtos.NotificationDtos;
+﻿using XenoTerra.DTOLayer.Dtos.PostDtos;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Types
 {
-    public class NotificationWithRelationsType : ObjectType<ResultNotificationWithRelationsDto>
+    public class PostType : ObjectType<ResultPostDto>
     {
-        protected override void Configure(IObjectTypeDescriptor<ResultNotificationWithRelationsDto> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ResultPostDto> descriptor)
         {
-            descriptor.Name("ResultNotificationWithRelations");
+            descriptor.Name("ResultPost");
         }
     }
 }

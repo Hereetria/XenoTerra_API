@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.MessageDtos
 {
-    public record ResultMessageDto(
-        Guid MessageId,
-        string Content,
-        Guid SenderId,
-        Guid ReceiverId,
-        string Header,
-        DateTime SentAt
-    );
+    public record class ResultMessageDto
+    {
+        public Guid MessageId { get; init; }
+        public string Content { get; init; } = string.Empty;
+        public Guid SenderId { get; init; }
+        public Guid ReceiverId { get; init; }
+        public string Header { get; init; } = string.Empty;
+        public DateTime SentAt { get; init; }
+    }
 }

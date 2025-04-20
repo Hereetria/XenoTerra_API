@@ -9,12 +9,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos
 {
-    public record ResultStoryHighlightWithRelationsDto(
-        Guid StoryId,
-        Guid HighlightId
-    )
+    public record class ResultStoryHighlightWithRelationsDto
     {
-        public ResultStoryDto? Story { get; set; }
-        public ResultHighlightDto? Highlight { get; set; }
+        public Guid StoryId { get; init; }
+        public Guid HighlightId { get; init; }
+        public ResultStoryDto Story { get; init; } = new();
+        public ResultHighlightDto Highlight { get; init; } = new();
     }
 }

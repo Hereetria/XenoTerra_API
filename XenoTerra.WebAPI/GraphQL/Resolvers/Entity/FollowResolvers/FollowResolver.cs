@@ -2,16 +2,15 @@
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.FollowResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.FollowResolvers;
+
+public class FollowResolver : EntityResolver<Follow, Guid>, IFollowResolver
 {
-    public class FollowResolver : EntityResolver<Follow, Guid>, IFollowResolver
+    public FollowResolver(IEntityFieldMapBuilder<Follow, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
     {
-        public FollowResolver(IEntityFieldMapBuilder<Follow, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
-        {
-        }
     }
 }

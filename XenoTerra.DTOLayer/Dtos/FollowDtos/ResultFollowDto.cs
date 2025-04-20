@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.FollowDtos
 {
-    public record ResultFollowDto(
-        Guid FollowId,
-        Guid FollowerId,
-        Guid FollowingId,
-        DateTime FollowedAt
-    );
+    public record class ResultFollowDto
+    {
+        public Guid FollowId { get; init; }
+        public Guid FollowerId { get; init; }
+        public Guid FollowingId { get; init; }
+        public DateTime FollowedAt { get; init; }
+    }
 }

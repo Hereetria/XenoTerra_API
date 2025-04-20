@@ -6,11 +6,8 @@ using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
 namespace XenoTerra.WebAPI.Schemas.Resolvers
 {
-    public class SearchHistoryResolver : EntityResolver<SearchHistory, Guid>, ISearchHistoryResolver
+    public class SearchHistoryResolver(IEntityFieldMapBuilder<SearchHistory, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : EntityResolver<SearchHistory, Guid>(entityFieldMapBuilder, dataLoaderInvoker), ISearchHistoryResolver
     {
-        public SearchHistoryResolver(IEntityFieldMapBuilder<SearchHistory, Guid> entityFieldMapBuilder, IDataLoaderInvoker dataLoaderInvoker) : base(entityFieldMapBuilder, dataLoaderInvoker)
-        {
-        }
     }
 
 }

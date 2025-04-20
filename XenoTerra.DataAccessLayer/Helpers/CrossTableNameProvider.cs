@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.WebAPI.Utils;
+using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.DataAccessLayer.Utils
 {

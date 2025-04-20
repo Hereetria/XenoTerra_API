@@ -2,7 +2,7 @@
 using System.Reflection;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.WebAPI.Utils;
+using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
 {

@@ -4,7 +4,7 @@ namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos
 {
     public class CreateHighlightDto
     {
-        public required string Name { get; set; }
-        public required string ProfilePicturePath { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string ProfilePicturePath { get; set; } = string.Empty;
     }
 }

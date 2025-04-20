@@ -7,8 +7,9 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos
 {
-    public record ResultSearchHistoryUserDto(
-        Guid SearchHistoryId,
-        Guid UserId
-    );
+    public record class ResultSearchHistoryUserDto
+    {
+        public Guid SearchHistoryId { get; init; }
+        public Guid UserId { get; init; }
+    }
 }

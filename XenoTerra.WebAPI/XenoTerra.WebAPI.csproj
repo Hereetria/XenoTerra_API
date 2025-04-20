@@ -21,10 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="GraphQL\Schemas\RecentChatsSchemas\Mutations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\XenoTerra.BussinessLogicLayer\XenoTerra.BussinessLogicLayer.csproj" />
   </ItemGroup>
 

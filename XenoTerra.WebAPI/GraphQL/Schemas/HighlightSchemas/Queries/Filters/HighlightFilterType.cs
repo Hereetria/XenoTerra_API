@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries.Filters
 {
     public class HighlightFilterType : FilterInputType<Highlight>
     {

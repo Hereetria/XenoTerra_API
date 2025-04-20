@@ -3,7 +3,7 @@ using HotChocolate.Resolvers;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace XenoTerra.WebAPI.Utils
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class GraphQLSortingHelper
     {

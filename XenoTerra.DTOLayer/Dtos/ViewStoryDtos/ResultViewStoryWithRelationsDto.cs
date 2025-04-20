@@ -5,14 +5,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos
 {
-    public record ResultViewStoryWithRelationsDto(
-        Guid ViewStoryId,
-        Guid StoryId,
-        Guid UserId,
-        DateTime ViewedAt
-    )
+    public record class ResultViewStoryWithRelationsDto
     {
-        public ResultStoryWithRelationsDto? Story { get; set; }
-        public ResultUserWithRelationsDto? User { get; set; }
+        public Guid ViewStoryId { get; init; }
+        public Guid StoryId { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime ViewedAt { get; init; }
+        public ResultStoryWithRelationsDto Story { get; init; } = new();
+        public ResultUserWithRelationsDto User { get; init; } = new();
     }
 }

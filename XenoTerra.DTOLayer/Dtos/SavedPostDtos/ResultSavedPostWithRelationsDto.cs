@@ -2,10 +2,11 @@
 
 namespace XenoTerra.DTOLayer.Dtos.SavedPostDtos
 {
-public record ResultSavedPostWithRelationsDto(
-    Guid SavedPostId,
-    Guid UserId,
-    Guid PostId,
-    DateTime SavedAt
-);
+    public record class ResultSavedPostWithRelationsDto
+    {
+        public Guid SavedPostId { get; init; }
+        public Guid UserId { get; init; }
+        public Guid PostId { get; init; }
+        public DateTime SavedAt { get; init; }
+    }
 }

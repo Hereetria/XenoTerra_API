@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryQueries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Sorts
 {
     public class ViewStorySortType : SortInputType<ViewStory>
     {

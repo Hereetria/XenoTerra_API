@@ -5,14 +5,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
 {
-    public record ResultReactionWithRelationsDto(
-        Guid ReactionId,
-        string Payload,
-        Guid MessageId,
-        Guid UserId
-    )
+    public record class ResultReactionWithRelationsDto
     {
-        public ResultMessageDto? Message { get; set; }
-        public ResultUserDto? User { get; set; }
+        public Guid ReactionId { get; init; }
+        public string Payload { get; init; } = string.Empty;
+        public Guid MessageId { get; init; }
+        public Guid UserId { get; init; }
+        public ResultMessageDto Message { get; init; } = new();
+        public ResultUserDto User { get; init; } = new();
     }
 }

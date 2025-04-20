@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
-using XenoTerra.WebAPI.Utils;
+using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.GraphQL.Resolvers.Base
 {

@@ -1,12 +1,13 @@
 ﻿using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
+using XenoTerra.DTOLayer.Dtos.RoleDtos;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Types
 {
-    public class ReportCommentWithRelationsType : ObjectType<ResultReportCommentWithRelationsDto>
+    public class RoleType : ObjectType<ResultRoleDto>
     {
-        protected override void Configure(IObjectTypeDescriptor<ResultReportCommentWithRelationsDto> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ResultRoleDto> descriptor)
         {
-            descriptor.Name("ResultReportCommentWithRelations");
+            descriptor.Name("ResultRole");
         }
     }
 }

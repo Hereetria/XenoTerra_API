@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Queries.Sorts
 {
     public class CommentSortType : SortInputType<Comment>
     {

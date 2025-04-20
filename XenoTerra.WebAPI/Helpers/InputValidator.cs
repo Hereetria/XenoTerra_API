@@ -9,9 +9,10 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Payloads;
+using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
+using XenoTerra.WebAPI.Helpers;
 
-namespace XenoTerra.WebAPI.Utils
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class InputValidator
     {

@@ -1,6 +1,5 @@
-﻿using XenoTerra.WebAPI.GraphQL.SharedTypes.Payloads;
-
-namespace XenoTerra.WebAPI.Utils
+﻿
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class GraphQLExceptionFactory
     {

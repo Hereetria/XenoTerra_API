@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
 {
-    public record ResultRecentChatsDto(
-        Guid RecentChatsId,
-        string LastMessage,
-        Guid UserId,
-        DateTime LastMessageAt
-    );
+    public record class ResultRecentChatsDto
+    {
+        public Guid RecentChatsId { get; init; }
+        public string LastMessage { get; init; } = string.Empty;
+        public Guid UserId { get; init; }
+        public DateTime LastMessageAt { get; init; }
+    }
 }

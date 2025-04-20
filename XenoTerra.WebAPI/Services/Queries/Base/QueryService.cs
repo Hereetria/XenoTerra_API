@@ -1,10 +1,8 @@
-﻿using AutoMapper;
-using HotChocolate.Resolvers;
-using Microsoft.EntityFrameworkCore;
+﻿using HotChocolate.Resolvers;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.WebAPI.Utils;
+using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.Services.Queries.Base
 {

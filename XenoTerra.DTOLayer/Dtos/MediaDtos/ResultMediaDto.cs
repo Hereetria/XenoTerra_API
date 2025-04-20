@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
-    public record ResultMediaDto(
-        Guid MediaId,
-        string PhotoUrl,
-        Guid UserId,
-        DateTime UploadedAt
-    );
+    public record class ResultMediaDto
+    {
+        public Guid MediaId { get; init; }
+        public string PhotoUrl { get; init; } = string.Empty;
+        public Guid UserId { get; init; }
+        public DateTime UploadedAt { get; init; }
+    }
 }

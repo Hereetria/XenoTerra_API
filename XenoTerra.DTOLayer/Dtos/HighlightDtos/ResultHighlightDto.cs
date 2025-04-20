@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
 {
-    public record ResultHighlightDto
+    public record class ResultHighlightDto
     {
         public Guid HighlightId { get; init; }
         public string Name { get; init; } = string.Empty;

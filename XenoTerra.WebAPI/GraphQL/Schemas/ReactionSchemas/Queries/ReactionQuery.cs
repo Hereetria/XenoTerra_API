@@ -2,59 +2,74 @@
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionQueries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReactionQueryServices;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries
 {
-    public class ReactionQuery
+    public class ReactionQuery(IMapper mapper, IQueryResolverHelper<Reaction, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<Reaction, Guid> _queryResolver;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<Reaction, Guid> _queryResolver = queryResolver;
 
-        public ReactionQuery(IMapper mapper, IQueryResolverHelper<Reaction, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
-
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(ReactionFilterType))]
         [UseSorting(typeof(ReactionSortType))]
-        public async Task<IEnumerable<ResultReactionWithRelationsDto>> GetAllReactionsAsync(
+        public async Task<ReactionConnection> GetAllReactionsAsync(
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultReactionWithRelationsDto>>(entities);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Reaction, ResultReactionWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<ReactionConnection, ResultReactionWithRelationsDto>(connection);
         }
 
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(ReactionFilterType))]
         [UseSorting(typeof(ReactionSortType))]
-        public async Task<IEnumerable<ResultReactionWithRelationsDto>> GetReactionsByIdsAsync(
-            IEnumerable<Guid> keys,
+        public async Task<ReactionConnection> GetReactionsByIdsAsync(
+            IEnumerable<string>? keys,
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultReactionWithRelationsDto>>(entities);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Reaction, ResultReactionWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<ReactionConnection, ResultReactionWithRelationsDto>(connection);
         }
 
-        public async Task<ResultReactionWithRelationsDto> GetReactionByIdAsync(
-            Guid key,
+        public async Task<ResultReactionWithRelationsDto?> GetReactionByIdAsync(
+            string? key,
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultReactionWithRelationsDto>(entity);
         }
     }

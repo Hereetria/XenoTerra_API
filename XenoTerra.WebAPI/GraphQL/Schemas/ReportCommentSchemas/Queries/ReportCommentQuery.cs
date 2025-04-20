@@ -2,59 +2,74 @@
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentQueries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReportCommentResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Queries
 {
-    public class ReportCommentQuery
+    public class ReportCommentQuery(IMapper mapper, IQueryResolverHelper<ReportComment, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<ReportComment, Guid> _queryResolver;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<ReportComment, Guid> _queryResolver = queryResolver;
 
-        public ReportCommentQuery(IMapper mapper, IQueryResolverHelper<ReportComment, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
-
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(ReportCommentFilterType))]
         [UseSorting(typeof(ReportCommentSortType))]
-        public async Task<IEnumerable<ResultReportCommentWithRelationsDto>> GetAllReportCommentsAsync(
+        public async Task<ReportCommentConnection> GetAllReportCommentsAsync(
             [Service] IReportCommentQueryService service,
             [Service] IReportCommentResolver resolver,
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultReportCommentWithRelationsDto>>(entities);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<ReportComment, ResultReportCommentWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<ReportCommentConnection, ResultReportCommentWithRelationsDto>(connection);
         }
 
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(ReportCommentFilterType))]
         [UseSorting(typeof(ReportCommentSortType))]
-        public async Task<IEnumerable<ResultReportCommentWithRelationsDto>> GetReportCommentsByIdsAsync(
-            IEnumerable<Guid> keys,
+        public async Task<ReportCommentConnection> GetReportCommentsByIdsAsync(
+            IEnumerable<string>? keys,
             [Service] IReportCommentQueryService service,
             [Service] IReportCommentResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultReportCommentWithRelationsDto>>(entities);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<ReportComment, ResultReportCommentWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<ReportCommentConnection, ResultReportCommentWithRelationsDto>(connection);
         }
 
-        public async Task<ResultReportCommentWithRelationsDto> GetReportCommentByIdAsync(
-            Guid key,
+        public async Task<ResultReportCommentWithRelationsDto?> GetReportCommentByIdAsync(
+            string? key,
             [Service] IReportCommentQueryService service,
             [Service] IReportCommentResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultReportCommentWithRelationsDto>(entity);
         }
     }

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using HotChocolate.Resolvers;
-using HotChocolate.Types.Pagination;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
@@ -8,9 +7,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Paginations;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
-using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries
 {
@@ -35,7 +34,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries
                 _mapper
             );
 
-            return new BlockUserConnection(connection.Edges, connection.Info, connection.TotalCount);
+            return GraphQLConnectionFactory.Create<BlockUserConnection, ResultBlockUserWithRelationsDto>(connection);
         }
 
 
@@ -59,7 +58,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries
                 _mapper
             );
 
-            return new BlockUserConnection(connection.Edges, connection.Info, connection.TotalCount);
+            return GraphQLConnectionFactory.Create<BlockUserConnection, ResultBlockUserWithRelationsDto>(connection);
         }
 
         public async Task<ResultBlockUserWithRelationsDto?> GetBlockUserByIdAsync(

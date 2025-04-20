@@ -4,16 +4,15 @@ using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryDtos
 {
-    public record ResultStoryWithRelationsDto(
-        Guid StoryId,
-        string Path,
-        bool IsVideo,
-        Guid UserId,
-        DateTime CreatedAt
-    )
+    public record class ResultStoryWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
-        public ICollection<ResultViewStoryDto>? ViewStories { get; set; }
-        public ICollection<ResultHighlightDto>? Highlights { get; set; }
+        public Guid StoryId { get; init; }
+        public string Path { get; init; } = string.Empty;
+        public bool IsVideo { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime CreatedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
+        public ICollection<ResultViewStoryDto> ViewStories { get; init; } = [];
+        public ICollection<ResultHighlightDto> Highlights { get; init; } = [];
     }
 }

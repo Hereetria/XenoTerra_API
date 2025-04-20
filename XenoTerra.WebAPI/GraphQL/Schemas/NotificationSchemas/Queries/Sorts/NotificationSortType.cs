@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationQueries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Queries.Sorts
 {
     public class NotificationSortType : SortInputType<Notification>
     {

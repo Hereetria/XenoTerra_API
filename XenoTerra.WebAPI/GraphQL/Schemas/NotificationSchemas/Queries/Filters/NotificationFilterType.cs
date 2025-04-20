@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Queries.Filters
 {
     public class NotificationFilterType : FilterInputType<Notification>
     {

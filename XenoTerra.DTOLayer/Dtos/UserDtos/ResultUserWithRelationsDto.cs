@@ -20,42 +20,43 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.UserDtos
 {
-    public record ResultUserWithRelationsDto(
-        Guid Id,
-        string UserName,
-        string Password,
-        string Email,
-        string FullName,
-        string Bio,
-        string ProfilePicture,
-        string Website,
-        DateTime BirthDate,
-        int FollowersCount,
-        int FollowingCount,
-        bool IsVerified,
-        DateTime LastActive
-    )
+    public record class ResultUserWithRelationsDto
     {
-        public ICollection<ResultBlockUserDto>? BlockedUsers { get; set; }
-        public ICollection<ResultBlockUserDto>? BlockingUsers { get; set; }
-        public ICollection<ResultPostDto>? Posts { get; set; }
-        public ICollection<ResultFollowDto>? Followers { get; set; }
-        public ICollection<ResultFollowDto>? Followings { get; set; }
-        public ICollection<ResultLikeDto>? Likes { get; set; }
-        public ICollection<ResultCommentDto>? Comments { get; set; }
-        public ICollection<ResultMessageDto>? SentMessages { get; set; }
-        public ICollection<ResultMessageDto>? ReceivedMessages { get; set; }
-        public ICollection<ResultNotificationDto>? Notifications { get; set; }
-        public ICollection<ResultMediaDto>? Medias { get; set; }
-        public ICollection<ResultStoryDto>? Stories { get; set; }
-        public ICollection<ResultSavedPostDto>? SavedPosts { get; set; }
-        public ICollection<ResultReportCommentDto>? ReportComments { get; set; }
-        public ICollection<ResultViewStoryDto>? ViewStories { get; set; }
-        public ICollection<ResultUserSettingDto>? UserSettings { get; set; }
-        public ICollection<ResultUserDto>? SearchedBy { get; set; }
-        public ICollection<ResultRecentChatsDto>? RecentChats { get; set; }
-        public ResultNoteDto? Note { get; set; }
-        public ICollection<ResultReactionDto>? Reactions { get; set; }
-        public ICollection<ResultPostDto>? TaggedPosts { get; set; }
+        public Guid Id { get; init; }
+        public string UserName { get; init; } = string.Empty;
+        public string Password { get; init; } = string.Empty;
+        public string Email { get; init; } = string.Empty;
+        public string FullName { get; init; } = string.Empty;
+        public string Bio { get; init; } = string.Empty;
+        public string ProfilePicture { get; init; } = string.Empty;
+        public string Website { get; init; } = string.Empty;
+        public DateTime BirthDate { get; init; }
+        public int FollowersCount { get; init; }
+        public int FollowingCount { get; init; }
+        public bool IsVerified { get; init; }
+        public DateTime LastActive { get; init; }
+
+
+        public ICollection<ResultBlockUserDto> BlockedUsers { get; init; } = [];
+        public ICollection<ResultBlockUserDto> BlockingUsers { get; init; } = [];
+        public ICollection<ResultPostDto> Posts { get; init; } = [];
+        public ICollection<ResultFollowDto> Followers { get; init; } = [];
+        public ICollection<ResultFollowDto> Followings { get; init; } = [];
+        public ICollection<ResultLikeDto> Likes { get; init; } = [];
+        public ICollection<ResultCommentDto> Comments { get; init; } = [];
+        public ICollection<ResultMessageDto> SentMessages { get; init; } = [];
+        public ICollection<ResultMessageDto> ReceivedMessages { get; init; } = [];
+        public ICollection<ResultNotificationDto> Notifications { get; init; } = [];
+        public ICollection<ResultMediaDto> Medias { get; init; } = [];
+        public ICollection<ResultStoryDto> Stories { get; init; } = [];
+        public ICollection<ResultSavedPostDto> SavedPosts { get; init; } = [];
+        public ICollection<ResultReportCommentDto> ReportComments { get; init; } = [];
+        public ICollection<ResultViewStoryDto> ViewStories { get; init; } = [];
+        public ICollection<ResultUserSettingDto> UserSettings { get; init; } = [];
+        public ICollection<ResultUserDto> SearchedBy { get; init; } = [];
+        public ICollection<ResultRecentChatsDto> RecentChats { get; init; } = [];
+        public ResultNoteDto Note { get; init; } = new();
+        public ICollection<ResultReactionDto> Reactions { get; init; } = [];
+        public ICollection<ResultPostDto> TaggedPosts { get; init; } = [];
     }
 }

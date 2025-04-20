@@ -9,8 +9,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.BlockUserMutationServices;
-using XenoTerra.WebAPI.Utils;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
 {
@@ -30,8 +30,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
             var createDto = DtoMapperHelper.MapInputToDto<CreateBlockUserInput, CreateBlockUserDto>(input);
             var payload = await mutationService.CreateAsync<CreateBlockUserPayload>(writeService, createDto);
 
-            if (payload.Result is not null)
-                await SendBlockUserCreatedEvents(eventSender, payload.Result);
+            await SendBlockUserCreatedEvents(eventSender, payload.Result);
 
             return payload;
         }
@@ -52,8 +51,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
 
             var payload = await mutationService.UpdateAsync<UpdateBlockUserPayload>(writeService, updateDto, modifiedFields);
 
-            if (payload.Result is not null)
-                await SendBlockUserUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            await SendBlockUserUpdatedEvents(eventSender, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -71,15 +69,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
             _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteBlockUserPayload>(writeService, parsedKey);
 
-            
-            if (payload.Result is not null)
-                await SendBlockUserDeletedEvents(eventSender, payload.Result);
+            await SendBlockUserDeletedEvents(eventSender, payload.Result);
 
             return payload;
         }
 
-        private async Task SendBlockUserCreatedEvents(ITopicEventSender sender, ResultBlockUserDto result)
+        private async Task SendBlockUserCreatedEvents(ITopicEventSender sender, ResultBlockUserDto? result)
         {
+            if (result is null)
+                return;
+
             await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserCreated),
                 BlockUserCreatedEvent.From<BlockUserCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
 
@@ -87,8 +86,11 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
                 BlockUserChangedEvent.From<BlockUserChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
         }
 
-        private async Task SendBlockUserUpdatedEvents(ITopicEventSender sender, ResultBlockUserDto result, IEnumerable<string> modifiedFields)
+        private async Task SendBlockUserUpdatedEvents(ITopicEventSender sender, ResultBlockUserDto? result, IEnumerable<string> modifiedFields)
         {
+            if (result is null)
+                return;
+
             await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserUpdated),
                 BlockUserUpdatedEvent.From<BlockUserUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
 
@@ -96,8 +98,11 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations
                 BlockUserChangedEvent.From<BlockUserChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
         }
 
-        private async Task SendBlockUserDeletedEvents(ITopicEventSender sender, ResultBlockUserDto result)
+        private async Task SendBlockUserDeletedEvents(ITopicEventSender sender, ResultBlockUserDto? result)
         {
+            if (result is null)
+                return;
+
             await sender.SendAsync(nameof(BlockUserSubscription.OnBlockUserDeleted),
                 BlockUserDeletedEvent.From<BlockUserDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
 

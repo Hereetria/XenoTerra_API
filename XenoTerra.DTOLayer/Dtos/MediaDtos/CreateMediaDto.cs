@@ -6,7 +6,7 @@ namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
     public class CreateMediaDto
     {
-        public required string PhotoUrl { get; set; }
+        public string PhotoUrl { get; set; } = string.Empty;
         public Guid UserId { get; set; }
         public DateTime UploadedAt { get; set; }
     }

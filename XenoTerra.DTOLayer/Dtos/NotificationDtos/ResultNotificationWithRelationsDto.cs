@@ -4,14 +4,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.NotificationDtos
 {
-    public record ResultNotificationWithRelationsDto(
-        Guid NotificationId,
-        Guid UserId,
-        Guid Message,
-        string Image,
-        DateTime CreatedAt
-    )
+    public record class ResultNotificationWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
+        public Guid NotificationId { get; init; }
+        public Guid UserId { get; init; }
+        public Guid Message { get; init; }
+        public string Image { get; init; } = string.Empty;
+        public DateTime CreatedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
     }
 }

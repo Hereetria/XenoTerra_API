@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Filters
 {
     public class ViewStoryFilterType : FilterInputType<ViewStory>
     {

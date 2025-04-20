@@ -4,13 +4,12 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
-    public record ResultMediaWithRelationsDto(
-        Guid MediaId,
-        string PhotoUrl,
-        Guid UserId,
-        DateTime UploadedAt
-    )
+    public record class ResultMediaWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
+        public Guid MediaId { get; init; }
+        public string PhotoUrl { get; init; } = string.Empty;
+        public Guid UserId { get; init; }
+        public DateTime UploadedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
     }
 }

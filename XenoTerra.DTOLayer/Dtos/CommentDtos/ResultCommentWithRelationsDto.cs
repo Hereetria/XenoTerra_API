@@ -5,15 +5,14 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.CommentDtos
 {
-    public record ResultCommentWithRelationsDto(
-        Guid CommentId,
-        string Content,
-        Guid PostId,
-        Guid UserId,
-        DateTime CommentedAt
-    )
+    public record class ResultCommentWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
-        public ResultPostDto? Post { get; set; }
+        public Guid CommentId { get; init; }
+        public string Content { get; init; } = string.Empty;
+        public Guid PostId { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime CommentedAt { get; init; }
+        public ResultUserDto User { get; init; } = new();
+        public ResultPostDto Post { get; init; } = new();
     }
 }

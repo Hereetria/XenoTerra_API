@@ -7,19 +7,18 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.PostDtos
 {
-    public record ResultPostWithRelationsDto(
-        Guid PostId,
-        string Caption,
-        string Path,
-        bool IsVideo,
-        Guid UserId,
-        DateTime CreatedAt
-    )
+    public record class ResultPostWithRelationsDto
     {
-        public ResultUserDto? User { get; set; }
-        public ICollection<ResultLikeDto>? Likes { get; set; }
-        public ICollection<ResultCommentDto>? Comments { get; set; }
-        public ICollection<ResultSavedPostDto>? SavedPosts { get; set; }
-        public ICollection<ResultUserDto>? TaggedUsers { get; set; }
+        public Guid PostId { get; init; }
+        public string Caption { get; init; } = string.Empty;
+        public string Path { get; init; } = string.Empty;
+        public bool IsVideo { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime CreatedAt { get; init; }
+        public ResultUserDto? User { get; init; }
+        public ICollection<ResultLikeDto> Likes { get; init; } = [];
+        public ICollection<ResultCommentDto> Comments { get; init; } = [];
+        public ICollection<ResultSavedPostDto> SavedPosts { get; init; } = [];
+        public ICollection<ResultUserDto> TaggedUsers { get; init; } = [];
     }
 }

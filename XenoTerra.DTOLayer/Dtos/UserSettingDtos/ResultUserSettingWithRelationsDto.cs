@@ -4,15 +4,14 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
 {
-    public record ResultUserSettingWithRelationsDto(
-        Guid UserSettingId,
-        Guid UserId,
-        bool IsPrivate,
-        bool ReceiveNotifications,
-        bool ShowActivityStatus,
-        DateTime LastUpdated
-    )
+    public record class ResultUserSettingWithRelationsDto
     {
-        public ResultUserWithRelationsDto? User { get; set; }
+        public Guid UserSettingId { get; init; }
+        public Guid UserId { get; init; }
+        public bool IsPrivate { get; init; }
+        public bool ReceiveNotifications { get; init; }
+        public bool ShowActivityStatus { get; init; }
+        public DateTime LastUpdated { get; init; }
+        public ResultUserWithRelationsDto User { get; init; } = new();
     }
 }

@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories;
+using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MediaResolvers;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MediaResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.MediaResolvers
 {
     public class MediaResolver : EntityResolver<Media, Guid>, IMediaResolver
     {

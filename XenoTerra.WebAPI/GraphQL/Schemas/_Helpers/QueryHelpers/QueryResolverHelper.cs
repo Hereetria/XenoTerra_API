@@ -1,12 +1,9 @@
-﻿using AutoMapper;
-using GreenDonut.Data;
+﻿using GreenDonut.Data;
 using HotChocolate.Resolvers;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
-using System.Reflection;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
-using XenoTerra.WebAPI.Utils;
+using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers
 {

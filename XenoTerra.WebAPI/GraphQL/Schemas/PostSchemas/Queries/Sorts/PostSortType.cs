@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.PostQueries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Queries.Sorts
 {
     public class PostSortType : SortInputType<Post>
     {

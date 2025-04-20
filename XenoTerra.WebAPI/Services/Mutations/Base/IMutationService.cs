@@ -1,6 +1,6 @@
 ﻿using HotChocolate.Execution;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Payloads;
+using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.Services.Mutations.Base
 {

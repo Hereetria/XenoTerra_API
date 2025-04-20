@@ -8,3 +8,4 @@
                 .Type<NonNullType<IntType>>();
         }
     }
+}

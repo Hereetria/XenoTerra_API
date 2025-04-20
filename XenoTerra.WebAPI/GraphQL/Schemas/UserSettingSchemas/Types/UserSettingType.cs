@@ -1,12 +1,12 @@
-﻿using XenoTerra.DTOLayer.Dtos.UserDtos;
+﻿using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Types
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSettingSchemas.Types
 {
-    public class UserWithRelationsType : ObjectType<ResultUserWithRelationsDto>
+    public class UserSettingType : ObjectType<ResultUserSettingDto>
     {
-        protected override void Configure(IObjectTypeDescriptor<ResultUserWithRelationsDto> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ResultUserSettingDto> descriptor)
         {
-            descriptor.Name("ResultUserWithRelations");
+            descriptor.Name("ResultUserSetting");
         }
     }
 }

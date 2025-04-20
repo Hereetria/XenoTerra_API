@@ -3,8 +3,9 @@ using HotChocolate.Resolvers;
 using HotChocolate.Types;
 using System.Linq.Expressions;
 using System.Reflection;
+using XenoTerra.WebAPI.Helpers;
 
-namespace XenoTerra.WebAPI.Utils
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class GraphQLFilteringHelper
     {

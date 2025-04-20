@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Queries.Filters
 {
     public class SavedPostFilterType : FilterInputType<SavedPost>
     {

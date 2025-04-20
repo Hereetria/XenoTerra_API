@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowQueries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Queries.Sorts
 {
     public class FollowSortType : SortInputType<Follow>
     {

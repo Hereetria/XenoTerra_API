@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.SavedPostDtos
 {
-    public record ResultSavedPostDto(
-        Guid SavedPostId,
-        Guid UserId,
-        Guid PostId,
-        DateTime SavedAt
-    );
+    public record class ResultSavedPostDto
+    {
+        public Guid SavedPostId { get; init; }
+        public Guid UserId { get; init; }
+        public Guid PostId { get; init; }
+        public DateTime SavedAt { get; init; }
+    }
 }

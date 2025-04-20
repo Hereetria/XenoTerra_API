@@ -1,68 +1,76 @@
 ﻿using AutoMapper;
-using HotChocolate;
 using HotChocolate.Resolvers;
-using Microsoft.EntityFrameworkCore;
-using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageQueries.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageQueries.Sorts;
+using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.MessageResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.MessageQueryServices;
-using XenoTerra.WebAPI.Utils;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Queries
 {
-    public class MessageQuery
+    public class MessageQuery(IMapper mapper, IQueryResolverHelper<Message, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<Message, Guid> _queryResolver;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<Message, Guid> _queryResolver = queryResolver;
 
-        public MessageQuery(IMapper mapper, IQueryResolverHelper<Message, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
-
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(MessageFilterType))]
         [UseSorting(typeof(MessageSortType))]
-        public async Task<IEnumerable<ResultMessageWithRelationsDto>> GetAllMessagesAsync(
+        public async Task<MessageConnection> GetAllMessagesAsync(
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultMessageWithRelationsDto>>(entities);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Message, ResultMessageWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<MessageConnection, ResultMessageWithRelationsDto>(connection);
         }
 
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(MessageFilterType))]
         [UseSorting(typeof(MessageSortType))]
-        public async Task<IEnumerable<ResultMessageWithRelationsDto>> GetMessagesByIdsAsync(
-            IEnumerable<Guid> keys,
+        public async Task<MessageConnection> GetMessagesByIdsAsync(
+            IEnumerable<string>? keys,
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultMessageWithRelationsDto>>(entities);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Message, ResultMessageWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<MessageConnection, ResultMessageWithRelationsDto>(connection);
         }
 
-        public async Task<ResultMessageWithRelationsDto> GetMessageByIdAsync(
-            Guid key,
+        public async Task<ResultMessageWithRelationsDto?> GetMessageByIdAsync(
+            string? key,
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultMessageWithRelationsDto>(entity);
         }
     }
-
-
 }

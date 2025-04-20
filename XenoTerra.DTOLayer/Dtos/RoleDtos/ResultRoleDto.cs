@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.RoleDtos
 {
-    public record ResultRoleDto(
-        Guid Id,
-        string Name
-    );
+    public record class ResultRoleDto
+    {
+        public Guid Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+    }
 }

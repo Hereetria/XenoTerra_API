@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Resolvers;
 using HotChocolate.Types.Pagination;
 
-namespace XenoTerra.WebAPI.Utils
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class ConnectionBuilder
     {

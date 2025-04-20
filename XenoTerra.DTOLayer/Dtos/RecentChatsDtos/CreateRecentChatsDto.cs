@@ -6,7 +6,7 @@ namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
 {
     public class CreateRecentChatsDto
     {
-        public required string LastMessage { get; set; }
+        public string LastMessage { get; set; } = string.Empty;
         public Guid UserId { get; set; }
         public DateTime LastMessageAt { get; set; }
     }

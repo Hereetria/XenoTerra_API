@@ -5,7 +5,7 @@ namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
     public class UpdateHighlightDto
     {
         public Guid HighlightId { get; set; }
-        public required string Name { get; set; }
-        public required string ProfilePicturePath { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string ProfilePicturePath { get; set; } = string.Empty;
     }
 }

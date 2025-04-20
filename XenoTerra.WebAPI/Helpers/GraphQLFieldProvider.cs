@@ -3,7 +3,7 @@ using HotChocolate.Resolvers;
 using System.Reflection;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 
-namespace XenoTerra.WebAPI.Utils
+namespace XenoTerra.WebAPI.Helpers
 {
     public static class GraphQLFieldProvider
     {
@@ -34,7 +34,6 @@ namespace XenoTerra.WebAPI.Utils
             }
             else
             {
-                // CASE: Non-pagination (flat field selection)
                 var directFields = selections
                     .OfType<FieldNode>()
                     .Select(f => f.Name.Value)

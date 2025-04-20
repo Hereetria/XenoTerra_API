@@ -9,12 +9,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos
 {
-    public record ResultSearchHistoryUserWithRelationsDto(
-        Guid SearchHistoryId,
-        Guid UserId
-    )
+    public record class ResultSearchHistoryUserWithRelationsDto
     {
-        public ResultSearchHistoryDto? SearchHistory { get; set; }
-        public ResultUserDto? User { get; set; }
+        public Guid SearchHistoryId { get; init; }
+        public Guid UserId { get; init; }
+        public ResultSearchHistoryDto SearchHistory { get; init; } = new();
+        public ResultUserDto User { get; init; } = new();
     }
 }

@@ -2,60 +2,74 @@
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries.Sorts;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.SearchHistoryResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryQueryServices;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries
 {
-    public class SearchHistoryQuery
+    public class SearchHistoryQuery(IMapper mapper, IQueryResolverHelper<SearchHistory, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<SearchHistory, Guid> _queryResolver;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<SearchHistory, Guid> _queryResolver = queryResolver;
 
-        public SearchHistoryQuery(IMapper mapper, IQueryResolverHelper<SearchHistory, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
-
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(SearchHistoryFilterType))]
         [UseSorting(typeof(SearchHistorySortType))]
-        public async Task<IEnumerable<ResultSearchHistoryWithRelationsDto>> GetAllSearchHistoriesAsync(
+        public async Task<SearchHistoryConnection> GetAllSearchHistoriesAsync(
             [Service] ISearchHistoryQueryService service,
             [Service] ISearchHistoryResolver resolver,
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(entities);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<SearchHistoryConnection, ResultSearchHistoryWithRelationsDto>(connection);
         }
 
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(SearchHistoryFilterType))]
         [UseSorting(typeof(SearchHistorySortType))]
-        public async Task<IEnumerable<ResultSearchHistoryWithRelationsDto>> GetSearchHistoriesByIdsAsync(
-            IEnumerable<Guid> keys,
+        public async Task<SearchHistoryConnection> GetSearchHistoriesByIdsAsync(
+            IEnumerable<string>? keys,
             [Service] ISearchHistoryQueryService service,
             [Service] ISearchHistoryResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultSearchHistoryWithRelationsDto>>(entities);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<SearchHistoryConnection, ResultSearchHistoryWithRelationsDto>(connection);
         }
 
-        public async Task<ResultSearchHistoryWithRelationsDto> GetSearchHistoryByIdAsync(
-            Guid key,
+        public async Task<ResultSearchHistoryWithRelationsDto?> GetSearchHistoryByIdAsync(
+            string? key,
             [Service] ISearchHistoryQueryService service,
             [Service] ISearchHistoryResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultSearchHistoryWithRelationsDto>(entity);
         }
     }

@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
 {
-    public record ResultReportCommentDto(
-        Guid ReportCommentId,
-        Guid ReporterUserId,
-        Guid CommentId,
-        string Reason,
-        DateTime ReportedAt
-    );
+    public record class ResultReportCommentDto
+    {
+        public Guid ReportCommentId { get; init; }
+        public Guid ReporterUserId { get; init; }
+        public Guid CommentId { get; init; }
+        public string Reason { get; init; } = string.Empty;
+        public DateTime ReportedAt { get; init; }
+    }
 }

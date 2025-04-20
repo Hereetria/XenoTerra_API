@@ -2,60 +2,74 @@
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries.Sorts;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries.Sorts;
+using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.HighlightResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries
 {
-    public class HighlightQuery
+    public class HighlightQuery(IMapper mapper, IQueryResolverHelper<Highlight, Guid> queryResolver)
     {
-        private readonly IMapper _mapper;
-        private readonly IQueryResolverHelper<Highlight, Guid> _queryResolver;
+        private readonly IMapper _mapper = mapper;
+        private readonly IQueryResolverHelper<Highlight, Guid> _queryResolver = queryResolver;
 
-        public HighlightQuery(IMapper mapper, IQueryResolverHelper<Highlight, Guid> queryResolver)
-        {
-            _mapper = mapper;
-            _queryResolver = queryResolver;
-        }
-
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(HighlightFilterType))]
         [UseSorting(typeof(HighlightSortType))]
-        public async Task<IEnumerable<ResultHighlightWithRelationsDto>> GetAllHighlightsAsync(
+        public async Task<HighlightConnection> GetAllHighlightsAsync(
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
             IResolverContext context)
         {
             var query = service.GetAllQueryable(context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultHighlightWithRelationsDto>>(entities);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<HighlightConnection, ResultHighlightWithRelationsDto>(connection);
         }
 
-        [UsePaging]
+        [UseCustomPaging]
         [UseFiltering(typeof(HighlightFilterType))]
         [UseSorting(typeof(HighlightSortType))]
-        public async Task<IEnumerable<ResultHighlightWithRelationsDto>> GetHighlightsByIdsAsync(
-            IEnumerable<Guid> keys,
+        public async Task<HighlightConnection> GetHighlightsByIdsAsync(
+            IEnumerable<string>? keys,
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdsQueryable(keys, context);
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-            return _mapper.Map<List<ResultHighlightWithRelationsDto>>(entities);
+            var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+
+            var query = service.GetByIdsQueryable(parsedKeys, context);
+            var entityConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
+
+            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightWithRelationsDto>(
+                entityConnection,
+                _mapper
+            );
+
+            return GraphQLConnectionFactory.Create<HighlightConnection, ResultHighlightWithRelationsDto>(connection);
         }
 
-        public async Task<ResultHighlightWithRelationsDto> GetHighlightByIdAsync(
-            Guid key,
+        public async Task<ResultHighlightWithRelationsDto?> GetHighlightByIdAsync(
+            string? key,
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
             IResolverContext context)
         {
-            var query = service.GetByIdQueryable(key, context);
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+
+            var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
+
             return _mapper.Map<ResultHighlightWithRelationsDto>(entity);
         }
     }

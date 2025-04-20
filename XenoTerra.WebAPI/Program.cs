@@ -16,7 +16,7 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-Configuration.ConfigureServices(builder);
+AppServiceConfigurator.ConfigureServices(builder);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -4,43 +4,38 @@ using XenoTerra.WebAPI.GraphQL.DataLoaders.Entity;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
 using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 
-namespace XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories
+namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Factories
 {
-    public class EntityDataLoaderFactory
+    public class EntityDataLoaderFactory(IServiceProvider serviceProvider)
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public EntityDataLoaderFactory(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-        }
+        private readonly IServiceProvider _serviceProvider = serviceProvider;
 
         public object GetDataLoader<TEntity>()
             where TEntity : class
         {
             var dataLoaderMappings = new Dictionary<Type, Type>
-        {
-            { typeof(BlockUser), typeof(BlockUserDataLoader) },
-            { typeof(Comment), typeof(CommentDataLoader) },
-            { typeof(Follow), typeof(FollowDataLoader) },
-            { typeof(Highlight), typeof(HighlightDataLoader) },
-            { typeof(Like), typeof(LikeDataLoader) },
-            { typeof(Media), typeof(MediaDataLoader) },
-            { typeof(Message), typeof(MessageDataLoader) },
-            { typeof(Note), typeof(NoteDataLoader) },
-            { typeof(Notification), typeof(NotificationDataLoader) },
-            { typeof(Post), typeof(PostDataLoader) },
-            { typeof(Reaction), typeof(ReactionDataLoader) },
-            { typeof(RecentChats), typeof(RecentChatsDataLoader) },
-            { typeof(ReportComment), typeof(ReportCommentDataLoader) },
-            { typeof(Role), typeof(RoleDataLoader) },
-            { typeof(SavedPost), typeof(SavedPostDataLoader) },
-            { typeof(SearchHistory), typeof(SearchHistoryDataLoader) },
-            { typeof(Story), typeof(StoryDataLoader) },
-            { typeof(User), typeof(UserDataLoader) },
-            { typeof(UserSetting), typeof(UserSettingDataLoader) },
-            { typeof(ViewStory), typeof(ViewStoryDataLoader) }
-        };
+            {
+                { typeof(BlockUser), typeof(BlockUserDataLoader) },
+                { typeof(Comment), typeof(CommentDataLoader) },
+                { typeof(Follow), typeof(FollowDataLoader) },
+                { typeof(Highlight), typeof(HighlightDataLoader) },
+                { typeof(Like), typeof(LikeDataLoader) },
+                { typeof(Media), typeof(MediaDataLoader) },
+                { typeof(Message), typeof(MessageDataLoader) },
+                { typeof(Note), typeof(NoteDataLoader) },
+                { typeof(Notification), typeof(NotificationDataLoader) },
+                { typeof(Post), typeof(PostDataLoader) },
+                { typeof(Reaction), typeof(ReactionDataLoader) },
+                { typeof(RecentChats), typeof(RecentChatsDataLoader) },
+                { typeof(ReportComment), typeof(ReportCommentDataLoader) },
+                { typeof(Role), typeof(RoleDataLoader) },
+                { typeof(SavedPost), typeof(SavedPostDataLoader) },
+                { typeof(SearchHistory), typeof(SearchHistoryDataLoader) },
+                { typeof(Story), typeof(StoryDataLoader) },
+                { typeof(User), typeof(UserDataLoader) },
+                { typeof(UserSetting), typeof(UserSettingDataLoader) },
+                { typeof(ViewStory), typeof(ViewStoryDataLoader) }
+            };
 
             if (!dataLoaderMappings.TryGetValue(typeof(TEntity), out var dataLoaderType))
             {
@@ -49,12 +44,7 @@ namespace XenoTerra.WebAPI.Schemas.DataLoaders.DataLoaderFactories
 
             var instance = _serviceProvider.GetService(dataLoaderType);
 
-            if (instance == null)
-            {
-                throw new InvalidOperationException($"Failed to resolve DataLoader for type {dataLoaderType.Name}");
-            }
-
-            return instance;
+            return instance ?? throw new InvalidOperationException($"Failed to resolve DataLoader for type {dataLoaderType.Name}");
         }
     }
 }

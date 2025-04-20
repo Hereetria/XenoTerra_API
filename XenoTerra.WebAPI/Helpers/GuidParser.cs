@@ -1,4 +1,4 @@
-﻿namespace XenoTerra.WebAPI.Utils
+﻿namespace XenoTerra.WebAPI.Helpers
 {
     public static class GuidParser
     {

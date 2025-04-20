@@ -1,8 +1,6 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
-
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries.Sorts
 {
     public class ReactionSortType : SortInputType<Reaction>
     {

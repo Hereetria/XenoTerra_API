@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Queries.Filters
 {
     public class FollowFilterType : FilterInputType<Follow>
     {

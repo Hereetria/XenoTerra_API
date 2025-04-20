@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Sorts;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.LikeQueries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Queries.Sorts
 {
     public class LikeSortType : SortInputType<Like>
     {

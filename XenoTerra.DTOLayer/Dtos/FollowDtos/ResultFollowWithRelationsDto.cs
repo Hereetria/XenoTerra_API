@@ -4,14 +4,13 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.FollowDtos
 {
-    public record ResultFollowWithRelationsDto(
-        Guid FollowId,
-        Guid FollowerId,
-        Guid FollowingId,
-        DateTime FollowedAt
-    )
+    public record class ResultFollowWithRelationsDto
     {
-        public ResultUserDto? Follower { get; set; }
-        public ResultUserDto? Following { get; set; }
+        public Guid FollowId { get; init; }
+        public Guid FollowerId { get; init; }
+        public Guid FollowingId { get; init; }
+        public DateTime FollowedAt { get; init; }
+        public ResultUserDto Follower { get; init; } = new();
+        public ResultUserDto Following { get; init; } = new();
     }
 }

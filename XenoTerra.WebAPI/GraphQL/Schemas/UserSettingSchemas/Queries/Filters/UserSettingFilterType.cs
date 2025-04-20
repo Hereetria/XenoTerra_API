@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Filters
 {
     public class UserSettingFilterType : FilterInputType<UserSetting>
     {

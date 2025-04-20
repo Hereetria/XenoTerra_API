@@ -1,8 +1,7 @@
 ﻿using HotChocolate.Data.Filters;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Filters;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsQueries.Filters
+namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Queries.Filters
 {
     public class RecentChatsFilterType : FilterInputType<RecentChats>
     {

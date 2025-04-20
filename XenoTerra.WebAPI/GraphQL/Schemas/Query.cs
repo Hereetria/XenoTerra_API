@@ -1,23 +1,23 @@
 ﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.CommentQueries;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.FollowQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.HighlightQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.LikeQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.MediaQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.NotificationQueries;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.PostQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.ReactionQueries;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.RecentChatsQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentQueries;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Queries;
-using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.StoryQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.UserQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.UserSettingQueries;
-using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.ViewStoryQueries;
+using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas
 {
