@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MediaService;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Mutations
             [Service] IMediaMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateMediaInput> inputValidator,
             CreateMediaInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Media, CreateMediaInput, ResultMediaDto, CreateMediaPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateMediaInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateMediaInput, CreateMediaDto>(input);
             var payload = await mutationService.CreateAsync<CreateMediaPayload>(writeService, createDto);
 
-            await SendMediaCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendMediaEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Mutations
             [Service] IMediaMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateMediaInput> inputValidator,
             IResolverContext context,
             UpdateMediaInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Media, UpdateMediaInput, ResultMediaDto, UpdateMediaPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateMediaInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateMediaInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateMediaInput, UpdateMediaDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateMediaPayload>(writeService, updateDto, modifiedFields);
 
-            await SendMediaUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendMediaEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Mutations
             [Service] IMediaMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Media, ResultMediaDto, DeleteMediaPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteMediaPayload>(writeService, parsedKey);
 
-            await SendMediaDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendMediaEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendMediaCreatedEvents(ITopicEventSender sender, ResultMediaDto? result)
+        private async Task SendMediaEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultMediaDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(MediaSubscription.OnMediaCreated),
-                MediaCreatedEvent.From<MediaCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(MediaSubscription.OnMediaCreated),
+                        MediaCreatedEvent.From<MediaCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(MediaSubscription.OnMediaUpdated),
+                        MediaUpdatedEvent.From<MediaUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(MediaSubscription.OnMediaDeleted),
+                        MediaDeletedEvent.From<MediaDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(MediaSubscription.OnMediaChanged),
-                MediaChangedEvent.From<MediaChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendMediaUpdatedEvents(ITopicEventSender sender, ResultMediaDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(MediaSubscription.OnMediaUpdated),
-                MediaUpdatedEvent.From<MediaUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(MediaSubscription.OnMediaChanged),
-                MediaChangedEvent.From<MediaChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendMediaDeletedEvents(ITopicEventSender sender, ResultMediaDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(MediaSubscription.OnMediaDeleted),
-                MediaDeletedEvent.From<MediaDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(MediaSubscription.OnMediaChanged),
-                MediaChangedEvent.From<MediaChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                MediaChangedEvent.From<MediaChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

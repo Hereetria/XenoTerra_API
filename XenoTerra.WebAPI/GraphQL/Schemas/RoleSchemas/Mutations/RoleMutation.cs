@@ -10,6 +10,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.RoleMutationServices;
+using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Mutations
 {
@@ -17,96 +20,88 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Mutations
     {
         public async Task<CreateRolePayload> CreateRoleAsync(
             [Service] IRoleMutationService mutationService,
-            [Service] IRoleWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateRoleInput> inputValidator,
             CreateRoleInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Role, CreateRoleInput, ResultRoleDto, CreateRolePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateRoleInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateRoleInput, CreateRoleDto>(input);
-            var payload = await mutationService.CreateAsync<CreateRolePayload>(writeService, createDto);
+            var payload = await mutationService.CreateAsync(createDto);
 
-            await SendRoleCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendRoleEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
 
         public async Task<UpdateRolePayload> UpdateRoleAsync(
             [Service] IRoleMutationService mutationService,
-            [Service] IRoleWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateRoleInput> inputValidator,
             IResolverContext context,
             UpdateRoleInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Role, UpdateRoleInput, ResultRoleDto, UpdateRolePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateRoleInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateRoleInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateRoleInput, UpdateRoleDto>(input, modifiedFields);
 
-            var payload = await mutationService.UpdateAsync<UpdateRolePayload>(writeService, updateDto, modifiedFields);
+            var payload = await mutationService.UpdateAsync(updateDto, modifiedFields);
 
-            await SendRoleUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendRoleEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
 
         public async Task<DeleteRolePayload> DeleteRoleAsync(
             [Service] IRoleMutationService mutationService,
-            [Service] IRoleWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Role, ResultRoleDto, DeleteRolePayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
-            var payload = await mutationService.DeleteAsync<DeleteRolePayload>(writeService, parsedKey);
+            var payload = await mutationService.DeleteAsync(parsedKey);
 
-            await SendRoleDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendRoleEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendRoleCreatedEvents(ITopicEventSender sender, ResultRoleDto? result)
+        private async Task SendRoleEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultRoleDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(RoleSubscription.OnRoleCreated),
-                RoleCreatedEvent.From<RoleCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(RoleSubscription.OnRoleCreated),
+                        RoleCreatedEvent.From<RoleCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(RoleSubscription.OnRoleUpdated),
+                        RoleUpdatedEvent.From<RoleUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(RoleSubscription.OnRoleDeleted),
+                        RoleDeletedEvent.From<RoleDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(RoleSubscription.OnRoleChanged),
-                RoleChangedEvent.From<RoleChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendRoleUpdatedEvents(ITopicEventSender sender, ResultRoleDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(RoleSubscription.OnRoleUpdated),
-                RoleUpdatedEvent.From<RoleUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(RoleSubscription.OnRoleChanged),
-                RoleChangedEvent.From<RoleChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendRoleDeletedEvents(ITopicEventSender sender, ResultRoleDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(RoleSubscription.OnRoleDeleted),
-                RoleDeletedEvent.From<RoleDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(RoleSubscription.OnRoleChanged),
-                RoleChangedEvent.From<RoleChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                RoleChangedEvent.From<RoleChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
+
 }

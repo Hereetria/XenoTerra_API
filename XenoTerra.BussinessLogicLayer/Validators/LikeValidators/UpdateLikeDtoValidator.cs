@@ -12,23 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.LikeValidators
     {
         public UpdateLikeDtoValidator()
         {
-            RuleFor(x => x.LikeId)
-                .NotEmpty()
-                .WithMessage("LikeId must not be empty.");
-
-            RuleFor(x => x.PostId)
-                .NotEmpty()
-                .WithMessage("PostId must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.LikedAt)
-                .NotEmpty()
-                .WithMessage("LikedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("LikedAt cannot be in the future.");
         }
     }
 }

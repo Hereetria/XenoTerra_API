@@ -12,27 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.PostValidators
     {
         public UpdatePostDtoValidator()
         {
-            RuleFor(x => x.PostId)
-                .NotEmpty()
-                .WithMessage("PostId must not be empty.");
-
-            RuleFor(x => x.Caption)
-                .NotEmpty()
-                .WithMessage("Caption must not be empty.");
-
-            RuleFor(x => x.Path)
-                .NotEmpty()
-                .WithMessage("Path must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.CreatedAt)
-                .NotEmpty()
-                .WithMessage("CreatedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("CreatedAt cannot be in the future.");
         }
     }
 }

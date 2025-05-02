@@ -5,7 +5,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Mutations.Inputs
     public record CreateReportCommentInput(
         string ReporterUserId,
         string CommentId,
-        string Reason,
-        [property: DateField] string ReportedAt
+        string Reason
     );
 }

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageMutations
             [Service] IMessageMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateMessageInput> inputValidator,
             CreateMessageInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Message, CreateMessageInput, ResultMessageDto, CreateMessagePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateMessageInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateMessageInput, CreateMessageDto>(input);
             var payload = await mutationService.CreateAsync<CreateMessagePayload>(writeService, createDto);
 
-            await SendMessageCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendMessageEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageMutations
             [Service] IMessageMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateMessageInput> inputValidator,
             IResolverContext context,
             UpdateMessageInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Message, UpdateMessageInput, ResultMessageDto, UpdateMessagePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateMessageInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateMessageInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateMessageInput, UpdateMessageDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateMessagePayload>(writeService, updateDto, modifiedFields);
 
-            await SendMessageUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendMessageEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageMutations
             [Service] IMessageMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Message, ResultMessageDto, DeleteMessagePayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteMessagePayload>(writeService, parsedKey);
 
-            await SendMessageDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendMessageEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendMessageCreatedEvents(ITopicEventSender sender, ResultMessageDto? result)
+        private async Task SendMessageEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultMessageDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(MessageSubscription.OnMessageCreated),
-                MessageCreatedEvent.From<MessageCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(MessageSubscription.OnMessageCreated),
+                        MessageCreatedEvent.From<MessageCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(MessageSubscription.OnMessageUpdated),
+                        MessageUpdatedEvent.From<MessageUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(MessageSubscription.OnMessageDeleted),
+                        MessageDeletedEvent.From<MessageDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(MessageSubscription.OnMessageChanged),
-                MessageChangedEvent.From<MessageChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendMessageUpdatedEvents(ITopicEventSender sender, ResultMessageDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(MessageSubscription.OnMessageUpdated),
-                MessageUpdatedEvent.From<MessageUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(MessageSubscription.OnMessageChanged),
-                MessageChangedEvent.From<MessageChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendMessageDeletedEvents(ITopicEventSender sender, ResultMessageDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(MessageSubscription.OnMessageDeleted),
-                MessageDeletedEvent.From<MessageDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(MessageSubscription.OnMessageChanged),
-                MessageChangedEvent.From<MessageChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                MessageChangedEvent.From<MessageChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

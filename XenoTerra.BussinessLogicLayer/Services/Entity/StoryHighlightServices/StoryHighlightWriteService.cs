@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
 using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
 using XenoTerra.EntityLayer.Entities;
@@ -16,13 +18,15 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices
         IWriteRepository<StoryHighlight, Guid> writeRepository,
         IMapper mapper,
         IValidator<CreateStoryHighlightDto> createValidator,
-        IValidator<UpdateStoryHighlightDto> updateValidator
+        IValidator<UpdateStoryHighlightDto> updateValidator,
+            AppDbContext dbContext
     )
         : WriteService<StoryHighlight, CreateStoryHighlightDto, UpdateStoryHighlightDto, Guid>(
             writeRepository,
             mapper,
             createValidator,
-            updateValidator
+            updateValidator,
+            dbContext
         ),
         IStoryHighlightWriteService
     {

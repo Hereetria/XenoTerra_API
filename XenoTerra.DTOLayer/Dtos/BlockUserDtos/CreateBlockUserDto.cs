@@ -4,7 +4,7 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos
 {
-    public class CreateBlockUserDto
+    public class CreateCommentckUserDto
     {
         public Guid BlockingUserId { get; set; }
         public Guid BlockedUserId { get; set; }

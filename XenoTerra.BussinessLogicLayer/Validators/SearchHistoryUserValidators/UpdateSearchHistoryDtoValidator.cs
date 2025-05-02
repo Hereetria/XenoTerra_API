@@ -12,13 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.SearchHistoryUserValidators
     {
         public UpdateSearchHistoryUserDtoValidator()
         {
-            RuleFor(x => x.SearchHistoryId)
-                .NotEmpty()
-                .WithMessage("SearchHistoryId must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
         }
     }
 }

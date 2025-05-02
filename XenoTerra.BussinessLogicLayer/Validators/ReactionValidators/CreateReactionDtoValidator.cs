@@ -12,17 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.ReactionValidators
     {
         public CreateReactionDtoValidator()
         {
-            RuleFor(x => x.Payload)
-                .NotEmpty()
-                .WithMessage("Payload must not be empty.");
-
-            RuleFor(x => x.MessageId)
-                .NotEmpty()
-                .WithMessage("MessageId must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
         }
     }
 }

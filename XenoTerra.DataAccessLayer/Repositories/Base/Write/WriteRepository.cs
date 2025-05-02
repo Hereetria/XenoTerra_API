@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
 
@@ -19,14 +20,14 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
 
         public WriteRepository(AppDbContext context)
         {
-            _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
+            _context = context;
             _dbSet = _context.Set<TEntity>();
         }
 
-        public AppDbContext GetDbContext()
-        {
-            return _context;
-        }
+        protected virtual Task PreInsertAsync(TEntity entity) => Task.CompletedTask;
+        protected virtual Task PreDeleteAsync(TEntity entity) => Task.CompletedTask;
+        protected virtual Task PreUpdateAsync(TEntity entity, IEnumerable<string> modifiedFields) => Task.CompletedTask;
+
 
         public async Task<TEntity> InsertAsync(TEntity entity)
         {
@@ -89,7 +90,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
         {
             await using var transaction = await _context.Database.BeginTransactionAsync();
 
-            return await ExecuteSafelyAsync(async () =>
+            return await RepositoryExceptionHandler.ExecuteWriteSafelyAsync(async () =>
             {
                 var result = await operation();
                 await transaction.CommitAsync();
@@ -98,42 +99,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
             {
                 await transaction.RollbackAsync();
             }, operationName);
-        }
-
-        private static async Task<TEntity> ExecuteSafelyAsync(
-            Func<Task<TEntity>> operation,
-            Func<Task> rollback,
-            string operationName)
-        {
-            try
-            {
-                return await operation();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                await rollback();
-                throw new InvalidOperationException("A concurrency conflict occurred during data operation.", ex);
-            }
-            catch (DbUpdateException ex)
-            {
-                await rollback();
-                throw new InvalidOperationException("A database update error occurred.", ex);
-            }
-            catch (ArgumentException ex)
-            {
-                await rollback();
-                throw new ArgumentException("Invalid argument provided to the operation.", ex);
-            }
-            catch (TimeoutException ex)
-            {
-                await rollback();
-                throw new TimeoutException("The operation timed out while writing to the database.", ex);
-            }
-            catch (Exception ex)
-            {
-                await rollback();
-                throw new Exception($"An unexpected error occurred while {operationName} the entity.", ex);
-            }
         }
     }
 }

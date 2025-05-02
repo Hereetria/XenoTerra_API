@@ -36,7 +36,7 @@ namespace XenoTerra.DTOLayer.Mappings
 
                 .ReverseMap();
             CreateMap<BlockUser, ResultBlockUserDto>().ReverseMap();
-            CreateMap<BlockUser, CreateBlockUserDto>().ReverseMap();
+            CreateMap<BlockUser, CreateCommentckUserDto>().ReverseMap();
             CreateMap<BlockUser, UpdateBlockUserDto>().ReverseMap();
 
             // Comment Mappings

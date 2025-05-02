@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DataAccessLayer.Utils;
@@ -18,13 +19,15 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
             IWriteRepository<Reaction, Guid> writeRepository,
             IMapper mapper,
             IValidator<CreateReactionDto> createValidator,
-            IValidator<UpdateReactionDto> updateValidator
+            IValidator<UpdateReactionDto> updateValidator,
+            AppDbContext dbContext
         )
             : WriteService<Reaction, CreateReactionDto, UpdateReactionDto, Guid>(
                 writeRepository,
                 mapper,
                 createValidator,
-                updateValidator
+                updateValidator,
+                dbContext
             ),
             IReactionWriteService
     {

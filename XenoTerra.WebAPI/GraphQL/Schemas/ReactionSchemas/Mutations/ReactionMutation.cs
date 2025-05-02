@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Mutations
             [Service] IReactionMutationService mutationService,
             [Service] IReactionWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateReactionInput> inputValidator,
             CreateReactionInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Reaction, CreateReactionInput, ResultReactionDto, CreateReactionPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateReactionInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateReactionInput, CreateReactionDto>(input);
             var payload = await mutationService.CreateAsync<CreateReactionPayload>(writeService, createDto);
 
-            await SendReactionCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendReactionEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Mutations
             [Service] IReactionMutationService mutationService,
             [Service] IReactionWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateReactionInput> inputValidator,
             IResolverContext context,
             UpdateReactionInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Reaction, UpdateReactionInput, ResultReactionDto, UpdateReactionPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateReactionInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateReactionInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateReactionInput, UpdateReactionDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateReactionPayload>(writeService, updateDto, modifiedFields);
 
-            await SendReactionUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendReactionEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,48 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Mutations
             [Service] IReactionMutationService mutationService,
             [Service] IReactionWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Reaction, ResultReactionDto, DeleteReactionPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteReactionPayload>(writeService, parsedKey);
 
-            await SendReactionDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendReactionEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendReactionCreatedEvents(ITopicEventSender sender, ResultReactionDto? result)
+        private async Task SendReactionEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultReactionDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
 
-            await sender.SendAsync(nameof(ReactionSubscription.OnReactionCreated),
-                ReactionCreatedEvent.From<ReactionCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
+
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(ReactionSubscription.OnReactionCreated),
+                        ReactionCreatedEvent.From<ReactionCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(ReactionSubscription.OnReactionUpdated),
+                        ReactionUpdatedEvent.From<ReactionUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(ReactionSubscription.OnReactionDeleted),
+                        ReactionDeletedEvent.From<ReactionDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(ReactionSubscription.OnReactionChanged),
-                ReactionChangedEvent.From<ReactionChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendReactionUpdatedEvents(ITopicEventSender sender, ResultReactionDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ReactionSubscription.OnReactionUpdated),
-                ReactionUpdatedEvent.From<ReactionUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(ReactionSubscription.OnReactionChanged),
-                ReactionChangedEvent.From<ReactionChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendReactionDeletedEvents(ITopicEventSender sender, ResultReactionDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ReactionSubscription.OnReactionDeleted),
-                ReactionDeletedEvent.From<ReactionDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(ReactionSubscription.OnReactionChanged),
-                ReactionChangedEvent.From<ReactionChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                ReactionChangedEvent.From<ReactionChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

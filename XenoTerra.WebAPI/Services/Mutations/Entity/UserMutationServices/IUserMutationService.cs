@@ -1,10 +1,14 @@
 ﻿using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Base;
 
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.UserMutationServices
 {
-    public interface IUserMutationService : IMutationService<User, ResultUserDto, CreateUserDto, UpdateUserDto, Guid>
+    public interface IUserMutationService
     {
+        Task<CreateUserPayload> CreateAsync(CreateUserDto dto);
+        Task<UpdateUserPayload> UpdateAsync(UpdateUserDto dto, IEnumerable<string> modifiedFields);
+        Task<DeleteUserPayload> DeleteAsync(Guid userId);
     }
 }

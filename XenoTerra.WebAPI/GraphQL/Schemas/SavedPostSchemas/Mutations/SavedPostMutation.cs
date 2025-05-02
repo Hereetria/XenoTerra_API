@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations
             [Service] ISavedPostMutationService mutationService,
             [Service] ISavedPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateSavedPostInput> inputValidator,
             CreateSavedPostInput? input)
         {
-            if (!InputValidator.ValidateInputFields<SavedPost, CreateSavedPostInput, ResultSavedPostDto, CreateSavedPostPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateSavedPostInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateSavedPostInput, CreateSavedPostDto>(input);
             var payload = await mutationService.CreateAsync<CreateSavedPostPayload>(writeService, createDto);
 
-            await SendSavedPostCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendSavedPostEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations
             [Service] ISavedPostMutationService mutationService,
             [Service] ISavedPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateSavedPostInput> inputValidator,
             IResolverContext context,
             UpdateSavedPostInput? input)
         {
-            if (!InputValidator.ValidateInputFields<SavedPost, UpdateSavedPostInput, ResultSavedPostDto, UpdateSavedPostPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateSavedPostInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateSavedPostInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateSavedPostInput, UpdateSavedPostDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateSavedPostPayload>(writeService, updateDto, modifiedFields);
 
-            await SendSavedPostUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendSavedPostEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations
             [Service] ISavedPostMutationService mutationService,
             [Service] ISavedPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<SavedPost, ResultSavedPostDto, DeleteSavedPostPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteSavedPostPayload>(writeService, parsedKey);
 
-            await SendSavedPostDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendSavedPostEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendSavedPostCreatedEvents(ITopicEventSender sender, ResultSavedPostDto? result)
+        private async Task SendSavedPostEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultSavedPostDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostCreated),
-                SavedPostCreatedEvent.From<SavedPostCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostCreated),
+                        SavedPostCreatedEvent.From<SavedPostCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostUpdated),
+                        SavedPostUpdatedEvent.From<SavedPostUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostDeleted),
+                        SavedPostDeletedEvent.From<SavedPostDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostChanged),
-                SavedPostChangedEvent.From<SavedPostChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendSavedPostUpdatedEvents(ITopicEventSender sender, ResultSavedPostDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostUpdated),
-                SavedPostUpdatedEvent.From<SavedPostUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostChanged),
-                SavedPostChangedEvent.From<SavedPostChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendSavedPostDeletedEvents(ITopicEventSender sender, ResultSavedPostDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostDeleted),
-                SavedPostDeletedEvent.From<SavedPostDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(SavedPostSubscription.OnSavedPostChanged),
-                SavedPostChangedEvent.From<SavedPostChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                SavedPostChangedEvent.From<SavedPostChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

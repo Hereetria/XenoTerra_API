@@ -6,7 +6,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Mutations.Inputs
         string NotificationId,
         string? UserId,
         string? Message,
-        string? Image,
-        [property: DateField] string? CreatedAt
+        string? Image
     );
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DataAccessLayer.Utils;
@@ -17,16 +18,23 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
     public class BlockUserWriteService(
         IWriteRepository<BlockUser, Guid> writeRepository,
         IMapper mapper,
-        IValidator<CreateBlockUserDto> createValidator,
-        IValidator<UpdateBlockUserDto> updateValidator
+        IValidator<CreateCommentckUserDto> createValidator,
+        IValidator<UpdateBlockUserDto> updateValidator,
+        AppDbContext dbContext
     )
-        : WriteService<BlockUser, CreateBlockUserDto, UpdateBlockUserDto, Guid>(
+        : WriteService<BlockUser, CreateCommentckUserDto, UpdateBlockUserDto, Guid>(
             writeRepository,
             mapper,
             createValidator,
-            updateValidator
+            updateValidator,
+            dbContext
         ),
         IBlockUserWriteService
     {
+        protected override Task PreCreateAsync(CreateCommentckUserDto createDto)
+        {
+            createDto.BlockedAt = DateTime.UtcNow;
+            return Task.CompletedTask;
+        }
     }
 }

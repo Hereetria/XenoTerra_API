@@ -2,6 +2,6 @@
 {
     public record UpdateUserPostTagInput(
         string PostId,
-        string? UserId
+        string UserId
     );
 }

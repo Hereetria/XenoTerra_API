@@ -24,4 +24,8 @@
     <ProjectReference Include="..\XenoTerra.BussinessLogicLayer\XenoTerra.BussinessLogicLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GraphQL\Schemas\MediaSchemas\Mutations\Payloads\" />
+  </ItemGroup>
+
 </Project>

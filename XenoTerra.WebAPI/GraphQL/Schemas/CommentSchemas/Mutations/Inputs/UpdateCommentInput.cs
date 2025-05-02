@@ -6,7 +6,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Mutations.Inputs
         string CommentId,
         string? Content,
         string? PostId,
-        string? UserId,
-        [property: DateField] string? CommentedAt
+        string? UserId
     );
 }

@@ -12,19 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.FollowValidators
     {
         public CreateFollowDtoValidator()
         {
-            RuleFor(x => x.FollowerId)
-                .NotEmpty()
-                .WithMessage("FollowerId must not be empty.");
-
-            RuleFor(x => x.FollowingId)
-                .NotEmpty()
-                .WithMessage("FollowingId must not be empty.");
-
-            RuleFor(x => x.FollowedAt)
-                .NotEmpty()
-                .WithMessage("FollowedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("FollowedAt cannot be in the future.");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentService;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Mutations
             [Service] ICommentMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateCommentInput> inputValidator,
             CreateCommentInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Comment, CreateCommentInput, ResultCommentDto, CreateCommentPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateCommentInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateCommentInput, CreateCommentDto>(input);
             var payload = await mutationService.CreateAsync<CreateCommentPayload>(writeService, createDto);
 
-            await SendCommentCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendCommentEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Mutations
             [Service] ICommentMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateCommentInput> inputValidator,
             IResolverContext context,
             UpdateCommentInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Comment, UpdateCommentInput, ResultCommentDto, UpdateCommentPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateCommentInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateCommentInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentInput, UpdateCommentDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateCommentPayload>(writeService, updateDto, modifiedFields);
 
-            await SendCommentUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendCommentEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Mutations
             [Service] ICommentMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Comment, ResultCommentDto, DeleteCommentPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteCommentPayload>(writeService, parsedKey);
 
-            await SendCommentDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendCommentEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendCommentCreatedEvents(ITopicEventSender sender, ResultCommentDto? result)
+        private async Task SendCommentEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultCommentDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(CommentSubscription.OnCommentCreated),
-                CommentCreatedEvent.From<CommentCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(CommentSubscription.OnCommentCreated),
+                        CommentCreatedEvent.From<CommentCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(CommentSubscription.OnCommentUpdated),
+                        CommentUpdatedEvent.From<CommentUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(CommentSubscription.OnCommentDeleted),
+                        CommentDeletedEvent.From<CommentDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(CommentSubscription.OnCommentChanged),
-                CommentChangedEvent.From<CommentChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendCommentUpdatedEvents(ITopicEventSender sender, ResultCommentDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(CommentSubscription.OnCommentUpdated),
-                CommentUpdatedEvent.From<CommentUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(CommentSubscription.OnCommentChanged),
-                CommentChangedEvent.From<CommentChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendCommentDeletedEvents(ITopicEventSender sender, ResultCommentDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(CommentSubscription.OnCommentDeleted),
-                CommentDeletedEvent.From<CommentDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(CommentSubscription.OnCommentChanged),
-                CommentChangedEvent.From<CommentChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                CommentChangedEvent.From<CommentChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

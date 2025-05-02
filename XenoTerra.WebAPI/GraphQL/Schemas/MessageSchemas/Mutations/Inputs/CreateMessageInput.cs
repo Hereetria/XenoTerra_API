@@ -6,7 +6,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Mutations.Inputs
         string Content,
         string SenderId,
         string ReceiverId,
-        string? Header,
-        [property: DateField] string SentAt
+        string? Header
     );
 }

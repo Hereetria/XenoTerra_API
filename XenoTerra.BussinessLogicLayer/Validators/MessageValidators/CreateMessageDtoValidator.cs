@@ -12,23 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.MessageValidators
     {
         public CreateMessageDtoValidator()
         {
-            RuleFor(x => x.Content)
-                .NotEmpty()
-                .WithMessage("Content must not be empty.");
-
-            RuleFor(x => x.SenderId)
-                .NotEmpty()
-                .WithMessage("SenderId must not be empty.");
-
-            RuleFor(x => x.ReceiverId)
-                .NotEmpty()
-                .WithMessage("ReceiverId must not be empty.");
-
-            RuleFor(x => x.SentAt)
-                .NotEmpty()
-                .WithMessage("SentAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("SentAt cannot be in the future.");
         }
     }
 }

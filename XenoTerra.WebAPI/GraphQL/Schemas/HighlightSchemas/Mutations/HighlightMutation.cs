@@ -11,6 +11,7 @@ using XenoTerra.WebAPI.Helpers;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.WebAPI.Services.Mutations.Entity.HighlightMutationServices;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Subscriptions;
+using FluentValidation;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Mutations
 {
@@ -20,17 +21,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Mutations
             [Service] IHighlightMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateHighlightInput> inputValidator,
             CreateHighlightInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Highlight, CreateHighlightInput, ResultHighlightDto, CreateHighlightPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateHighlightInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateHighlightInput, CreateHighlightDto>(input);
             var payload = await mutationService.CreateAsync<CreateHighlightPayload>(writeService, createDto);
 
-            await SendHighlightCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendHighlightEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -39,19 +40,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Mutations
             [Service] IHighlightMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateHighlightInput> inputValidator,
             IResolverContext context,
             UpdateHighlightInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Highlight, UpdateHighlightInput, ResultHighlightDto, UpdateHighlightPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateHighlightInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateHighlightInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateHighlightInput, UpdateHighlightDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateHighlightPayload>(writeService, updateDto, modifiedFields);
 
-            await SendHighlightUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendHighlightEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -60,54 +62,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Mutations
             [Service] IHighlightMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Highlight, ResultHighlightDto, DeleteHighlightPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteHighlightPayload>(writeService, parsedKey);
 
-            await SendHighlightDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendHighlightEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendHighlightCreatedEvents(ITopicEventSender sender, ResultHighlightDto? result)
+        private async Task SendHighlightEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultHighlightDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(HighlightSubscription.OnHighlightCreated),
-                HighlightCreatedEvent.From<HighlightCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(HighlightSubscription.OnHighlightCreated),
+                        HighlightCreatedEvent.From<HighlightCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(HighlightSubscription.OnHighlightUpdated),
+                        HighlightUpdatedEvent.From<HighlightUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(HighlightSubscription.OnHighlightDeleted),
+                        HighlightDeletedEvent.From<HighlightDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(HighlightSubscription.OnHighlightChanged),
-                HighlightChangedEvent.From<HighlightChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendHighlightUpdatedEvents(ITopicEventSender sender, ResultHighlightDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(HighlightSubscription.OnHighlightUpdated),
-                HighlightUpdatedEvent.From<HighlightUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(HighlightSubscription.OnHighlightChanged),
-                HighlightChangedEvent.From<HighlightChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendHighlightDeletedEvents(ITopicEventSender sender, ResultHighlightDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(HighlightSubscription.OnHighlightDeleted),
-                HighlightDeletedEvent.From<HighlightDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(HighlightSubscription.OnHighlightChanged),
-                HighlightChangedEvent.From<HighlightChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                HighlightChangedEvent.From<HighlightChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

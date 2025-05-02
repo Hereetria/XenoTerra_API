@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Mutations
             [Service] IRecentChatsMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateRecentChatsInput> inputValidator,
             CreateRecentChatsInput? input)
         {
-            if (!InputValidator.ValidateInputFields<RecentChats, CreateRecentChatsInput, ResultRecentChatsDto, CreateRecentChatsPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateRecentChatsInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateRecentChatsInput, CreateRecentChatsDto>(input);
             var payload = await mutationService.CreateAsync<CreateRecentChatsPayload>(writeService, createDto);
 
-            await SendRecentChatsCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendRecentChatsEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Mutations
             [Service] IRecentChatsMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateRecentChatsInput> inputValidator,
             IResolverContext context,
             UpdateRecentChatsInput? input)
         {
-            if (!InputValidator.ValidateInputFields<RecentChats, UpdateRecentChatsInput, ResultRecentChatsDto, UpdateRecentChatsPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateRecentChatsInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateRecentChatsInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateRecentChatsInput, UpdateRecentChatsDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateRecentChatsPayload>(writeService, updateDto, modifiedFields);
 
-            await SendRecentChatsUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendRecentChatsEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,48 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Mutations
             [Service] IRecentChatsMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<RecentChats, ResultRecentChatsDto, DeleteRecentChatsPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteRecentChatsPayload>(writeService, parsedKey);
 
-            await SendRecentChatsDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendRecentChatsEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendRecentChatsCreatedEvents(ITopicEventSender sender, ResultRecentChatsDto? result)
+        private async Task SendRecentChatsEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultRecentChatsDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsCreated),
-                RecentChatsCreatedEvent.From<RecentChatsCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsCreated),
+                        RecentChatsCreatedEvent.From<RecentChatsCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsUpdated),
+                        RecentChatsUpdatedEvent.From<RecentChatsUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsDeleted),
+                        RecentChatsDeletedEvent.From<RecentChatsDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsChanged),
-                RecentChatsChangedEvent.From<RecentChatsChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendRecentChatsUpdatedEvents(ITopicEventSender sender, ResultRecentChatsDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsUpdated),
-                RecentChatsUpdatedEvent.From<RecentChatsUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsChanged),
-                RecentChatsChangedEvent.From<RecentChatsChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendRecentChatsDeletedEvents(ITopicEventSender sender, ResultRecentChatsDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsDeleted),
-                RecentChatsDeletedEvent.From<RecentChatsDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(RecentChatsSubscription.OnRecentChatsChanged),
-                RecentChatsChangedEvent.From<RecentChatsChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                RecentChatsChangedEvent.From<RecentChatsChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
+
 }

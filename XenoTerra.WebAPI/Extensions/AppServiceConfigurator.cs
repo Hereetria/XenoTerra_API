@@ -18,6 +18,8 @@ using XenoTerra.WebAPI.GraphQL.Extensions.Configurators;
 using XenoTerra.WebAPI.GraphQL.Extensions.Builders;
 using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.HighlightResolvers;
+using Microsoft.AspNetCore.Identity;
+using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -45,6 +47,18 @@ namespace XenoTerra.WebAPI.Extensions
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
+
+            builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+            })
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
 
             builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));
             builder.Services.AddScoped(typeof(IWriteService<,,,>), typeof(WriteService<,,,>));

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations
             [Service] IViewStoryMutationService mutationService,
             [Service] IViewStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateViewStoryInput> inputValidator,
             CreateViewStoryInput? input)
         {
-            if (!InputValidator.ValidateInputFields<ViewStory, CreateViewStoryInput, ResultViewStoryDto, CreateViewStoryPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateViewStoryInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateViewStoryInput, CreateViewStoryDto>(input);
             var payload = await mutationService.CreateAsync<CreateViewStoryPayload>(writeService, createDto);
 
-            await SendViewStoryCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendViewStoryEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations
             [Service] IViewStoryMutationService mutationService,
             [Service] IViewStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateViewStoryInput> inputValidator,
             IResolverContext context,
             UpdateViewStoryInput? input)
         {
-            if (!InputValidator.ValidateInputFields<ViewStory, UpdateViewStoryInput, ResultViewStoryDto, UpdateViewStoryPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateViewStoryInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateViewStoryInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateViewStoryInput, UpdateViewStoryDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateViewStoryPayload>(writeService, updateDto, modifiedFields);
 
-            await SendViewStoryUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendViewStoryEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,45 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations
             [Service] IViewStoryMutationService mutationService,
             [Service] IViewStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<ViewStory, ResultViewStoryDto, DeleteViewStoryPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteViewStoryPayload>(writeService, parsedKey);
 
-            await SendViewStoryDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendViewStoryEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendViewStoryCreatedEvents(ITopicEventSender sender, ResultViewStoryDto? result)
+        private async Task SendViewStoryEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultViewStoryDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryCreated),
-                ViewStoryCreatedEvent.From<ViewStoryCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryCreated),
+                        ViewStoryCreatedEvent.From<ViewStoryCreatedEvent>(result, userId, now));
+                    break;
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryUpdated),
+                        ViewStoryUpdatedEvent.From<ViewStoryUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryDeleted),
+                        ViewStoryDeletedEvent.From<ViewStoryDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryChanged),
-                ViewStoryChangedEvent.From<ViewStoryChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendViewStoryUpdatedEvents(ITopicEventSender sender, ResultViewStoryDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryUpdated),
-                ViewStoryUpdatedEvent.From<ViewStoryUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryChanged),
-                ViewStoryChangedEvent.From<ViewStoryChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendViewStoryDeletedEvents(ITopicEventSender sender, ResultViewStoryDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryDeleted),
-                ViewStoryDeletedEvent.From<ViewStoryDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(ViewStorySubscription.OnViewStoryChanged),
-                ViewStoryChangedEvent.From<ViewStoryChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                ViewStoryChangedEvent.From<ViewStoryChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
             [Service] IUserSettingMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateUserSettingInput> inputValidator,
             CreateUserSettingInput? input)
         {
-            if (!InputValidator.ValidateInputFields<UserSetting, CreateUserSettingInput, ResultUserSettingDto, CreateUserSettingPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateUserSettingInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateUserSettingInput, CreateUserSettingDto>(input);
             var payload = await mutationService.CreateAsync<CreateUserSettingPayload>(writeService, createDto);
 
-            await SendUserSettingCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendUserSettingEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
             [Service] IUserSettingMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateUserSettingInput> inputValidator,
             IResolverContext context,
             UpdateUserSettingInput? input)
         {
-            if (!InputValidator.ValidateInputFields<UserSetting, UpdateUserSettingInput, ResultUserSettingDto, UpdateUserSettingPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateUserSettingInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserSettingInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserSettingInput, UpdateUserSettingDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateUserSettingPayload>(writeService, updateDto, modifiedFields);
 
-            await SendUserSettingUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendUserSettingEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,45 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
             [Service] IUserSettingMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<UserSetting, ResultUserSettingDto, DeleteUserSettingPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteUserSettingPayload>(writeService, parsedKey);
 
-            await SendUserSettingDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendUserSettingEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendUserSettingCreatedEvents(ITopicEventSender sender, ResultUserSettingDto? result)
+        private async Task SendUserSettingEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultUserSettingDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingCreated),
-                UserSettingCreatedEvent.From<UserSettingCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingCreated),
+                        UserSettingCreatedEvent.From<UserSettingCreatedEvent>(result, userId, now));
+                    break;
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingUpdated),
+                        UserSettingUpdatedEvent.From<UserSettingUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingDeleted),
+                        UserSettingDeletedEvent.From<UserSettingDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingChanged),
-                UserSettingChangedEvent.From<UserSettingChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendUserSettingUpdatedEvents(ITopicEventSender sender, ResultUserSettingDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingUpdated),
-                UserSettingUpdatedEvent.From<UserSettingUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingChanged),
-                UserSettingChangedEvent.From<UserSettingChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendUserSettingDeletedEvents(ITopicEventSender sender, ResultUserSettingDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingDeleted),
-                UserSettingDeletedEvent.From<UserSettingDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(UserSettingSubscription.OnUserSettingChanged),
-                UserSettingChangedEvent.From<UserSettingChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                UserSettingChangedEvent.From<UserSettingChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

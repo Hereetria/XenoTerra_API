@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations
             [Service] INoteMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateNoteInput> inputValidator,
             CreateNoteInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Note, CreateNoteInput, ResultNoteDto, CreateNotePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateNoteInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateNoteInput, CreateNoteDto>(input);
             var payload = await mutationService.CreateAsync<CreateNotePayload>(writeService, createDto);
 
-            await SendNoteCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendNoteEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations
             [Service] INoteMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateNoteInput> inputValidator,
             IResolverContext context,
             UpdateNoteInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Note, UpdateNoteInput, ResultNoteDto, UpdateNotePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateNoteInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateNoteInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateNoteInput, UpdateNoteDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateNotePayload>(writeService, updateDto, modifiedFields);
 
-            await SendNoteUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendNoteEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations
             [Service] INoteMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Note, ResultNoteDto, DeleteNotePayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteNotePayload>(writeService, parsedKey);
 
-            await SendNoteDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendNoteEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendNoteCreatedEvents(ITopicEventSender sender, ResultNoteDto? result)
+        private async Task SendNoteEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultNoteDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(NoteSubscription.OnNoteCreated),
-                NoteCreatedEvent.From<NoteCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(NoteSubscription.OnNoteCreated),
+                        NoteCreatedEvent.From<NoteCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(NoteSubscription.OnNoteUpdated),
+                        NoteUpdatedEvent.From<NoteUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(NoteSubscription.OnNoteDeleted),
+                        NoteDeletedEvent.From<NoteDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(NoteSubscription.OnNoteChanged),
-                NoteChangedEvent.From<NoteChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendNoteUpdatedEvents(ITopicEventSender sender, ResultNoteDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(NoteSubscription.OnNoteUpdated),
-                NoteUpdatedEvent.From<NoteUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(NoteSubscription.OnNoteChanged),
-                NoteChangedEvent.From<NoteChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendNoteDeletedEvents(ITopicEventSender sender, ResultNoteDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(NoteSubscription.OnNoteDeleted),
-                NoteDeletedEvent.From<NoteDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(NoteSubscription.OnNoteChanged),
-                NoteChangedEvent.From<NoteChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                NoteChangedEvent.From<NoteChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

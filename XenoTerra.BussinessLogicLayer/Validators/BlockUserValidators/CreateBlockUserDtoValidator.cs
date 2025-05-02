@@ -8,23 +8,10 @@ using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.BlockUserValidators
 {
-    public class CreateBlockUserDtoValidator : AbstractValidator<CreateBlockUserDto>
+    public class CreateBlockUserDtoValidator : AbstractValidator<CreateCommentckUserDto>
     {
         public CreateBlockUserDtoValidator()
         {
-            RuleFor(x => x.BlockingUserId)
-                .NotEmpty()
-                .WithMessage("BlockingUserId must not be empty.");
-
-            RuleFor(x => x.BlockedUserId)
-                .NotEmpty()
-                .WithMessage("BlockedUserId must not be empty.");
-
-            RuleFor(x => x.BlockedAt)
-                .NotEmpty()
-                .WithMessage("BlockedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("BlockedAt cannot be in the future.");
         }
     }
 

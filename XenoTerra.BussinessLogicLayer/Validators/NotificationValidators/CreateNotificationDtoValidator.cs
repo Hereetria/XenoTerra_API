@@ -12,19 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.NotificationValidators
     {
         public CreateNotificationDtoValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.Message)
-                .NotEmpty()
-                .WithMessage("Message must not be empty.");
-
-            RuleFor(x => x.CreatedAt)
-                .NotEmpty()
-                .WithMessage("CreatedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("CreatedAt cannot be in the future.");
         }
     }
 }

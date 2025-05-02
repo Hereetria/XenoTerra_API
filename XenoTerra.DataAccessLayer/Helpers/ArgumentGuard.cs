@@ -30,7 +30,6 @@ namespace XenoTerra.DataAccessLayer.Utils
             }
         }
 
-
         public static void EnsureValidKey<TKey>(TKey key)
         {
             if (key is null || typeof(TKey) == typeof(Guid) && EqualityComparer<TKey>.Default.Equals(key, default))

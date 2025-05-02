@@ -6,7 +6,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations.Inputs
         string UserId,
         bool IsPrivate,
         bool ReceiveNotifications,
-        bool ShowActivityStatus,
-        [property: DateField] string LastUpdated
+        bool ShowActivityStatus
     );
 }

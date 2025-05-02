@@ -12,15 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.SearchHistoryValidators
     {
         public CreateSearchHistoryDtoValidator()
         {
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.SearchedAt)
-                .NotEmpty()
-                .WithMessage("SearchedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("SearchedAt cannot be in the future.");
         }
     }
 }

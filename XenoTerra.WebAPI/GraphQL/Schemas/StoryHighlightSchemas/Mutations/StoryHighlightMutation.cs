@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices;
 using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Mutations
             [Service] IStoryHighlightMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateStoryHighlightInput> inputValidator,
             CreateStoryHighlightInput? input)
         {
-            if (!InputValidator.ValidateInputFields<StoryHighlight, CreateStoryHighlightInput, ResultStoryHighlightDto, CreateStoryHighlightPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateStoryHighlightInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateStoryHighlightInput, CreateStoryHighlightDto>(input);
             var payload = await mutationService.CreateAsync<CreateStoryHighlightPayload>(writeService, createDto);
 
-            await SendStoryHighlightCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendStoryHighlightEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Mutations
             [Service] IStoryHighlightMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateStoryHighlightInput> inputValidator,
             IResolverContext context,
             UpdateStoryHighlightInput? input)
         {
-            if (!InputValidator.ValidateInputFields<StoryHighlight, UpdateStoryHighlightInput, ResultStoryHighlightDto, UpdateStoryHighlightPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateStoryHighlightInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateStoryHighlightInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryHighlightInput, UpdateStoryHighlightDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateStoryHighlightPayload>(writeService, updateDto, modifiedFields);
 
-            await SendStoryHighlightUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendStoryHighlightEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Mutations
             [Service] IStoryHighlightMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<StoryHighlight, ResultStoryHighlightDto, DeleteStoryHighlightPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteStoryHighlightPayload>(writeService, parsedKey);
 
-            await SendStoryHighlightDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendStoryHighlightEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendStoryHighlightCreatedEvents(ITopicEventSender sender, ResultStoryHighlightDto? result)
+        private async Task SendStoryHighlightEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultStoryHighlightDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightCreated),
-                StoryHighlightCreatedEvent.From<StoryHighlightCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightCreated),
+                        StoryHighlightCreatedEvent.From<StoryHighlightCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightUpdated),
+                        StoryHighlightUpdatedEvent.From<StoryHighlightUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightDeleted),
+                        StoryHighlightDeletedEvent.From<StoryHighlightDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightChanged),
-                StoryHighlightChangedEvent.From<StoryHighlightChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendStoryHighlightUpdatedEvents(ITopicEventSender sender, ResultStoryHighlightDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightUpdated),
-                StoryHighlightUpdatedEvent.From<StoryHighlightUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightChanged),
-                StoryHighlightChangedEvent.From<StoryHighlightChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendStoryHighlightDeletedEvents(ITopicEventSender sender, ResultStoryHighlightDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightDeleted),
-                StoryHighlightDeletedEvent.From<StoryHighlightDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(StoryHighlightSubscription.OnStoryHighlightChanged),
-                StoryHighlightChangedEvent.From<StoryHighlightChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                StoryHighlightChangedEvent.From<StoryHighlightChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

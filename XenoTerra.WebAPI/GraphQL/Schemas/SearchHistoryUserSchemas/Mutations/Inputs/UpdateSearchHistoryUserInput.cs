@@ -2,6 +2,6 @@
 {
     public record UpdateSearchHistoryUserInput(
         string SearchHistoryId,
-        string? UserId
+        string UserId
     );
 }

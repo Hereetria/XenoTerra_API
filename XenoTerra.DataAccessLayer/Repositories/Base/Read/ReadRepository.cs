@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Utils;
 
@@ -18,18 +19,12 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
         where TEntity : class
         where TKey : notnull
     {
-        protected readonly AppDbContext _context = context ?? throw new ArgumentNullException(nameof(context), $"{nameof(context)} cannot be null.");
-
-        public AppDbContext GetDbContext()
-        {
-            return _context;
-        }
+        protected readonly AppDbContext _context = context;
 
         public IQueryable<TEntity> GetRawQueryable()
         {
             return _context.Set<TEntity>();
         }
-
 
         public IQueryable<TEntity> GetAllQueryable(IQueryable<TEntity> query, IEnumerable<string> selectedFields)
         {
@@ -37,7 +32,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 
             var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
 
-            return ExecuteSafely(() => query.AsNoTracking().Select(selector));
+            return RepositoryExceptionHandler.ExecuteReadSafely(() => query.AsNoTracking().Select(selector));
         }
 
         public IQueryable<TEntity> GetByIdQueryable(IQueryable<TEntity> query, TKey key, IEnumerable<string> selectedFields)
@@ -54,7 +49,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
             if (primaryKey is null || primaryKey.Properties.Count != 1)
                 throw new NotSupportedException($"Entity '{typeof(TEntity).Name}' must define a single primary key");
 
-            return ExecuteSafely(() => query.AsNoTracking()
+            return RepositoryExceptionHandler.ExecuteReadSafely(() => query.AsNoTracking()
                 .Where(e => EF.Property<TKey>(e, primaryKey.Properties[0].Name)!.Equals(key))
                 .Select(selector));
         }
@@ -75,41 +70,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 
             var keySet = new HashSet<TKey>(keys);
 
-            return ExecuteSafely(() => query.AsNoTracking()
+            return RepositoryExceptionHandler.ExecuteReadSafely(() => query.AsNoTracking()
                 .Where(entity => keySet.Contains(EF.Property<TKey>(entity, primaryKey.Properties[0].Name)))
                 .Select(selector));
-        }
-
-        private static TResult ExecuteSafely<TResult>(Func<TResult> query)
-        {
-            try
-            {
-                return query();
-            }
-            catch (DbUpdateConcurrencyException ex)
-            {
-                throw new InvalidOperationException("A concurrency conflict occurred during data access.", ex);
-            }
-            catch (InvalidOperationException ex)
-            {
-                throw new InvalidOperationException("An invalid operation was attempted during query execution.", ex);
-            }
-            catch (ArgumentException ex)
-            {
-                throw new ArgumentException("An invalid argument was provided to the query.", ex);
-            }
-            catch (TimeoutException ex)
-            {
-                throw new TimeoutException("The query has timed out while accessing the database.", ex);
-            }
-            catch (SqlException ex)
-            {
-                throw new InvalidOperationException("A SQL error occurred while executing the query.", ex);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("An unexpected error occurred while executing the query.", ex);
-            }
         }
     }
 }

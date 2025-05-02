@@ -375,15 +375,15 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsVideo")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("isVideo")
-                        .HasColumnType("bit");
 
                     b.HasKey("PostId");
 
@@ -477,7 +477,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -562,15 +561,15 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsVideo")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Path")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("isVideo")
-                        .HasColumnType("bit");
 
                     b.HasKey("StoryId");
 
@@ -827,7 +826,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.BlockUser", b =>
                 {
                     b.HasOne("XenoTerra.EntityLayer.Entities.User", "BlockedUser")
-                        .WithMany("BlockedByUsers")
+                        .WithMany("BlockingUsers")
                         .HasForeignKey("BlockedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1169,9 +1168,9 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.User", b =>
                 {
-                    b.Navigation("BlockedByUsers");
-
                     b.Navigation("BlockedUsers");
+
+                    b.Navigation("BlockingUsers");
 
                     b.Navigation("Comments");
 

@@ -12,13 +12,9 @@ namespace XenoTerra.BussinessLogicLayer.Validators.BlockUserValidators
     {
         public UpdateBlockUserDtoValidator()
         {
-            RuleFor(x => x.BlockUserId)
-                .NotEmpty()
-                .WithMessage("BlockUserId must not be empty.");
-
-            RuleFor(x => x.BlockedAt)
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("BlockedAt cannot be in the future.");
+            RuleFor(x => x.BlockingUserId)
+                .NotEqual(x => x.BlockedUserId)
+                .WithMessage("A user cannot block themselves.");
         }
     }
 }

@@ -12,13 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.StoryHighlightValidators
     {
         public UpdateStoryHighlightDtoValidator()
         {
-            RuleFor(x => x.StoryId)
-                .NotEmpty()
-                .WithMessage("StoryId must not be empty.");
-
-            RuleFor(x => x.HighlightId)
-                .NotEmpty()
-                .WithMessage("HighlightId must not be empty.");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserServices;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Mutations
             [Service] ISearchHistoryUserMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateSearchHistoryUserInput> inputValidator,
             CreateSearchHistoryUserInput? input)
         {
-            if (!InputValidator.ValidateInputFields<SearchHistoryUser, CreateSearchHistoryUserInput, ResultSearchHistoryUserDto, CreateSearchHistoryUserPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateSearchHistoryUserInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateSearchHistoryUserInput, CreateSearchHistoryUserDto>(input);
             var payload = await mutationService.CreateAsync<CreateSearchHistoryUserPayload>(writeService, createDto);
 
-            await SendSearchHistoryUserCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendSearchHistoryUserEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Mutations
             [Service] ISearchHistoryUserMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateSearchHistoryUserInput> inputValidator,
             IResolverContext context,
             UpdateSearchHistoryUserInput? input)
         {
-            if (!InputValidator.ValidateInputFields<SearchHistoryUser, UpdateSearchHistoryUserInput, ResultSearchHistoryUserDto, UpdateSearchHistoryUserPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateSearchHistoryUserInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateSearchHistoryUserInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateSearchHistoryUserInput, UpdateSearchHistoryUserDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateSearchHistoryUserPayload>(writeService, updateDto, modifiedFields);
 
-            await SendSearchHistoryUserUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendSearchHistoryUserEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Mutations
             [Service] ISearchHistoryUserMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<SearchHistoryUser, ResultSearchHistoryUserDto, DeleteSearchHistoryUserPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteSearchHistoryUserPayload>(writeService, parsedKey);
 
-            await SendSearchHistoryUserDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendSearchHistoryUserEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendSearchHistoryUserCreatedEvents(ITopicEventSender sender, ResultSearchHistoryUserDto? result)
+        private async Task SendSearchHistoryUserEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultSearchHistoryUserDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserCreated),
-                SearchHistoryUserCreatedEvent.From<SearchHistoryUserCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserCreated),
+                        SearchHistoryUserCreatedEvent.From<SearchHistoryUserCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserUpdated),
+                        SearchHistoryUserUpdatedEvent.From<SearchHistoryUserUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserDeleted),
+                        SearchHistoryUserDeletedEvent.From<SearchHistoryUserDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserChanged),
-                SearchHistoryUserChangedEvent.From<SearchHistoryUserChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendSearchHistoryUserUpdatedEvents(ITopicEventSender sender, ResultSearchHistoryUserDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserUpdated),
-                SearchHistoryUserUpdatedEvent.From<SearchHistoryUserUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserChanged),
-                SearchHistoryUserChangedEvent.From<SearchHistoryUserChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendSearchHistoryUserDeletedEvents(ITopicEventSender sender, ResultSearchHistoryUserDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserDeleted),
-                SearchHistoryUserDeletedEvent.From<SearchHistoryUserDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(SearchHistoryUserSubscription.OnSearchHistoryUserChanged),
-                SearchHistoryUserChangedEvent.From<SearchHistoryUserChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                SearchHistoryUserChangedEvent.From<SearchHistoryUserChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

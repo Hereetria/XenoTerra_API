@@ -52,7 +52,6 @@ namespace XenoTerra.WebAPI.Helpers
                         .Cast<Expression>()
                         .ToArray();
 
-
                     var combined = field.Name.Value switch
                     {
                         "and" => subExpressions.Aggregate(Expression.AndAlso),
@@ -67,6 +66,47 @@ namespace XenoTerra.WebAPI.Helpers
                 if (field.Value is not ObjectValueNode opNode) continue;
 
                 var propertyName = field.Name.Value;
+                var propertyInfo = typeof(T).GetProperty(propertyName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance)
+                    ?? throw new InvalidOperationException($"Property '{propertyName}' not found on type '{typeof(T).Name}'");
+
+                // ICollection filtre desteği
+                if (typeof(System.Collections.IEnumerable).IsAssignableFrom(propertyInfo.PropertyType) && propertyInfo.PropertyType != typeof(string))
+                {
+                    Expression? collectionExpr = null;
+
+                    foreach (var op in opNode.Fields)
+                    {
+                        var method = op.Name.Value switch
+                        {
+                            "any" => nameof(Enumerable.Any),
+                            "all" => nameof(Enumerable.All),
+                            "none" => nameof(Enumerable.All), // sonra tersine çevireceğiz
+                            "some" => nameof(Enumerable.Any),
+                            _ => throw new NotSupportedException($"Unsupported collection operator '{op.Name.Value}'")
+                        };
+
+                        var collectionItemType = propertyInfo.PropertyType.GetGenericArguments().FirstOrDefault()
+                            ?? throw new InvalidOperationException($"Cannot determine item type of collection property '{propertyName}'");
+
+                        var subParam = Expression.Parameter(collectionItemType, "c");
+                        var subExpr = BuildFilterExpressionSub(subParam, collectionItemType, op.Value as ObjectValueNode ?? throw new InvalidOperationException("Invalid collection filter node."));
+                        var lambda = Expression.Lambda(subExpr, subParam);
+
+                        var propAccess = Expression.Property(parameter, propertyInfo.Name);
+                        Expression callExpr = Expression.Call(typeof(Enumerable), method, [collectionItemType], propAccess, lambda);
+
+                        if (op.Name.Value == "none")
+                            callExpr = Expression.Not(callExpr);
+
+                        collectionExpr = collectionExpr is null ? callExpr : Expression.AndAlso(collectionExpr, callExpr);
+                    }
+
+                    if (collectionExpr is not null)
+                        finalExpr = finalExpr is null ? collectionExpr : Expression.AndAlso(finalExpr, collectionExpr);
+
+                    continue;
+                }
+
                 if (!selectedFields.Contains(propertyName))
                     throw new InvalidOperationException($"Filtering failed: '{propertyName}' is not part of the selected GraphQL fields.");
 

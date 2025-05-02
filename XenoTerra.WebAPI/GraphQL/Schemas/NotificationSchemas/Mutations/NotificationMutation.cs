@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Mutations
             [Service] INotificationMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateNotificationInput> inputValidator,
             CreateNotificationInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Notification, CreateNotificationInput, ResultNotificationDto, CreateNotificationPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateNotificationInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateNotificationInput, CreateNotificationDto>(input);
             var payload = await mutationService.CreateAsync<CreateNotificationPayload>(writeService, createDto);
 
-            await SendNotificationCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendNotificationEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Mutations
             [Service] INotificationMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateNotificationInput> inputValidator,
             IResolverContext context,
             UpdateNotificationInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Notification, UpdateNotificationInput, ResultNotificationDto, UpdateNotificationPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateNotificationInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateNotificationInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateNotificationInput, UpdateNotificationDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateNotificationPayload>(writeService, updateDto, modifiedFields);
 
-            await SendNotificationUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendNotificationEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Mutations
             [Service] INotificationMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Notification, ResultNotificationDto, DeleteNotificationPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteNotificationPayload>(writeService, parsedKey);
 
-            await SendNotificationDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendNotificationEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendNotificationCreatedEvents(ITopicEventSender sender, ResultNotificationDto? result)
+        private async Task SendNotificationEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultNotificationDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(NotificationSubscription.OnNotificationCreated),
-                NotificationCreatedEvent.From<NotificationCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(NotificationSubscription.OnNotificationCreated),
+                        NotificationCreatedEvent.From<NotificationCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(NotificationSubscription.OnNotificationUpdated),
+                        NotificationUpdatedEvent.From<NotificationUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(NotificationSubscription.OnNotificationDeleted),
+                        NotificationDeletedEvent.From<NotificationDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(NotificationSubscription.OnNotificationChanged),
-                NotificationChangedEvent.From<NotificationChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendNotificationUpdatedEvents(ITopicEventSender sender, ResultNotificationDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(NotificationSubscription.OnNotificationUpdated),
-                NotificationUpdatedEvent.From<NotificationUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(NotificationSubscription.OnNotificationChanged),
-                NotificationChangedEvent.From<NotificationChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendNotificationDeletedEvents(ITopicEventSender sender, ResultNotificationDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(NotificationSubscription.OnNotificationDeleted),
-                NotificationDeletedEvent.From<NotificationDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(NotificationSubscription.OnNotificationChanged),
-                NotificationChangedEvent.From<NotificationChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                NotificationChangedEvent.From<NotificationChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

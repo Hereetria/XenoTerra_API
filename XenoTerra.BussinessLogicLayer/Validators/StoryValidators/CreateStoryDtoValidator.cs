@@ -12,19 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.StoryValidators
     {
         public CreateStoryDtoValidator()
         {
-            RuleFor(x => x.Path)
-                .NotEmpty()
-                .WithMessage("Path must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.CreatedAt)
-                .NotEmpty()
-                .WithMessage("CreatedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("CreatedAt cannot be in the future.");
         }
     }
 }

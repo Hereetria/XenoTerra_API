@@ -5,7 +5,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations.Inputs
     public record UpdateBlockUserInput(
         string BlockUserId,
         string? BlockingUserId,
-        string? BlockedUserId,
-        [property: DateField] string? BlockedAt 
+        string? BlockedUserId
     );
 }

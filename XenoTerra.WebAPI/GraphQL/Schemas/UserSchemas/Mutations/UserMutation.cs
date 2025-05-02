@@ -1,5 +1,8 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserService;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
@@ -17,96 +20,85 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations
     {
         public async Task<CreateUserPayload> CreateUserAsync(
             [Service] IUserMutationService mutationService,
-            [Service] IUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateUserInput> inputValidator,
             CreateUserInput? input)
         {
-            if (!InputValidator.ValidateInputFields<User, CreateUserInput, ResultUserDto, CreateUserPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateUserInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateUserInput, CreateUserDto>(input);
-            var payload = await mutationService.CreateAsync<CreateUserPayload>(writeService, createDto);
+            var payload = await mutationService.CreateAsync(createDto);
 
-            await SendUserCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendUserEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
 
         public async Task<UpdateUserPayload> UpdateUserAsync(
             [Service] IUserMutationService mutationService,
-            [Service] IUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateUserInput> inputValidator,
             IResolverContext context,
             UpdateUserInput? input)
         {
-            if (!InputValidator.ValidateInputFields<User, UpdateUserInput, ResultUserDto, UpdateUserPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateUserInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserInput, UpdateUserDto>(input, modifiedFields);
 
-            var payload = await mutationService.UpdateAsync<UpdateUserPayload>(writeService, updateDto, modifiedFields);
+            var payload = await mutationService.UpdateAsync(updateDto, modifiedFields);
 
-            await SendUserUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendUserEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
 
         public async Task<DeleteUserPayload> DeleteUserAsync(
             [Service] IUserMutationService mutationService,
-            [Service] IUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<User, ResultUserDto, DeleteUserPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
-            var payload = await mutationService.DeleteAsync<DeleteUserPayload>(writeService, parsedKey);
+            var payload = await mutationService.DeleteAsync(parsedKey);
 
-            await SendUserDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendUserEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendUserCreatedEvents(ITopicEventSender sender, ResultUserDto? result)
+        private async Task SendUserEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultUserDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(UserSubscription.OnUserCreated),
-                UserCreatedEvent.From<UserCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(UserSubscription.OnUserCreated),
+                        UserCreatedEvent.From<UserCreatedEvent>(result, userId, now));
+                    break;
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(UserSubscription.OnUserUpdated),
+                        UserUpdatedEvent.From<UserUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(UserSubscription.OnUserDeleted),
+                        UserDeletedEvent.From<UserDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(UserSubscription.OnUserChanged),
-                UserChangedEvent.From<UserChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendUserUpdatedEvents(ITopicEventSender sender, ResultUserDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(UserSubscription.OnUserUpdated),
-                UserUpdatedEvent.From<UserUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(UserSubscription.OnUserChanged),
-                UserChangedEvent.From<UserChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendUserDeletedEvents(ITopicEventSender sender, ResultUserDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(UserSubscription.OnUserDeleted),
-                UserDeletedEvent.From<UserDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(UserSubscription.OnUserChanged),
-                UserChangedEvent.From<UserChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                UserChangedEvent.From<UserChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

@@ -11,7 +11,6 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Write
         where TEntity : class
         where TKey : notnull
     {
-        AppDbContext GetDbContext();
         Task<TEntity> InsertAsync(TEntity entity);
         Task<TEntity> ModifyAsync(TEntity entity, IEnumerable<string> modifiedFields);
         Task<TEntity> RemoveAsync(TKey key);

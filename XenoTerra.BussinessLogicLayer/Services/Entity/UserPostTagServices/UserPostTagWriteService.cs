@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.UserPostTagDtos;
 using XenoTerra.EntityLayer.Entities;
@@ -16,13 +17,15 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices
         IWriteRepository<UserPostTag, Guid> writeRepository,
         IMapper mapper,
         IValidator<CreateUserPostTagDto> createValidator,
-        IValidator<UpdateUserPostTagDto> updateValidator
+        IValidator<UpdateUserPostTagDto> updateValidator,
+            AppDbContext dbContext
     )
         : WriteService<UserPostTag, CreateUserPostTagDto, UpdateUserPostTagDto, Guid>(
             writeRepository,
             mapper,
             createValidator,
-            updateValidator
+            updateValidator,
+            dbContext
         ),
         IUserPostTagWriteService
     {

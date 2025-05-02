@@ -12,23 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.ReportCommentValidators
     {
         public CreateReportCommentDtoValidator()
         {
-            RuleFor(x => x.ReporterUserId)
-                .NotEmpty()
-                .WithMessage("ReporterUserId must not be empty.");
-
-            RuleFor(x => x.CommentId)
-                .NotEmpty()
-                .WithMessage("CommentId must not be empty.");
-
-            RuleFor(x => x.Reason)
-                .NotEmpty()
-                .WithMessage("Reason must not be empty.");
-
-            RuleFor(x => x.ReportedAt)
-                .NotEmpty()
-                .WithMessage("ReportedAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("ReportedAt cannot be in the future.");
         }
     }
 }

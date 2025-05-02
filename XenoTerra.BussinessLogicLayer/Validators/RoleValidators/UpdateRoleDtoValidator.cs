@@ -12,13 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.RoleValidators
     {
         public UpdateRoleDtoValidator()
         {
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .WithMessage("RoleId must not be empty.");
-
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .WithMessage("Name must not be empty.");
         }
     }
 }

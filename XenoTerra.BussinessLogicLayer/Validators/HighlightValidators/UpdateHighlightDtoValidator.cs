@@ -12,17 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.HighlightValidators
     {
         public UpdateHighlightDtoValidator()
         {
-            RuleFor(x => x.HighlightId)
-                .NotEmpty()
-                .WithMessage("HighlightId must not be empty.");
-
-            RuleFor(x => x.Name)
-                .NotEmpty()
-                .WithMessage("Name must not be empty.");
-
-            RuleFor(x => x.ProfilePicturePath)
-                .NotEmpty()
-                .WithMessage("ProfilePicturePath must not be empty.");
         }
     }
 }

@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
 {
-    public interface IBlockUserWriteService : IWriteService<BlockUser, CreateBlockUserDto, UpdateBlockUserDto, Guid>
+    public interface IBlockUserWriteService : IWriteService<BlockUser, CreateCommentckUserDto, UpdateBlockUserDto, Guid>
     {
     }
 }

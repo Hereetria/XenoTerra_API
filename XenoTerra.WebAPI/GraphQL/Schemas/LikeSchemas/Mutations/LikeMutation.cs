@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Mutations
             [Service] ILikeMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateLikeInput> inputValidator,
             CreateLikeInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Like, CreateLikeInput, ResultLikeDto, CreateLikePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateLikeInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateLikeInput, CreateLikeDto>(input);
             var payload = await mutationService.CreateAsync<CreateLikePayload>(writeService, createDto);
 
-            await SendLikeCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendLikeEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Mutations
             [Service] ILikeMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateLikeInput> inputValidator,
             IResolverContext context,
             UpdateLikeInput? input)
         {
-            if (!InputValidator.ValidateInputFields<Like, UpdateLikeInput, ResultLikeDto, UpdateLikePayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateLikeInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateLikeInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateLikeInput, UpdateLikeDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateLikePayload>(writeService, updateDto, modifiedFields);
 
-            await SendLikeUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendLikeEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Mutations
             [Service] ILikeMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<Like, ResultLikeDto, DeleteLikePayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteLikePayload>(writeService, parsedKey);
 
-            await SendLikeDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendLikeEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendLikeCreatedEvents(ITopicEventSender sender, ResultLikeDto? result)
+        private async Task SendLikeEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultLikeDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(LikeSubscription.OnLikeCreated),
-                LikeCreatedEvent.From<LikeCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(LikeSubscription.OnLikeCreated),
+                        LikeCreatedEvent.From<LikeCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(LikeSubscription.OnLikeUpdated),
+                        LikeUpdatedEvent.From<LikeUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(LikeSubscription.OnLikeDeleted),
+                        LikeDeletedEvent.From<LikeDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(LikeSubscription.OnLikeChanged),
-                LikeChangedEvent.From<LikeChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendLikeUpdatedEvents(ITopicEventSender sender, ResultLikeDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(LikeSubscription.OnLikeUpdated),
-                LikeUpdatedEvent.From<LikeUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(LikeSubscription.OnLikeChanged),
-                LikeChangedEvent.From<LikeChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendLikeDeletedEvents(ITopicEventSender sender, ResultLikeDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(LikeSubscription.OnLikeDeleted),
-                LikeDeletedEvent.From<LikeDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(LikeSubscription.OnLikeChanged),
-                LikeChangedEvent.From<LikeChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                LikeChangedEvent.From<LikeChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

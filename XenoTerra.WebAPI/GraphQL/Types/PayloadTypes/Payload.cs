@@ -1,4 +1,5 @@
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+﻿using System.Diagnostics.CodeAnalysis;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 
 namespace XenoTerra.WebAPI.GraphQL.Types.PayloadTypes
 {
@@ -9,9 +10,13 @@ namespace XenoTerra.WebAPI.GraphQL.Types.PayloadTypes
         public IReadOnlyList<string> Errors { get; init; } = [];
         public TResult? Result { get; init; }
 
-        public bool HasError() => Errors.Count > 0;
+        public bool HasError => Errors.Count > 0;
 
-        public static TPayload FromSuccess<TPayload>(string message, TResult? result = null)
+        [MemberNotNullWhen(true, nameof(Result))]
+        public bool IsSuccess() => Success;
+
+        // Factory methods
+        public static TPayload FromSuccess<TPayload>(string message, TResult result)
             where TPayload : Payload<TResult>, new()
             => new()
             {

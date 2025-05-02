@@ -12,19 +12,6 @@ namespace XenoTerra.BussinessLogicLayer.Validators.RecentChatsValidators
     {
         public CreateRecentChatsDtoValidator()
         {
-            RuleFor(x => x.LastMessage)
-                .NotEmpty()
-                .WithMessage("LastMessage must not be empty.");
-
-            RuleFor(x => x.UserId)
-                .NotEmpty()
-                .WithMessage("UserId must not be empty.");
-
-            RuleFor(x => x.LastMessageAt)
-                .NotEmpty()
-                .WithMessage("LastMessageAt must not be empty.")
-                .LessThanOrEqualTo(DateTime.UtcNow)
-                .WithMessage("LastMessageAt cannot be in the future.");
         }
     }
 }

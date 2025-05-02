@@ -2,6 +2,6 @@
 {
     public record UpdateStoryHighlightInput(
         string StoryId,
-        string? HighlightId
+        string HighlightId
     );
 }

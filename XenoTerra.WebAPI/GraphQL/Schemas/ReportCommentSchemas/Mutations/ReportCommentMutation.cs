@@ -1,4 +1,5 @@
-﻿using HotChocolate.Resolvers;
+﻿using FluentValidation;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
@@ -19,17 +20,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMut
             [Service] IReportCommentMutationService mutationService,
             [Service] IReportCommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
+            [Service] IValidator<CreateReportCommentInput> inputValidator,
             CreateReportCommentInput? input)
         {
-            if (!InputValidator.ValidateInputFields<ReportComment, CreateReportCommentInput, ResultReportCommentDto, CreateReportCommentPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(CreateReportCommentInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var createDto = DtoMapperHelper.MapInputToDto<CreateReportCommentInput, CreateReportCommentDto>(input);
             var payload = await mutationService.CreateAsync<CreateReportCommentPayload>(writeService, createDto);
 
-            await SendReportCommentCreatedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendReportCommentEventAsync(eventSender, ChangedEventType.Created, payload.Result);
 
             return payload;
         }
@@ -38,19 +39,20 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMut
             [Service] IReportCommentMutationService mutationService,
             [Service] IReportCommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
+            [Service] IValidator<UpdateReportCommentInput> inputValidator,
             IResolverContext context,
             UpdateReportCommentInput? input)
         {
-            if (!InputValidator.ValidateInputFields<ReportComment, UpdateReportCommentInput, ResultReportCommentDto, UpdateReportCommentPayload>(
-                    input, context, out var validationPayload))
-                return validationPayload;
+            InputGuard.EnsureNotNull(input, nameof(UpdateReportCommentInput));
+            await ValidationGuard.ValidateOrThrowAsync(inputValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateReportCommentInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportCommentInput, UpdateReportCommentDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateReportCommentPayload>(writeService, updateDto, modifiedFields);
 
-            await SendReportCommentUpdatedEvents(eventSender, payload.Result, modifiedFields);
+            if (payload.IsSuccess())
+                await SendReportCommentEventAsync(eventSender, ChangedEventType.Updated, payload.Result, modifiedFields);
 
             return payload;
         }
@@ -59,54 +61,47 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMut
             [Service] IReportCommentMutationService mutationService,
             [Service] IReportCommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            IResolverContext context,
             string? key)
         {
-            if (!InputValidator.ValidateGuidInput<ReportComment, ResultReportCommentDto, DeleteReportCommentPayload>(key, context, out var validationPayload))
-                return validationPayload;
+            var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            _ = Guid.TryParse(key, out var parsedKey);
             var payload = await mutationService.DeleteAsync<DeleteReportCommentPayload>(writeService, parsedKey);
 
-            await SendReportCommentDeletedEvents(eventSender, payload.Result);
+            if (payload.IsSuccess())
+                await SendReportCommentEventAsync(eventSender, ChangedEventType.Deleted, payload.Result);
 
             return payload;
         }
 
-        private async Task SendReportCommentCreatedEvents(ITopicEventSender sender, ResultReportCommentDto? result)
+        private async Task SendReportCommentEventAsync(
+            ITopicEventSender sender,
+            ChangedEventType eventType,
+            ResultReportCommentDto result,
+            IEnumerable<string>? modifiedFields = null)
         {
-            if (result is null)
-                return;
+            var now = DateTime.UtcNow;
+            var userId = Guid.Empty;
 
-            await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentCreated),
-                ReportCommentCreatedEvent.From<ReportCommentCreatedEvent>(result, Guid.Empty, DateTime.UtcNow));
+            switch (eventType)
+            {
+                case ChangedEventType.Created:
+                    await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentCreated),
+                        ReportCommentCreatedEvent.From<ReportCommentCreatedEvent>(result, userId, now));
+                    break;
+
+                case ChangedEventType.Updated:
+                    await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentUpdated),
+                        ReportCommentUpdatedEvent.From<ReportCommentUpdatedEvent>(result, userId, now, modifiedFields ?? []));
+                    break;
+
+                case ChangedEventType.Deleted:
+                    await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentDeleted),
+                        ReportCommentDeletedEvent.From<ReportCommentDeletedEvent>(result, userId, now));
+                    break;
+            }
 
             await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentChanged),
-                ReportCommentChangedEvent.From<ReportCommentChangedEvent>(ChangedEventType.Created, result, Guid.Empty, DateTime.UtcNow));
-        }
-
-        private async Task SendReportCommentUpdatedEvents(ITopicEventSender sender, ResultReportCommentDto? result, IEnumerable<string> modifiedFields)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentUpdated),
-                ReportCommentUpdatedEvent.From<ReportCommentUpdatedEvent>(result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-
-            await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentChanged),
-                ReportCommentChangedEvent.From<ReportCommentChangedEvent>(ChangedEventType.Updated, result, Guid.Empty, DateTime.UtcNow, modifiedFields));
-        }
-
-        private async Task SendReportCommentDeletedEvents(ITopicEventSender sender, ResultReportCommentDto? result)
-        {
-            if (result is null)
-                return;
-
-            await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentDeleted),
-                ReportCommentDeletedEvent.From<ReportCommentDeletedEvent>(result, Guid.Empty, DateTime.UtcNow));
-
-            await sender.SendAsync(nameof(ReportCommentSubscription.OnReportCommentChanged),
-                ReportCommentChangedEvent.From<ReportCommentChangedEvent>(ChangedEventType.Deleted, result, Guid.Empty, DateTime.UtcNow));
+                ReportCommentChangedEvent.From<ReportCommentChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

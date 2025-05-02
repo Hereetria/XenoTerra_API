@@ -6,9 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
 
@@ -18,15 +20,22 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.MessageService
             IWriteRepository<Message, Guid> writeRepository,
             IMapper mapper,
             IValidator<CreateMessageDto> createValidator,
-            IValidator<UpdateMessageDto> updateValidator
+            IValidator<UpdateMessageDto> updateValidator,
+            AppDbContext dbContext
         )
             : WriteService<Message, CreateMessageDto, UpdateMessageDto, Guid>(
                 writeRepository,
                 mapper,
                 createValidator,
-                updateValidator
+                updateValidator,
+                dbContext
             ),
             IMessageWriteService
     {
+        protected override Task PreCreateAsync(CreateMessageDto createDto)
+        {
+            createDto.SentAt = DateTime.UtcNow;
+            return Task.CompletedTask;
+        }
     }
 }

@@ -7,7 +7,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Mutations.Inputs
         string? Caption,
         string? Path,
         bool? IsVideo,
-        string? UserId,
-        [property: DateField] string? CreatedAt
+        string? UserId
     );
 }
