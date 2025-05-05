@@ -26,6 +26,11 @@ namespace XenoTerra.DataAccessLayer.Utils
 
             foreach (var prop in collectionProps)
             {
+                var singularPropName = WordInflector.ConvertToSingular(prop.Name);
+
+                if (!string.Equals(singularPropName, targetEntityName, StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
                 var potentialJoinEntityType = prop.PropertyType.GetGenericArguments().FirstOrDefault();
                 if (potentialJoinEntityType == null)
                     continue;
