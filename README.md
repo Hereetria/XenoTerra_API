@@ -1,9 +1,5 @@
 # XenoTerra_API — Modular, High-Performance GraphQL Backend for Modern Applications
 
-🚧 **Development in Progress**
-
-This project currently works correctly only for the BlockUser entity. Other entities have not been implemented yet in order to avoid code duplication, but they will be added in the future.
-
 ## Project Overview
 
 This project focuses on designing a **fully functional and performant GraphQL API** that mirrors the behavior of a real-world social media backend. The implementation includes:
