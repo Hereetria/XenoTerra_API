@@ -11,7 +11,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
 {
     public interface IUserWriteService
     {
-        Task<User> CreateAsync(CreateUserDto dto);
+        Task<User> CreateAsync(RegisterDto dto);
         Task<User> UpdateAsync(UpdateUserDto dto, IEnumerable<string> modifiedFields);
         Task<User> DeleteAsync(Guid id);
     }

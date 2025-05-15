@@ -6,8 +6,8 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 {
     public interface IRoleWriteRepository
     {
-        Task<IdentityRole<Guid>> InsertAsync(IdentityRole<Guid> role);
-        Task<IdentityRole<Guid>> ModifyAsync(IdentityRole<Guid> role, IEnumerable<string> modifiedFields);
-        Task<IdentityRole<Guid>> RemoveAsync(Guid id);
+        Task<Role> InsertAsync(Role role);
+        Task<Role> ModifyAsync(Role role, IEnumerable<string> modifiedFields);
+        Task<Role> RemoveAsync(Guid id);
     }
 }

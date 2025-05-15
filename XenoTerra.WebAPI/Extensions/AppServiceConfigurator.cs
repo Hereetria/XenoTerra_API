@@ -20,6 +20,14 @@ using XenoTerra.WebAPI.GraphQL.DataLoaders.Factories;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.HighlightResolvers;
 using Microsoft.AspNetCore.Identity;
 using XenoTerra.EntityLayer.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using XenoTerra.WebAPI.GraphQL.Auth.Services;
+using FluentValidation;
+using XenoTerra.WebAPI.GraphQL.Auth.Inputs;
+using XenoTerra.WebAPI.GraphQL.Auth.Validators;
+using System.Security.Claims;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -31,14 +39,16 @@ namespace XenoTerra.WebAPI.Extensions
             var graphqlBuilder = new GraphQLEntityBuilder(builder.Services, executorBuilder);
             GraphQLConfigurator.ConfigureEntityModules(graphqlBuilder);
 
-            builder.Services
-                .AddGraphQLServer()
+            builder.Services.AddAuthorization();
+
+            executorBuilder
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
                 .AddSubscriptionType<Subscription>()
                 .AddInMemorySubscriptions()
                 .AddFiltering()
                 .AddSorting()
+                .AddAuthorization()
                 .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
 
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -48,16 +58,59 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
 
-            builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            builder.Services.AddIdentity<User, Role>(options =>
             {
                 options.Password.RequireDigit = true;
-                options.Password.RequiredLength = 6;
+                options.Password.RequiredLength = 8;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireNonAlphanumeric = false;
             })
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+            var jwtSection = builder.Configuration.GetSection("JwtSettings");
+            var secretKey = jwtSection["SecretKey"]
+                ?? throw new InvalidOperationException("JWT SecretKey is missing in configuration.");
+            var issuer = jwtSection["Issuer"]
+                ?? throw new InvalidOperationException("JWT Issuer is missing.");
+            var audience = jwtSection["Audience"]
+                ?? throw new InvalidOperationException("JWT Audience is missing.");
+
+            if (string.IsNullOrWhiteSpace(secretKey))
+                throw new InvalidOperationException("JWT SecretKey is missing in configuration.");
+
+            var signingKey = secretKey.Length >= 64
+                ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                : throw new ArgumentException("The secret key must be at least 64 characters long.", nameof(secretKey));
+
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(opt =>
+            {
+                opt.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = issuer,
+                    ValidAudience = audience,
+                    IssuerSigningKey = signingKey,
+
+                    ClockSkew = TimeSpan.Zero,
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
+
+            builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
+            builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();
+            builder.Services.AddScoped<IValidator<RegisterInput>, RegisterInputValidator>();
 
 
             builder.Services.AddScoped(typeof(IReadService<,>), typeof(ReadService<,>));

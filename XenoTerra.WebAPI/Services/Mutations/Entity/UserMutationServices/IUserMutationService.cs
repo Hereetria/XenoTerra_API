@@ -7,7 +7,7 @@ namespace XenoTerra.WebAPI.Services.Mutations.Entity.UserMutationServices
 {
     public interface IUserMutationService
     {
-        Task<CreateUserPayload> CreateAsync(CreateUserDto dto);
+        Task<CreateUserPayload> CreateAsync(RegisterDto dto);
         Task<UpdateUserPayload> UpdateAsync(UpdateUserDto dto, IEnumerable<string> modifiedFields);
         Task<DeleteUserPayload> DeleteAsync(Guid userId);
     }

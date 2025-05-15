@@ -1,6 +1,6 @@
 ﻿using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Mutations.Payloads;
+using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Base;
 
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.RoleMutationServices

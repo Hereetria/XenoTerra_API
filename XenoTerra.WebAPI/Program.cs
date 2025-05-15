@@ -1,4 +1,3 @@
-using System.Net.WebSockets;
 using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Extensions;
 
@@ -33,6 +32,8 @@ app.UseWebSockets();
 app.UseRouting();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

@@ -11,7 +11,7 @@ namespace XenoTerra.WebAPI.Helpers
 
             if (!result.IsValid)
             {
-                var errors = result.Errors.Select(e => e.ErrorMessage);
+                var errors = result.Errors.Select(e => e.ErrorMessage).ToList();
                 throw GraphQLExceptionFactory.Create(
                     "Validation failed.",
                     errors,

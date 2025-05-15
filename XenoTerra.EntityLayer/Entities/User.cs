@@ -56,7 +56,7 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<RecentChats> RecentChats { get; set; } = [];
 
-        public required Note Note { get; set; }
+        public Note Note { get; set; } = null!;
 
         public ICollection<Reaction> Reactions { get; set; } = [];
         public ICollection<UserPostTag> TaggedPosts { get; set; } = [];

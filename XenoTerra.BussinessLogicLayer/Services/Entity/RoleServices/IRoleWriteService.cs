@@ -12,8 +12,8 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
 {
     public interface IRoleWriteService
     {
-        Task<IdentityRole<Guid>> CreateAsync(CreateRoleDto dto);
-        Task<IdentityRole<Guid>> UpdateAsync(UpdateRoleDto dto, IEnumerable<string> modifiedFields);
-        Task<IdentityRole<Guid>> DeleteAsync(Guid id);
+        Task<Role> CreateAsync(CreateRoleDto dto);
+        Task<Role> UpdateAsync(UpdateRoleDto dto, IEnumerable<string> modifiedFields);
+        Task<Role> DeleteAsync(Guid id);
     }
 }

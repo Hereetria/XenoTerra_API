@@ -200,7 +200,7 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
             CreateMap<User, ResultUserDto>().ReverseMap();
-            CreateMap<User, CreateUserDto>().ReverseMap();
+            CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
 
             // UserSetting Mappings

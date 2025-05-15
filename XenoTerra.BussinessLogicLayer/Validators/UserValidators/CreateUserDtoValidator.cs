@@ -8,7 +8,7 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.UserValidators
 {
-    public class CreateUserDtoValidator : AbstractValidator<CreateUserDto>
+    public class CreateUserDtoValidator : AbstractValidator<RegisterDto>
     {
         public CreateUserDtoValidator()
         {

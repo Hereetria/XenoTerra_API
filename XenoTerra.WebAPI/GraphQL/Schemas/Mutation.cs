@@ -1,24 +1,26 @@
 ﻿using AutoMapper;
-using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.MessageMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.NoteMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.PostMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.ReportCommentMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.SavedPostMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.SearchHistoryMutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Mutations;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Mutations;
+using System.Net.Security;
+using XenoTerra.WebAPI.GraphQL.Auth;
+using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations;
@@ -51,6 +53,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas
         public UserMutation Users { get; }
         public UserSettingMutation UserSettings { get; }
         public ViewStoryMutation ViewStories { get; }
+        public LoginMutation Logins { get; }
+        public RegisterMutation Registers { get; }
 
 
         public Mutation()
@@ -78,6 +82,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas
             Users = new UserMutation();
             UserSettings = new UserSettingMutation();
             ViewStories = new ViewStoryMutation();
+            Logins = new LoginMutation();
+            Registers = new RegisterMutation();
         }
     }
 }

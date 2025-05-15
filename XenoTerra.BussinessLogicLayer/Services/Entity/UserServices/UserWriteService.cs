@@ -23,18 +23,18 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
     public class UserWriteService(
         IUserWriteRepository userWriteRepository,
         IMapper mapper,
-        IValidator<CreateUserDto> createValidator,
+        IValidator<RegisterDto> createValidator,
         IValidator<UpdateUserDto> updateValidator,
         AppDbContext dbContext
     ) : IUserWriteService
     {
         private readonly IUserWriteRepository _userWriteRepository = userWriteRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly IValidator<CreateUserDto> _createValidator = createValidator;
+        private readonly IValidator<RegisterDto> _createValidator = createValidator;
         private readonly IValidator<UpdateUserDto> _updateValidator = updateValidator;
         private readonly AppDbContext _dbContext = dbContext;
 
-        protected virtual Task PreCreateAsync(CreateUserDto dto)
+        protected virtual Task PreCreateAsync(RegisterDto dto)
         {
             dto.Bio = string.Empty;
             dto.ProfilePicture = string.Empty;
@@ -49,14 +49,14 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
 
         protected virtual Task PreUpdateAsync(UpdateUserDto dto) => Task.CompletedTask;
 
-        public async Task<User> CreateAsync(CreateUserDto dto)
+        public async Task<User> CreateAsync(RegisterDto dto)
         {
             ArgumentGuard.EnsureNotNull(dto);
             await ValidationGuard.ValidateOrThrowAsync(_createValidator, dto);
 
             await PreCreateAsync(dto);
 
-            var user = MappingGuard.MapOrThrow<User, CreateUserDto>(_mapper, dto);
+            var user = MappingGuard.MapOrThrow<User, RegisterDto>(_mapper, dto);
 
             return await ServiceExceptionHandler.ExecuteWriteSafelyAsync(
                 _dbContext,

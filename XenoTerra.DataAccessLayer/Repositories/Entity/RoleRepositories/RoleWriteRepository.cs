@@ -15,11 +15,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
 {
-    public class RoleWriteRepository(RoleManager<IdentityRole<Guid>> roleManager) : IRoleWriteRepository
+    public class RoleWriteRepository(RoleManager<Role> roleManager) : IRoleWriteRepository
     {
-        private readonly RoleManager<IdentityRole<Guid>> _roleManager = roleManager;
+        private readonly RoleManager<Role> _roleManager = roleManager;
 
-        public async Task<IdentityRole<Guid>> InsertAsync(IdentityRole<Guid> role)
+        public async Task<Role> InsertAsync(Role role)
         {
             ArgumentGuard.EnsureNotNull(role);
 
@@ -29,7 +29,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
             return role;
         }
 
-        public async Task<IdentityRole<Guid>> ModifyAsync(IdentityRole<Guid> role, IEnumerable<string> modifiedFields)
+        public async Task<Role> ModifyAsync(Role role, IEnumerable<string> modifiedFields)
         {
             ArgumentGuard.EnsureNotNull(role);
 
@@ -44,7 +44,7 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
             return existing;
         }
 
-        public async Task<IdentityRole<Guid>> RemoveAsync(Guid id)
+        public async Task<Role> RemoveAsync(Guid id)
         {
             var role = await _roleManager.FindByIdAsync(id.ToString())
                 ?? throw new KeyNotFoundException($"Role with ID '{id}' not found."); ;
@@ -56,12 +56,12 @@ namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
         }
 
         private static void ApplyModifiedFields(
-            IdentityRole<Guid> target,
-            IdentityRole<Guid> source,
+            Role target,
+            Role source,
             IEnumerable<string> modifiedFields)
         {
             var modifiedSet = new HashSet<string>(modifiedFields, StringComparer.OrdinalIgnoreCase);
-            var props = typeof(IdentityRole<Guid>).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var props = typeof(Role).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
             foreach (var prop in props)
             {

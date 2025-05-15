@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.Services.Mutations.Entity.UserMutationServices
         private readonly IUserWriteService _userWriteService = userWriteService;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<CreateUserPayload> CreateAsync(CreateUserDto dto)
+        public async Task<CreateUserPayload> CreateAsync(RegisterDto dto)
         {
             var user = await _userWriteService.CreateAsync(dto);
             var result = _mapper.Map<ResultUserDto>(user);
