@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Subscriptions.
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Subscriptions.Events.Types
 {
-    public class SearchHistoryDeletedEventType : ObjectType<SearchHistoryDeletedEvent>
+    public class SearchHistoryDeletedEventType : ObjectType<SearchHistoryDeletedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<SearchHistoryDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<SearchHistoryDeletedSelfEvent> descriptor)
         {
         }
     }

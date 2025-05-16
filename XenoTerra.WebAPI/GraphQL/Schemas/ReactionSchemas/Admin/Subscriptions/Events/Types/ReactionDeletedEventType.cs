@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Event
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events.Types
 {
-    public class ReactionDeletedEventType : ObjectType<ReactionDeletedEvent>
+    public class ReactionDeletedEventType : ObjectType<ReactionDeletedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<ReactionDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ReactionDeletedAdminEvent> descriptor)
         {
         }
     }

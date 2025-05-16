@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events.Types
 {
-    public class NoteChangedEventType : ObjectType<NoteChangedEvent>
+    public class NoteChangedEventType : ObjectType<NoteChangedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<NoteChangedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<NoteChangedSelfEvent> descriptor)
         {
         }
     }

@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions.Events.Types
 {
-    public class CommentDeletedEventType : ObjectType<CommentDeletedEvent>
+    public class CommentDeletedEventType : ObjectType<CommentDeletedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<CommentDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<CommentDeletedAdminEvent> descriptor)
         {
         }
     }

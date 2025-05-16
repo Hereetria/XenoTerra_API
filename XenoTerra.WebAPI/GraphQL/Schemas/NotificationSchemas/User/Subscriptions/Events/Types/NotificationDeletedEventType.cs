@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.E
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.Events.Types
 {
-    public class NotificationDeletedEventType : ObjectType<NotificationDeletedEvent>
+    public class NotificationDeletedEventType : ObjectType<NotificationDeletedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<NotificationDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<NotificationDeletedSelfEvent> descriptor)
         {
         }
     }

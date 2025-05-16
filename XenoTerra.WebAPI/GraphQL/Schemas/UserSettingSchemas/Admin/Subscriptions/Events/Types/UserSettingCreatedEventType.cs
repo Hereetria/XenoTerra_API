@@ -1,8 +1,8 @@
 ﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions.Events.Types
 {
-    public class UserSettingCreatedEventType : ObjectType<UserSettingCreatedEvent>
+    public class UserSettingCreatedEventType : ObjectType<UserSettingCreatedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<UserSettingCreatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserSettingCreatedAdminEvent> descriptor)
         {
         }
     }

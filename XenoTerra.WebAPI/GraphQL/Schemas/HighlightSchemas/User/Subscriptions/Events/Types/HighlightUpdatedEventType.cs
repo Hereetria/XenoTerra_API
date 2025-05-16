@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions.Events.Types
 {
-    public class HighlightUpdatedEventType : ObjectType<HighlightUpdatedEvent>
+    public class HighlightUpdatedEventType : ObjectType<HighlightUpdatedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<HighlightUpdatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<HighlightUpdatedSelfEvent> descriptor)
         {
         }
     }

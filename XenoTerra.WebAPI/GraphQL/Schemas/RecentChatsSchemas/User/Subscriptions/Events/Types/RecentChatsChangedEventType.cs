@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Ev
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Events.Types
 {
-    public class RecentChatsChangedEventType : ObjectType<RecentChatsChangedEvent>
+    public class RecentChatsChangedEventType : ObjectType<RecentChatsChangedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<RecentChatsChangedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<RecentChatsChangedSelfEvent> descriptor)
         {
         }
     }

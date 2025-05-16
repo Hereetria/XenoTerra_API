@@ -1,8 +1,8 @@
 ﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions.Events.Types
 {
-    public class UserSettingDeletedEventType : ObjectType<UserSettingDeletedEvent>
+    public class UserSettingDeletedEventType : ObjectType<UserSettingDeletedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<UserSettingDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserSettingDeletedSelfEvent> descriptor)
         {
         }
     }

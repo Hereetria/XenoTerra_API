@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions.Events.Types
 {
-    public class RoleCreatedEventType : ObjectType<RoleCreatedEvent>
+    public class RoleCreatedEventType : ObjectType<RoleCreatedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<RoleCreatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<RoleCreatedSelfEvent> descriptor)
         {
         }
     }

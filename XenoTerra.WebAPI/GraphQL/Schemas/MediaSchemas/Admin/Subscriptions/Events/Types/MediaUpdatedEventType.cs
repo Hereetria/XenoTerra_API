@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events.Types
 {
-    public class MediaUpdatedEventType : ObjectType<MediaUpdatedEvent>
+    public class MediaUpdatedEventType : ObjectType<MediaUpdatedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<MediaUpdatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<MediaUpdatedAdminEvent> descriptor)
         {
         }
     }

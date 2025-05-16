@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Subscriptions.Events.Types
 {
-    public class MessageChangedEventType : ObjectType<MessageChangedEvent>
+    public class MessageChangedEventType : ObjectType<MessageChangedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<MessageChangedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<MessageChangedAdminEvent> descriptor)
         {
         }
     }

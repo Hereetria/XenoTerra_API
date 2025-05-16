@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions.Events.Types
 {
-    public class StoryHighlightDeletedEventType : ObjectType<StoryHighlightDeletedEvent>
+    public class StoryHighlightDeletedEventType : ObjectType<StoryHighlightDeletedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<StoryHighlightDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<StoryHighlightDeletedAdminEvent> descriptor)
         {
         }
     }

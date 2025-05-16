@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Subscriptions.Events.Types
 {
-    public class BlockUserCreatedEventType : ObjectType<BlockUserCreatedEvent>
+    public class BlockUserCreatedEventType : ObjectType<BlockUserCreatedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<BlockUserCreatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<BlockUserCreatedSelfEvent> descriptor)
         {
         }
     }

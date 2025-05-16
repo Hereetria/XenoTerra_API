@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Events.Types
 {
-    public class UserPostTagChangedEventType : ObjectType<UserPostTagChangedEvent>
+    public class UserPostTagChangedEventType : ObjectType<UserPostTagChangedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<UserPostTagChangedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserPostTagChangedAdminEvent> descriptor)
         {
         }
     }

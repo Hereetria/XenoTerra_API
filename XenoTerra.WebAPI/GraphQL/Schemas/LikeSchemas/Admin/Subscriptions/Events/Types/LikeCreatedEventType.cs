@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions.Events.Types
 {
-    public class LikeCreatedEventType : ObjectType<LikeCreatedEvent>
+    public class LikeCreatedEventType : ObjectType<LikeCreatedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<LikeCreatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<LikeCreatedAdminEvent> descriptor)
         {
         }
     }

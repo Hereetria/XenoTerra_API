@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Even
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Events.Types
 {
-    public class SavedPostDeletedEventType : ObjectType<SavedPostDeletedEvent>
+    public class SavedPostDeletedEventType : ObjectType<SavedPostDeletedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<SavedPostDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<SavedPostDeletedAdminEvent> descriptor)
         {
         }
     }

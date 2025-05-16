@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Subscriptions.
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Subscriptions.Events.Types
 {
-    public class ReportCommentCreatedEventType : ObjectType<ReportCommentCreatedEvent>
+    public class ReportCommentCreatedEventType : ObjectType<ReportCommentCreatedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<ReportCommentCreatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ReportCommentCreatedSelfEvent> descriptor)
         {
         }
     }

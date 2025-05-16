@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Event
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events.Types
 {
-    public class ReactionUpdatedEventType : ObjectType<ReactionUpdatedEvent>
+    public class ReactionUpdatedEventType : ObjectType<ReactionUpdatedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<ReactionUpdatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ReactionUpdatedAdminEvent> descriptor)
         {
         }
     }

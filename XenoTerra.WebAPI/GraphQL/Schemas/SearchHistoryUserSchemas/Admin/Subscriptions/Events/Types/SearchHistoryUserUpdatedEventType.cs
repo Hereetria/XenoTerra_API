@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscripti
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions.Events.Types
 {
-    public class SearchHistoryUserUpdatedEventType : ObjectType<SearchHistoryUserUpdatedEvent>
+    public class SearchHistoryUserUpdatedEventType : ObjectType<SearchHistoryUserUpdatedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<SearchHistoryUserUpdatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<SearchHistoryUserUpdatedAdminEvent> descriptor)
         {
         }
     }

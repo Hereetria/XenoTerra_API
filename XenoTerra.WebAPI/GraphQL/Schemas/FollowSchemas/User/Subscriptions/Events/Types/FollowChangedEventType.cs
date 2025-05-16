@@ -2,9 +2,9 @@
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events.Types
 {
-    public class FollowChangedEventType : ObjectType<FollowChangedEvent>
+    public class FollowChangedEventType : ObjectType<FollowChangedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<FollowChangedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<FollowChangedSelfEvent> descriptor)
         {
         }
     }

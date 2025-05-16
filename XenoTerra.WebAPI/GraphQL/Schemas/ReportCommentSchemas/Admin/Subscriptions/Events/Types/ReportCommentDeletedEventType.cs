@@ -2,9 +2,9 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Subscriptions.
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Subscriptions.Events.Types
 {
-    public class ReportCommentDeletedEventType : ObjectType<ReportCommentDeletedEvent>
+    public class ReportCommentDeletedEventType : ObjectType<ReportCommentDeletedAdminEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<ReportCommentDeletedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<ReportCommentDeletedAdminEvent> descriptor)
         {
         }
     }

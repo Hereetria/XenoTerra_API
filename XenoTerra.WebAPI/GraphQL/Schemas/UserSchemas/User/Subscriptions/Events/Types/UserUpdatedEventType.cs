@@ -1,8 +1,8 @@
 ﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Subscriptions.Events.Types
 {
-    public class UserUpdatedEventType : ObjectType<UserUpdatedEvent>
+    public class UserUpdatedEventType : ObjectType<UserUpdatedSelfEvent>
     {
-        protected override void Configure(IObjectTypeDescriptor<UserUpdatedEvent> descriptor)
+        protected override void Configure(IObjectTypeDescriptor<UserUpdatedSelfEvent> descriptor)
         {
         }
     }
