@@ -1,4 +1,4 @@
-﻿namespace XenoTerra.WebAPI.Helpers
+﻿namespace XenoTerra.DataAccessLayer.Helpers
 {
     public static class WordInflector
     {
@@ -15,11 +15,11 @@
             {
                 return pluralWord.Substring(0, pluralWord.Length - 3) + "f";
             }
-            else if (pluralWord.EndsWith("es") && (pluralWord.Length > 2))
+            else if (pluralWord.EndsWith("es") && pluralWord.Length > 2)
             {
                 return pluralWord.Substring(0, pluralWord.Length - 2);
             }
-            else if (pluralWord.EndsWith("s") && (pluralWord.Length > 1))
+            else if (pluralWord.EndsWith("s") && pluralWord.Length > 1)
             {
                 return pluralWord.Substring(0, pluralWord.Length - 1);
             }

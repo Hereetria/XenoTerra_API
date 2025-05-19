@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RecentChatsResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.RecentChatsResolvers
 {
     public class RecentChatsResolver : EntityResolver<RecentChats, Guid>, IRecentChatsResolver
     {

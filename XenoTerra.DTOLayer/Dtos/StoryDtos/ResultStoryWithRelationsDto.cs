@@ -11,7 +11,7 @@ namespace XenoTerra.DTOLayer.Dtos.StoryDtos
         public bool IsVideo { get; init; }
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
         public ICollection<ResultViewStoryDto> ViewStories { get; init; } = [];
         public ICollection<ResultHighlightDto> Highlights { get; init; } = [];
     }

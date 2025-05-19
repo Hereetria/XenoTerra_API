@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices
 {

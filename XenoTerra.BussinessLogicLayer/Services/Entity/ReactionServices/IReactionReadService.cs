@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionServices
 {
     public interface IReactionReadService : IReadService<Reaction, Guid> { }
 }

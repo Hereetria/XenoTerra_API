@@ -10,6 +10,6 @@ namespace XenoTerra.DTOLayer.Dtos.NoteDtos
         public string Text { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

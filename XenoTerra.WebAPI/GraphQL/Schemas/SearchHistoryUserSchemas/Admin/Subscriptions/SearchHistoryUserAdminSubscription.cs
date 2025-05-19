@@ -1,25 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class SearchHistoryUserAdminSubscription
     {
         [Subscribe]
-        public SearchHistoryUserCreatedAdminEvent OnSearchHistoryUserCreated(
-            [EventMessage] SearchHistoryUserCreatedAdminEvent evt) => evt;
+        public SearchHistoryUserAdminCreatedEvent OnSearchHistoryUserAdminCreated(
+            [EventMessage] SearchHistoryUserAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public SearchHistoryUserUpdatedAdminEvent OnSearchHistoryUserUpdated(
-            [EventMessage] SearchHistoryUserUpdatedAdminEvent evt) => evt;
+        public SearchHistoryUserAdminUpdatedEvent OnSearchHistoryUserAdminUpdated(
+            [EventMessage] SearchHistoryUserAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public SearchHistoryUserDeletedAdminEvent OnSearchHistoryUserDeleted(
-            [EventMessage] SearchHistoryUserDeletedAdminEvent evt) => evt;
+        public SearchHistoryUserAdminDeletedEvent OnSearchHistoryUserAdminDeleted(
+            [EventMessage] SearchHistoryUserAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public SearchHistoryUserChangedAdminEvent OnSearchHistoryUserChanged(
-            [EventMessage] SearchHistoryUserChangedAdminEvent evt) => evt;
+        public SearchHistoryUserAdminChangedEvent OnSearchHistoryUserAdminChanged(
+            [EventMessage] SearchHistoryUserAdminChangedEvent evt) => evt;
     }
 }

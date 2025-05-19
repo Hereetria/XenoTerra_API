@@ -1,3 +1,5 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
@@ -8,19 +10,20 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations.Inp
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.StoryHighlightMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryHighlightMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class StoryHighlightAdminMutation
     {
         public async Task<CreateStoryHighlightAdminPayload> CreateStoryHighlightAsync(
-            [Service] IStoryHighlightMutationService mutationService,
+            [Service] IStoryHighlightAdminMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateStoryHighlightAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateStoryHighlightAdminInput> inputAdminValidator,
             CreateStoryHighlightAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateStoryHighlightAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
         }
 
         public async Task<UpdateStoryHighlightAdminPayload> UpdateStoryHighlightAsync(
-            [Service] IStoryHighlightMutationService mutationService,
+            [Service] IStoryHighlightAdminMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateStoryHighlightAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateStoryHighlightAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateStoryHighlightAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
         }
 
         public async Task<DeleteStoryHighlightAdminPayload> DeleteStoryHighlightAsync(
-            [Service] IStoryHighlightMutationService mutationService,
+            [Service] IStoryHighlightAdminMutationService mutationService,
             [Service] IStoryHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightCreated),
-                        StoryHighlightCreatedAdminEvent.From<StoryHighlightCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightAdminCreated),
+                        StoryHighlightAdminCreatedEvent.From<StoryHighlightAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightUpdated),
-                        StoryHighlightUpdatedAdminEvent.From<StoryHighlightUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightAdminUpdated),
+                        StoryHighlightAdminUpdatedEvent.From<StoryHighlightAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightDeleted),
-                        StoryHighlightDeletedAdminEvent.From<StoryHighlightDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightAdminDeleted),
+                        StoryHighlightAdminDeletedEvent.From<StoryHighlightAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightChanged),
-                StoryHighlightChangedAdminEvent.From<StoryHighlightChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(StoryHighlightAdminSubscription.OnStoryHighlightAdminChanged),
+                StoryHighlightAdminChangedEvent.From<StoryHighlightAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

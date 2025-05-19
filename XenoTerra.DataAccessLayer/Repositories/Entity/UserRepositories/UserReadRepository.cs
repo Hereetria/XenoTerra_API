@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserRepositories
 {
     public class UserReadRepository(AppDbContext context) : ReadRepository<User, Guid>(context), IUserReadRepository
     {

@@ -2,13 +2,14 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 using XenoTerra.BussinessLogicLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository;
-using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepositories;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleServices
 {
     public class RoleWriteService(
         IRoleWriteRepository roleWriteRepository,

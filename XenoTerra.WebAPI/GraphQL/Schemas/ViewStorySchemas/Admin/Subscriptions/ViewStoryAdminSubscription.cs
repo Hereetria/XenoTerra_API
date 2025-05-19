@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Subscriptions.Events;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Subscriptions
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class ViewStoryAdminSubscription
     {
         [Subscribe]
-        public ViewStoryCreatedAdminEvent OnViewStoryCreated(
-            [EventMessage] ViewStoryCreatedAdminEvent evt) => evt;
+        public ViewStoryAdminCreatedEvent OnViewStoryAdminCreated(
+            [EventMessage] ViewStoryAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public ViewStoryUpdatedAdminEvent OnViewStoryUpdated(
-            [EventMessage] ViewStoryUpdatedAdminEvent evt) => evt;
+        public ViewStoryAdminUpdatedEvent OnViewStoryAdminUpdated(
+            [EventMessage] ViewStoryAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public ViewStoryDeletedAdminEvent OnViewStoryDeleted(
-            [EventMessage] ViewStoryDeletedAdminEvent evt) => evt;
+        public ViewStoryAdminDeletedEvent OnViewStoryAdminDeleted(
+            [EventMessage] ViewStoryAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public ViewStoryChangedAdminEvent OnViewStoryChanged(
-            [EventMessage] ViewStoryChangedAdminEvent evt) => evt;
+        public ViewStoryAdminChangedEvent OnViewStoryAdminChanged(
+            [EventMessage] ViewStoryAdminChangedEvent evt) => evt;
     }
 }

@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepositories
 {
     public class SearchHistoryReadRepository(AppDbContext context) : ReadRepository<SearchHistory, Guid>(context), ISearchHistoryReadRepository
     {

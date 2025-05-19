@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Resolvers;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.Services.Queries.Base
@@ -60,8 +60,6 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
 
             return query;
         }
-
-
 
         public IQueryable<TEntity> GetByIdQueryable(TKey key, IResolverContext context)
         {

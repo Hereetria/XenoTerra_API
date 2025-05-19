@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DataAccessLayer.Utils
+namespace XenoTerra.DataAccessLayer.Helpers
 {
     public static class ArgumentGuard
     {

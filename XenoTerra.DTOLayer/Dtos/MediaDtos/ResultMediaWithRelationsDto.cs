@@ -10,6 +10,6 @@ namespace XenoTerra.DTOLayer.Dtos.MediaDtos
         public string PhotoUrl { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime UploadedAt { get; init; }
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

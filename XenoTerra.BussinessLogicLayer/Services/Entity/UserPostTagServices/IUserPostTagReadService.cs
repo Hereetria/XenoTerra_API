@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices
 {

@@ -8,7 +8,7 @@ using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices
 {
     public interface IFollowReadService : IReadService<Follow, Guid> { }
 

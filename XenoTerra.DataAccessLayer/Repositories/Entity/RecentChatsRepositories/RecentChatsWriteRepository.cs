@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepositories
 {
     public class RecentChatsWriteRepository(AppDbContext context) : WriteRepository<RecentChats, Guid>(context), IRecentChatsWriteRepository
     {

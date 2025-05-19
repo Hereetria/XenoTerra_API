@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices
 {
     public interface IViewStoryReadService : IReadService<ViewStory, Guid> { }
 

@@ -6,11 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostServices
 {
     public class SavedPostReadService(IReadRepository<SavedPost, Guid> readRepository) : ReadService<SavedPost, Guid>(readRepository), ISavedPostReadService
     {

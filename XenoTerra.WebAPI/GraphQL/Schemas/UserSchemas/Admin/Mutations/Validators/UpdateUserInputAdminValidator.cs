@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations.Inputs;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.Helpers;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations.Validators
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Mutations.Validators
 {
     public class UpdateUserInputAdminValidator : AbstractValidator<UpdateUserAdminInput>
     {

@@ -8,7 +8,7 @@ using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices
 {
     public interface ICommentReadService : IReadService<Comment, Guid> { }
 

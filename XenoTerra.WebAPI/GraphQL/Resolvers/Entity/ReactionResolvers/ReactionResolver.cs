@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.ReactionResolvers
 {
 
     public class ReactionResolver : EntityResolver<Reaction, Guid>, IReactionResolver

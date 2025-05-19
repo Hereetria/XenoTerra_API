@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.NoteService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.NoteMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NoteMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class NoteAdminMutation
     {
         public async Task<CreateNoteAdminPayload> CreateNoteAsync(
-            [Service] INoteMutationService mutationService,
+            [Service] INoteAdminMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateNoteAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateNoteAdminInput> inputAdminValidator,
             CreateNoteAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateNoteAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
         }
 
         public async Task<UpdateNoteAdminPayload> UpdateNoteAsync(
-            [Service] INoteMutationService mutationService,
+            [Service] INoteAdminMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateNoteAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateNoteAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateNoteAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
         }
 
         public async Task<DeleteNoteAdminPayload> DeleteNoteAsync(
-            [Service] INoteMutationService mutationService,
+            [Service] INoteAdminMutationService mutationService,
             [Service] INoteWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteCreated),
-                        NoteCreatedAdminEvent.From<NoteCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteAdminCreated),
+                        NoteAdminCreatedEvent.From<NoteAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteUpdated),
-                        NoteUpdatedAdminEvent.From<NoteUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteAdminUpdated),
+                        NoteAdminUpdatedEvent.From<NoteAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteDeleted),
-                        NoteDeletedAdminEvent.From<NoteDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteAdminDeleted),
+                        NoteAdminDeletedEvent.From<NoteAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteChanged),
-                NoteChangedAdminEvent.From<NoteChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(NoteAdminSubscription.OnNoteAdminChanged),
+                NoteAdminChangedEvent.From<NoteAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

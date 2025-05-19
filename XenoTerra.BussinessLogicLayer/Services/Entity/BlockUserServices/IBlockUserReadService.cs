@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices
 {
     public interface IBlockUserReadService : IReadService<BlockUser, Guid>
     {

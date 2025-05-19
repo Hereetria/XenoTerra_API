@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class PostAdminSubscription
     {
         [Subscribe]
-        public PostCreatedAdminEvent OnPostCreated(
-            [EventMessage] PostCreatedAdminEvent evt) => evt;
+        public PostAdminCreatedEvent OnPostAdminCreated(
+            [EventMessage] PostAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public PostUpdatedAdminEvent OnPostUpdated(
-            [EventMessage] PostUpdatedAdminEvent evt) => evt;
+        public PostAdminUpdatedEvent OnPostAdminUpdated(
+            [EventMessage] PostAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public PostDeletedAdminEvent OnPostDeleted(
-            [EventMessage] PostDeletedAdminEvent evt) => evt;
+        public PostAdminDeletedEvent OnPostAdminDeleted(
+            [EventMessage] PostAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public PostChangedAdminEvent OnPostChanged(
-            [EventMessage] PostChangedAdminEvent evt) => evt;
+        public PostAdminChangedEvent OnPostAdminChanged(
+            [EventMessage] PostAdminChangedEvent evt) => evt;
     }
 }

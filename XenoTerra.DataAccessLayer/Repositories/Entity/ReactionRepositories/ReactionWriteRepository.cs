@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepositories
 {
     public class ReactionWriteRepository(AppDbContext context) : WriteRepository<Reaction, Guid>(context), IReactionWriteRepository
     {

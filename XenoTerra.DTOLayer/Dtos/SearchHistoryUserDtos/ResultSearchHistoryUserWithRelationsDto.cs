@@ -14,6 +14,6 @@ namespace XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos
         public Guid SearchHistoryId { get; init; }
         public Guid UserId { get; init; }
         public ResultSearchHistoryDto SearchHistory { get; init; } = new();
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

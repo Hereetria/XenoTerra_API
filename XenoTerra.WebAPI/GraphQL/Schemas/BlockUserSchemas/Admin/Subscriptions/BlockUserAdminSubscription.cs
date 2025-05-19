@@ -1,25 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class BlockUserAdminSubscription
     {
         [Subscribe]
-        public BlockUserCreatedAdminEvent OnBlockUserCreated(
-            [EventMessage] BlockUserCreatedAdminEvent evt) => evt;
+        public BlockUserAdminCreatedEvent OnBlockUserAdminCreated(
+            [EventMessage] BlockUserAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public BlockUserUpdatedAdminEvent OnBlockUserUpdated(
-            [EventMessage] BlockUserUpdatedAdminEvent evt) => evt;
+        public BlockUserAdminUpdatedEvent OnBlockUserAdminUpdated(
+            [EventMessage] BlockUserAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public BlockUserDeletedAdminEvent OnBlockUserDeleted(
-            [EventMessage] BlockUserDeletedAdminEvent evt) => evt;
+        public BlockUserAdminDeletedEvent OnBlockUserAdminDeleted(
+            [EventMessage] BlockUserAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public BlockUserChangedAdminEvent OnBlockUserChanged(
-            [EventMessage] BlockUserChangedAdminEvent evt) => evt;
+        public BlockUserAdminChangedEvent OnBlockUserAdminChanged(
+            [EventMessage] BlockUserAdminChangedEvent evt) => evt;
     }
 }

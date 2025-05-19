@@ -1,18 +1,21 @@
-﻿using AutoMapper;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+using AutoMapper;
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
-using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.ReactionResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries.Paginations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReactionResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReactionQueryServices;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class ReactionAdminQuery(IMapper mapper, IQueryResolverHelper<Reaction, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -29,7 +32,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<Reaction, ResultReactionWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Reaction, ResultReactionWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -51,7 +54,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<Reaction, ResultReactionWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Reaction, ResultReactionWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -70,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return _mapper.Map<ResultReactionWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultReactionWithRelationsDto>(entity);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Entity
 {

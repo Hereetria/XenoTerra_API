@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepositories
 {
 
     public class NotificationReadRepository(AppDbContext context) : ReadRepository<Notification, Guid>(context), INotificationReadRepository

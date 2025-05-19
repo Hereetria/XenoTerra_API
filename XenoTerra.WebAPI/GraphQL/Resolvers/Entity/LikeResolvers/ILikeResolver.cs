@@ -2,7 +2,7 @@
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.LikeResolvers
 {
     public interface ILikeResolver : IEntityResolver<Like, Guid>
     {

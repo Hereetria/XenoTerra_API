@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
 
-namespace XenoTerra.DataAccessLayer.Utils
+namespace XenoTerra.DataAccessLayer.Helpers
 {
     public class SimpleDbProjectionExpressionProvider
     {

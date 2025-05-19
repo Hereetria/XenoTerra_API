@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.StoryRepositories
 {
     public class StoryReadRepository(AppDbContext context) : ReadRepository<Story, Guid>(context), IStoryReadRepository
     {

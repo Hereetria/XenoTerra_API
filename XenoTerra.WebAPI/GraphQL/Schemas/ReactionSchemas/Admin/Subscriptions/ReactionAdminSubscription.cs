@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class ReactionAdminSubscription
     {
         [Subscribe]
-        public ReactionCreatedAdminEvent OnReactionCreated(
-            [EventMessage] ReactionCreatedAdminEvent evt) => evt;
+        public ReactionAdminCreatedEvent OnReactionAdminCreated(
+            [EventMessage] ReactionAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public ReactionUpdatedAdminEvent OnReactionUpdated(
-            [EventMessage] ReactionUpdatedAdminEvent evt) => evt;
+        public ReactionAdminUpdatedEvent OnReactionAdminUpdated(
+            [EventMessage] ReactionAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public ReactionDeletedAdminEvent OnReactionDeleted(
-            [EventMessage] ReactionDeletedAdminEvent evt) => evt;
+        public ReactionAdminDeletedEvent OnReactionAdminDeleted(
+            [EventMessage] ReactionAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public ReactionChangedAdminEvent OnReactionChanged(
-            [EventMessage] ReactionChangedAdminEvent evt) => evt;
+        public ReactionAdminChangedEvent OnReactionAdminChanged(
+            [EventMessage] ReactionAdminChangedEvent evt) => evt;
     }
 }

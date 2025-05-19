@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class NotificationAdminSubscription
     {
         [Subscribe]
-        public NotificationCreatedAdminEvent OnNotificationCreated(
-            [EventMessage] NotificationCreatedAdminEvent evt) => evt;
+        public NotificationAdminCreatedEvent OnNotificationAdminCreated(
+            [EventMessage] NotificationAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public NotificationUpdatedAdminEvent OnNotificationUpdated(
-            [EventMessage] NotificationUpdatedAdminEvent evt) => evt;
+        public NotificationAdminUpdatedEvent OnNotificationAdminUpdated(
+            [EventMessage] NotificationAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public NotificationDeletedAdminEvent OnNotificationDeleted(
-            [EventMessage] NotificationDeletedAdminEvent evt) => evt;
+        public NotificationAdminDeletedEvent OnNotificationAdminDeleted(
+            [EventMessage] NotificationAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public NotificationChangedAdminEvent OnNotificationChanged(
-            [EventMessage] NotificationChangedAdminEvent evt) => evt;
+        public NotificationAdminChangedEvent OnNotificationAdminChanged(
+            [EventMessage] NotificationAdminChangedEvent evt) => evt;
     }
 }

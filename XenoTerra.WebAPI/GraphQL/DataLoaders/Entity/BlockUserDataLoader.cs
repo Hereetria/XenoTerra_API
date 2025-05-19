@@ -1,6 +1,6 @@
 ﻿using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
+using XenoTerra.WebAPI.GraphQL.DataLoaders.Base;
 
 namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Entity
 {

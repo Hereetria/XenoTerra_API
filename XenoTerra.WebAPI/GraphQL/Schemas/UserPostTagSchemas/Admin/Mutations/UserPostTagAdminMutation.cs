@@ -1,3 +1,5 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
@@ -8,19 +10,20 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations.Inputs
 using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.UserPostTagMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserPostTagMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserPostTagAdminMutation
     {
         public async Task<CreateUserPostTagAdminPayload> CreateUserPostTagAsync(
-            [Service] IUserPostTagMutationService mutationService,
+            [Service] IUserPostTagAdminMutationService mutationService,
             [Service] IUserPostTagWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateUserPostTagAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateUserPostTagAdminInput> inputAdminValidator,
             CreateUserPostTagAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateUserPostTagAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
         }
 
         public async Task<UpdateUserPostTagAdminPayload> UpdateUserPostTagAsync(
-            [Service] IUserPostTagMutationService mutationService,
+            [Service] IUserPostTagAdminMutationService mutationService,
             [Service] IUserPostTagWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateUserPostTagAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateUserPostTagAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateUserPostTagAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
         }
 
         public async Task<DeleteUserPostTagAdminPayload> DeleteUserPostTagAsync(
-            [Service] IUserPostTagMutationService mutationService,
+            [Service] IUserPostTagAdminMutationService mutationService,
             [Service] IUserPostTagWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -84,21 +87,21 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagCreated),
-                        UserPostTagCreatedAdminEvent.From<UserPostTagCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagAdminCreated),
+                        UserPostTagAdminCreatedEvent.From<UserPostTagAdminCreatedEvent>(result, userId, now));
                     break;
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagUpdated),
-                        UserPostTagUpdatedAdminEvent.From<UserPostTagUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagAdminUpdated),
+                        UserPostTagAdminUpdatedEvent.From<UserPostTagAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagDeleted),
-                        UserPostTagDeletedAdminEvent.From<UserPostTagDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagAdminDeleted),
+                        UserPostTagAdminDeletedEvent.From<UserPostTagAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagChanged),
-                UserPostTagChangedAdminEvent.From<UserPostTagChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(UserPostTagAdminSubscription.OnUserPostTagAdminChanged),
+                UserPostTagAdminChangedEvent.From<UserPostTagAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

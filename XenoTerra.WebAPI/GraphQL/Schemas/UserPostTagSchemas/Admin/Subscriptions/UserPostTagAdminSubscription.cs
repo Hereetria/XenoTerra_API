@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserPostTagAdminSubscription
     {
         [Subscribe]
-        public UserPostTagCreatedAdminEvent OnUserPostTagCreated(
-            [EventMessage] UserPostTagCreatedAdminEvent evt) => evt;
+        public UserPostTagAdminCreatedEvent OnUserPostTagAdminCreated(
+            [EventMessage] UserPostTagAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public UserPostTagUpdatedAdminEvent OnUserPostTagUpdated(
-            [EventMessage] UserPostTagUpdatedAdminEvent evt) => evt;
+        public UserPostTagAdminUpdatedEvent OnUserPostTagAdminUpdated(
+            [EventMessage] UserPostTagAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public UserPostTagDeletedAdminEvent OnUserPostTagDeleted(
-            [EventMessage] UserPostTagDeletedAdminEvent evt) => evt;
+        public UserPostTagAdminDeletedEvent OnUserPostTagAdminDeleted(
+            [EventMessage] UserPostTagAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public UserPostTagChangedAdminEvent OnUserPostTagChanged(
-            [EventMessage] UserPostTagChangedAdminEvent evt) => evt;
+        public UserPostTagAdminChangedEvent OnUserPostTagAdminChanged(
+            [EventMessage] UserPostTagAdminChangedEvent evt) => evt;
     }
 }

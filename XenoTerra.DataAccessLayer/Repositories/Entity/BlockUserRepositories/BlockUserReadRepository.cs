@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepositories
 {
     public class BlockUserReadRepository(AppDbContext context) : ReadRepository<BlockUser, Guid>(context), IBlockUserReadRepository
     {

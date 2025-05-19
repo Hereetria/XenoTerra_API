@@ -1,4 +1,4 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Paginations.Types
+﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations.Types
 {
     public class ViewStoryAdminConnectionType : ObjectType<ViewStoryAdminConnection>
     {

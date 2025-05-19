@@ -11,6 +11,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices
 {

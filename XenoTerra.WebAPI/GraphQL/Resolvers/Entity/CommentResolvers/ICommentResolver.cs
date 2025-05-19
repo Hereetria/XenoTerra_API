@@ -3,7 +3,7 @@ using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.CommentResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.CommentResolvers
 {
     public interface ICommentResolver : IEntityResolver<Comment, Guid>
     {

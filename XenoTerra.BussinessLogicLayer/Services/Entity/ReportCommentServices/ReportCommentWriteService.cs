@@ -10,12 +10,11 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentServices
 {
     public class ReportCommentWriteService(
             IWriteRepository<ReportComment, Guid> writeRepository,

@@ -6,12 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices
 {
     public class HighlightReadService(IReadRepository<Highlight, Guid> readRepository) : ReadService<Highlight, Guid>(readRepository), IHighlightReadService
     {

@@ -1,4 +1,6 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations.Payloads.Types
+﻿using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Payloads;
+
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Payloads.Types
 {
     public class DeleteViewStoryAdminPayloadType : ObjectType<DeleteViewStoryAdminPayload>
     {

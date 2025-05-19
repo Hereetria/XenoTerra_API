@@ -9,12 +9,11 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.MessageService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.MessageServices
 {
     public class MessageWriteService(
             IWriteRepository<Message, Guid> writeRepository,

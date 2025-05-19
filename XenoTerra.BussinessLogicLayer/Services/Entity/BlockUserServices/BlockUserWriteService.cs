@@ -9,11 +9,11 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices
 {
     public class BlockUserWriteService(
         IWriteRepository<BlockUser, Guid> writeRepository,

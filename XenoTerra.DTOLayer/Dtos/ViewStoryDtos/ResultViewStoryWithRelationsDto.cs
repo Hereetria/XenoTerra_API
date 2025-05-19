@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos
         public Guid UserId { get; init; }
         public DateTime ViewedAt { get; init; }
         public ResultStoryWithRelationsDto Story { get; init; } = new();
-        public ResultUserWithRelationsDto User { get; init; } = new();
+        public ResultUserWithRelationsPrivateDto User { get; init; } = new();
     }
 }

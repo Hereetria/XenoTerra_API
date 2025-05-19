@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserServices
 {
     public interface IUserReadService : IReadService<User, Guid> { }
 

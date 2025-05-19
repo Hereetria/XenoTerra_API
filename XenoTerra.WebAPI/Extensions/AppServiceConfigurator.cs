@@ -1,17 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DTOLayer.Mappings;
 using System.Reflection;
-using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
-using XenoTerra.WebAPI.GraphQL.Schemas;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
 using XenoTerra.WebAPI.Services.Queries.Base;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.GraphQL.Extensions.Configurators;
@@ -28,6 +25,12 @@ using FluentValidation;
 using XenoTerra.WebAPI.GraphQL.Auth.Inputs;
 using XenoTerra.WebAPI.GraphQL.Auth.Validators;
 using System.Security.Claims;
+using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas._RootMutations;
+using XenoTerra.WebAPI.GraphQL.Schemas._RootQueries;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.BlockUserResolvers;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -50,6 +53,14 @@ namespace XenoTerra.WebAPI.Extensions
                 .AddSorting()
                 .AddAuthorization()
                 .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
+
+            builder.Services.AddScoped<Query>();
+            builder.Services.AddScoped<AdminQuery>();
+            builder.Services.AddScoped<UserQuery>();
+
+            builder.Services.AddScoped<Mutation>();
+            builder.Services.AddScoped<AdminMutation>();
+            builder.Services.AddScoped<UserMutation>();
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),

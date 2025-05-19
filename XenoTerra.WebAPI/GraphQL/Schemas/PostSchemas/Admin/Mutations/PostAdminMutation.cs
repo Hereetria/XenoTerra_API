@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.PostService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostServices;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.PostMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.PostMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class PostAdminMutation
     {
         public async Task<CreatePostAdminPayload> CreatePostAsync(
-            [Service] IPostMutationService mutationService,
+            [Service] IPostAdminMutationService mutationService,
             [Service] IPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreatePostAdminInput> inputAdminValidator,
+            [Service] IValidator<CreatePostAdminInput> inputAdminValidator,
             CreatePostAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreatePostAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
         }
 
         public async Task<UpdatePostAdminPayload> UpdatePostAsync(
-            [Service] IPostMutationService mutationService,
+            [Service] IPostAdminMutationService mutationService,
             [Service] IPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdatePostAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdatePostAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdatePostAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
         }
 
         public async Task<DeletePostAdminPayload> DeletePostAsync(
-            [Service] IPostMutationService mutationService,
+            [Service] IPostAdminMutationService mutationService,
             [Service] IPostWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostCreated),
-                        PostCreatedAdminEvent.From<PostCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostAdminCreated),
+                        PostAdminCreatedEvent.From<PostAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostUpdated),
-                        PostUpdatedAdminEvent.From<PostUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostAdminUpdated),
+                        PostAdminUpdatedEvent.From<PostAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostDeleted),
-                        PostDeletedAdminEvent.From<PostDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(PostAdminSubscription.OnPostAdminDeleted),
+                        PostAdminDeletedEvent.From<PostAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(PostAdminSubscription.OnPostChanged),
-                PostChangedAdminEvent.From<PostChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(PostAdminSubscription.OnPostAdminChanged),
+                PostAdminChangedEvent.From<PostAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

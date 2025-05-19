@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.LikeService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.LikeServices;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.LikeMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.LikeMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class LikeAdminMutation
     {
         public async Task<CreateLikeAdminPayload> CreateLikeAsync(
-            [Service] ILikeMutationService mutationService,
+            [Service] ILikeAdminMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateLikeAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateLikeAdminInput> inputAdminValidator,
             CreateLikeAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateLikeAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations
         }
 
         public async Task<UpdateLikeAdminPayload> UpdateLikeAsync(
-            [Service] ILikeMutationService mutationService,
+            [Service] ILikeAdminMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateLikeAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateLikeAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateLikeAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations
         }
 
         public async Task<DeleteLikeAdminPayload> DeleteLikeAsync(
-            [Service] ILikeMutationService mutationService,
+            [Service] ILikeAdminMutationService mutationService,
             [Service] ILikeWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeCreated),
-                        LikeCreatedAdminEvent.From<LikeCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeAdminCreated),
+                        LikeAdminCreatedEvent.From<LikeAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeUpdated),
-                        LikeUpdatedAdminEvent.From<LikeUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeAdminUpdated),
+                        LikeAdminUpdatedEvent.From<LikeAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeDeleted),
-                        LikeDeletedAdminEvent.From<LikeDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeAdminDeleted),
+                        LikeAdminDeletedEvent.From<LikeAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeChanged),
-                LikeChangedAdminEvent.From<LikeChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(LikeAdminSubscription.OnLikeAdminChanged),
+                LikeAdminChangedEvent.From<LikeAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

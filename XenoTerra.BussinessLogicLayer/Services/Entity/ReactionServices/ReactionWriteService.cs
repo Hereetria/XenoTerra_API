@@ -9,11 +9,11 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReactionServices
 {
     public class ReactionWriteService(
             IWriteRepository<Reaction, Guid> writeRepository,

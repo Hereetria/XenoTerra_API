@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.CommentService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.CommentMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class CommentAdminMutation
     {
         public async Task<CreateCommentAdminPayload> CreateCommentAsync(
-            [Service] ICommentMutationService mutationService,
+            [Service] ICommentAdminMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateCommentAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateCommentAdminInput> inputAdminValidator,
             CreateCommentAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateCommentAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
         }
 
         public async Task<UpdateCommentAdminPayload> UpdateCommentAsync(
-            [Service] ICommentMutationService mutationService,
+            [Service] ICommentAdminMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateCommentAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateCommentAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateCommentAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
         }
 
         public async Task<DeleteCommentAdminPayload> DeleteCommentAsync(
-            [Service] ICommentMutationService mutationService,
+            [Service] ICommentAdminMutationService mutationService,
             [Service] ICommentWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentCreated),
-                        CommentCreatedAdminEvent.From<CommentCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentAdminCreated),
+                        CommentAdminCreatedEvent.From<CommentAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentUpdated),
-                        CommentUpdatedAdminEvent.From<CommentUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentAdminUpdated),
+                        CommentAdminUpdatedEvent.From<CommentAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentDeleted),
-                        CommentDeletedAdminEvent.From<CommentDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentAdminDeleted),
+                        CommentAdminDeletedEvent.From<CommentAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentChanged),
-                CommentChangedAdminEvent.From<CommentChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(CommentAdminSubscription.OnCommentAdminChanged),
+                CommentAdminChangedEvent.From<CommentAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

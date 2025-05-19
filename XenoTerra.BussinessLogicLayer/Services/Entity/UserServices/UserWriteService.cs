@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Exceptions.Technical;
 using XenoTerra.BussinessLogicLayer.Helpers;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Repositories.Entity.UserRepository;
-using XenoTerra.DataAccessLayer.Utils;
+using XenoTerra.DataAccessLayer.Repositories.Entity.UserRepositories;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserServices
 {
     public class UserWriteService(
         IUserWriteRepository userWriteRepository,

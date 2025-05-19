@@ -1,25 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class StoryHighlightAdminSubscription
     {
         [Subscribe]
-        public StoryHighlightCreatedAdminEvent OnStoryHighlightCreated(
-            [EventMessage] StoryHighlightCreatedAdminEvent evt) => evt;
+        public StoryHighlightAdminCreatedEvent OnStoryHighlightAdminCreated(
+            [EventMessage] StoryHighlightAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public StoryHighlightUpdatedAdminEvent OnStoryHighlightUpdated(
-            [EventMessage] StoryHighlightUpdatedAdminEvent evt) => evt;
+        public StoryHighlightAdminUpdatedEvent OnStoryHighlightAdminUpdated(
+            [EventMessage] StoryHighlightAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public StoryHighlightDeletedAdminEvent OnStoryHighlightDeleted(
-            [EventMessage] StoryHighlightDeletedAdminEvent evt) => evt;
+        public StoryHighlightAdminDeletedEvent OnStoryHighlightAdminDeleted(
+            [EventMessage] StoryHighlightAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public StoryHighlightChangedAdminEvent OnStoryHighlightChanged(
-            [EventMessage] StoryHighlightChangedAdminEvent evt) => evt;
+        public StoryHighlightAdminChangedEvent OnStoryHighlightAdminChanged(
+            [EventMessage] StoryHighlightAdminChangedEvent evt) => evt;
     }
 }

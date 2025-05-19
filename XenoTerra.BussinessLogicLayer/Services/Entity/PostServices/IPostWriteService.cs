@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.PostDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.PostServices
 {
 
     public interface IPostWriteService : IWriteService<Post, CreatePostDto, UpdatePostDto, Guid> { }

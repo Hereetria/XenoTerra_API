@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.ReportCommentResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.ReportCommentResolvers
 {
     public class ReportCommentResolver : EntityResolver<ReportComment, Guid>, IReportCommentResolver
     {

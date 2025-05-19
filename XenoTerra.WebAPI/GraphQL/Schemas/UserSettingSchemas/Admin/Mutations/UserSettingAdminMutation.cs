@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations.Inputs;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations.Payloads;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations.Inputs;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations.Payloads;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.UserSettingMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserSettingMutationServices;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserSettingAdminMutation
     {
         public async Task<CreateUserSettingAdminPayload> CreateUserSettingAsync(
-            [Service] IUserSettingMutationService mutationService,
+            [Service] IUserSettingAdminMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateUserSettingAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateUserSettingAdminInput> inputAdminValidator,
             CreateUserSettingAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateUserSettingAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
         }
 
         public async Task<UpdateUserSettingAdminPayload> UpdateUserSettingAsync(
-            [Service] IUserSettingMutationService mutationService,
+            [Service] IUserSettingAdminMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateUserSettingAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateUserSettingAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateUserSettingAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
         }
 
         public async Task<DeleteUserSettingAdminPayload> DeleteUserSettingAsync(
-            [Service] IUserSettingMutationService mutationService,
+            [Service] IUserSettingAdminMutationService mutationService,
             [Service] IUserSettingWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,21 +88,21 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingCreated),
-                        UserSettingCreatedAdminEvent.From<UserSettingCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingAdminCreated),
+                        UserSettingAdminCreatedEvent.From<UserSettingAdminCreatedEvent>(result, userId, now));
                     break;
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingUpdated),
-                        UserSettingUpdatedAdminEvent.From<UserSettingUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingAdminUpdated),
+                        UserSettingAdminUpdatedEvent.From<UserSettingAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingDeleted),
-                        UserSettingDeletedAdminEvent.From<UserSettingDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingAdminDeleted),
+                        UserSettingAdminDeletedEvent.From<UserSettingAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingChanged),
-                UserSettingChangedAdminEvent.From<UserSettingChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(UserSettingAdminSubscription.OnUserSettingAdminChanged),
+                UserSettingAdminChangedEvent.From<UserSettingAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

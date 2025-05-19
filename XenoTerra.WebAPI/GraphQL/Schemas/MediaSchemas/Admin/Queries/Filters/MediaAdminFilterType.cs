@@ -3,10 +3,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries.Filters
 {
-    public class MediaAdminFilterType : FilterAdminInputType<Media>
+    public class MediaAdminFilterType : FilterInputType<Media>
     {
         protected override void Configure(IFilterInputTypeDescriptor<Media> descriptor)
         {
+        descriptor.Name("MediaAdminFilterInput");
         }
     }
 }

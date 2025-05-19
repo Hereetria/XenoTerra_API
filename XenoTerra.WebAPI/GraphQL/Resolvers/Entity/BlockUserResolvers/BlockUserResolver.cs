@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.BlockUserResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.BlockUserResolvers
 {
     public class BlockUserResolver : EntityResolver<BlockUser, Guid>, IBlockUserResolver
     {

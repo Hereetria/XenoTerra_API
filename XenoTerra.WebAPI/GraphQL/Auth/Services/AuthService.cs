@@ -18,7 +18,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
     {
         private readonly UserManager<User> _userManager = userManager;
         private readonly IConfiguration _config = config;
-        IValidator<RegisterInput> _validator = registerValidator;
+        private readonly IValidator<RegisterInput> _validator = registerValidator;
 
         public async Task<RegisterPayload> RegisterAsync(RegisterInput? input)
         {
@@ -44,7 +44,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
 
             await _userManager.AddToRoleAsync(newUser, "Visitor");
 
-            var resultDto = new ResultUserDto
+            var resultDto = new ResultUserPrivateDto
             {
                 Id = newUser.Id,
                 UserName = newUser.UserName!,
@@ -53,7 +53,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
                 BirthDate = DateOnly.Parse(input.BirthDate).ToDateTime()
             };
 
-            return Payload<ResultUserDto>.FromSuccess<RegisterPayload>(
+            return Payload<ResultUserPrivateDto>.FromSuccess<RegisterPayload>(
                 "User registered successfully",
                 resultDto
             );

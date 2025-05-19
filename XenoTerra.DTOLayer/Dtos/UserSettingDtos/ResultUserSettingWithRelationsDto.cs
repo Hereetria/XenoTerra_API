@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
         public bool ReceiveNotifications { get; init; }
         public bool ShowActivityStatus { get; init; }
         public DateTime LastUpdated { get; init; }
-        public ResultUserWithRelationsDto User { get; init; } = new();
+        public ResultUserWithRelationsPrivateDto User { get; init; } = new();
     }
 }

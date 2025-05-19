@@ -7,7 +7,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepositories
 {
 
     public interface IHighlightWriteRepository : IWriteRepository<Highlight, Guid>

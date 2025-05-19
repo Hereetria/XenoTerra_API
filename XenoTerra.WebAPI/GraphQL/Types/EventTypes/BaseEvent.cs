@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Events
+namespace XenoTerra.WebAPI.GraphQL.Types.EventTypes
 {
     public abstract record BaseEvent<TResult> where TResult : class
     {

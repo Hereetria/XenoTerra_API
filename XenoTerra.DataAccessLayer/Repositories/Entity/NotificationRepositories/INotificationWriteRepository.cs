@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepositories
 {
     public interface INotificationWriteRepository : IWriteRepository<Notification, Guid>
     {

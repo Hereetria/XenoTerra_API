@@ -7,13 +7,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.RoleRepositories
 {
     public class RoleWriteRepository(RoleManager<Role> roleManager) : IRoleWriteRepository
     {

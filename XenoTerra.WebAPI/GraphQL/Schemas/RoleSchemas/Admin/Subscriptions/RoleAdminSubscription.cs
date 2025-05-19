@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class RoleAdminSubscription
     {
         [Subscribe]
-        public RoleCreatedAdminEvent OnRoleCreated(
-            [EventMessage] RoleCreatedAdminEvent evt) => evt;
+        public RoleAdminCreatedEvent OnRoleAdminCreated(
+            [EventMessage] RoleAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public RoleUpdatedAdminEvent OnRoleUpdated(
-            [EventMessage] RoleUpdatedAdminEvent evt) => evt;
+        public RoleAdminUpdatedEvent OnRoleAdminUpdated(
+            [EventMessage] RoleAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public RoleDeletedAdminEvent OnRoleDeleted(
-            [EventMessage] RoleDeletedAdminEvent evt) => evt;
+        public RoleAdminDeletedEvent OnRoleAdminDeleted(
+            [EventMessage] RoleAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public RoleChangedAdminEvent OnRoleChanged(
-            [EventMessage] RoleChangedAdminEvent evt) => evt;
+        public RoleAdminChangedEvent OnRoleAdminChanged(
+            [EventMessage] RoleAdminChangedEvent evt) => evt;
     }
 }

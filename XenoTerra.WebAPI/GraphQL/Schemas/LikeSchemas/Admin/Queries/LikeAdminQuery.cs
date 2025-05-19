@@ -1,18 +1,21 @@
-﻿using AutoMapper;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+using AutoMapper;
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
-using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.LikeResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries.Paginations;
 using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.LikeResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.LikeQueryServices;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class LikeAdminQuery(IMapper mapper, IQueryResolverHelper<Like, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -29,7 +32,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<Like, ResultLikeWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Like, ResultLikeWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -51,7 +54,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<Like, ResultLikeWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Like, ResultLikeWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -70,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return _mapper.Map<ResultLikeWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultLikeWithRelationsDto>(entity);
         }
     }
 

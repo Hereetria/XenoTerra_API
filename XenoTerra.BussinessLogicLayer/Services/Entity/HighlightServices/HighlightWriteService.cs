@@ -10,12 +10,10 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices
 {
     public class HighlightWriteService(
             IWriteRepository<Highlight, Guid> writeRepository,

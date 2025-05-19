@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class HighlightAdminSubscription
     {
         [Subscribe]
-        public HighlightCreatedAdminEvent OnHighlightCreated(
-            [EventMessage] HighlightCreatedAdminEvent evt) => evt;
+        public HighlightAdminCreatedEvent OnHighlightAdminCreated(
+            [EventMessage] HighlightAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public HighlightUpdatedAdminEvent OnHighlightUpdated(
-            [EventMessage] HighlightUpdatedAdminEvent evt) => evt;
+        public HighlightAdminUpdatedEvent OnHighlightAdminUpdated(
+            [EventMessage] HighlightAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public HighlightDeletedAdminEvent OnHighlightDeleted(
-            [EventMessage] HighlightDeletedAdminEvent evt) => evt;
+        public HighlightAdminDeletedEvent OnHighlightAdminDeleted(
+            [EventMessage] HighlightAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public HighlightChangedAdminEvent OnHighlightChanged(
-            [EventMessage] HighlightChangedAdminEvent evt) => evt;
+        public HighlightAdminChangedEvent OnHighlightAdminChanged(
+            [EventMessage] HighlightAdminChangedEvent evt) => evt;
     }
 }

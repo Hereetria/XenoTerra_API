@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class SavedPostAdminSubscription
     {
         [Subscribe]
-        public SavedPostCreatedAdminEvent OnSavedPostCreated(
-            [EventMessage] SavedPostCreatedAdminEvent evt) => evt;
+        public SavedPostAdminCreatedEvent OnSavedPostAdminCreated(
+            [EventMessage] SavedPostAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public SavedPostUpdatedAdminEvent OnSavedPostUpdated(
-            [EventMessage] SavedPostUpdatedAdminEvent evt) => evt;
+        public SavedPostAdminUpdatedEvent OnSavedPostAdminUpdated(
+            [EventMessage] SavedPostAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public SavedPostDeletedAdminEvent OnSavedPostDeleted(
-            [EventMessage] SavedPostDeletedAdminEvent evt) => evt;
+        public SavedPostAdminDeletedEvent OnSavedPostAdminDeleted(
+            [EventMessage] SavedPostAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public SavedPostChangedAdminEvent OnSavedPostChanged(
-            [EventMessage] SavedPostChangedAdminEvent evt) => evt;
+        public SavedPostAdminChangedEvent OnSavedPostAdminChanged(
+            [EventMessage] SavedPostAdminChangedEvent evt) => evt;
     }
 }

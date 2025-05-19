@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
         public Guid MessageId { get; init; }
         public Guid UserId { get; init; }
         public ResultMessageDto Message { get; init; } = new();
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

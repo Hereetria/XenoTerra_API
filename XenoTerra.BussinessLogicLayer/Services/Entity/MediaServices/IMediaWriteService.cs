@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.MediaDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices
 {
 
     public interface IMediaWriteService : IWriteService<Media, CreateMediaDto, UpdateMediaDto, Guid> { }

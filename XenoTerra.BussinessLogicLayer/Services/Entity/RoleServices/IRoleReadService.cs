@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleServices
 {
     public interface IRoleReadService : IReadService<Role, Guid> { }
 

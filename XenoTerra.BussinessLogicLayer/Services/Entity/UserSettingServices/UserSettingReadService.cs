@@ -6,11 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices
 {
     public class UserSettingReadService(IReadRepository<UserSetting, Guid> readRepository) : ReadService<UserSetting, Guid>(readRepository), IUserSettingReadService
     {

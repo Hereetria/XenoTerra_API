@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Types.Pagination;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Paginations
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations
 {
     public class ViewStoryAdminConnection(
         IReadOnlyList<Edge<ResultViewStoryWithRelationsDto>> edges,

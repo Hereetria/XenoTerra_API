@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.RecentChatsRepositories
 {
     public class RecentChatsReadRepository(AppDbContext context) : ReadRepository<RecentChats, Guid>(context), IRecentChatsReadRepository
     {

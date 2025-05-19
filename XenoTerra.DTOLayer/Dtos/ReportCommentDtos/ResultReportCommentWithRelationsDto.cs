@@ -12,7 +12,7 @@ namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
         public Guid CommentId { get; init; }
         public string Reason { get; init; } = string.Empty;
         public DateTime ReportedAt { get; init; }
-        public ResultUserDto ReporterUser { get; init; } = new();
+        public ResultUserPrivateDto ReporterUser { get; init; } = new();
         public ResultCommentDto Comment { get; init; } = new();
     }
 }

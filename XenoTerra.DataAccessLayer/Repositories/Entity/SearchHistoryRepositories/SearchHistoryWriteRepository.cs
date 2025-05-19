@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.SearchHistoryRepositories
 {
     public class SearchHistoryWriteRepository(AppDbContext context) : WriteRepository<SearchHistory, Guid>(context), ISearchHistoryWriteRepository
     {

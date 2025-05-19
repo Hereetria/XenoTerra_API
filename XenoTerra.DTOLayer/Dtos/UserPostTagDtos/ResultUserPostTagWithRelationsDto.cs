@@ -14,6 +14,6 @@ namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos
         public Guid PostId { get; init; }
         public Guid UserId { get; init; }
         public ResultPostDto Post { get; init; } = new();
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.RoleResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.RoleResolvers
 {
     public class RoleResolver : EntityResolver<Role, Guid>, IRoleResolver
     {

@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class RecentChatsAdminSubscription
     {
         [Subscribe]
-        public RecentChatsCreatedAdminEvent OnRecentChatsCreated(
-            [EventMessage] RecentChatsCreatedAdminEvent evt) => evt;
+        public RecentChatsAdminCreatedEvent OnRecentChatsAdminCreated(
+            [EventMessage] RecentChatsAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public RecentChatsUpdatedAdminEvent OnRecentChatsUpdated(
-            [EventMessage] RecentChatsUpdatedAdminEvent evt) => evt;
+        public RecentChatsAdminUpdatedEvent OnRecentChatsAdminUpdated(
+            [EventMessage] RecentChatsAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public RecentChatsDeletedAdminEvent OnRecentChatsDeleted(
-            [EventMessage] RecentChatsDeletedAdminEvent evt) => evt;
+        public RecentChatsAdminDeletedEvent OnRecentChatsAdminDeleted(
+            [EventMessage] RecentChatsAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public RecentChatsChangedAdminEvent OnRecentChatsChanged(
-            [EventMessage] RecentChatsChangedAdminEvent evt) => evt;
+        public RecentChatsAdminChangedEvent OnRecentChatsAdminChanged(
+            [EventMessage] RecentChatsAdminChangedEvent evt) => evt;
     }
 }

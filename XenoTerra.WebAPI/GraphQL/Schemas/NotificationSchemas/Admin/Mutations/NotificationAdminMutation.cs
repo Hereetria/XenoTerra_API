@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.NotificationMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NotificationMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class NotificationAdminMutation
     {
         public async Task<CreateNotificationAdminPayload> CreateNotificationAsync(
-            [Service] INotificationMutationService mutationService,
+            [Service] INotificationAdminMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateNotificationAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateNotificationAdminInput> inputAdminValidator,
             CreateNotificationAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateNotificationAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
         }
 
         public async Task<UpdateNotificationAdminPayload> UpdateNotificationAsync(
-            [Service] INotificationMutationService mutationService,
+            [Service] INotificationAdminMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateNotificationAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateNotificationAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateNotificationAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
         }
 
         public async Task<DeleteNotificationAdminPayload> DeleteNotificationAsync(
-            [Service] INotificationMutationService mutationService,
+            [Service] INotificationAdminMutationService mutationService,
             [Service] INotificationWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationCreated),
-                        NotificationCreatedAdminEvent.From<NotificationCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationAdminCreated),
+                        NotificationAdminCreatedEvent.From<NotificationAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationUpdated),
-                        NotificationUpdatedAdminEvent.From<NotificationUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationAdminUpdated),
+                        NotificationAdminUpdatedEvent.From<NotificationAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationDeleted),
-                        NotificationDeletedAdminEvent.From<NotificationDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationAdminDeleted),
+                        NotificationAdminDeletedEvent.From<NotificationAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationChanged),
-                NotificationChangedAdminEvent.From<NotificationChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(NotificationAdminSubscription.OnNotificationAdminChanged),
+                NotificationAdminChangedEvent.From<NotificationAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

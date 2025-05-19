@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostRepositories
 {
     public class PostWriteRepository(AppDbContext context) : WriteRepository<Post, Guid>(context), IPostWriteRepository
     {

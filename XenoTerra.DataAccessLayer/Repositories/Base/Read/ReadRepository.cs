@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
 {
@@ -30,7 +29,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
         {
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
-            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
+            var safeSelectedFields = SelectedFieldHelper.EnsurePrimaryKeyIncluded<TEntity>(_context, selectedFields);
+
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, safeSelectedFields);
 
             return RepositoryExceptionHandler.ExecuteReadSafely(() => query.AsNoTracking().Select(selector));
         }
@@ -40,7 +41,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
             ArgumentGuard.EnsureValidKey(key);
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
-            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
+            var safeSelectedFields = SelectedFieldHelper.EnsurePrimaryKeyIncluded<TEntity>(_context, selectedFields);
+
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, safeSelectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException($"Entity type '{typeof(TEntity).Name}' not found in the current DbContext model.");
@@ -59,7 +62,9 @@ namespace XenoTerra.DataAccessLayer.Repositories.Base.Read
             ArgumentGuard.EnsureNotNullOrEmpty(keys, "Key list cannot be null.", "At least one key must in keys.");
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields, "Field list cannot be null.", "At least one field must be selected.");
 
-            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, selectedFields);
+            var safeSelectedFields = SelectedFieldHelper.EnsurePrimaryKeyIncluded<TEntity>(_context, selectedFields);
+
+            var selector = SimpleDbProjectionExpressionProvider.CreateSelectorExpression<TEntity>(_context, safeSelectedFields);
 
             var entityType = _context.Model.FindEntityType(typeof(TEntity))
                               ?? throw new InvalidOperationException($"Entity type '{typeof(TEntity).Name}' not found in the current DbContext model.");

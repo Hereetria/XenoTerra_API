@@ -1,14 +1,8 @@
 ﻿using HotChocolate.Resolvers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System.Collections;
-using System.Reflection;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityAssignment;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
-using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.GraphQL.Resolvers.Base
 {

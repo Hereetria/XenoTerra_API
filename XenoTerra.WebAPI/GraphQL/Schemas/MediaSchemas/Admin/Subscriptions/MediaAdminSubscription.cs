@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class MediaAdminSubscription
     {
         [Subscribe]
-        public MediaCreatedAdminEvent OnMediaCreated(
-            [EventMessage] MediaCreatedAdminEvent evt) => evt;
+        public MediaAdminCreatedEvent OnMediaAdminCreated(
+            [EventMessage] MediaAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public MediaUpdatedAdminEvent OnMediaUpdated(
-            [EventMessage] MediaUpdatedAdminEvent evt) => evt;
+        public MediaAdminUpdatedEvent OnMediaAdminUpdated(
+            [EventMessage] MediaAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public MediaDeletedAdminEvent OnMediaDeleted(
-            [EventMessage] MediaDeletedAdminEvent evt) => evt;
+        public MediaAdminDeletedEvent OnMediaAdminDeleted(
+            [EventMessage] MediaAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public MediaChangedAdminEvent OnMediaChanged(
-            [EventMessage] MediaChangedAdminEvent evt) => evt;
+        public MediaAdminChangedEvent OnMediaAdminChanged(
+            [EventMessage] MediaAdminChangedEvent evt) => evt;
     }
 }

@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions.Events;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Subscriptions
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserSettingAdminSubscription
     {
         [Subscribe]
-        public UserSettingCreatedAdminEvent OnUserSettingCreated(
-            [EventMessage] UserSettingCreatedAdminEvent evt) => evt;
+        public UserSettingAdminCreatedEvent OnUserSettingAdminCreated(
+            [EventMessage] UserSettingAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public UserSettingUpdatedAdminEvent OnUserSettingUpdated(
-            [EventMessage] UserSettingUpdatedAdminEvent evt) => evt;
+        public UserSettingAdminUpdatedEvent OnUserSettingAdminUpdated(
+            [EventMessage] UserSettingAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public UserSettingDeletedAdminEvent OnUserSettingDeleted(
-            [EventMessage] UserSettingDeletedAdminEvent evt) => evt;
+        public UserSettingAdminDeletedEvent OnUserSettingAdminDeleted(
+            [EventMessage] UserSettingAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public UserSettingChangedAdminEvent OnUserSettingChanged(
-            [EventMessage] UserSettingChangedAdminEvent evt) => evt;
+        public UserSettingAdminChangedEvent OnUserSettingAdminChanged(
+            [EventMessage] UserSettingAdminChangedEvent evt) => evt;
     }
 }

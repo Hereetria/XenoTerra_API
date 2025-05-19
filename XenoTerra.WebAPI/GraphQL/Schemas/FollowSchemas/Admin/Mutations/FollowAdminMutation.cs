@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.FollowService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.FollowMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.FollowMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class FollowAdminMutation
     {
         public async Task<CreateFollowAdminPayload> CreateFollowAsync(
-            [Service] IFollowMutationService mutationService,
+            [Service] IFollowAdminMutationService mutationService,
             [Service] IFollowWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateFollowAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateFollowAdminInput> inputAdminValidator,
             CreateFollowAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateFollowAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
         }
 
         public async Task<UpdateFollowAdminPayload> UpdateFollowAsync(
-            [Service] IFollowMutationService mutationService,
+            [Service] IFollowAdminMutationService mutationService,
             [Service] IFollowWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateFollowAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateFollowAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateFollowAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
         }
 
         public async Task<DeleteFollowAdminPayload> DeleteFollowAsync(
-            [Service] IFollowMutationService mutationService,
+            [Service] IFollowAdminMutationService mutationService,
             [Service] IFollowWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowCreated),
-                        FollowCreatedAdminEvent.From<FollowCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowAdminCreated),
+                        FollowAdminCreatedEvent.From<FollowAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowUpdated),
-                        FollowUpdatedAdminEvent.From<FollowUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowAdminUpdated),
+                        FollowAdminUpdatedEvent.From<FollowAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowDeleted),
-                        FollowDeletedAdminEvent.From<FollowDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowAdminDeleted),
+                        FollowAdminDeletedEvent.From<FollowAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowChanged),
-                FollowChangedAdminEvent.From<FollowChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(FollowAdminSubscription.OnFollowAdminChanged),
+                FollowAdminChangedEvent.From<FollowAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

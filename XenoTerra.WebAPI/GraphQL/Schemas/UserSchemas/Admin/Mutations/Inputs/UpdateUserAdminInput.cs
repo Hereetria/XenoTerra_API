@@ -1,6 +1,6 @@
 ﻿using XenoTerra.WebAPI.GraphQL.Attributes;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Mutations.Inputs
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Mutations.Inputs
 {
     public record UpdateUserAdminInput(
         string Id,

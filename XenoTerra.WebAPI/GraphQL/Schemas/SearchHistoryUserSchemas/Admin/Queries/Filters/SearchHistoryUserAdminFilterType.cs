@@ -3,10 +3,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Queries.Filters
 {
-    public class SearchHistoryUserAdminFilterType : FilterAdminInputType<SearchHistoryUser>
+    public class SearchHistoryUserAdminFilterType : FilterInputType<SearchHistoryUser>
     {
         protected override void Configure(IFilterInputTypeDescriptor<SearchHistoryUser> descriptor)
         {
+        descriptor.Name("SearchHistoryUserAdminFilterInput");
         }
     }
 }

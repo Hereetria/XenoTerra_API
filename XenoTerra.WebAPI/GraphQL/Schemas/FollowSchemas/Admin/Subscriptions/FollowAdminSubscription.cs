@@ -1,27 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class FollowAdminSubscription
     {
         [Subscribe]
-        public FollowCreatedAdminEvent OnFollowCreated(
-            [EventMessage] FollowCreatedAdminEvent evt) => evt;
+        public FollowAdminCreatedEvent OnFollowAdminCreated(
+            [EventMessage] FollowAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public FollowUpdatedAdminEvent OnFollowUpdated(
-            [EventMessage] FollowUpdatedAdminEvent evt) => evt;
+        public FollowAdminUpdatedEvent OnFollowAdminUpdated(
+            [EventMessage] FollowAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public FollowDeletedAdminEvent OnFollowDeleted(
-            [EventMessage] FollowDeletedAdminEvent evt) => evt;
+        public FollowAdminDeletedEvent OnFollowAdminDeleted(
+            [EventMessage] FollowAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public FollowChangedAdminEvent OnFollowChanged(
-            [EventMessage] FollowChangedAdminEvent evt) => evt;
+        public FollowAdminChangedEvent OnFollowAdminChanged(
+            [EventMessage] FollowAdminChangedEvent evt) => evt;
     }
 }

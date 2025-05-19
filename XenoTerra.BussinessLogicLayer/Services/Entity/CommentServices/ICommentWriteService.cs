@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices
 {
     public interface ICommentWriteService : IWriteService<Comment, CreateCommentDto, UpdateCommentDto, Guid> { }
 

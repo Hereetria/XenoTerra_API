@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentServices
 {
     public interface IReportCommentReadService : IReadService<ReportComment, Guid> { }
 

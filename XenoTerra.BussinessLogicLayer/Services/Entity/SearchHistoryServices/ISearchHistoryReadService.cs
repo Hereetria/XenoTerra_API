@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryServices
 {
     public interface ISearchHistoryReadService : IReadService<SearchHistory, Guid> { }
 

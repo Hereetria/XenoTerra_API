@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class StoryAdminSubscription
     {
         [Subscribe]
-        public StoryCreatedAdminEvent OnStoryCreated(
-            [EventMessage] StoryCreatedAdminEvent evt) => evt;
+        public StoryAdminCreatedEvent OnStoryAdminCreated(
+            [EventMessage] StoryAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public StoryUpdatedAdminEvent OnStoryUpdated(
-            [EventMessage] StoryUpdatedAdminEvent evt) => evt;
+        public StoryAdminUpdatedEvent OnStoryAdminUpdated(
+            [EventMessage] StoryAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public StoryDeletedAdminEvent OnStoryDeleted(
-            [EventMessage] StoryDeletedAdminEvent evt) => evt;
+        public StoryAdminDeletedEvent OnStoryAdminDeleted(
+            [EventMessage] StoryAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public StoryChangedAdminEvent OnStoryChanged(
-            [EventMessage] StoryChangedAdminEvent evt) => evt;
+        public StoryAdminChangedEvent OnStoryAdminChanged(
+            [EventMessage] StoryAdminChangedEvent evt) => evt;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Paginations.Types
+﻿using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations;
+
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations.Types
 {
     public class ViewStoryAdminEdgeType : ObjectType<ViewStoryAdminEdge>
     {

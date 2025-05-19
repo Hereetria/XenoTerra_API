@@ -1,4 +1,6 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations.Inputs.Types
+﻿using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Inputs;
+
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Inputs.Types
 {
     public class UpdateViewStoryAdminInputType : InputObjectType<UpdateViewStoryAdminInput>
     {

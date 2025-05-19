@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class NoteAdminSubscription
     {
         [Subscribe]
-        public NoteCreatedAdminEvent OnNoteCreated(
-            [EventMessage] NoteCreatedAdminEvent evt) => evt;
+        public NoteAdminCreatedEvent OnNoteAdminCreated(
+            [EventMessage] NoteAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public NoteUpdatedAdminEvent OnNoteUpdated(
-            [EventMessage] NoteUpdatedAdminEvent evt) => evt;
+        public NoteAdminUpdatedEvent OnNoteAdminUpdated(
+            [EventMessage] NoteAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public NoteDeletedAdminEvent OnNoteDeleted(
-            [EventMessage] NoteDeletedAdminEvent evt) => evt;
+        public NoteAdminDeletedEvent OnNoteAdminDeleted(
+            [EventMessage] NoteAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public NoteChangedAdminEvent OnNoteChanged(
-            [EventMessage] NoteChangedAdminEvent evt) => evt;
+        public NoteAdminChangedEvent OnNoteAdminChanged(
+            [EventMessage] NoteAdminChangedEvent evt) => evt;
     }
 }

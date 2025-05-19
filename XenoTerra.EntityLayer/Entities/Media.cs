@@ -11,8 +11,11 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid MediaId { get; set; }
         public string PhotoUrl { get; set; } = string.Empty;
 
-        public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public Guid SenderId { get; set; }
+        public User Sender { get; set; } = null!;
+
+        public Guid ReceiverId { get; set; }
+        public User Receiver { get; set; } = null!;
 
         public DateTime UploadedAt { get; set; }
     }

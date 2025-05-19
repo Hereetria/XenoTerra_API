@@ -1,8 +1,6 @@
 ﻿using GreenDonut;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.DataLoaders.Entity;
-using XenoTerra.WebAPI.Schemas.DataLoaders.Base;
-using XenoTerra.WebAPI.Schemas.DataLoaders.Entity;
 
 namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Factories
 {

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.NoteRepositories
 {
 
     public class NoteWriteRepository(AppDbContext context) : WriteRepository<Note, Guid>(context), INoteWriteRepository

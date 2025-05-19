@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Utils;
 
-namespace XenoTerra.WebAPI.Schemas.DataLoaders.Base
+namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Base
 {
     public abstract class EntityDataLoader<TEntity, TKey> : BatchDataLoader<TKey, TEntity>
         where TEntity : class

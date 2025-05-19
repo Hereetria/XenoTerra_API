@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.StoryService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.StoryMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class StoryAdminMutation
     {
         public async Task<CreateStoryAdminPayload> CreateStoryAsync(
-            [Service] IStoryMutationService mutationService,
+            [Service] IStoryAdminMutationService mutationService,
             [Service] IStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateStoryAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateStoryAdminInput> inputAdminValidator,
             CreateStoryAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateStoryAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
         }
 
         public async Task<UpdateStoryAdminPayload> UpdateStoryAsync(
-            [Service] IStoryMutationService mutationService,
+            [Service] IStoryAdminMutationService mutationService,
             [Service] IStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateStoryAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateStoryAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateStoryAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
         }
 
         public async Task<DeleteStoryAdminPayload> DeleteStoryAsync(
-            [Service] IStoryMutationService mutationService,
+            [Service] IStoryAdminMutationService mutationService,
             [Service] IStoryWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -84,21 +87,21 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryCreated),
-                        StoryCreatedAdminEvent.From<StoryCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryAdminCreated),
+                        StoryAdminCreatedEvent.From<StoryAdminCreatedEvent>(result, userId, now));
                     break;
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryUpdated),
-                        StoryUpdatedAdminEvent.From<StoryUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryAdminUpdated),
+                        StoryAdminUpdatedEvent.From<StoryAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryDeleted),
-                        StoryDeletedAdminEvent.From<StoryDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryAdminDeleted),
+                        StoryAdminDeletedEvent.From<StoryAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryChanged),
-                StoryChangedAdminEvent.From<StoryChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(StoryAdminSubscription.OnStoryAdminChanged),
+                StoryAdminChangedEvent.From<StoryAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

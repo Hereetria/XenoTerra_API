@@ -34,13 +34,17 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<Comment> Comments { get; set; } = [];
 
+        public ICollection<Highlight> Highlights { get; set; } = [];
+
         public ICollection<Message> SentMessages { get; set; } = [];
 
         public ICollection<Message> ReceivedMessages { get; set; } = [];
 
         public ICollection<Notification> Notifications { get; set; } = [];
 
-        public ICollection<Media> Medias { get; set; } = [];
+        public ICollection<Media> SentMedias { get; set; } = [];
+
+        public ICollection<Media> ReceivedMedias { get; set; } = [];
 
         public ICollection<Story> Stories { get; set; } = [];
 
@@ -50,15 +54,13 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<ViewStory> ViewStories { get; set; } = [];
 
-        public ICollection<UserSetting> UserSettings { get; set; } = [];
+        public UserSetting UserSetting { get; set; } = null!;
 
         public ICollection<SearchHistoryUser> SearchedBy { get; set; } = [];
 
         public ICollection<RecentChats> RecentChats { get; set; } = [];
 
         public Note Note { get; set; } = null!;
-
-        public ICollection<Reaction> Reactions { get; set; } = [];
         public ICollection<UserPostTag> TaggedPosts { get; set; } = [];
     }
 }

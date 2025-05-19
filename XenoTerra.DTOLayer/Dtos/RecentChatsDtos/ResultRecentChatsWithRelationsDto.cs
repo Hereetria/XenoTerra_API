@@ -10,6 +10,6 @@ namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos
         public string LastMessage { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime LastMessageAt { get; init; }
-        public ICollection<ResultUserDto> Users { get; init; } = [];
+        public ICollection<ResultUserPrivateDto> Users { get; init; } = [];
     }
 }

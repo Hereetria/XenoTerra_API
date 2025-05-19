@@ -3,10 +3,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Queries.Sorts
 {
-    public class MessageAdminSortType : SortAdminInputType<Message>
+    public class MessageAdminSortType : SortInputType<Message>
     {
         protected override void Configure(ISortInputTypeDescriptor<Message> descriptor)
         {
+        descriptor.Name("MessageAdminSortInput");
         }
     }
 }

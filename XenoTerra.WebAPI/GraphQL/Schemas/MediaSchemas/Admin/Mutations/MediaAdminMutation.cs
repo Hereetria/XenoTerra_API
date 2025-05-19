@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.MediaService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.MediaMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MediaMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class MediaAdminMutation
     {
         public async Task<CreateMediaAdminPayload> CreateMediaAsync(
-            [Service] IMediaMutationService mutationService,
+            [Service] IMediaAdminMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateMediaAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateMediaAdminInput> inputAdminValidator,
             CreateMediaAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateMediaAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
         }
 
         public async Task<UpdateMediaAdminPayload> UpdateMediaAsync(
-            [Service] IMediaMutationService mutationService,
+            [Service] IMediaAdminMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateMediaAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateMediaAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateMediaAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
         }
 
         public async Task<DeleteMediaAdminPayload> DeleteMediaAsync(
-            [Service] IMediaMutationService mutationService,
+            [Service] IMediaAdminMutationService mutationService,
             [Service] IMediaWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaCreated),
-                        MediaCreatedAdminEvent.From<MediaCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaAdminCreated),
+                        MediaAdminCreatedEvent.From<MediaAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaUpdated),
-                        MediaUpdatedAdminEvent.From<MediaUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaAdminUpdated),
+                        MediaAdminUpdatedEvent.From<MediaAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaDeleted),
-                        MediaDeletedAdminEvent.From<MediaDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaAdminDeleted),
+                        MediaAdminDeletedEvent.From<MediaAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaChanged),
-                MediaChangedAdminEvent.From<MediaChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(MediaAdminSubscription.OnMediaAdminChanged),
+                MediaAdminChangedEvent.From<MediaAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

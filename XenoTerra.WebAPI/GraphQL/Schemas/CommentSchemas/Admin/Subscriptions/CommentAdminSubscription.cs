@@ -1,27 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class CommentAdminSubscription
     {
         [Subscribe]
-        public CommentCreatedAdminEvent OnCommentCreated(
-            [EventMessage] CommentCreatedAdminEvent evt) => evt;
+        public CommentAdminCreatedEvent OnCommentAdminCreated(
+            [EventMessage] CommentAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public CommentUpdatedAdminEvent OnCommentUpdated(
-            [EventMessage] CommentUpdatedAdminEvent evt) => evt;
+        public CommentAdminUpdatedEvent OnCommentAdminUpdated(
+            [EventMessage] CommentAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public CommentDeletedAdminEvent OnCommentDeleted(
-            [EventMessage] CommentDeletedAdminEvent evt) => evt;
+        public CommentAdminDeletedEvent OnCommentAdminDeleted(
+            [EventMessage] CommentAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public CommentChangedAdminEvent OnCommentChanged(
-            [EventMessage] CommentChangedAdminEvent evt) => evt;
+        public CommentAdminChangedEvent OnCommentAdminChanged(
+            [EventMessage] CommentAdminChangedEvent evt) => evt;
     }
 }

@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsServices;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.RecentChatsMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RecentChatsMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class RecentChatsAdminMutation
     {
         public async Task<CreateRecentChatsAdminPayload> CreateRecentChatsAsync(
-            [Service] IRecentChatsMutationService mutationService,
+            [Service] IRecentChatsAdminMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateRecentChatsAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateRecentChatsAdminInput> inputAdminValidator,
             CreateRecentChatsAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateRecentChatsAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
         }
 
         public async Task<UpdateRecentChatsAdminPayload> UpdateRecentChatsAsync(
-            [Service] IRecentChatsMutationService mutationService,
+            [Service] IRecentChatsAdminMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateRecentChatsAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateRecentChatsAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateRecentChatsAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
         }
 
         public async Task<DeleteRecentChatsAdminPayload> DeleteRecentChatsAsync(
-            [Service] IRecentChatsMutationService mutationService,
+            [Service] IRecentChatsAdminMutationService mutationService,
             [Service] IRecentChatsWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsCreated),
-                        RecentChatsCreatedAdminEvent.From<RecentChatsCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsAdminCreated),
+                        RecentChatsAdminCreatedEvent.From<RecentChatsAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsUpdated),
-                        RecentChatsUpdatedAdminEvent.From<RecentChatsUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsAdminUpdated),
+                        RecentChatsAdminUpdatedEvent.From<RecentChatsAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsDeleted),
-                        RecentChatsDeletedAdminEvent.From<RecentChatsDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsAdminDeleted),
+                        RecentChatsAdminDeletedEvent.From<RecentChatsAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsChanged),
-                RecentChatsChangedAdminEvent.From<RecentChatsChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(RecentChatsAdminSubscription.OnRecentChatsAdminChanged),
+                RecentChatsAdminChangedEvent.From<RecentChatsAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 

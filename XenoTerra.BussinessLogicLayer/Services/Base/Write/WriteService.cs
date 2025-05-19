@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using XenoTerra.BussinessLogicLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Base.Write
 {

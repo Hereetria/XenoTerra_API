@@ -3,7 +3,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 using XenoTerra.WebAPI.Services.Common.DataLoading;
 using XenoTerra.WebAPI.Services.Common.EntityMapping;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserSettingResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.UserSettingResolvers
 {
     public class UserSettingResolver : EntityResolver<UserSetting, Guid>, IUserSettingResolver
     {

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepositories
 {
     public class SavedPostWriteRepository(AppDbContext context) : WriteRepository<SavedPost, Guid>(context), ISavedPostWriteRepository
     {

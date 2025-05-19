@@ -1,27 +1,26 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.RoleService;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
-using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.RoleMutationServices;
-using Microsoft.AspNetCore.Identity;
 using FluentValidation;
-using Microsoft.AspNetCore.Http.HttpResults;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Subscriptions.Events;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RoleMutationServices;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class RoleAdminMutation
     {
         public async Task<CreateRoleAdminPayload> CreateRoleAsync(
-            [Service] IRoleMutationService mutationService,
+            [Service] IRoleAdminMutationService mutationService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateRoleAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateRoleAdminInput> inputAdminValidator,
             CreateRoleAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateRoleAdminInput));
@@ -37,9 +36,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations
         }
 
         public async Task<UpdateRoleAdminPayload> UpdateRoleAsync(
-            [Service] IRoleMutationService mutationService,
+            [Service] IRoleAdminMutationService mutationService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateRoleAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateRoleAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateRoleAdminInput? input)
         {
@@ -58,7 +57,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations
         }
 
         public async Task<DeleteRoleAdminPayload> DeleteRoleAsync(
-            [Service] IRoleMutationService mutationService,
+            [Service] IRoleAdminMutationService mutationService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -84,23 +83,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleCreated),
-                        RoleCreatedAdminEvent.From<RoleCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleAdminCreated),
+                        RoleAdminCreatedEvent.From<RoleAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleUpdated),
-                        RoleUpdatedAdminEvent.From<RoleUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleAdminUpdated),
+                        RoleAdminUpdatedEvent.From<RoleAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleDeleted),
-                        RoleDeletedAdminEvent.From<RoleDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleAdminDeleted),
+                        RoleAdminDeletedEvent.From<RoleAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleChanged),
-                RoleChangedAdminEvent.From<RoleChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(RoleAdminSubscription.OnRoleAdminChanged),
+                RoleAdminChangedEvent.From<RoleAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 

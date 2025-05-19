@@ -1,6 +1,6 @@
 ﻿using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Paginations
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Paginations
 {
     public class UserSettingAdminEdge
     {

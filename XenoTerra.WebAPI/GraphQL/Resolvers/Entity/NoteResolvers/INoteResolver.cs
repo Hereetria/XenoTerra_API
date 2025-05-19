@@ -2,7 +2,7 @@
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Base;
 
-namespace XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.NoteResolvers
+namespace XenoTerra.WebAPI.GraphQL.Resolvers.Entity.NoteResolvers
 {
     public interface INoteResolver : IEntityResolver<Note, Guid>
     {

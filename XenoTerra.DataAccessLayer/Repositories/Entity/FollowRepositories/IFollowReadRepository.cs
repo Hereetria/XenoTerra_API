@@ -7,7 +7,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepositories
 {
     public interface IFollowReadRepository : IReadRepository<Follow, Guid>
     {

@@ -3,10 +3,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Queries.Filters
 {
-    public class StoryHighlightAdminFilterType : FilterAdminInputType<StoryHighlight>
+    public class StoryHighlightAdminFilterType : FilterInputType<StoryHighlight>
     {
         protected override void Configure(IFilterInputTypeDescriptor<StoryHighlight> descriptor)
         {
+        descriptor.Name("StoryHighlightAdminFilterInput");
         }
     }
 }

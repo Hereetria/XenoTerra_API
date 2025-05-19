@@ -5,9 +5,8 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.WebAPI.Helpers;
 
-namespace XenoTerra.DataAccessLayer.Utils
+namespace XenoTerra.DataAccessLayer.Helpers
 {
     public static class CrossTableNameProvider
     {
@@ -39,9 +38,9 @@ namespace XenoTerra.DataAccessLayer.Utils
 
                 bool hasTargetEntity = joinProps.Any(p =>
                     string.Equals(p.PropertyType.Name, targetEntityName, StringComparison.InvariantCultureIgnoreCase) ||
-                    (p.PropertyType.IsGenericType &&
+                    p.PropertyType.IsGenericType &&
                      p.PropertyType.GetGenericArguments().Any(t =>
-                         string.Equals(t.Name, targetEntityName, StringComparison.InvariantCultureIgnoreCase))));
+                         string.Equals(t.Name, targetEntityName, StringComparison.InvariantCultureIgnoreCase)));
 
                 if (hasTargetEntity)
                 {

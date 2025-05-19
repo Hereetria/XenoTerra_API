@@ -1,4 +1,4 @@
-﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Mutations.Payloads.Types
+﻿namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Payloads.Types
 {
     public class CreateViewStoryAdminPayloadType : ObjectType<CreateViewStoryAdminPayload>
     {

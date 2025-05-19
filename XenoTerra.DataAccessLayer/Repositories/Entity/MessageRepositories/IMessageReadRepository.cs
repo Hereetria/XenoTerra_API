@@ -7,7 +7,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.MessageRepositories
 {
     public interface IMessageReadRepository : IReadRepository<Message, Guid>
     {

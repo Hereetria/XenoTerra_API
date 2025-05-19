@@ -9,9 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.WebAPI.Helpers;
 
-namespace XenoTerra.DataAccessLayer.Utils
+namespace XenoTerra.DataAccessLayer.Helpers
 {
     public static class TypeProviders
     {
@@ -54,7 +53,7 @@ namespace XenoTerra.DataAccessLayer.Utils
                     .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.OrdinalIgnoreCase));
 
             if (entityType == null)
-                throw new Exception($"Entity type '{(crossTableName ?? typeof(TEntity).Name)}' could not be found in DbContext.");
+                throw new Exception($"Entity type '{crossTableName ?? typeof(TEntity).Name}' could not be found in DbContext.");
 
             var navigation = entityType.GetNavigations()
                 .FirstOrDefault(n => n.Name.Equals(navigationPropertyName, StringComparison.OrdinalIgnoreCase));

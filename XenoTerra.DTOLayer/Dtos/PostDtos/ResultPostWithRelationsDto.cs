@@ -15,10 +15,10 @@ namespace XenoTerra.DTOLayer.Dtos.PostDtos
         public bool IsVideo { get; init; }
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserDto? User { get; init; }
+        public ResultUserPrivateDto? User { get; init; }
         public ICollection<ResultLikeDto> Likes { get; init; } = [];
         public ICollection<ResultCommentDto> Comments { get; init; } = [];
         public ICollection<ResultSavedPostDto> SavedPosts { get; init; } = [];
-        public ICollection<ResultUserDto> TaggedUsers { get; init; } = [];
+        public ICollection<ResultUserPrivateDto> TaggedUsers { get; init; } = [];
     }
 }

@@ -7,7 +7,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostServices
 {
     public interface ISavedPostReadService : IReadService<SavedPost, Guid> { }
 

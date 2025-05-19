@@ -11,6 +11,6 @@ namespace XenoTerra.DTOLayer.Dtos.NotificationDtos
         public Guid Message { get; init; }
         public string Image { get; init; } = string.Empty;
         public DateTime CreatedAt { get; init; }
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
     }
 }

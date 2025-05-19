@@ -1,6 +1,6 @@
 ﻿using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Queries.Paginations
+namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations
 {
     public class ViewStoryAdminEdge
     {

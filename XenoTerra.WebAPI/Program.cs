@@ -1,4 +1,3 @@
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,7 +1,7 @@
 ﻿using HotChocolate.Types.Pagination;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Paginations
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Paginations
 {
     public class UserSettingAdminConnection(
         IReadOnlyList<Edge<ResultUserSettingWithRelationsDto>> edges,

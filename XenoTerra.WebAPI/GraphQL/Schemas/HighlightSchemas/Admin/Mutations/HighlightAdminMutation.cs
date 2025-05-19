@@ -1,27 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightService;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
-using XenoTerra.WebAPI.Services.Mutations.Entity.HighlightMutationServices;
 using FluentValidation;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Payloads;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.HighlightMutationServices;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
+using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class HighlightAdminMutation
     {
         public async Task<CreateHighlightAdminPayload> CreateHighlightAsync(
-            [Service] IHighlightMutationService mutationService,
+            [Service] IHighlightAdminMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateHighlightAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateHighlightAdminInput> inputAdminValidator,
             CreateHighlightAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateHighlightAdminInput));
@@ -37,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
         }
 
         public async Task<UpdateHighlightAdminPayload> UpdateHighlightAsync(
-            [Service] IHighlightMutationService mutationService,
+            [Service] IHighlightAdminMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateHighlightAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateHighlightAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateHighlightAdminInput? input)
         {
@@ -59,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
         }
 
         public async Task<DeleteHighlightAdminPayload> DeleteHighlightAsync(
-            [Service] IHighlightMutationService mutationService,
+            [Service] IHighlightAdminMutationService mutationService,
             [Service] IHighlightWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -86,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightCreated),
-                        HighlightCreatedAdminEvent.From<HighlightCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightAdminCreated),
+                        HighlightAdminCreatedEvent.From<HighlightAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightUpdated),
-                        HighlightUpdatedAdminEvent.From<HighlightUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightAdminUpdated),
+                        HighlightAdminUpdatedEvent.From<HighlightAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightDeleted),
-                        HighlightDeletedAdminEvent.From<HighlightDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightAdminDeleted),
+                        HighlightAdminDeletedEvent.From<HighlightAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightChanged),
-                HighlightChangedAdminEvent.From<HighlightChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(HighlightAdminSubscription.OnHighlightAdminChanged),
+                HighlightAdminChangedEvent.From<HighlightAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

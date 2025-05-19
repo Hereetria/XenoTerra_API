@@ -1,3 +1,5 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
@@ -8,19 +10,20 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations.
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.SearchHistoryUserMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryUserMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class SearchHistoryUserAdminMutation
     {
         public async Task<CreateSearchHistoryUserAdminPayload> CreateSearchHistoryUserAsync(
-            [Service] ISearchHistoryUserMutationService mutationService,
+            [Service] ISearchHistoryUserAdminMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateSearchHistoryUserAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateSearchHistoryUserAdminInput> inputAdminValidator,
             CreateSearchHistoryUserAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateSearchHistoryUserAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
         }
 
         public async Task<UpdateSearchHistoryUserAdminPayload> UpdateSearchHistoryUserAsync(
-            [Service] ISearchHistoryUserMutationService mutationService,
+            [Service] ISearchHistoryUserAdminMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateSearchHistoryUserAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateSearchHistoryUserAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateSearchHistoryUserAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
         }
 
         public async Task<DeleteSearchHistoryUserAdminPayload> DeleteSearchHistoryUserAsync(
-            [Service] ISearchHistoryUserMutationService mutationService,
+            [Service] ISearchHistoryUserAdminMutationService mutationService,
             [Service] ISearchHistoryUserWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserCreated),
-                        SearchHistoryUserCreatedAdminEvent.From<SearchHistoryUserCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserAdminCreated),
+                        SearchHistoryUserAdminCreatedEvent.From<SearchHistoryUserAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserUpdated),
-                        SearchHistoryUserUpdatedAdminEvent.From<SearchHistoryUserUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserAdminUpdated),
+                        SearchHistoryUserAdminUpdatedEvent.From<SearchHistoryUserAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserDeleted),
-                        SearchHistoryUserDeletedAdminEvent.From<SearchHistoryUserDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserAdminDeleted),
+                        SearchHistoryUserAdminDeletedEvent.From<SearchHistoryUserAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserChanged),
-                SearchHistoryUserChangedAdminEvent.From<SearchHistoryUserChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(SearchHistoryUserAdminSubscription.OnSearchHistoryUserAdminChanged),
+                SearchHistoryUserAdminChangedEvent.From<SearchHistoryUserAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

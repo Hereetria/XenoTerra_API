@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.ReactionRepositories
 {
     public class ReactionReadRepository(AppDbContext context) : ReadRepository<Reaction, Guid>(context), IReactionReadRepository
     {

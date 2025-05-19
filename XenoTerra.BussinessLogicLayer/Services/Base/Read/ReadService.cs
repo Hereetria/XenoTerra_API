@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using XenoTerra.BussinessLogicLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
-using XenoTerra.DataAccessLayer.Utils;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Base.Read
 {

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepositories
 {
     public class BlockUserWriteRepository(AppDbContext context) : WriteRepository<BlockUser, Guid>(context), IBlockUserWriteRepository
     {

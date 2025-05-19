@@ -10,7 +10,7 @@ namespace XenoTerra.DTOLayer.Dtos.FollowDtos
         public Guid FollowerId { get; init; }
         public Guid FollowingId { get; init; }
         public DateTime FollowedAt { get; init; }
-        public ResultUserDto Follower { get; init; } = new();
-        public ResultUserDto Following { get; init; } = new();
+        public ResultUserPrivateDto Follower { get; init; } = new();
+        public ResultUserPrivateDto Following { get; init; } = new();
     }
 }

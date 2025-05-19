@@ -20,7 +20,6 @@ using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
 namespace XenoTerra.DTOLayer.Mappings
@@ -178,7 +177,7 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<Story, UpdateStoryDto>().ReverseMap();
 
             // User Mappings
-            CreateMap<User, ResultUserWithRelationsDto>()
+            CreateMap<User, ResultUserWithRelationsPrivateDto>()
                 .ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts))
                 .ForMember(dest => dest.Followers, opt => opt.MapFrom(src => src.Followers))
                 .ForMember(dest => dest.Followings, opt => opt.MapFrom(src => src.Followings))
@@ -199,7 +198,7 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.Reactions, opt => opt.MapFrom(src => src.Reactions))
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
-            CreateMap<User, ResultUserDto>().ReverseMap();
+            CreateMap<User, ResultUserPrivateDto>().ReverseMap();
             CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
 

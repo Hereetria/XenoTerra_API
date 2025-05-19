@@ -1,12 +1,13 @@
 ﻿using HotChocolate.Data.Sorting;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Sorts
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Sorts
 {
-    public class UserSettingAdminSortType : SortAdminInputType<UserSetting>
+    public class UserSettingAdminSortType : SortInputType<UserSetting>
     {
         protected override void Configure(ISortInputTypeDescriptor<UserSetting> descriptor)
         {
+        descriptor.Name("UserSettingAdminSortInput");
         }
     }
 }

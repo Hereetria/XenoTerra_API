@@ -1,7 +1,7 @@
 ﻿using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.UserSettingRepositories
 {
     public interface IUserSettingReadRepository : IReadRepository<UserSetting, Guid>
     {

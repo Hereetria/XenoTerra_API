@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.HighlightRepositories
 {
     public interface IHighlightReadRepository : IReadRepository<Highlight, Guid>
     {

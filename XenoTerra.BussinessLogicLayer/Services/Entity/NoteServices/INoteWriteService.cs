@@ -5,12 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.BussinessLogicLayer.Services.Entity.RoleService;
-using XenoTerra.DataAccessLayer.Utils;
-using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.NoteDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices
 {
     public interface INoteWriteService : IWriteService<Note, CreateNoteDto, UpdateNoteDto, Guid> { }
 

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.NotificationRepositories
 {
     public class NotificationWriteRepository(AppDbContext context) : WriteRepository<Notification, Guid>(context), INotificationWriteRepository
     {

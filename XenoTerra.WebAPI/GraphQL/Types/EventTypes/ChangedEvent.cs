@@ -1,6 +1,4 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Subscriptions.Events;
-
-namespace XenoTerra.WebAPI.GraphQL.SharedTypes.Events
+﻿namespace XenoTerra.WebAPI.GraphQL.Types.EventTypes
 {
 
     public abstract record ChangedEvent<TResult> : BaseEvent<TResult> where TResult : class

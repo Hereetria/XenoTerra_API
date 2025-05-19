@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DataAccessLayer.Utils
+namespace XenoTerra.DataAccessLayer.Helpers
 {
     public static class SimpleProjectonExpressionProvider
     {

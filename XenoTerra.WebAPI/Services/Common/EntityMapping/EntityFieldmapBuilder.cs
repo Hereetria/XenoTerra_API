@@ -1,8 +1,8 @@
 ﻿using HotChocolate.Resolvers;
 using System.Reflection;
-using XenoTerra.DataAccessLayer.Utils;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.DataAccessLayer.Helpers;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {

@@ -1,24 +1,28 @@
-﻿using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions.Events;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+﻿using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
+using XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions.Events;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class LikeAdminSubscription
     {
         [Subscribe]
-        public LikeCreatedAdminEvent OnLikeCreated(
-            [EventMessage] LikeCreatedAdminEvent evt) => evt;
+        public LikeAdminCreatedEvent OnLikeAdminCreated(
+            [EventMessage] LikeAdminCreatedEvent evt) => evt;
 
         [Subscribe]
-        public LikeUpdatedAdminEvent OnLikeUpdated(
-            [EventMessage] LikeUpdatedAdminEvent evt) => evt;
+        public LikeAdminUpdatedEvent OnLikeAdminUpdated(
+            [EventMessage] LikeAdminUpdatedEvent evt) => evt;
 
         [Subscribe]
-        public LikeDeletedAdminEvent OnLikeDeleted(
-            [EventMessage] LikeDeletedAdminEvent evt) => evt;
+        public LikeAdminDeletedEvent OnLikeAdminDeleted(
+            [EventMessage] LikeAdminDeletedEvent evt) => evt;
 
         [Subscribe]
-        public LikeChangedAdminEvent OnLikeChanged(
-            [EventMessage] LikeChangedAdminEvent evt) => evt;
+        public LikeAdminChangedEvent OnLikeAdminChanged(
+            [EventMessage] LikeAdminChangedEvent evt) => evt;
     }
 }

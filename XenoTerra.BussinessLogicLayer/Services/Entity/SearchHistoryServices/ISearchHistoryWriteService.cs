@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryServices
 {
     public interface ISearchHistoryWriteService : IWriteService<SearchHistory, CreateSearchHistoryDto, UpdateSearchHistoryDto, Guid> { }
 

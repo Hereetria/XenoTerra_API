@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.FollowRepositories
 {
 
     public class FollowWriteRepository(AppDbContext context) : WriteRepository<Follow, Guid>(context), IFollowWriteRepository

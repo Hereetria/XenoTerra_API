@@ -1,26 +1,29 @@
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 ﻿using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.MessageService;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MessageServices;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Subscriptions.Events;
-using XenoTerra.WebAPI.GraphQL.SharedTypes.Events;
+using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.MessageMutationServices;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MessageMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class MessageAdminMutation
     {
         public async Task<CreateMessageAdminPayload> CreateMessageAsync(
-            [Service] IMessageMutationService mutationService,
+            [Service] IMessageAdminMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<CreateMessageAdminInput> inputAdminValidator,
+            [Service] IValidator<CreateMessageAdminInput> inputAdminValidator,
             CreateMessageAdminInput? input)
         {
             InputGuard.EnsureNotNull(input, nameof(CreateMessageAdminInput));
@@ -36,10 +39,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
         }
 
         public async Task<UpdateMessageAdminPayload> UpdateMessageAsync(
-            [Service] IMessageMutationService mutationService,
+            [Service] IMessageAdminMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
-            [Service] IAdminValidator<UpdateMessageAdminInput> inputAdminValidator,
+            [Service] IValidator<UpdateMessageAdminInput> inputAdminValidator,
             IResolverContext context,
             UpdateMessageAdminInput? input)
         {
@@ -58,7 +61,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
         }
 
         public async Task<DeleteMessageAdminPayload> DeleteMessageAsync(
-            [Service] IMessageMutationService mutationService,
+            [Service] IMessageAdminMutationService mutationService,
             [Service] IMessageWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
@@ -85,23 +88,23 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
             switch (eventType)
             {
                 case ChangedEventType.Created:
-                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageCreated),
-                        MessageCreatedAdminEvent.From<MessageCreatedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageAdminCreated),
+                        MessageAdminCreatedEvent.From<MessageAdminCreatedEvent>(result, userId, now));
                     break;
 
                 case ChangedEventType.Updated:
-                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageUpdated),
-                        MessageUpdatedAdminEvent.From<MessageUpdatedAdminEvent>(result, userId, now, modifiedFields ?? []));
+                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageAdminUpdated),
+                        MessageAdminUpdatedEvent.From<MessageAdminUpdatedEvent>(result, userId, now, modifiedFields ?? []));
                     break;
 
                 case ChangedEventType.Deleted:
-                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageDeleted),
-                        MessageDeletedAdminEvent.From<MessageDeletedAdminEvent>(result, userId, now));
+                    await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageAdminDeleted),
+                        MessageAdminDeletedEvent.From<MessageAdminDeletedEvent>(result, userId, now));
                     break;
             }
 
-            await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageChanged),
-                MessageChangedAdminEvent.From<MessageChangedAdminEvent>(eventType, result, userId, now, modifiedFields));
+            await sender.SendAsync(nameof(MessageAdminSubscription.OnMessageAdminChanged),
+                MessageAdminChangedEvent.From<MessageAdminChangedEvent>(eventType, result, userId, now, modifiedFields));
         }
     }
 }

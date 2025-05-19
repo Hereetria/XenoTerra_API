@@ -12,7 +12,7 @@ namespace XenoTerra.DTOLayer.Dtos.CommentDtos
         public Guid PostId { get; init; }
         public Guid UserId { get; init; }
         public DateTime CommentedAt { get; init; }
-        public ResultUserDto User { get; init; } = new();
+        public ResultUserPrivateDto User { get; init; } = new();
         public ResultPostDto Post { get; init; } = new();
     }
 }

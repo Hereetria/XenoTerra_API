@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepositories
 {
     public class ViewStoryWriteRepository(AppDbContext context) : WriteRepository<ViewStory, Guid>(context), IViewStoryWriteRepository
     {

@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 
-namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleService
+namespace XenoTerra.BussinessLogicLayer.Services.Entity.RoleServices
 {
     public interface IRoleWriteService
     {

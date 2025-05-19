@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.CommentRepositories
 {
     public class CommentWriteRepository(AppDbContext context) : WriteRepository<Comment, Guid>(context), ICommentWriteRepository
     {

@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.LikeRepositories
 {
     public class LikeWriteRepository(AppDbContext context) : WriteRepository<Like, Guid>(context), ILikeWriteRepository
     {

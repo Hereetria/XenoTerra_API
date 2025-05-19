@@ -1,18 +1,21 @@
-﻿using AutoMapper;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
+using AutoMapper;
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
-using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Paginations;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Sorts;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries.Filters;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Schemas.Resolvers.EntityResolvers.UserSettingResolvers;
 using XenoTerra.WebAPI.Services.Queries.Entity.UserSettingQueryServices;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Sorts;
+using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.UserSettingResolvers;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Paginations;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries
+namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries
 {
+    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserSettingAdminQuery(IMapper mapper, IQueryResolverHelper<UserSetting, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -29,7 +32,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<UserSetting, ResultUserSettingWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<UserSetting, ResultUserSettingWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -53,7 +56,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapAdminConnection<UserSetting, ResultUserSettingWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<UserSetting, ResultUserSettingWithRelationsDto>(
                 entityAdminConnection,
                 _mapper
             );
@@ -72,7 +75,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return _mapper.Map<ResultUserSettingWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultUserSettingWithRelationsDto>(entity);
         }
     }
 }

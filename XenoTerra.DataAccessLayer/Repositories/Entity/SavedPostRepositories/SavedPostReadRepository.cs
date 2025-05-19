@@ -8,7 +8,7 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepository
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.SavedPostRepositories
 {
     public class SavedPostReadRepository(AppDbContext context) : ReadRepository<SavedPost, Guid>(context), ISavedPostReadRepository
     {
