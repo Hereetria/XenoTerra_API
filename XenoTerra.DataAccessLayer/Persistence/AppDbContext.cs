@@ -26,6 +26,12 @@ namespace XenoTerra.DataAccessLayer.Persistence
                 .WithMany(h => h.StoryHighlights)
                 .HasForeignKey(sh => sh.HighlightId);
 
+            modelBuilder.Entity<Highlight>()
+                .HasOne(h => h.User)
+                .WithMany(u => u.Highlights)
+                .HasForeignKey(h => h.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<BlockUser>()
                 .HasOne(b => b.BlockingUser)
                 .WithMany(u => u.BlockedUsers)
@@ -54,6 +60,18 @@ namespace XenoTerra.DataAccessLayer.Persistence
                 .HasOne(m => m.Sender)
                 .WithMany(u => u.SentMessages)
                 .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Media>()
+                .HasOne(m => m.Sender)
+                .WithMany(u => u.SentMedias)
+                .HasForeignKey(m => m.SenderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Media>()
+                .HasOne(m => m.Receiver)
+                .WithMany(u => u.ReceivedMedias)
+                .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Message>()

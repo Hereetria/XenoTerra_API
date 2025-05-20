@@ -14,7 +14,7 @@ using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RoleSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    //[Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class RoleAdminMutation
     {
         public async Task<CreateRoleAdminPayload> CreateRoleAsync(

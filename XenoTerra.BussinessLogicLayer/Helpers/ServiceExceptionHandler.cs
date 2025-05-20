@@ -49,6 +49,4 @@ namespace XenoTerra.BussinessLogicLayer.Helpers
             }
         }
     }
-
-
 }

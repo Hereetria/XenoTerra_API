@@ -1,5 +1,3 @@
-using HotChocolate.Authorization;
-using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
 using XenoTerra.DTOLayer.Dtos.UserDtos;
@@ -15,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    //[Authorize(Roles = new[] { nameof(Roles.Admin) })]
     public class UserAdminQuery(IMapper mapper, IQueryResolverHelper<User, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

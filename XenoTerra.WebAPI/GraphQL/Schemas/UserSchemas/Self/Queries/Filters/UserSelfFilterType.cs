@@ -3,10 +3,11 @@ using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries.Filters
 {
-    public class UserPrivateSelfFilterType : UserCommonSelfFilterType
+    public class UserSelfFilterType : FilterInputType<User>
     {
         protected override void Configure(IFilterInputTypeDescriptor<User> descriptor)
         {
+            descriptor.Name("UserSelfFilterInput");
         }
     }
 }

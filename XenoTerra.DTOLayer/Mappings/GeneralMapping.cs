@@ -75,7 +75,6 @@ namespace XenoTerra.DTOLayer.Mappings
 
             // Media Mappings
             CreateMap<Media, ResultMediaWithRelationsDto>()
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
             CreateMap<Media, ResultMediaDto>().ReverseMap();
             CreateMap<Media, CreateMediaDto>().ReverseMap();
@@ -122,7 +121,6 @@ namespace XenoTerra.DTOLayer.Mappings
             // Reaction Mappings
             CreateMap<Reaction, ResultReactionWithRelationsDto>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
             CreateMap<Reaction, ResultReactionDto>().ReverseMap();
             CreateMap<Reaction, CreateReactionDto>().ReverseMap();
@@ -186,16 +184,13 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.SentMessages, opt => opt.MapFrom(src => src.SentMessages))
                 .ForMember(dest => dest.ReceivedMessages, opt => opt.MapFrom(src => src.ReceivedMessages))
                 .ForMember(dest => dest.Notifications, opt => opt.MapFrom(src => src.Notifications))
-                .ForMember(dest => dest.Medias, opt => opt.MapFrom(src => src.Medias))
                 .ForMember(dest => dest.Stories, opt => opt.MapFrom(src => src.Stories))
                 .ForMember(dest => dest.SavedPosts, opt => opt.MapFrom(src => src.SavedPosts))
                 .ForMember(dest => dest.ReportComments, opt => opt.MapFrom(src => src.ReportComments))
                 .ForMember(dest => dest.ViewStories, opt => opt.MapFrom(src => src.ViewStories))
-                .ForMember(dest => dest.UserSettings, opt => opt.MapFrom(src => src.UserSettings))
                 .ForMember(dest => dest.SearchedBy, opt => opt.MapFrom(src => src.SearchedBy))
                 .ForMember(dest => dest.RecentChats, opt => opt.MapFrom(src => src.RecentChats))
                 .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
-                .ForMember(dest => dest.Reactions, opt => opt.MapFrom(src => src.Reactions))
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
             CreateMap<User, ResultUserPrivateDto>().ReverseMap();

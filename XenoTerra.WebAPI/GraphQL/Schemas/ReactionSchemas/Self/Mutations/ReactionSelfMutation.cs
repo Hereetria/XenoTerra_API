@@ -82,10 +82,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Mutations
             var reaction = EntityReadHelper.FetchEntityWithSelectedFieldsOrThrow(
                 readService,
                 parsedKey,
-                x => x.UserId
+                x => x.Message.SenderId
             );
 
-            if (reaction.UserId != userId)
+            if (reaction.Message.SenderId != userId)
             {
                 throw GraphQLExceptionFactory.Create(
                     "Access denied.",

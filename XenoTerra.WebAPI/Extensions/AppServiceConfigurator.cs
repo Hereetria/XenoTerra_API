@@ -31,6 +31,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas._RootQueries;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.BlockUserResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
+using Microsoft.AspNetCore.Authentication;
+using XenoTerra.WebAPI.GraphQL.Auth;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -80,44 +82,54 @@ namespace XenoTerra.WebAPI.Extensions
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            var jwtSection = builder.Configuration.GetSection("JwtSettings");
-            var secretKey = jwtSection["SecretKey"]
-                ?? throw new InvalidOperationException("JWT SecretKey is missing in configuration.");
-            var issuer = jwtSection["Issuer"]
-                ?? throw new InvalidOperationException("JWT Issuer is missing.");
-            var audience = jwtSection["Audience"]
-                ?? throw new InvalidOperationException("JWT Audience is missing.");
 
-            if (string.IsNullOrWhiteSpace(secretKey))
-                throw new InvalidOperationException("JWT SecretKey is missing in configuration.");
-
-            var signingKey = secretKey.Length >= 64
-                ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
-                : throw new ArgumentException("The secret key must be at least 64 characters long.", nameof(secretKey));
-
-
-            builder.Services.AddAuthentication(options =>
+            if (builder.Environment.IsDevelopment())
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(opt =>
-            {
-                opt.TokenValidationParameters = new TokenValidationParameters
+                builder.Services.AddAuthentication(options =>
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
+                    options.DefaultAuthenticateScheme = "DevScheme";
+                    options.DefaultChallengeScheme = "DevScheme";
+                })
+                .AddScheme<AuthenticationSchemeOptions, DevAuthenticationHandler>("DevScheme", options => { });
+            }
+            else
+            {
+                var jwtSection = builder.Configuration.GetSection("JwtSettings");
+                var secretKey = jwtSection["SecretKey"]
+                    ?? throw new InvalidOperationException("JWT SecretKey is missing in configuration.");
+                var issuer = jwtSection["Issuer"]
+                    ?? throw new InvalidOperationException("JWT Issuer is missing.");
+                var audience = jwtSection["Audience"]
+                    ?? throw new InvalidOperationException("JWT Audience is missing.");
 
-                    ValidIssuer = issuer,
-                    ValidAudience = audience,
-                    IssuerSigningKey = signingKey,
+                var signingKey = secretKey.Length >= 64
+                    ? new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey))
+                    : throw new ArgumentException("The secret key must be at least 64 characters long.", nameof(secretKey));
 
-                    ClockSkew = TimeSpan.Zero,
-                    RoleClaimType = ClaimTypes.Role
-                };
-            });
+                builder.Services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(opt =>
+                {
+                    opt.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+
+                        ValidIssuer = issuer,
+                        ValidAudience = audience,
+                        IssuerSigningKey = signingKey,
+
+                        ClockSkew = TimeSpan.Zero,
+                        RoleClaimType = ClaimTypes.Role
+                    };
+                });
+            }
+
 
             builder.Services.AddScoped(typeof(IAuthService), typeof(AuthService));
             builder.Services.AddScoped<IValidator<LoginInput>, LoginInputValidator>();

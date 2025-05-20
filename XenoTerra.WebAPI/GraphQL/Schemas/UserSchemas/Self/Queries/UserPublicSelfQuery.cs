@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
         private readonly IQueryResolverHelper<User, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(UserPublicSelfFilterType))]
-        [UseSorting(typeof(UserPublicSelfSortType))]
+        [UseFiltering(typeof(UserSelfFilterType))]
+        [UseSorting(typeof(UserSelfSortType))]
         public async Task<UserPublicSelfConnection> GetAllUsersAsync(
             [Service] IUserQueryService service,
             [Service] IUserResolver resolver,
@@ -50,8 +50,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(UserPublicSelfFilterType))]
-        [UseSorting(typeof(UserPublicSelfSortType))]
+        [UseFiltering(typeof(UserSelfFilterType))]
+        [UseSorting(typeof(UserSelfSortType))]
         public async Task<UserPublicSelfConnection> GetUsersByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IUserQueryService service,

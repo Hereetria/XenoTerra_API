@@ -81,10 +81,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations
             var media = EntityReadHelper.FetchEntityWithSelectedFieldsOrThrow(
                 readService,
                 parsedKey,
-                x => x.UserId
+                x => x.SenderId
             );
 
-            if (media.UserId != userId)
+            if (media.SenderId != userId)
             {
                 throw GraphQLExceptionFactory.Create(
                     "Access denied.",
