@@ -9,6 +9,7 @@ using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Auth.Inputs;
 using XenoTerra.WebAPI.GraphQL.Auth.Payloads;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 using XenoTerra.WebAPI.Helpers;
 
@@ -42,7 +43,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
                 throw GraphQLExceptionFactory.Create($"User creation failed: {errorMessages}");
             }
 
-            await _userManager.AddToRoleAsync(newUser, "Visitor");
+            await _userManager.AddToRoleAsync(newUser, AppRoles.User.ToString());
 
             var resultDto = new ResultUserPrivateDto
             {

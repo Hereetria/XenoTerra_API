@@ -9,6 +9,7 @@ namespace XenoTerra.DTOLayer.Dtos.UserDtos
     public class ResultUserWithRelationsPublicDto
     {
         public Guid Id { get; init; }
+        public string UserName { get; init; } = string.Empty;
         public string FullName { get; init; } = string.Empty;
         public string ProfilePicture { get; init; } = string.Empty;
         public string Bio { get; init; } = string.Empty;

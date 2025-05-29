@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class NoteAdminQuery(IMapper mapper, IQueryResolverHelper<Note, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

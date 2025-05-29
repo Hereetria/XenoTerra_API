@@ -33,6 +33,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using XenoTerra.WebAPI.GraphQL.Auth;
+using XenoTerra.WebAPI.Services.Mutations.Base;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -150,8 +151,13 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped(typeof(IEntityAssignmentService<,,>), typeof(EntityAssignmentService<,,>));
             builder.Services.AddScoped(typeof(IDataLoaderInvoker), typeof(DataLoaderInvoker));
 
-            builder.Services.AddScoped(typeof(IQueryService<,>), typeof(QueryService<,>));
+            builder.Services.AddScoped<IBlockedUserIdProvider, BlockedUserIdProvider>();
+            builder.Services.AddScoped<IFollowedUserIdProvider, FollowedUserIdProvider>();
+            builder.Services.AddScoped<IPublicUserIdProvider, PublicUserIdProvider>();
             builder.Services.AddScoped(typeof(IQueryResolverHelper<,>), typeof(QueryResolverHelper<,>));
+
+            builder.Services.AddScoped(typeof(IQueryService<,>), typeof(QueryService<,>));
+            builder.Services.AddScoped(typeof(IMutationService<,,,,>), typeof(MutationService<,,,,>));
         }
     }
 }

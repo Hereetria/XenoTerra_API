@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class NoteSelfQuery(IMapper mapper, IQueryResolverHelper<Note, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -32,12 +32,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreateNoteAccessFilter(currentUserId, followedUserIds);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Note, ResultNoteWithRelationsDto>(
@@ -60,13 +57,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-
-            var filter = CreateNoteAccessFilter(currentUserId, followedUserIds);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Note, ResultNoteWithRelationsDto>(
@@ -86,28 +79,29 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-
-            var filter = CreateNoteAccessFilter(currentUserId, followedUserIds);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultNoteWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Note, bool>> CreateNoteAccessFilter(
-            Guid currentUserId,
-            IReadOnlyCollection<Guid> followedUserIds)
+        private static async Task<Expression<Func<Note, bool>>> BuildAccessFilterAsync(
+            IHttpContextAccessor httpContextAccessor,
+            IFollowedUserIdProvider followedUserIdProvider)
         {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
+
             var authorizedUserIds = followedUserIds
                 .Append(currentUserId)
                 .Distinct()
                 .ToList();
 
-            return note => authorizedUserIds.Contains(note.UserId);
+            return FilterExpressionHelper.BuildContainsExpression<Note, Guid>(
+                note => note.UserId,
+                authorizedUserIds);
         }
     }
 }

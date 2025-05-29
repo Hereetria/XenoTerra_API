@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.PostMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class PostSelfMutation
     {
         public async Task<CreatePostSelfPayload> CreateMyPostAsync(

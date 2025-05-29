@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.PostMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class PostAdminMutation
     {
         public async Task<CreatePostAdminPayload> CreatePostAsync(

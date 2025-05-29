@@ -17,7 +17,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class LikeSelfQuery(IMapper mapper, IQueryResolverHelper<Like, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -34,13 +34,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var filter = CreateLikeAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetAllQueryable(context).Where(filter);
+            var query = service.GetAllQueryable(context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Like, ResultLikeWithRelationsDto>(
@@ -65,13 +61,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Self.Queries
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var filter = CreateLikeAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Like, ResultLikeWithRelationsDto>(
@@ -93,30 +85,34 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Self.Queries
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var filter = CreateLikeAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultLikeWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Like, bool>> CreateLikeAccessFilter(
-            Guid currentUserId,
-            IReadOnlyCollection<Guid> followedUserIds,
-            IReadOnlyCollection<Guid> publicUserIds)
+        private static async Task<Expression<Func<Like, bool>>> BuildAccessFilterAsync(
+            IHttpContextAccessor httpContextAccessor,
+            IFollowedUserIdProvider followedUserIdProvider,
+            IPublicUserIdProvider publicUserIdProvider)
         {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
+            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
+
             var authorizedUserIds = followedUserIds
                 .Concat(publicUserIds)
                 .Append(currentUserId)
                 .Distinct()
                 .ToList();
 
-            return like => authorizedUserIds.Contains(like.Post.UserId);
+            return FilterExpressionHelper.BuildNestedContainsExpression<Like, Guid>(
+                [
+                    like => like.Post.UserId
+                ],
+                authorizedUserIds);
         }
     }
 }

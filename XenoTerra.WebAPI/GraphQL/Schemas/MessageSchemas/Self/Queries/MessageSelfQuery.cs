@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class MessageSelfQuery(IMapper mapper, IQueryResolverHelper<Message, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -31,11 +31,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreateMessageAccessFilter(currentUserId);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Message, ResultMessageWithRelationsDto>(
@@ -57,12 +55,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateMessageAccessFilter(currentUserId);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Message, ResultMessageWithRelationsDto>(
@@ -81,24 +76,25 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateMessageAccessFilter(currentUserId);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultMessageWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Message, bool>> CreateMessageAccessFilter(Guid currentUserId)
+        private static Expression<Func<Message, bool>> BuildAccessFilter(IHttpContextAccessor httpContextAccessor)
         {
-            var userIds = new[] { currentUserId };
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
 
-            return message =>
-                userIds.Contains(message.SenderId) ||
-                userIds.Contains(message.ReceiverId);
+            return FilterExpressionHelper.BuildMultiEqualsOrExpression<Message, Guid>(
+                [
+                    m => m.SenderId,
+                    m => m.ReceiverId
+                ],
+                currentUserId);
+
         }
     }
 }

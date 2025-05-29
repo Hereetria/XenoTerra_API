@@ -52,7 +52,6 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             foreach (var entity in entityList)
             {
                 var fkProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, navProperty.Name);
-                //var fkProperty = typeof(TEntity).GetProperty(navProperty.Name + "Id", BindingFlags.Public | BindingFlags.Instance);
 
                 if (fkProperty == null || fkProperty.PropertyType != typeof(TRelatedKey))
                     continue;
@@ -91,7 +90,11 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 return;
 
             var singularNavPropertyName = WordInflector.ConvertToSingular(navProperty.Name);
-            var fkPropName = TypeProviders.GetForeignKeyProperty<TRelatedEntity>(dbContext, singularNavPropertyName)?.Name;
+
+            var navigationName = typeof(TEntity).Name;
+
+            var fkPropName = TypeProviders.GetForeignKeyProperty<TRelatedEntity>(dbContext, navigationName)?.Name;
+
             if (fkPropName == null)
                 return;
 

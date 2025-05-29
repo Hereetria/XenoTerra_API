@@ -17,7 +17,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class UserAdminMutation
     {
         //public async Task<CreateUserAdminPayload> CreateUserAsync(

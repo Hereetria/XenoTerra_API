@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class SearchHistorySelfQuery(IMapper mapper, IQueryResolverHelper<SearchHistory, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -31,11 +31,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = CreateSearchHistoryAccessFilter(httpContextAccessor);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreateSearchHistoryAccessFilter(currentUserId);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
@@ -57,12 +55,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = CreateSearchHistoryAccessFilter(httpContextAccessor);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateSearchHistoryAccessFilter(currentUserId);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
@@ -81,18 +76,18 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = CreateSearchHistoryAccessFilter(httpContextAccessor);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateSearchHistoryAccessFilter(currentUserId);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultSearchHistoryWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<SearchHistory, bool>> CreateSearchHistoryAccessFilter(Guid currentUserId) =>
-            history => history.UserId == currentUserId;
+        private static Expression<Func<SearchHistory, bool>> CreateSearchHistoryAccessFilter(IHttpContextAccessor httpContextAccessor)
+        {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            return FilterExpressionHelper.BuildEqualsExpression<SearchHistory, Guid>(x => x.UserId, currentUserId);
+        }
     }
 }

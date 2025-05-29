@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.LikeMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class LikeSelfMutation
     {
         public async Task<CreateLikeSelfPayload> CreateMyLikeAsync(

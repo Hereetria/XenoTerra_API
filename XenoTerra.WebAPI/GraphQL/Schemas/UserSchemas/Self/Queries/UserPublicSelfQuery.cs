@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class UserPublicSelfQuery(IMapper mapper, IQueryResolverHelper<User, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -32,12 +32,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
-
-            var filter = CreateUserPublicAccessFilter(currentUserId, blockedUserIds);
-
-            var query = service.GetAllQueryable(context).Where(filter);
+            var filter = CreateUserPublicAccessFilter(httpContextAccessor, blockedUserIdProvider);
+            var query = service.GetAllQueryable(context, filter);
 
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
@@ -61,12 +57,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
-
-            var filter = CreateUserPublicAccessFilter(currentUserId, blockedUserIds);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
+            var filter = CreateUserPublicAccessFilter(httpContextAccessor, blockedUserIdProvider);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
@@ -87,12 +79,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
-
-            var filter = CreateUserPublicAccessFilter(currentUserId, blockedUserIds);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
+            var filter = CreateUserPublicAccessFilter(httpContextAccessor, blockedUserIdProvider);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
@@ -100,10 +88,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Queries
         }
 
         private static Expression<Func<User, bool>> CreateUserPublicAccessFilter(
-            Guid currentUserId,
-            IReadOnlyCollection<Guid> blockedUserIds) =>
-                user =>
-                    user.Id != currentUserId &&
-                    !blockedUserIds.Contains(user.Id);
+            IHttpContextAccessor httpContextAccessor,
+            IBlockedUserIdProvider blockedUserIdProvider)
+        {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var blockedUserIds = blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId).GetAwaiter().GetResult();
+
+            var notSelf = FilterExpressionHelper.BuildNotEqualsExpression<User, Guid>(u => u.Id, currentUserId);
+            var notBlocked = FilterExpressionHelper.BuildNotContainsExpression<User, Guid>(u => u.Id, blockedUserIds);
+
+            return notSelf.And(notBlocked);
+        }
     }
 }

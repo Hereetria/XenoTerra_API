@@ -10,10 +10,12 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.UserQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using HotChocolate.Authorization;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Queries
 {
-    //[Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class UserAdminQuery(IMapper mapper, IQueryResolverHelper<User, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

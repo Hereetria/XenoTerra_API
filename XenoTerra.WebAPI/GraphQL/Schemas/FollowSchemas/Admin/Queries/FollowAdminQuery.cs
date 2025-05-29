@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class FollowAdminQuery(IMapper mapper, IQueryResolverHelper<Follow, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

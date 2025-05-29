@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.StoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class StorySelfMutation
     {
         public async Task<CreateStorySelfPayload> CreateMyStoryAsync(

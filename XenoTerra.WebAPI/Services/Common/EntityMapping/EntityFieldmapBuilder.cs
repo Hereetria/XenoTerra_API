@@ -3,6 +3,7 @@ using System.Reflection;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Helpers;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {
@@ -81,58 +82,54 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
             Dictionary<Type, (HashSet<TKey>, HashSet<string>)> entityMap,
             IResolverContext context)
         {
-            var entityType = dbContext.Model.FindEntityType(typeof(TEntity))!;
+            var entityType = dbContext.Model.FindEntityType(typeof(TEntity))
+                ?? throw new Exception($"Entity type '{typeof(TEntity).Name}' not found in DbContext.");
+
             var pkProp = TypeProviders.GetPrimaryKeyProperty<TEntity>(dbContext);
 
             var primaryKeys = entityList
                 .Select(e => pkProp.GetValue(e))
-                .Where(x => x is TKey)
-                .Cast<TKey>()
+                .OfType<TKey>()
                 .ToHashSet();
 
-            var navProperty = typeof(TEntity)
-                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .FirstOrDefault(p => string.Equals(p.Name, field, StringComparison.InvariantCultureIgnoreCase))
-                ?? throw new Exception($"Property '{field}' not found on entity '{typeof(TEntity).Name}'");
+            var navProperty = typeof(TEntity).GetProperty(field, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)
+                ?? throw new Exception($"Property '{field}' not found on entity '{typeof(TEntity).Name}'.");
 
             var navType = navProperty.PropertyType;
-            var relatedType = navType.IsGenericType && navType != typeof(string)
+
+            var relatedType = (navType.IsGenericType && navType != typeof(string))
                 ? navType.GetGenericArguments().First()
                 : navType;
+
+            var navigationName = NavigationPropertyNameProvider.GetNavigationPropertyName(typeof(TEntity), field);
 
             var getFkMethod = typeof(TypeProviders)
                 .GetMethods(BindingFlags.Public | BindingFlags.Static)
                 .First(m => m.Name == nameof(TypeProviders.GetForeignKeyProperty) && m.IsGenericMethod);
 
-            var genericFkMethod = getFkMethod.MakeGenericMethod(relatedType);
+            var genericFkMethod = getFkMethod.MakeGenericMethod(entityType.ClrType);
 
-            var singularField = WordInflector.ConvertToSingular(field);
 
-            var fkProp = genericFkMethod.Invoke(null, [dbContext, singularField, null]) as PropertyInfo
+            var fkProp = genericFkMethod.Invoke(null, new object[] { dbContext, navigationName, null }) as PropertyInfo
                 ?? throw new InvalidOperationException($"Foreign key property not found on related entity '{relatedType.Name}'.");
 
-            var method = typeof(TypeProviders)
-                .GetMethod(nameof(TypeProviders.GetRelatedPrimaryKeysByForeignKeyMatch))!
-                .MakeGenericMethod(relatedType, typeof(TKey));
+            var getRelatedKeysMethod = typeof(TypeProviders)
+                .GetMethod(nameof(TypeProviders.GetRelatedPrimaryKeysByForeignKeyMatch))
+                ?.MakeGenericMethod(relatedType, typeof(TKey))
+                ?? throw new Exception("Method GetRelatedPrimaryKeysByForeignKeyMatch not found.");
 
             if (!_entityKeyMap.TryGetValue(relatedType, out var relatedIds))
             {
-                var result = method.Invoke(
-                    null,
-                    [dbContext, fkProp, primaryKeys.ToList()]
-                ) as List<TKey>;
+                var result = getRelatedKeysMethod.Invoke(null, new object[] { dbContext, fkProp, primaryKeys.ToList() }) as List<TKey>;
 
-                if (result is not List<TKey> resolved)
-                {
-                    throw new InvalidOperationException("Failed to invoke method or unexpected return type.");
-                }
+                if (result == null)
+                    throw new InvalidOperationException("Failed to get related primary keys.");
 
-                relatedIds = resolved;
+                relatedIds = result;
                 _entityKeyMap[relatedType] = relatedIds;
             }
 
             var selectedFieldsRaw = GraphQLFieldProvider.GetNestedSelectedFields(context, field);
-
             var selectedFields = selectedFieldsRaw != null
                 ? new HashSet<string>(selectedFieldsRaw, StringComparer.InvariantCultureIgnoreCase)
                 : new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);

@@ -15,13 +15,12 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class BlockUserAdminQuery(IMapper mapper, IQueryResolverHelper<BlockUser, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
         private readonly IQueryResolverHelper<BlockUser, Guid> _queryResolver = queryResolver;
 
-        [Authorize(Roles = new[] { "Visitor" })]
         [UseCustomPaging]
         [UseFiltering(typeof(BlockUserAdminFilterType))]
         [UseSorting(typeof(BlockUserAdminSortType))]
@@ -41,7 +40,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Queries
             return GraphQLConnectionFactory.Create<BlockUserAdminConnection, ResultBlockUserWithRelationsDto>(connection);
         }
 
-        [Authorize(Roles = new[] { "Visitor" })]
         [UseCustomPaging]
         [UseFiltering(typeof(BlockUserAdminFilterType))]
         [UseSorting(typeof(BlockUserAdminSortType))]
@@ -64,7 +62,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Queries
             return GraphQLConnectionFactory.Create<BlockUserAdminConnection, ResultBlockUserWithRelationsDto>(connection);
         }
 
-        [Authorize(Roles = new[] { "Visitor" })]
         public async Task<ResultBlockUserWithRelationsDto?> GetBlockUserByIdAsync(
             string? key,
             [Service] IBlockUserQueryService service,

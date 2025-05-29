@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ViewStoryMutationServices
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class ViewStoryAdminMutation
     {
         public async Task<CreateViewStoryAdminPayload> CreateViewStoryAsync(

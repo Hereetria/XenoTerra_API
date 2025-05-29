@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Subscriptions.Events;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class MessageSelfSubscription
     {
         [Subscribe]

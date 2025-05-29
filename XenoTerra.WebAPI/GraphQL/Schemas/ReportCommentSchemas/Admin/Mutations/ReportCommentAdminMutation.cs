@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReportCommentMutationServ
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class ReportCommentAdminMutation
     {
         public async Task<CreateReportCommentAdminPayload> CreateReportCommentAsync(

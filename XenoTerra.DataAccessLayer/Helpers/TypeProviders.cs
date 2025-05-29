@@ -44,9 +44,6 @@ namespace XenoTerra.DataAccessLayer.Helpers
         public static PropertyInfo GetForeignKeyProperty<TEntity>(AppDbContext dbContext, string navigationPropertyName, string? crossTableName = null)
             where TEntity : class
         {
-            if (crossTableName != null)
-                navigationPropertyName = WordInflector.ConvertToSingular(navigationPropertyName);
-
             var entityType = crossTableName == null
                 ? dbContext.Model.FindEntityType(typeof(TEntity))
                 : dbContext.Model.GetEntityTypes()
@@ -55,14 +52,32 @@ namespace XenoTerra.DataAccessLayer.Helpers
             if (entityType == null)
                 throw new Exception($"Entity type '{crossTableName ?? typeof(TEntity).Name}' could not be found in DbContext.");
 
+            // Denenecek navigation isimleri: verilen ad, singular, plural
+            var navNameCandidates = new[]
+            {
+        navigationPropertyName,
+        WordInflector.ConvertToSingular(navigationPropertyName),
+        WordInflector.ConvertToPlural(navigationPropertyName)
+        }
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
             var navigation = entityType.GetNavigations()
-                .FirstOrDefault(n => n.Name.Equals(navigationPropertyName, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(n => navNameCandidates
+                    .Any(candidate => candidate.Equals(n.Name, StringComparison.OrdinalIgnoreCase)));
 
             if (navigation == null)
-                throw new Exception($"Navigation property '{navigationPropertyName}' was not found on entity '{entityType.ClrType.Name}'.");
+            {
+                var available = string.Join(", ", entityType.GetNavigations().Select(n => n.Name));
+                throw new Exception(
+                    $"Navigation property not found on entity '{entityType.ClrType.Name}'. " +
+                    $"Tried: {string.Join(", ", navNameCandidates)}. " +
+                    $"Available navigations: {available}"
+                );
+            }
 
             var foreignKey = navigation.ForeignKey.Properties.FirstOrDefault()
-                ?? throw new Exception($"Foreign key could not be resolved for navigation '{navigationPropertyName}' in entity '{entityType.ClrType.Name}'.");
+                ?? throw new Exception($"Foreign key could not be resolved for navigation '{navigation.Name}' in entity '{entityType.ClrType.Name}'.");
 
             var foreignKeyProperty = entityType.ClrType.GetProperties()
                 .FirstOrDefault(p => p.Name.Equals(foreignKey.Name, StringComparison.OrdinalIgnoreCase))
@@ -70,6 +85,7 @@ namespace XenoTerra.DataAccessLayer.Helpers
 
             return foreignKeyProperty;
         }
+
 
         public static List<TKey> GetRelatedPrimaryKeysByForeignKeyMatch<TRelatedEntity, TKey>(
             DbContext dbContext,

@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NotificationMutationServi
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class NotificationAdminMutation
     {
         public async Task<CreateNotificationAdminPayload> CreateNotificationAsync(

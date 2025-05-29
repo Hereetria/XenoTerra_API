@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class NotificationAdminQuery(IMapper mapper, IQueryResolverHelper<Notification, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

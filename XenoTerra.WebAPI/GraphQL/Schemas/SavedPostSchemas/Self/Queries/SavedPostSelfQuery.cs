@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class SavedPostSelfQuery(IMapper mapper, IQueryResolverHelper<SavedPost, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -31,11 +31,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = CreateSavedPostAccessFilter(httpContextAccessor);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreateSavedPostAccessFilter(currentUserId);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<SavedPost, ResultSavedPostWithRelationsDto>(
@@ -57,12 +55,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = CreateSavedPostAccessFilter(httpContextAccessor);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateSavedPostAccessFilter(currentUserId);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<SavedPost, ResultSavedPostWithRelationsDto>(
@@ -81,18 +76,22 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = CreateSavedPostAccessFilter(httpContextAccessor);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateSavedPostAccessFilter(currentUserId);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultSavedPostWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<SavedPost, bool>> CreateSavedPostAccessFilter(Guid currentUserId) =>
-            savedPost => savedPost.UserId == currentUserId;
+        private static Expression<Func<SavedPost, bool>> CreateSavedPostAccessFilter(IHttpContextAccessor httpContextAccessor)
+        {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+
+            return FilterExpressionHelper.BuildEqualsExpression<SavedPost, Guid>(
+                x => x.UserId,
+                currentUserId
+            );
+        }
     }
 }

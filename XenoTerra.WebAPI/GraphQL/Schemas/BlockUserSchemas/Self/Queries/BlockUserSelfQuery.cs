@@ -13,10 +13,11 @@ using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.BlockUserQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Http;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class BlockUserSelfQuery(IMapper mapper, IQueryResolverHelper<BlockUser, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -31,11 +32,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = CreateBlockUserAccessFilter(httpContextAccessor);
 
-            var filter = CreateBlockUserAccessFilter(currentUserId);
-
-            var query = service.GetAllQueryable(context).Where(filter);
+            var query = service.GetAllQueryable(context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<BlockUser, ResultBlockUserWithRelationsDto>(
@@ -58,11 +57,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = CreateBlockUserAccessFilter(httpContextAccessor);
 
-            var filter = CreateBlockUserAccessFilter(currentUserId);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<BlockUser, ResultBlockUserWithRelationsDto>(
@@ -82,9 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateBlockUserAccessFilter(currentUserId);
+            var filter = CreateBlockUserAccessFilter(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -92,9 +87,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultBlockUserWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<BlockUser, bool>> CreateBlockUserAccessFilter(Guid currentUserId) =>
-            blockUser => blockUser.BlockingUserId == currentUserId;
-        
+        private static Expression<Func<BlockUser, bool>> CreateBlockUserAccessFilter(IHttpContextAccessor httpContextAccessor)
+        {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
 
+            return FilterExpressionHelper.BuildEqualsExpression<BlockUser, Guid>(
+                b => b.BlockingUserId,
+                currentUserId
+            );
+        }
     }
 }

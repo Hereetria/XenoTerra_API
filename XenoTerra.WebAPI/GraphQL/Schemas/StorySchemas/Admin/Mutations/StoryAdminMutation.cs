@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class StoryAdminMutation
     {
         public async Task<CreateStoryAdminPayload> CreateStoryAsync(

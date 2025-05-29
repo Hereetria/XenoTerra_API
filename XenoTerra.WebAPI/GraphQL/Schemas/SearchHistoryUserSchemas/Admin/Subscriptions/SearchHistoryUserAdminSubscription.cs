@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscripti
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class SearchHistoryUserAdminSubscription
     {
         [Subscribe]

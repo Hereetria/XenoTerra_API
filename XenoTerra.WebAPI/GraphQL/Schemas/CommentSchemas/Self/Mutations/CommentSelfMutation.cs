@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.CommentMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class CommentSelfMutation
     {
         public async Task<CreateCommentSelfPayload> CreateMyCommentAsync(

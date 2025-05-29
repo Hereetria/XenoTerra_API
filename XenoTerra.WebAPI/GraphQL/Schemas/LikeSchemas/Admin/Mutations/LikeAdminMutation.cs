@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.LikeMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.LikeSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class LikeAdminMutation
     {
         public async Task<CreateLikeAdminPayload> CreateLikeAsync(

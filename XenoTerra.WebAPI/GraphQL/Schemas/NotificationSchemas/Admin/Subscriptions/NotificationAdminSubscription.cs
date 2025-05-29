@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.E
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class NotificationAdminSubscription
     {
         [Subscribe]

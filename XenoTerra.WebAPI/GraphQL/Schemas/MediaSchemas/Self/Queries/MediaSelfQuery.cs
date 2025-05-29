@@ -16,7 +16,7 @@ using System.Linq.Expressions;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class MediaSelfQuery(IMapper mapper, IQueryResolverHelper<Media, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -31,11 +31,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreateMediaAccessFilter(currentUserId);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsDto>(
@@ -57,12 +55,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateMediaAccessFilter(currentUserId);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsDto>(
@@ -81,22 +76,22 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = BuildAccessFilter(httpContextAccessor);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            var filter = CreateMediaAccessFilter(currentUserId);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultMediaWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Media, bool>> CreateMediaAccessFilter(Guid currentUserId)
+        private static Expression<Func<Media, bool>> BuildAccessFilter(IHttpContextAccessor httpContextAccessor)
         {
-            var userIds = new[] { currentUserId };
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
 
-            return media => userIds.Contains(media.SenderId) || userIds.Contains(media.ReceiverId);
+            return FilterExpressionHelper.BuildMultiEqualsOrExpression<Media, Guid>(
+                [m => m.SenderId, m => m.ReceiverId],
+                currentUserId
+            );
         }
     }
 }

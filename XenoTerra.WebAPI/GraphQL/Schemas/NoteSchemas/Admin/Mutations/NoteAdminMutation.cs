@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NoteMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class NoteAdminMutation
     {
         public async Task<CreateNoteAdminPayload> CreateNoteAsync(

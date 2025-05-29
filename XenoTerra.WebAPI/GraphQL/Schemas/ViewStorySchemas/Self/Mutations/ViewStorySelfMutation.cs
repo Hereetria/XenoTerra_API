@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.ViewStoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class ViewStorySelfMutation
     {
         public async Task<CreateViewStorySelfPayload> CreateMyViewStoryAsync(

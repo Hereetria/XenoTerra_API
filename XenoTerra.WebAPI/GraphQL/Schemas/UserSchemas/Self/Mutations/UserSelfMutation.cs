@@ -18,7 +18,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.UserMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class UserSelfMutation
     {
         //public async Task<CreateUserSelfPayload> CreateMyUserAsync(

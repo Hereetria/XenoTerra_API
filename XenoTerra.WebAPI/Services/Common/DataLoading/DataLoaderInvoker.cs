@@ -9,8 +9,16 @@ namespace XenoTerra.WebAPI.Services.Common.DataLoading
 
         public async Task<object> InvokeLoadAsync(Type entityType, AppDbContext dbContext, List<object> keys, List<string> selectedFields)
         {
-            if (keys == null || keys.Count == 0)
-                throw new ArgumentException("Keys list cannot be null or empty.", nameof(keys));
+            if (keys == null)
+                throw new ArgumentNullException(nameof(keys));
+
+            if (keys.Count == 0)
+            {
+                // Eğer key yoksa, Dictionary<TKey, TEntity> boş olarak dön
+                // TKey'yi bilmediğimiz için varsayılan olarak object alalım (kapsayıcı çözüm)
+                var emptyDictType = typeof(Dictionary<,>).MakeGenericType(typeof(object), entityType);
+                return Activator.CreateInstance(emptyDictType)!;
+            }
 
             var keyType = keys.First().GetType();
 
@@ -40,10 +48,17 @@ namespace XenoTerra.WebAPI.Services.Common.DataLoading
             var resultProp = task.GetType().GetProperty("Result")
                 ?? throw new InvalidOperationException("Result property not found.");
 
-            return resultProp.GetValue(task)
-                ?? throw new InvalidOperationException("LoadAsync returned null.");
-        }
+            var result = resultProp.GetValue(task);
 
+            if (result == null)
+            {
+                // Eğer LoadAsync null dönerse, Dictionary<TKey, TEntity> boş olarak dön
+                var dictType = typeof(Dictionary<,>).MakeGenericType(keyType, entityType);
+                return Activator.CreateInstance(dictType)!;
+            }
+
+            return result;
+        }
     }
 
 }

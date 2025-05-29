@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Subscriptions.Events;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class UserAdminSubscription
     {
         [Subscribe]

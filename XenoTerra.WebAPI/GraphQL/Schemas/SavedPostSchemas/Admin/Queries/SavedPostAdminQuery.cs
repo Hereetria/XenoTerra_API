@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class SavedPostAdminQuery(IMapper mapper, IQueryResolverHelper<SavedPost, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;

@@ -15,7 +15,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Self.MessageMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class MessageSelfMutation
     {
         public async Task<CreateMessageSelfPayload> CreateMyMessageAsync(

@@ -193,7 +193,9 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
+            CreateMap<User, ResultUserWithRelationsPublicDto>();
             CreateMap<User, ResultUserPrivateDto>().ReverseMap();
+            CreateMap<User, ResultUserPublicDto>();
             CreateMap<User, RegisterDto>().ReverseMap();
             CreateMap<User, UpdateUserDto>().ReverseMap();
 

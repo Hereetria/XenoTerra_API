@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryUserMutation
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class SearchHistoryUserAdminMutation
     {
         public async Task<CreateSearchHistoryUserAdminPayload> CreateSearchHistoryUserAsync(

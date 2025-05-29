@@ -1,7 +1,9 @@
 ﻿using HotChocolate.Resolvers;
+using System.Linq.Expressions;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.DataAccessLayer.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.Services.Queries.Base
@@ -12,9 +14,11 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
     {
         protected readonly IReadService<TEntity, TKey> _readService = readService;
 
-        public IQueryable<TEntity> GetAllQueryable(IResolverContext context)
+        public IQueryable<TEntity> GetAllQueryable(
+            IResolverContext context,
+            Expression<Func<TEntity, bool>>? filter = null)
         {
-            var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
+            var selectedFields = GraphQLFieldProvider.GetSelectedFields(context).ToList();
             selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
 
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
@@ -22,11 +26,16 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             var query = ExecuteSafely(() =>
             {
                 var rawQuery = _readService.GetRawQueryable();
-                var baseQuery = rawQuery.ApplyDefaultFiltering(context);
-                baseQuery = baseQuery.ApplyDefaultSorting(context);
+
+                if (filter is not null)
+                    rawQuery = rawQuery.Where(filter);
+
+                var baseQuery = rawQuery
+                    .ApplyDefaultFiltering(context)
+                    .ApplyDefaultSorting(context);
 
                 baseQuery = _readService.FetchAllQueryable(baseQuery, selectedFields)
-                                ?? Enumerable.Empty<TEntity>().AsQueryable();
+                    ?? Enumerable.Empty<TEntity>().AsQueryable();
 
                 baseQuery = ModifyQueryForGetAll(baseQuery);
 
@@ -36,7 +45,10 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             return query;
         }
 
-        public IQueryable<TEntity> GetByIdsQueryable(IEnumerable<TKey> keys, IResolverContext context)
+        public IQueryable<TEntity> GetByIdsQueryable(
+            IEnumerable<TKey> keys,
+            IResolverContext context,
+            Expression<Func<TEntity, bool>>? filter = null)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
             selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
@@ -46,14 +58,19 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             var query = ExecuteSafely(() =>
             {
                 var rawQuery = _readService.GetRawQueryable();
-                var baseQuery = rawQuery.ApplyDefaultFiltering(context);
-                baseQuery = baseQuery.ApplyDefaultSorting(context);
 
-                baseQuery = baseQuery.ApplyDefaultFiltering(context);
+                // 🔥 Filtre varsa uygula
+                if (filter is not null)
+                    rawQuery = rawQuery.Where(filter);
+
+                var baseQuery = rawQuery
+                    .ApplyDefaultFiltering(context)
+                    .ApplyDefaultSorting(context);
+
                 baseQuery = _readService.FetchByIdsQueryable(baseQuery, keys, selectedFields)
-                                ?? Enumerable.Empty<TEntity>().AsQueryable();
+                    ?? Enumerable.Empty<TEntity>().AsQueryable();
 
-                baseQuery = ModifyQueryForGetAll(baseQuery);
+                baseQuery = ModifyQueryForGetByIds(baseQuery);
 
                 return baseQuery;
             }) ?? Enumerable.Empty<TEntity>().AsQueryable();
@@ -61,7 +78,10 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             return query;
         }
 
-        public IQueryable<TEntity> GetByIdQueryable(TKey key, IResolverContext context)
+        public IQueryable<TEntity> GetByIdQueryable(
+            TKey key,
+            IResolverContext context,
+            Expression<Func<TEntity, bool>>? filter = null)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
             selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
@@ -71,12 +91,17 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             var query = ExecuteSafely(() =>
             {
                 var rawQuery = _readService.GetRawQueryable();
-                var baseQuery =_readService.FetchByIdQueryable(rawQuery, key, selectedFields);
 
-                return baseQuery;
+                if (filter is not null)
+                    rawQuery = rawQuery.Where(filter);
+
+                var baseQuery = _readService.FetchByIdQueryable(rawQuery, key, selectedFields)
+                    ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+                return ModifyQueryForGetById(baseQuery);
             }) ?? Enumerable.Empty<TEntity>().AsQueryable();
 
-            return ModifyQueryForGetById(query);
+            return query;
         }
 
         public virtual IQueryable<TEntity> ModifyQueryForGetAll(IQueryable<TEntity> query) => query;

@@ -17,7 +17,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class PostSelfQuery(IMapper mapper, IQueryResolverHelper<Post, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -35,14 +35,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
+            var filter = await CreatePostAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var query = service.GetAllQueryable(context, filter);
 
-            var filter = CreatePostAccessFilter(currentUserId, followedUserIds, publicUserIds, blockedUserIds);
-
-            var query = service.GetAllQueryable(context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Post, ResultPostWithRelationsDto>(
@@ -67,15 +62,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = await CreatePostAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
-
-            var filter = CreatePostAccessFilter(currentUserId, followedUserIds, publicUserIds, blockedUserIds);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Post, ResultPostWithRelationsDto>(
@@ -97,35 +86,36 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = await CreatePostAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
-            var blockedUserIds = (await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId)).ToList();
-
-            var filter = CreatePostAccessFilter(currentUserId, followedUserIds, publicUserIds, blockedUserIds);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultPostWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Post, bool>> CreatePostAccessFilter(
-            Guid currentUserId,
-            IReadOnlyCollection<Guid> followedUserIds,
-            IReadOnlyCollection<Guid> publicUserIds,
-            IReadOnlyCollection<Guid> blockedUserIds)
+        private static async Task<Expression<Func<Post, bool>>> CreatePostAccessFilterAsync(
+            IHttpContextAccessor httpContextAccessor,
+            IFollowedUserIdProvider followedUserIdProvider,
+            IPublicUserIdProvider publicUserIdProvider,
+            IBlockedUserIdProvider blockedUserIdProvider)
         {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
+            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
+            var blockedUserIds = await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId);
+
             var authorizedUserIds = followedUserIds
                 .Concat(publicUserIds)
                 .Append(currentUserId)
                 .Distinct()
                 .ToList();
 
-            return post =>
-                authorizedUserIds.Contains(post.UserId) &&
-                !blockedUserIds.Contains(post.UserId);
+            return FilterExpressionHelper.BuildContainsAndNotContainsExpression<Post, Guid>(
+                p => p.UserId,
+                authorizedUserIds,
+                blockedUserIds
+            );
         }
     }
 }

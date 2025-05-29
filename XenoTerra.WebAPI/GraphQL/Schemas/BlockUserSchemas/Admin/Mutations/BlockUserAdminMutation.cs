@@ -17,7 +17,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.BlockUserAdminMutationSer
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class BlockUserAdminMutation
     {
         public async Task<CreateBlockUserAdminPayload> CreateBlockUserAsync(

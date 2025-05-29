@@ -16,7 +16,7 @@ using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryHighlightMutationSer
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 {
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class StoryHighlightAdminMutation
     {
         public async Task<CreateStoryHighlightAdminPayload> CreateStoryHighlightAsync(

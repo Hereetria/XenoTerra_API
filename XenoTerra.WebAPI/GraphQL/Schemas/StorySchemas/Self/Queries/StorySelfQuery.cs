@@ -14,10 +14,12 @@ using XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
+using Microsoft.EntityFrameworkCore;
+using XenoTerra.DataAccessLayer.Persistence;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
 {
-    [Authorize(Roles = new[] { nameof(Roles.User), nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class StorySelfQuery(IMapper mapper, IQueryResolverHelper<Story, Guid> queryResolver)
     {
         private readonly IMapper _mapper = mapper;
@@ -34,13 +36,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var filter = CreateStoryAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetAllQueryable(context).Where(filter);
+            var query = service.GetAllQueryable(context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsDto>(
@@ -64,14 +62,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
-
-            var filter = CreateStoryAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetByIdsQueryable(parsedKeys, context).Where(filter);
+            var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entitySelfConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
             var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsDto>(
@@ -92,31 +85,30 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
+            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
 
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = (await followedUserIdProvider.GetFollowedUserIdsAsync()).ToList();
-            var publicUserIds = (await publicUserIdProvider.GetPublicUserIdsAsync()).ToList();
-
-            var filter = CreateStoryAccessFilter(currentUserId, followedUserIds, publicUserIds);
-
-            var query = service.GetByIdQueryable(parsedKey, context).Where(filter);
+            var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
             return entity is null ? null : _mapper.Map<ResultStoryWithRelationsDto>(entity);
         }
 
-        private static Expression<Func<Story, bool>> CreateStoryAccessFilter(
-            Guid currentUserId,
-            IReadOnlyCollection<Guid> followedUserIds,
-            IReadOnlyCollection<Guid> publicUserIds)
+        private static async Task<Expression<Func<Story, bool>>> BuildAccessFilterAsync(
+            IHttpContextAccessor httpContextAccessor,
+            IFollowedUserIdProvider followedUserIdProvider,
+            IPublicUserIdProvider publicUserIdProvider)
         {
+            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
+            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
+            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
+
             var authorizedUserIds = followedUserIds
                 .Concat(publicUserIds)
                 .Append(currentUserId)
                 .Distinct()
                 .ToList();
 
-            return story => authorizedUserIds.Contains(story.UserId);
+            return FilterExpressionHelper.BuildContainsExpression<Story, Guid>(s => s.UserId, authorizedUserIds);
         }
     }
 }

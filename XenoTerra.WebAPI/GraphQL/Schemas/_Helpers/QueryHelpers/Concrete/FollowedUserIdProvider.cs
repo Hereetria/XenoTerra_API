@@ -17,7 +17,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete
 
             return await _dbContext.Set<Follow>()
                 .Where(f => f.FollowerId == currentUserId)
-                .Select(f => f.FollowId)
+                .Select(f => f.FollowingId)
                 .ToListAsync();
         }
     }

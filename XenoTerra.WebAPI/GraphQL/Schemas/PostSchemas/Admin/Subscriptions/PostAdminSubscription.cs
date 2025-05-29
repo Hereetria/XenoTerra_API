@@ -6,7 +6,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions.Events;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions
 {
     [ExtendObjectType(typeof(Subscription))]
-    [Authorize(Roles = new[] { nameof(Roles.Admin) })]
+    [Authorize(Roles = new[] { nameof(AppRoles.Admin) })]
     public class PostAdminSubscription
     {
         [Subscribe]
