@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.MediaDtos
 {
@@ -10,6 +10,6 @@ namespace XenoTerra.DTOLayer.Dtos.MediaDtos
         public string PhotoUrl { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime UploadedAt { get; init; }
-        public ResultUserPrivateDto User { get; init; } = new();
+        public ResultAppUserPrivateDto User { get; init; } = new();
     }
 }

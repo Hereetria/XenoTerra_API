@@ -1,7 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
 {
@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.ReactionDtos
         public Guid MessageId { get; init; }
         public Guid UserId { get; init; }
         public ResultMessageDto Message { get; init; } = new();
-        public ResultUserPrivateDto User { get; init; } = new();
+        public ResultAppUserPrivateDto User { get; init; } = new();
     }
 }

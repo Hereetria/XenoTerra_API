@@ -41,7 +41,10 @@ namespace XenoTerra.DataAccessLayer.Helpers
             return propertyInfo;
         }
 
-        public static PropertyInfo GetForeignKeyProperty<TEntity>(AppDbContext dbContext, string navigationPropertyName, string? crossTableName = null)
+        public static PropertyInfo GetForeignKeyProperty<TEntity>(
+            AppDbContext dbContext,
+            string navigationPropertyName,
+            string? crossTableName = null)
             where TEntity : class
         {
             var entityType = crossTableName == null
@@ -52,19 +55,22 @@ namespace XenoTerra.DataAccessLayer.Helpers
             if (entityType == null)
                 throw new Exception($"Entity type '{crossTableName ?? typeof(TEntity).Name}' could not be found in DbContext.");
 
-            // Denenecek navigation isimleri: verilen ad, singular, plural
             var navNameCandidates = new[]
             {
         navigationPropertyName,
         WordInflector.ConvertToSingular(navigationPropertyName),
         WordInflector.ConvertToPlural(navigationPropertyName)
-        }
+    }
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
             var navigation = entityType.GetNavigations()
-                .FirstOrDefault(n => navNameCandidates
-                    .Any(candidate => candidate.Equals(n.Name, StringComparison.OrdinalIgnoreCase)));
+                .FirstOrDefault(n =>
+                    navNameCandidates.Any(candidate =>
+                        candidate.Equals(n.Name, StringComparison.OrdinalIgnoreCase)) ||
+                    (n.TargetEntityType.ClrType == entityType.ClrType &&
+                     navNameCandidates.Contains(entityType.ClrType.Name, StringComparer.OrdinalIgnoreCase))
+                );
 
             if (navigation == null)
             {
@@ -85,6 +91,7 @@ namespace XenoTerra.DataAccessLayer.Helpers
 
             return foreignKeyProperty;
         }
+
 
 
         public static List<TKey> GetRelatedPrimaryKeysByForeignKeyMatch<TRelatedEntity, TKey>(

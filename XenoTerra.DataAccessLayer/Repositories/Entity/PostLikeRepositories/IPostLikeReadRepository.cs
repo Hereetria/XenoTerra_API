@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using XenoTerra.DataAccessLayer.Repositories.Base.Read;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
+using XenoTerra.EntityLayer.Entities;
+
+namespace XenoTerra.DataAccessLayer.Repositories.Entity.PostLikeRepositories
+{
+    public interface IPostLikeReadRepository : IReadRepository<PostLike, Guid>
+    {
+    }
+}

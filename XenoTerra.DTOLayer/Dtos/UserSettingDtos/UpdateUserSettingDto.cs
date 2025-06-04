@@ -1,7 +1,4 @@
 
-
-using XenoTerra.DTOLayer.Dtos.UserDtos;
-
 namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
 {
     public class UpdateUserSettingDto

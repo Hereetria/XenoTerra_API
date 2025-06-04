@@ -11,7 +11,7 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid ReportCommentId { get; set; }
 
         public Guid ReporterUserId { get; set; }
-        public  User ReporterUser { get; set; } = null!;
+        public  AppUser ReporterUser { get; set; } = null!;
 
         public Guid CommentId { get; set; }
         public Comment Comment { get; set; } = null!;

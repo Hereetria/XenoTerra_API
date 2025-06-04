@@ -1,7 +1,5 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
-
 namespace XenoTerra.DTOLayer.Dtos.MessageDtos
 {
     public class CreateMessageDto

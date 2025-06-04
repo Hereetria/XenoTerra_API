@@ -72,7 +72,7 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
             builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
 
-            builder.Services.AddIdentity<User, Role>(options =>
+            builder.Services.AddIdentity<AppUser, AppRole>(options =>
             {
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;

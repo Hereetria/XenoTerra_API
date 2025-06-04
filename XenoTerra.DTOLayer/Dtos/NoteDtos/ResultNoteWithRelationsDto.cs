@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.NoteDtos
 {
@@ -10,6 +10,6 @@ namespace XenoTerra.DTOLayer.Dtos.NoteDtos
         public string Text { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserPrivateDto User { get; init; } = new();
+        public ResultAppUserPrivateDto User { get; init; } = new();
     }
 }

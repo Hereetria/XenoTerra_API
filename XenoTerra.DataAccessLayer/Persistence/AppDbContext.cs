@@ -9,7 +9,7 @@ using XenoTerra.EntityLayer.Entities;
 namespace XenoTerra.DataAccessLayer.Persistence
 {
     
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User, Role, Guid>(options)
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<AppUser, AppRole, Guid>(options)
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -92,16 +92,34 @@ namespace XenoTerra.DataAccessLayer.Persistence
                 .HasForeignKey(c => c.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Like>()
+            modelBuilder.Entity<PostLike>()
                 .HasOne(l => l.Post)
                 .WithMany(p => p.Likes)
                 .HasForeignKey(l => l.PostId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Like>()
+            modelBuilder.Entity<PostLike>()
                 .HasOne(l => l.User)
-                .WithMany(u => u.Likes)
+                .WithMany(u => u.PostLikes)
                 .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.ParentComment)
+                .WithMany(c => c.Replies)
+                .HasForeignKey(c => c.ParentCommentId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReportPost>()
+                .HasOne(rp => rp.Post)
+                .WithMany(p => p.ReportPosts)
+                .HasForeignKey(rp => rp.PostId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReportPost>()
+                .HasOne(rp => rp.ReporterUser)
+                .WithMany(u => u.ReportPosts)
+                .HasForeignKey(rp => rp.ReporterUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SavedPost>()
@@ -186,9 +204,9 @@ namespace XenoTerra.DataAccessLayer.Persistence
 
         public DbSet<BlockUser> BlockUsers { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<CommentLike> CommentLikes { get; set; }
         public DbSet<Follow> Follows { get; set; }
         public DbSet<Highlight> Highlights { get; set; }
-        public DbSet<Like> Likes { get; set; }
         public DbSet<Media> Medias { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Note> Notes { get; set; }
@@ -197,8 +215,10 @@ namespace XenoTerra.DataAccessLayer.Persistence
         public DbSet<UserPostTag> UserPostTags { get; set; }
         public DbSet<Reaction> Reactions { get; set; }
         public DbSet<RecentChats> RecentChatses { get; set; }
+        public DbSet<ReportPost> ReportPosts { get; set; }
         public DbSet<ReportComment> ReportComments { get; set; }
         public DbSet<SavedPost> SavedPosts { get; set; }
+        public DbSet<PostLike> PostLikes { get; set; }
         public DbSet<SearchHistory> SearchHistories { get; set; }
         public DbSet<SearchHistoryUser> SearchHistoryUsers { get; set; }
         public DbSet<Story> Stories { get; set; }

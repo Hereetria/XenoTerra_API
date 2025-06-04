@@ -15,15 +15,16 @@ namespace XenoTerra.EntityLayer.Entities
         public string? Location { get; set; } = string.Empty;
 
         public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public AppUser User { get; set; } = null!;
 
-        public ICollection<Like> Likes { get; set; } = [];
+        public ICollection<PostLike> Likes { get; set; } = [];
         
         public ICollection<Comment> Comments { get; set; } = [];
 
         public ICollection<SavedPost> SavedPosts { get; set; } = [];
 
         public ICollection<UserPostTag> TaggedUsers { get; set; } = [];
+        public ICollection<ReportPost> ReportPosts { get; set; } = [];
         public DateTime CreatedAt { get; set; }
     }
 }

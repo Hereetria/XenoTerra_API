@@ -1,6 +1,5 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryDtos

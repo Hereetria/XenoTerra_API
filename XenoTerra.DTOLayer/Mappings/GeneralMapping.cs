@@ -4,7 +4,6 @@ using XenoTerra.EntityLayer.Entities;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.DTOLayer.Dtos.FollowDtos;
-using XenoTerra.DTOLayer.Dtos.LikeDtos;
 using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.DTOLayer.Dtos.NoteDtos;
@@ -13,14 +12,15 @@ using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
-using XenoTerra.DTOLayer.Dtos.RoleDtos;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
+using XenoTerra.DTOLayer.Dtos.AppRoleDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Mappings
 {
@@ -39,9 +39,10 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<BlockUser, UpdateBlockUserDto>().ReverseMap();
 
             // Comment Mappings
-        CreateMap<Comment, ResultCommentWithRelationsDto>()
-            .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
-            .ForMember(dest => dest.Post, opt => opt.MapFrom(src => src.Post))
+            CreateMap<Comment, ResultCommentWithRelationsDto>()
+            .ForMember(dest => dest.User, (IMemberConfigurationExpression<Comment, ResultCommentWithRelationsDto, object> opt) => opt.MapFrom(src => src.User))
+            .ForMember(dest => dest.CommentLikes, opt => opt.MapFrom(src => src.CommentLikes))
+                        .ForMember(dest => dest.ParentComment, opt => opt.MapFrom(src => src.ParentComment))
             .ReverseMap();
             CreateMap<Comment, ResultCommentDto>().ReverseMap();
             CreateMap<Comment, CreateCommentDto>().ReverseMap();
@@ -64,14 +65,14 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<Highlight, CreateHighlightDto>().ReverseMap();
             CreateMap<Highlight, UpdateHighlightDto>().ReverseMap();
 
-            // Like Mappings
-            CreateMap<Like, ResultLikeWithRelationsDto>()
+            // PostLike Mappings
+            CreateMap<PostLike, ResultPostLikeWithRelationsDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.Post, opt => opt.MapFrom(src => src.Post))
                 .ReverseMap();
-            CreateMap<Like, ResultLikeDto>().ReverseMap();
-            CreateMap<Like, CreateLikeDto>().ReverseMap();
-            CreateMap<Like, UpdateLikeDto>().ReverseMap();
+            CreateMap<PostLike, ResultPostLikeDto>().ReverseMap();
+            CreateMap<PostLike, CreatePostLikeDto>().ReverseMap();
+            CreateMap<PostLike, UpdatePostLikeDto>().ReverseMap();
 
             // Media Mappings
             CreateMap<Media, ResultMediaWithRelationsDto>()
@@ -144,10 +145,10 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<ReportComment, UpdateReportCommentDto>().ReverseMap();
 
             // Role Mappings
-            CreateMap<Role, ResultRoleWithRelationsDto>().ReverseMap();
-            CreateMap<Role, ResultRoleDto>().ReverseMap();
-            CreateMap<Role, CreateRoleDto>().ReverseMap();
-            CreateMap<Role, UpdateRoleDto>().ReverseMap();
+            CreateMap<AppRole, ResultAppRoleWithRelationsDto>().ReverseMap();
+            CreateMap<AppRole, ResultAppRoleDto>().ReverseMap();
+            CreateMap<AppRole, CreateAppRoleDto>().ReverseMap();
+            CreateMap<AppRole, UpdateAppRoleDto>().ReverseMap();
 
             // SavedPost Mappings
             CreateMap<SavedPost, ResultSavedPostWithRelationsDto>().ReverseMap();
@@ -175,11 +176,11 @@ namespace XenoTerra.DTOLayer.Mappings
             CreateMap<Story, UpdateStoryDto>().ReverseMap();
 
             // User Mappings
-            CreateMap<User, ResultUserWithRelationsPrivateDto>()
+            CreateMap<AppUser, ResultAppUserWithRelationsPrivateDto>()
                 .ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts))
                 .ForMember(dest => dest.Followers, opt => opt.MapFrom(src => src.Followers))
                 .ForMember(dest => dest.Followings, opt => opt.MapFrom(src => src.Followings))
-                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes))
+                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.PostLikes))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.SentMessages, opt => opt.MapFrom(src => src.SentMessages))
                 .ForMember(dest => dest.ReceivedMessages, opt => opt.MapFrom(src => src.ReceivedMessages))
@@ -193,11 +194,11 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
-            CreateMap<User, ResultUserWithRelationsPublicDto>();
-            CreateMap<User, ResultUserPrivateDto>().ReverseMap();
-            CreateMap<User, ResultUserPublicDto>();
-            CreateMap<User, RegisterDto>().ReverseMap();
-            CreateMap<User, UpdateUserDto>().ReverseMap();
+            CreateMap<AppUser, ResultAppUserWithRelationsPublicDto>();
+            CreateMap<AppUser, ResultAppUserPrivateDto>().ReverseMap();
+            CreateMap<AppUser, ResultAppUserPublicDto>();
+            CreateMap<AppUser, RegisterDto>().ReverseMap();
+            CreateMap<AppUser, UpdateAppUserDto>().ReverseMap();
 
             // UserSetting Mappings
             CreateMap<UserSetting, ResultUserSettingWithRelationsDto>()

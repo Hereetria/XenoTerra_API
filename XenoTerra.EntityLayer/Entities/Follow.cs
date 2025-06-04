@@ -11,10 +11,10 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid FollowId { get; set; }
 
         public Guid FollowerId { get; set; }
-        public User Follower { get; set; } = null!;
+        public AppUser Follower { get; set; } = null!;
 
         public Guid FollowingId { get; set; }
-        public User Following { get; set; } = null!;
+        public AppUser Following { get; set; } = null!;
 
         public DateTime FollowedAt { get; set; }
     }

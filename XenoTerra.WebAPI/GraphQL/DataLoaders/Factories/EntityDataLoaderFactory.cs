@@ -17,7 +17,7 @@ namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Factories
                 { typeof(Comment), typeof(CommentDataLoader) },
                 { typeof(Follow), typeof(FollowDataLoader) },
                 { typeof(Highlight), typeof(HighlightDataLoader) },
-                { typeof(Like), typeof(LikeDataLoader) },
+                { typeof(PostLike), typeof(PostLikeDataLoader) },
                 { typeof(Media), typeof(MediaDataLoader) },
                 { typeof(Message), typeof(MessageDataLoader) },
                 { typeof(Note), typeof(NoteDataLoader) },
@@ -26,11 +26,11 @@ namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Factories
                 { typeof(Reaction), typeof(ReactionDataLoader) },
                 { typeof(RecentChats), typeof(RecentChatsDataLoader) },
                 { typeof(ReportComment), typeof(ReportCommentDataLoader) },
-                { typeof(Role), typeof(RoleDataLoader) },
+                { typeof(AppRole), typeof(AppRoleDataLoader) },
                 { typeof(SavedPost), typeof(SavedPostDataLoader) },
                 { typeof(SearchHistory), typeof(SearchHistoryDataLoader) },
                 { typeof(Story), typeof(StoryDataLoader) },
-                { typeof(User), typeof(UserDataLoader) },
+                { typeof(AppUser), typeof(AppUserDataLoader) },
                 { typeof(UserSetting), typeof(UserSettingDataLoader) },
                 { typeof(ViewStory), typeof(ViewStoryDataLoader) }
             };

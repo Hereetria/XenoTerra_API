@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.FollowDtos
 {
@@ -10,7 +10,7 @@ namespace XenoTerra.DTOLayer.Dtos.FollowDtos
         public Guid FollowerId { get; init; }
         public Guid FollowingId { get; init; }
         public DateTime FollowedAt { get; init; }
-        public ResultUserPrivateDto Follower { get; init; } = new();
-        public ResultUserPrivateDto Following { get; init; } = new();
+        public ResultAppUserPrivateDto Follower { get; init; } = new();
+        public ResultAppUserPrivateDto Following { get; init; } = new();
     }
 }

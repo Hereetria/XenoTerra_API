@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
 {
@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos
         public bool ReceiveNotifications { get; init; }
         public bool ShowActivityStatus { get; init; }
         public DateTime LastUpdated { get; init; }
-        public ResultUserWithRelationsPrivateDto User { get; init; } = new();
+        public ResultAppUserWithRelationsPrivateDto User { get; init; } = new();
     }
 }

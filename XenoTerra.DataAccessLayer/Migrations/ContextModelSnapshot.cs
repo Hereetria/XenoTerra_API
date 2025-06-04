@@ -22,6 +22,21 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("AppUserRecentChats", b =>
+                {
+                    b.Property<Guid>("RecentChatsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UsersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("RecentChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("AppUserRecentChats");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -125,19 +140,129 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RecentChatsUser", b =>
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.AppRole", b =>
                 {
-                    b.Property<Guid>("RecentChatsId")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles", (string)null);
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.AppUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RecentChatsId", "UsersId");
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
-                    b.HasIndex("UsersId");
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("RecentChatsUser");
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("FollowersCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowingCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastActive")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Website")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.BlockUser", b =>
@@ -177,6 +302,9 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("ParentCommentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
@@ -185,11 +313,37 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
                     b.HasKey("CommentId");
 
+                    b.HasIndex("ParentCommentId");
+
                     b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.CommentLike", b =>
+                {
+                    b.Property<Guid>("CommentLikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CommentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LikedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CommentLikeId");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CommentLikes");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Follow", b =>
@@ -238,30 +392,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Highlights");
-                });
-
-            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Like", b =>
-                {
-                    b.Property<Guid>("LikeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("LikedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("PostId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("LikeId");
-
-                    b.HasIndex("PostId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Likes");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Media", b =>
@@ -405,6 +535,30 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.PostLike", b =>
+                {
+                    b.Property<Guid>("PostLikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LikedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PostLikeId");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PostLikes");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Reaction", b =>
                 {
                     b.Property<Guid>("ReactionId")
@@ -474,32 +628,32 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("ReportComments");
                 });
 
-            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Role", b =>
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.ReportPost", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<Guid>("ReportPostId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<DateTime>("ReportedAt")
+                        .HasColumnType("datetime2");
 
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<Guid>("ReporterUserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("ReportPostId");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
+                    b.HasIndex("PostId");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.HasIndex("ReporterUserId");
+
+                    b.ToTable("ReportPosts");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.SavedPost", b =>
@@ -601,103 +755,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("StoryHighlights");
                 });
 
-            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Bio")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("FollowersCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowingCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastActive")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ProfilePicture")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("Website")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
-                });
-
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.UserPostTag", b =>
                 {
                     b.Property<Guid>("PostId")
@@ -766,9 +823,24 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.ToTable("ViewStories");
                 });
 
+            modelBuilder.Entity("AppUserRecentChats", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.RecentChats", null)
+                        .WithMany()
+                        .HasForeignKey("RecentChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.Role", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -777,7 +849,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -786,7 +858,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -795,13 +867,13 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.Role", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -810,37 +882,22 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RecentChatsUser", b =>
-                {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.RecentChats", null)
-                        .WithMany()
-                        .HasForeignKey("RecentChatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.BlockUser", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "BlockedUser")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "BlockedUser")
                         .WithMany("BlockingUsers")
                         .HasForeignKey("BlockedUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "BlockingUser")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "BlockingUser")
                         .WithMany("BlockedUsers")
                         .HasForeignKey("BlockingUserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -853,32 +910,58 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Comment", b =>
                 {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Comment", "ParentComment")
+                        .WithMany("Replies")
+                        .HasForeignKey("ParentCommentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("XenoTerra.EntityLayer.Entities.Post", "Post")
                         .WithMany("Comments")
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("ParentComment");
 
                     b.Navigation("Post");
 
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.CommentLike", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Comment", "Comment")
+                        .WithMany("CommentLikes")
+                        .HasForeignKey("CommentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Comment");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Follow", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Follower")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Follower")
                         .WithMany("Followings")
                         .HasForeignKey("FollowerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Following")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Following")
                         .WithMany("Followers")
                         .HasForeignKey("FollowingId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -891,7 +974,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Highlight", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("Highlights")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -900,34 +983,15 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Like", b =>
-                {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.Post", "Post")
-                        .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Post");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Media", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Receiver")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Receiver")
                         .WithMany("ReceivedMedias")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Sender")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Sender")
                         .WithMany("SentMedias")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -940,13 +1004,13 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Message", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Receiver")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "Sender")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -959,7 +1023,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Note", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithOne("Note")
                         .HasForeignKey("XenoTerra.EntityLayer.Entities.Note", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -970,7 +1034,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Notification", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -981,11 +1045,30 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Post", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.PostLike", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Post", "Post")
+                        .WithMany("Likes")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
+                        .WithMany("PostLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
 
                     b.Navigation("User");
                 });
@@ -1009,13 +1092,32 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "ReporterUser")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "ReporterUser")
                         .WithMany("ReportComments")
                         .HasForeignKey("ReporterUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Comment");
+
+                    b.Navigation("ReporterUser");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.ReportPost", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Post", "Post")
+                        .WithMany("ReportPosts")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "ReporterUser")
+                        .WithMany("ReportPosts")
+                        .HasForeignKey("ReporterUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
 
                     b.Navigation("ReporterUser");
                 });
@@ -1028,7 +1130,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("SavedPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1041,7 +1143,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.SearchHistory", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1058,7 +1160,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("SearchedBy")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1071,7 +1173,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Story", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("Stories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1107,7 +1209,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("TaggedPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1120,7 +1222,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.UserSetting", b =>
                 {
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithOne("UserSetting")
                         .HasForeignKey("XenoTerra.EntityLayer.Entities.UserSetting", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1137,7 +1239,7 @@ namespace XenoTerra.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("XenoTerra.EntityLayer.Entities.User", "User")
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
                         .WithMany("ViewStories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1148,8 +1250,61 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.AppUser", b =>
+                {
+                    b.Navigation("BlockedUsers");
+
+                    b.Navigation("BlockingUsers");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Followers");
+
+                    b.Navigation("Followings");
+
+                    b.Navigation("Highlights");
+
+                    b.Navigation("Note")
+                        .IsRequired();
+
+                    b.Navigation("Notifications");
+
+                    b.Navigation("PostLikes");
+
+                    b.Navigation("Posts");
+
+                    b.Navigation("ReceivedMedias");
+
+                    b.Navigation("ReceivedMessages");
+
+                    b.Navigation("ReportComments");
+
+                    b.Navigation("ReportPosts");
+
+                    b.Navigation("SavedPosts");
+
+                    b.Navigation("SearchedBy");
+
+                    b.Navigation("SentMedias");
+
+                    b.Navigation("SentMessages");
+
+                    b.Navigation("Stories");
+
+                    b.Navigation("TaggedPosts");
+
+                    b.Navigation("UserSetting")
+                        .IsRequired();
+
+                    b.Navigation("ViewStories");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Comment", b =>
                 {
+                    b.Navigation("CommentLikes");
+
+                    b.Navigation("Replies");
+
                     b.Navigation("ReportComments");
                 });
 
@@ -1169,6 +1324,8 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
                     b.Navigation("Likes");
 
+                    b.Navigation("ReportPosts");
+
                     b.Navigation("SavedPosts");
 
                     b.Navigation("TaggedUsers");
@@ -1182,53 +1339,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Story", b =>
                 {
                     b.Navigation("StoryHighlights");
-
-                    b.Navigation("ViewStories");
-                });
-
-            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.User", b =>
-                {
-                    b.Navigation("BlockedUsers");
-
-                    b.Navigation("BlockingUsers");
-
-                    b.Navigation("Comments");
-
-                    b.Navigation("Followers");
-
-                    b.Navigation("Followings");
-
-                    b.Navigation("Highlights");
-
-                    b.Navigation("Likes");
-
-                    b.Navigation("Note")
-                        .IsRequired();
-
-                    b.Navigation("Notifications");
-
-                    b.Navigation("Posts");
-
-                    b.Navigation("ReceivedMedias");
-
-                    b.Navigation("ReceivedMessages");
-
-                    b.Navigation("ReportComments");
-
-                    b.Navigation("SavedPosts");
-
-                    b.Navigation("SearchedBy");
-
-                    b.Navigation("SentMedias");
-
-                    b.Navigation("SentMessages");
-
-                    b.Navigation("Stories");
-
-                    b.Navigation("TaggedPosts");
-
-                    b.Navigation("UserSetting")
-                        .IsRequired();
 
                     b.Navigation("ViewStories");
                 });

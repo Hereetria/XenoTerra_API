@@ -53,7 +53,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             {
                 var fkProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, navProperty.Name);
 
-                if (fkProperty == null || fkProperty.PropertyType != typeof(TRelatedKey))
+                if (fkProperty == null)
                     continue;
 
                 var key = fkProperty.GetValue(entity);

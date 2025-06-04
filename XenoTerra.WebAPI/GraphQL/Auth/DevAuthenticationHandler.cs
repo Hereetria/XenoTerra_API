@@ -9,7 +9,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth
 {
     public class DevAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
 
         public DevAuthenticationHandler(
@@ -17,7 +17,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock,
-            UserManager<User> userManager,
+            UserManager<AppUser> userManager,
             IConfiguration configuration)
             : base(options, logger, encoder, clock)
         {

@@ -12,7 +12,7 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid SearchHistoryId { get; set; }
 
         public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public AppUser User { get; set; } = null!;
 
         public ICollection<SearchHistoryUser> SearchedUsers { get; set; } = [];
 

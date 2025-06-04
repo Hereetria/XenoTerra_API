@@ -1,7 +1,7 @@
 
 
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.StoryDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos
 {
@@ -12,6 +12,6 @@ namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos
         public Guid UserId { get; init; }
         public DateTime ViewedAt { get; init; }
         public ResultStoryWithRelationsDto Story { get; init; } = new();
-        public ResultUserWithRelationsPrivateDto User { get; init; } = new();
+        public ResultAppUserWithRelationsPrivateDto User { get; init; } = new();
     }
 }

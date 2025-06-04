@@ -1,7 +1,6 @@
 
 
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos
 {

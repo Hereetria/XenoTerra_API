@@ -9,7 +9,7 @@ namespace XenoTerra.DTOLayer.Dtos.HighlightDtos
         public string Name { get; init; } = string.Empty;
         public string ProfilePicturePath { get; init; } = string.Empty;
         public Guid UserId { get; set; }
-        public User User { get; init; } = null!;
+        public AppUser User { get; init; } = null!;
         public ICollection<ResultStoryDto> Stories { get; init; } = [];
     }
 }

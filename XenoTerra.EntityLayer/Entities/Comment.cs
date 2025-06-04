@@ -16,10 +16,17 @@ namespace XenoTerra.EntityLayer.Entities
         public Post Post { get; set; } = null!;
 
         public Guid UserId { get; set; }
-        public User User { get; set; } = null!;
+        public AppUser User { get; set; } = null!;
+
+        public ICollection<CommentLike> CommentLikes { get; set; } = [];
 
         public DateTime CommentedAt { get; set; }
 
         public ICollection<ReportComment> ReportComments { get; set; } = [];
+
+        public Guid? ParentCommentId { get; set; }
+        public Comment? ParentComment { get; set; }
+        public ICollection<Comment> Replies { get; set; } = [];
     }
+
 }

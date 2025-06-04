@@ -89,15 +89,18 @@ namespace XenoTerra.DataAccessLayer.Helpers
 
         private static bool IsPrimitiveOrSimpleType(Type type)
         {
-            return type.IsPrimitive ||
-                   type == typeof(string) ||
-                   type == typeof(Guid) ||
-                   type == typeof(DateTime) ||
-                   type == typeof(decimal) ||
-                   type == typeof(float) ||
-                   type == typeof(double) ||
-                   type == typeof(long) ||
-                   type == typeof(int);
+            var underlyingType = Nullable.GetUnderlyingType(type) ?? type;
+
+            return underlyingType.IsPrimitive ||
+                   underlyingType == typeof(string) ||
+                   underlyingType == typeof(Guid) ||
+                   underlyingType == typeof(DateTime) ||
+                   underlyingType == typeof(decimal) ||
+                   underlyingType == typeof(float) ||
+                   underlyingType == typeof(double) ||
+                   underlyingType == typeof(long) ||
+                   underlyingType == typeof(int);
         }
+
     }
 }

@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Auth.Inputs;
 using XenoTerra.WebAPI.GraphQL.Auth.Payloads;
@@ -15,9 +15,9 @@ using XenoTerra.WebAPI.Helpers;
 
 namespace XenoTerra.WebAPI.GraphQL.Auth.Services
 {
-    public class AuthService(UserManager<User> userManager, IConfiguration config, IValidator<RegisterInput> registerValidator) : IAuthService
+    public class AuthService(UserManager<AppUser> userManager, IConfiguration config, IValidator<RegisterInput> registerValidator) : IAuthService
     {
-        private readonly UserManager<User> _userManager = userManager;
+        private readonly UserManager<AppUser> _userManager = userManager;
         private readonly IConfiguration _config = config;
         private readonly IValidator<RegisterInput> _validator = registerValidator;
 
@@ -26,7 +26,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
             InputGuard.EnsureNotNull(input, nameof(RegisterInput));
             await ValidationGuard.ValidateOrThrowAsync(_validator, input);
 
-            var newUser = new User
+            var newUser = new AppUser
             {
                 UserName = input.UserName,
                 Email = input.Email,
@@ -45,7 +45,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
 
             await _userManager.AddToRoleAsync(newUser, AppRoles.User.ToString());
 
-            var resultDto = new ResultUserPrivateDto
+            var resultDto = new ResultAppUserPrivateDto
             {
                 Id = newUser.Id,
                 UserName = newUser.UserName!,
@@ -54,7 +54,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
                 BirthDate = DateOnly.Parse(input.BirthDate).ToDateTime()
             };
 
-            return Payload<ResultUserPrivateDto>.FromSuccess<RegisterPayload>(
+            return Payload<ResultAppUserPrivateDto>.FromSuccess<RegisterPayload>(
                 "User registered successfully",
                 resultDto
             );
@@ -67,7 +67,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
             if (string.IsNullOrWhiteSpace(input.Identity) || input.Identity.Length > 100)
                 throw GraphQLExceptionFactory.Create("Invalid identity input.");
 
-            User? user = null;
+            AppUser? user = null;
 
             if (input.Identity.Contains('@'))
             {

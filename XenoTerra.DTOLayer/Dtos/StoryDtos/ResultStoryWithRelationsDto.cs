@@ -1,5 +1,5 @@
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.HighlightDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.StoryDtos
@@ -11,7 +11,7 @@ namespace XenoTerra.DTOLayer.Dtos.StoryDtos
         public bool IsVideo { get; init; }
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserPrivateDto User { get; init; } = new();
+        public ResultAppUserPrivateDto User { get; init; } = new();
         public ICollection<ResultViewStoryDto> ViewStories { get; init; } = [];
         public ICollection<ResultHighlightDto> Highlights { get; init; } = [];
     }

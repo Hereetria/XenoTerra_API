@@ -7,9 +7,9 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Validators
 {
     public class RegisterInputValidator : AbstractValidator<RegisterInput>
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<AppUser> _userManager;
 
-        public RegisterInputValidator(UserManager<User> userManager)
+        public RegisterInputValidator(UserManager<AppUser> userManager)
         {
             _userManager = userManager;
 

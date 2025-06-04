@@ -1,9 +1,9 @@
 
 
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.CommentDtos;
-using XenoTerra.DTOLayer.Dtos.LikeDtos;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
 using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
-using XenoTerra.DTOLayer.Dtos.UserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.PostDtos
 {
@@ -16,10 +16,10 @@ namespace XenoTerra.DTOLayer.Dtos.PostDtos
         public string? Location { get; init; } = string.Empty;
         public Guid UserId { get; init; }
         public DateTime CreatedAt { get; init; }
-        public ResultUserPrivateDto? User { get; init; }
-        public ICollection<ResultLikeDto> Likes { get; init; } = [];
+        public ResultAppUserPrivateDto? User { get; init; }
+        public ICollection<ResultPostLikeDto> Likes { get; init; } = [];
         public ICollection<ResultCommentDto> Comments { get; init; } = [];
         public ICollection<ResultSavedPostDto> SavedPosts { get; init; } = [];
-        public ICollection<ResultUserPrivateDto> TaggedUsers { get; init; } = [];
+        public ICollection<ResultAppUserPrivateDto> TaggedUsers { get; init; } = [];
     }
 }

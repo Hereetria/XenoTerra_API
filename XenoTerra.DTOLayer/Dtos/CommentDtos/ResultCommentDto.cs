@@ -13,5 +13,6 @@ namespace XenoTerra.DTOLayer.Dtos.CommentDtos
         public Guid PostId { get; init; }
         public Guid UserId { get; init; }
         public DateTime CommentedAt { get; init; }
+        public Guid? ParentCommentId { get; init; }
     }
 }

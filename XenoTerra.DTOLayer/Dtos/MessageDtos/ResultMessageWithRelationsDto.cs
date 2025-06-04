@@ -1,6 +1,6 @@
 
 
-using XenoTerra.DTOLayer.Dtos.UserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 
 namespace XenoTerra.DTOLayer.Dtos.MessageDtos
 {
@@ -12,7 +12,7 @@ namespace XenoTerra.DTOLayer.Dtos.MessageDtos
         public Guid ReceiverId { get; init; }
         public string Header { get; init; } = string.Empty;
         public DateTime SentAt { get; init; }
-        public ResultUserPrivateDto Sender { get; init; } = new();
-        public ResultUserPrivateDto Receiver { get; init; } = new();
+        public ResultAppUserPrivateDto Sender { get; init; } = new();
+        public ResultAppUserPrivateDto Receiver { get; init; } = new();
     }
 }

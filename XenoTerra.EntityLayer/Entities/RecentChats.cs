@@ -13,7 +13,7 @@ namespace XenoTerra.EntityLayer.Entities
         public string LastMessage { get; set; } = string.Empty;
 
         public Guid UserId { get; set; }
-        public ICollection<User> Users { get; set; } = [];
+        public ICollection<AppUser> Users { get; set; } = [];
 
         public DateTime LastMessageAt { get; set; }
     }
