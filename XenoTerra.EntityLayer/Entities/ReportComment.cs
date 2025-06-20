@@ -16,8 +16,6 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid CommentId { get; set; }
         public Comment Comment { get; set; } = null!;
 
-        public string Reason { get; set; } = string.Empty;
-
         public DateTime ReportedAt { get; set; }
     }
 }

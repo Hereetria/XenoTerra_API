@@ -7,6 +7,7 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
         where TEntity : class
         where TKey : notnull
     {
+        IQueryable<TEntity> GetRawQueryable();
         IQueryable<TEntity> GetAllQueryable(
             IResolverContext context,
             Expression<Func<TEntity, bool>>? filter = null);
@@ -20,6 +21,10 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             TKey key,
             IResolverContext context,
             Expression<Func<TEntity, bool>>? filter = null);
+
+        IQueryable<TResult> GetCustomQueryable<TResult>(
+            IResolverContext context,
+            Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder);
 
         IQueryable<TEntity> ModifyQueryForGetAll(IQueryable<TEntity> query);
         IQueryable<TEntity> ModifyQueryForGetByIds(IQueryable<TEntity> query);

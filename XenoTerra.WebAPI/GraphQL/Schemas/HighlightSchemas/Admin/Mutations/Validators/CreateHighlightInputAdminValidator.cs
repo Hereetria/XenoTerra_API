@@ -12,6 +12,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Vali
 
             RuleFor(x => x.ProfilePicturePath)
                 .NotEmpty().WithMessage("ProfilePicturePath must not be empty.");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty().WithMessage("UserId must not be empty.");
         }
     }
 }

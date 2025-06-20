@@ -14,8 +14,11 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations;
@@ -38,10 +41,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
         RecentChatsSelfMutation recentChats,
         ReportCommentSelfMutation reportComments,
         ReportPostSelfMutation reportPosts,
+        ReportStorySelfMutation reportStories,
         SavedPostSelfMutation savedPosts,
         SearchHistorySelfMutation searchHistories,
         StorySelfMutation stories,
-        AppUserSelfMutation users,
+        StoryLikeSelfMutation storyLikes,
+        AppUserSelfMutation appUsers,
         UserSettingSelfMutation userSettings,
         ViewStorySelfMutation viewStories)
     {
@@ -60,10 +65,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
         public RecentChatsSelfMutation RecentChats { get; } = recentChats;
         public ReportCommentSelfMutation ReportComments { get; } = reportComments;
         public ReportPostSelfMutation ReportPosts { get; } = reportPosts;
+        public ReportStorySelfMutation ReportStories { get; } = reportStories;
         public SavedPostSelfMutation SavedPosts { get; } = savedPosts;
         public SearchHistorySelfMutation SearchHistories { get; } = searchHistories;
         public StorySelfMutation Stories { get; } = stories;
-        public AppUserSelfMutation Users { get; } = users;
+        public StoryLikeSelfMutation StoryLikes { get; } = storyLikes;
+        public AppUserSelfMutation AppUsers { get; } = appUsers;
         public UserSettingSelfMutation UserSettings { get; } = userSettings;
         public ViewStorySelfMutation ViewStories { get; } = viewStories;
     }

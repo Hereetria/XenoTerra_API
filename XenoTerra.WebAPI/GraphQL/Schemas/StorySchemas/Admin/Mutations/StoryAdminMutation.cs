@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices;
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryMutationServices;
+using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
     {
         public async Task<CreateStoryAdminPayload> CreateStoryAsync(
             [Service] IStoryAdminMutationService mutationService,
-            [Service] IStoryWriteService writeService,
+            [Service] IStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateStoryAdminInput> inputAdminValidator,
             CreateStoryAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateStoryAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateStoryAdminInput, CreateStoryDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateStoryAdminInput, CreateStoryAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateStoryAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
 
         public async Task<UpdateStoryAdminPayload> UpdateStoryAsync(
             [Service] IStoryAdminMutationService mutationService,
-            [Service] IStoryWriteService writeService,
+            [Service] IStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateStoryAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateStoryAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryAdminInput, UpdateStoryDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryAdminInput, UpdateStoryAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateStoryAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
 
         public async Task<DeleteStoryAdminPayload> DeleteStoryAsync(
             [Service] IStoryAdminMutationService mutationService,
-            [Service] IStoryWriteService writeService,
+            [Service] IStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -78,7 +78,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations
         private async Task SendStoryEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultStoryDto result,
+            ResultStoryAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

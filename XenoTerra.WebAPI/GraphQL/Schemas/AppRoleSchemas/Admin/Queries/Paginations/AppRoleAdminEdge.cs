@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.AppRoleDtos;
+﻿using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Queries.Paginations
 {
     public class AppRoleAdminEdge
     {
-        public ResultAppRoleWithRelationsDto Node { get; set; } = null!;
+        public ResultAppRoleWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

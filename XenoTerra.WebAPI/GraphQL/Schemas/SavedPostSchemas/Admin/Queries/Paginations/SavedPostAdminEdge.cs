@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
+﻿using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Queries.Paginations
 {
     public class SavedPostAdminEdge
     {
-        public ResultSavedPostWithRelationsDto Node { get; set; } = null!;
+        public ResultSavedPostWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

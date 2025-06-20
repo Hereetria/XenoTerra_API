@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.MessageDtos;
+﻿using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Queries.Paginations
 {
     public class MessageAdminEdge
     {
-        public ResultMessageWithRelationsDto Node { get; set; } = null!;
+        public ResultMessageWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

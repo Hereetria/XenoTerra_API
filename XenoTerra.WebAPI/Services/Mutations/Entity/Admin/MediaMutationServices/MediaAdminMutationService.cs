@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MediaMutationServices
 {
     public class MediaAdminMutationService(IMapper mapper)
-        : MutationService<Media, ResultMediaDto, CreateMediaDto, UpdateMediaDto, Guid>(mapper),
+        : MutationService<Media, ResultMediaAdminDto, CreateMediaAdminDto, UpdateMediaAdminDto, Guid>(mapper),
         IMediaAdminMutationService
     {
     }

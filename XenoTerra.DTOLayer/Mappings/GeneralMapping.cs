@@ -1,26 +1,29 @@
 
 using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
-using XenoTerra.DTOLayer.Dtos.FollowDtos;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
-using XenoTerra.DTOLayer.Dtos.MessageDtos;
-using XenoTerra.DTOLayer.Dtos.NoteDtos;
-using XenoTerra.DTOLayer.Dtos.NotificationDtos;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
-using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
-using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
-using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
-using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
-using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
-using XenoTerra.DTOLayer.Dtos.AppRoleDtos;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.AuthDtos;
+using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin;
 
 namespace XenoTerra.DTOLayer.Mappings
 {
@@ -29,158 +32,178 @@ namespace XenoTerra.DTOLayer.Mappings
         public GeneralMapping()
         {
             // BlockUser Mappings
-            CreateMap<BlockUser, ResultBlockUserWithRelationsDto>()
+            CreateMap<BlockUser, ResultBlockUserWithRelationsAdminDto>()
                 .ForMember(dest => dest.BlockingUser, opt => opt.MapFrom(src => src.BlockingUser ?? null))
                 .ForMember(dest => dest.BlockedUser, opt => opt.MapFrom(src => src.BlockedUser ?? null))
-
                 .ReverseMap();
-            CreateMap<BlockUser, ResultBlockUserDto>().ReverseMap();
-            CreateMap<BlockUser, CreateCommentckUserDto>().ReverseMap();
-            CreateMap<BlockUser, UpdateBlockUserDto>().ReverseMap();
+            CreateMap<BlockUser, ResultBlockUserAdminDto>().ReverseMap();
+            CreateMap<BlockUser, CreateBlockUserAdminDto>().ReverseMap();
+            CreateMap<BlockUser, UpdateBlockUserAdminDto>().ReverseMap();
 
             // Comment Mappings
-            CreateMap<Comment, ResultCommentWithRelationsDto>()
-            .ForMember(dest => dest.User, (IMemberConfigurationExpression<Comment, ResultCommentWithRelationsDto, object> opt) => opt.MapFrom(src => src.User))
+            CreateMap<Comment, ResultCommentWithRelationsAdminDto>()
+            .ForMember(dest => dest.User, (IMemberConfigurationExpression<Comment, ResultCommentWithRelationsAdminDto, object> opt) => opt.MapFrom(src => src.User))
             .ForMember(dest => dest.CommentLikes, opt => opt.MapFrom(src => src.CommentLikes))
                         .ForMember(dest => dest.ParentComment, opt => opt.MapFrom(src => src.ParentComment))
             .ReverseMap();
-            CreateMap<Comment, ResultCommentDto>().ReverseMap();
-            CreateMap<Comment, CreateCommentDto>().ReverseMap();
-            CreateMap<Comment, UpdateCommentDto>().ReverseMap();
+            CreateMap<Comment, ResultCommentAdminDto>().ReverseMap();
+            CreateMap<Comment, CreateCommentAdminDto>().ReverseMap();
+            CreateMap<Comment, UpdateCommentAdminDto>().ReverseMap();
 
             // Follow Mappings
-            CreateMap<Follow, ResultFollowWithRelationsDto>()
+            CreateMap<Follow, ResultFollowWithRelationsAdminDto>()
                 .ForMember(dest => dest.Follower, opt => opt.MapFrom(src => src.Follower))
                 .ForMember(dest => dest.Following, opt => opt.MapFrom(src => src.Following))
                 .ReverseMap();
-            CreateMap<Follow, ResultFollowDto>().ReverseMap();
-            CreateMap<Follow, CreateFollowDto>().ReverseMap();
-            CreateMap<Follow, UpdateFollowDto>().ReverseMap();
+            CreateMap<Follow, ResultFollowAdminDto>().ReverseMap();
+            CreateMap<Follow, CreateFollowAdminDto>().ReverseMap();
+            CreateMap<Follow, UpdateFollowAdminDto>().ReverseMap();
 
             // Highlight Mappings
-            CreateMap<Highlight, ResultHighlightWithRelationsDto>()
+            CreateMap<Highlight, ResultHighlightWithRelationsAdminDto>()
                 .ForMember(dest => dest.Stories, opt => opt.MapFrom(src => src.StoryHighlights.Select(sh => sh.Story)))
                 .ReverseMap();
-            CreateMap<Highlight, ResultHighlightDto>().ReverseMap();
-            CreateMap<Highlight, CreateHighlightDto>().ReverseMap();
-            CreateMap<Highlight, UpdateHighlightDto>().ReverseMap();
+            CreateMap<Highlight, ResultHighlightAdminDto>().ReverseMap();
+            CreateMap<Highlight, CreateHighlightAdminDto>().ReverseMap();
+            CreateMap<Highlight, UpdateHighlightAdminDto>().ReverseMap();
 
             // PostLike Mappings
-            CreateMap<PostLike, ResultPostLikeWithRelationsDto>()
+            CreateMap<PostLike, ResultPostLikeWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.Post, opt => opt.MapFrom(src => src.Post))
                 .ReverseMap();
-            CreateMap<PostLike, ResultPostLikeDto>().ReverseMap();
-            CreateMap<PostLike, CreatePostLikeDto>().ReverseMap();
-            CreateMap<PostLike, UpdatePostLikeDto>().ReverseMap();
+            CreateMap<PostLike, ResultPostLikeAdminDto>().ReverseMap();
+            CreateMap<PostLike, CreatePostLikeAdminDto>().ReverseMap();
+            CreateMap<PostLike, UpdatePostLikeAdminDto>().ReverseMap();
+
+            // StoryLike Mappings
+            CreateMap<StoryLike, ResultStoryLikeWithRelationsAdminDto>()
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+                .ForMember(dest => dest.Story, opt => opt.MapFrom(src => src.Story))
+                .ReverseMap();
+            CreateMap<StoryLike, ResultStoryLikeAdminDto>().ReverseMap();
+            CreateMap<StoryLike, CreateStoryLikeAdminDto>().ReverseMap();
+            CreateMap<StoryLike, UpdateStoryLikeAdminDto>().ReverseMap();
 
             // Media Mappings
-            CreateMap<Media, ResultMediaWithRelationsDto>()
+            CreateMap<Media, ResultMediaWithRelationsAdminDto>()
                 .ReverseMap();
-            CreateMap<Media, ResultMediaDto>().ReverseMap();
-            CreateMap<Media, CreateMediaDto>().ReverseMap();
-            CreateMap<Media, UpdateMediaDto>().ReverseMap();
+            CreateMap<Media, ResultMediaAdminDto>().ReverseMap();
+            CreateMap<Media, CreateMediaAdminDto>().ReverseMap();
+            CreateMap<Media, UpdateMediaAdminDto>().ReverseMap();
 
             // Message Mappings
-            CreateMap<Message, ResultMessageWithRelationsDto>()
+            CreateMap<Message, ResultMessageWithRelationsAdminDto>()
                 .ForMember(dest => dest.Sender, opt => opt.MapFrom(src => src.Sender))
                 .ForMember(dest => dest.Receiver, opt => opt.MapFrom(src => src.Receiver))
                 .ReverseMap();
-            CreateMap<Message, ResultMessageDto>().ReverseMap();
-            CreateMap<Message, CreateMessageDto>().ReverseMap();
-            CreateMap<Message, UpdateMessageDto>().ReverseMap();
+            CreateMap<Message, ResultMessageAdminDto>().ReverseMap();
+            CreateMap<Message, CreateMessageAdminDto>().ReverseMap();
+            CreateMap<Message, UpdateMessageAdminDto>().ReverseMap();
 
             // Note Mappings
-            CreateMap<Note, ResultNoteWithRelationsDto>()
+            CreateMap<Note, ResultNoteWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
-            CreateMap<Note, ResultNoteDto>().ReverseMap();
-            CreateMap<Note, CreateNoteDto>().ReverseMap();
-            CreateMap<Note, UpdateNoteDto>().ReverseMap();
+            CreateMap<Note, ResultNoteAdminDto>().ReverseMap();
+            CreateMap<Note, CreateNoteAdminDto>().ReverseMap();
+            CreateMap<Note, UpdateNoteAdminDto>().ReverseMap();
 
             // Notification Mappings
-            CreateMap<Notification, ResultNotificationWithRelationsDto>()
+            CreateMap<Notification, ResultNotificationWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
 
-            CreateMap<Notification, ResultNotificationDto>().ReverseMap();
-            CreateMap<Notification, CreateNotificationDto>().ReverseMap();
-            CreateMap<Notification, UpdateNotificationDto>().ReverseMap();
+            CreateMap<Notification, ResultNotificationAdminDto>().ReverseMap();
+            CreateMap<Notification, CreateNotificationAdminDto>().ReverseMap();
+            CreateMap<Notification, UpdateNotificationAdminDto>().ReverseMap();
 
             // Post Mappings
-            CreateMap<Post, ResultPostWithRelationsDto>()
+            CreateMap<Post, ResultPostWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.Likes))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.SavedPosts, opt => opt.MapFrom(src => src.SavedPosts))
                 .ForMember(dest => dest.TaggedUsers, opt => opt.MapFrom(src => src.TaggedUsers))
                 .ReverseMap();
-            CreateMap<Post, ResultPostDto>().ReverseMap();
-            CreateMap<Post, CreatePostDto>().ReverseMap();
-            CreateMap<Post, UpdatePostDto>().ReverseMap();
+            CreateMap<Post, ResultPostAdminDto>().ReverseMap();
+            CreateMap<Post, CreatePostAdminDto>().ReverseMap();
+            CreateMap<Post, UpdatePostAdminDto>().ReverseMap();
 
             // Reaction Mappings
-            CreateMap<Reaction, ResultReactionWithRelationsDto>()
+            CreateMap<Reaction, ResultReactionWithRelationsAdminDto>()
                 .ForMember(dest => dest.Message, opt => opt.MapFrom(src => src.Message))
                 .ReverseMap();
-            CreateMap<Reaction, ResultReactionDto>().ReverseMap();
-            CreateMap<Reaction, CreateReactionDto>().ReverseMap();
-            CreateMap<Reaction, UpdateReactionDto>().ReverseMap();
+            CreateMap<Reaction, ResultReactionAdminDto>().ReverseMap();
+            CreateMap<Reaction, CreateReactionAdminDto>().ReverseMap();
+            CreateMap<Reaction, UpdateReactionAdminDto>().ReverseMap();
 
             // RecentChats Mappings
-            CreateMap<RecentChats, ResultRecentChatsWithRelationsDto>()
+            CreateMap<RecentChats, ResultRecentChatsWithRelationsAdminDto>()
                 .ForMember(dest => dest.Users, opt => opt.MapFrom(src => src.Users))
                 .ReverseMap();
-            CreateMap<RecentChats, ResultRecentChatsDto>().ReverseMap();
-            CreateMap<RecentChats, CreateRecentChatsDto>().ReverseMap();
-            CreateMap<RecentChats, UpdateRecentChatsDto>().ReverseMap();
+            CreateMap<RecentChats, ResultRecentChatsAdminDto>().ReverseMap();
+            CreateMap<RecentChats, CreateRecentChatsAdminDto>().ReverseMap();
+            CreateMap<RecentChats, UpdateRecentChatsAdminDto>().ReverseMap();
 
             // ReportComment Mappings
-            CreateMap<ReportComment, ResultReportCommentWithRelationsDto>()
+            CreateMap<ReportComment, ResultReportCommentWithRelationsAdminDto>()
                 .ForMember(dest => dest.ReporterUser, opt => opt.MapFrom(src => src.ReporterUser))
                 .ForMember(dest => dest.Comment, opt => opt.MapFrom(src => src.Comment))
                 .ReverseMap();
-            CreateMap<ReportComment, ResultReportCommentDto>().ReverseMap();
-            CreateMap<ReportComment, CreateReportCommentDto>().ReverseMap();
-            CreateMap<ReportComment, UpdateReportCommentDto>().ReverseMap();
+            CreateMap<ReportComment, ResultReportCommentAdminDto>().ReverseMap();
+            CreateMap<ReportComment, CreateReportCommentAdminDto>().ReverseMap();
+            CreateMap<ReportComment, UpdateReportCommentAdminDto>().ReverseMap();
+
+            // ReportStory Mappings
+            CreateMap<ReportStory, ResultReportStoryWithRelationsAdminDto>()
+                .ForMember(dest => dest.ReporterUser, opt => opt.MapFrom(src => src.ReporterUser))
+                .ForMember(dest => dest.Story, opt => opt.MapFrom(src => src.Story))
+                .ReverseMap();
+            CreateMap<ReportStory, ResultReportStoryAdminDto>().ReverseMap();
+            CreateMap<ReportStory, CreateReportStoryAdminDto>().ReverseMap();
+            CreateMap<ReportStory, UpdateReportStoryAdminDto>().ReverseMap();
 
             // Role Mappings
-            CreateMap<AppRole, ResultAppRoleWithRelationsDto>().ReverseMap();
-            CreateMap<AppRole, ResultAppRoleDto>().ReverseMap();
-            CreateMap<AppRole, CreateAppRoleDto>().ReverseMap();
-            CreateMap<AppRole, UpdateAppRoleDto>().ReverseMap();
+            CreateMap<AppRole, ResultAppRoleWithRelationsAdminDto>().ReverseMap();
+            CreateMap<AppRole, ResultAppRoleAdminDto>().ReverseMap();
+            CreateMap<AppRole, CreateAppRoleAdminDto>().ReverseMap();
+            CreateMap<AppRole, UpdateAppRoleAdminDto>().ReverseMap();
 
             // SavedPost Mappings
-            CreateMap<SavedPost, ResultSavedPostWithRelationsDto>().ReverseMap();
-            CreateMap<SavedPost, ResultSavedPostDto>().ReverseMap();
-            CreateMap<SavedPost, CreateSavedPostDto>().ReverseMap();
-            CreateMap<SavedPost, UpdateSavedPostDto>().ReverseMap();
+            CreateMap<SavedPost, ResultSavedPostWithRelationsAdminDto>().ReverseMap();
+            CreateMap<SavedPost, ResultSavedPostAdminDto>().ReverseMap();
+            CreateMap<SavedPost, CreateSavedPostAdminDto>().ReverseMap();
+            CreateMap<SavedPost, UpdateSavedPostAdminDto>().ReverseMap();
 
             // SearchHistory Mappings
-            CreateMap<SearchHistory, ResultSearchHistoryWithRelationsDto>()
+            CreateMap<SearchHistory, ResultSearchHistoryWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.SearchedUsers, opt => opt.MapFrom(src => src.SearchedUsers))
                 .ReverseMap();
-            CreateMap<SearchHistory, ResultSearchHistoryDto>().ReverseMap();
-            CreateMap<SearchHistory, CreateSearchHistoryDto>().ReverseMap();
-            CreateMap<SearchHistory, UpdateSearchHistoryDto>().ReverseMap();
+            CreateMap<SearchHistory, ResultSearchHistoryAdminDto>().ReverseMap();
+            CreateMap<SearchHistory, CreateSearchHistoryAdminDto>().ReverseMap();
+            CreateMap<SearchHistory, UpdateSearchHistoryAdminDto>().ReverseMap();
 
             // Story Mappings
-            CreateMap<Story, ResultStoryWithRelationsDto>()
+            CreateMap<Story, ResultStoryWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ForMember(dest => dest.ViewStories, opt => opt.MapFrom(src => src.ViewStories))
                 .ForMember(dest => dest.Highlights, opt => opt.MapFrom(src => src.StoryHighlights.Select(sh => sh.Highlight)))
+                .ForMember(dest => dest.StoryLikes, opt => opt.MapFrom(src => src.StoryLikes))
+                .ForMember(dest => dest.ReportStories, opt => opt.MapFrom(src => src.ReportStories))
                 .ReverseMap();
-            CreateMap<Story, ResultStoryDto>().ReverseMap();
-            CreateMap<Story, CreateStoryDto>().ReverseMap();
-            CreateMap<Story, UpdateStoryDto>().ReverseMap();
+            CreateMap<Story, ResultStoryAdminDto>().ReverseMap();
+            CreateMap<Story, CreateStoryAdminDto>().ReverseMap();
+            CreateMap<Story, UpdateStoryAdminDto>().ReverseMap();
 
             // User Mappings
-            CreateMap<AppUser, ResultAppUserWithRelationsPrivateDto>()
+            CreateMap<AppUser, ResultAppUserWithRelationsAdminDto>()
                 .ForMember(dest => dest.Posts, opt => opt.MapFrom(src => src.Posts))
                 .ForMember(dest => dest.Followers, opt => opt.MapFrom(src => src.Followers))
                 .ForMember(dest => dest.Followings, opt => opt.MapFrom(src => src.Followings))
-                .ForMember(dest => dest.Likes, opt => opt.MapFrom(src => src.PostLikes))
+                .ForMember(dest => dest.PostLikes, opt => opt.MapFrom(src => src.PostLikes))
+                .ForMember(dest => dest.StoryLikes, opt => opt.MapFrom(src => src.StoryLikes))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
                 .ForMember(dest => dest.SentMessages, opt => opt.MapFrom(src => src.SentMessages))
                 .ForMember(dest => dest.ReceivedMessages, opt => opt.MapFrom(src => src.ReceivedMessages))
@@ -189,33 +212,33 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.SavedPosts, opt => opt.MapFrom(src => src.SavedPosts))
                 .ForMember(dest => dest.ReportComments, opt => opt.MapFrom(src => src.ReportComments))
                 .ForMember(dest => dest.ViewStories, opt => opt.MapFrom(src => src.ViewStories))
-                .ForMember(dest => dest.SearchedBy, opt => opt.MapFrom(src => src.SearchedBy))
+                .ForMember(dest => dest.PerformedSearches, opt => opt.MapFrom(src => src.PerformedSearches))
+                .ForMember(dest => dest.WasSearchedBy, opt => opt.MapFrom(src => src.WasSearchedBy))
                 .ForMember(dest => dest.RecentChats, opt => opt.MapFrom(src => src.RecentChats))
                 .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note))
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
-            CreateMap<AppUser, ResultAppUserWithRelationsPublicDto>();
-            CreateMap<AppUser, ResultAppUserPrivateDto>().ReverseMap();
-            CreateMap<AppUser, ResultAppUserPublicDto>();
+
+            CreateMap<AppUser, ResultAppUserAdminDto>();
             CreateMap<AppUser, RegisterDto>().ReverseMap();
-            CreateMap<AppUser, UpdateAppUserDto>().ReverseMap();
+            CreateMap<AppUser, UpdateAppUserAdminDto>().ReverseMap();
 
             // UserSetting Mappings
-            CreateMap<UserSetting, ResultUserSettingWithRelationsDto>()
+            CreateMap<UserSetting, ResultUserSettingWithRelationsAdminDto>()
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
-            CreateMap<UserSetting, ResultUserSettingDto>().ReverseMap();
-            CreateMap<UserSetting, CreateUserSettingDto>().ReverseMap();
-            CreateMap<UserSetting, UpdateUserSettingDto>().ReverseMap();
+            CreateMap<UserSetting, ResultUserSettingAdminDto>().ReverseMap();
+            CreateMap<UserSetting, CreateUserSettingAdminDto>().ReverseMap();
+            CreateMap<UserSetting, UpdateUserSettingAdminDto>().ReverseMap();
 
             // ViewStory Mappings
-            CreateMap<ViewStory, ResultViewStoryWithRelationsDto>()
+            CreateMap<ViewStory, ResultViewStoryWithRelationsAdminDto>()
                 .ForMember(dest => dest.Story, opt => opt.MapFrom(src => src.Story))
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap();
-            CreateMap<ViewStory, ResultViewStoryDto>().ReverseMap();
-            CreateMap<ViewStory, CreateViewStoryDto>().ReverseMap();
-            CreateMap<ViewStory, UpdateViewStoryDto>().ReverseMap();
+            CreateMap<ViewStory, ResultViewStoryAdminDto>().ReverseMap();
+            CreateMap<ViewStory, CreateViewStoryAdminDto>().ReverseMap();
+            CreateMap<ViewStory, UpdateViewStoryAdminDto>().ReverseMap();
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.CommentLikeDtos;
+﻿using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Subscriptions.Events
 {
-    public record CommentLikeAdminUpdatedEvent : UpdatedEvent<ResultCommentLikeDto>
+    public record CommentLikeAdminUpdatedEvent : UpdatedEvent<ResultCommentLikeAdminDto>
     {
     }
 }

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MediaMutationServices;
+using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
     {
         public async Task<CreateMediaAdminPayload> CreateMediaAsync(
             [Service] IMediaAdminMutationService mutationService,
-            [Service] IMediaWriteService writeService,
+            [Service] IMediaAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateMediaAdminInput> inputAdminValidator,
             CreateMediaAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateMediaAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateMediaAdminInput, CreateMediaDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateMediaAdminInput, CreateMediaAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateMediaAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
 
         public async Task<UpdateMediaAdminPayload> UpdateMediaAsync(
             [Service] IMediaAdminMutationService mutationService,
-            [Service] IMediaWriteService writeService,
+            [Service] IMediaAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateMediaAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateMediaAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateMediaAdminInput, UpdateMediaDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateMediaAdminInput, UpdateMediaAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateMediaAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
 
         public async Task<DeleteMediaAdminPayload> DeleteMediaAsync(
             [Service] IMediaAdminMutationService mutationService,
-            [Service] IMediaWriteService writeService,
+            [Service] IMediaAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
         private async Task SendMediaEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultMediaDto result,
+            ResultMediaAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

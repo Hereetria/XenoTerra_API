@@ -1,7 +1,7 @@
-﻿using XenoTerra.DTOLayer.Dtos.AppRoleDtos;
+﻿using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations.Payloads
 {
-    public record DeleteRoleAdminPayload : Payload<ResultAppRoleDto>;
+    public record DeleteRoleAdminPayload : Payload<ResultAppRoleAdminDto>;
 }

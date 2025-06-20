@@ -20,6 +20,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Admin.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Queries;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._RootQueries
 {
@@ -39,11 +41,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootQueries
         RecentChatsAdminQuery recentChats,
         ReportCommentAdminQuery reportComments,
         ReportPostAdminQuery reportPosts,
-        AppRoleAdminQuery roles,
+        StoryLikeAdminQuery storyLikes,
+        ReportStoryAdminQuery reportStories,
+        AppRoleAdminQuery appRoles,
         SavedPostAdminQuery savedPosts,
         SearchHistoryAdminQuery searchHistories,
         StoryAdminQuery stories,
-        AppUserAdminQuery users,
+        AppUserAdminQuery appUsers,
         UserSettingAdminQuery userSettings,
         ViewStoryAdminQuery viewStories)
     {
@@ -62,13 +66,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootQueries
         public RecentChatsAdminQuery RecentChats { get; } = recentChats;
         public ReportCommentAdminQuery ReportComments { get; } = reportComments;
         public ReportPostAdminQuery ReportPosts { get; } = reportPosts;
-        public AppRoleAdminQuery Roles { get; } = roles;
+        public StoryLikeAdminQuery StoryLikes { get; } = storyLikes;
+        public ReportStoryAdminQuery ReportStories { get; } = reportStories;
+        public AppRoleAdminQuery Roles { get; } = appRoles;
         public SavedPostAdminQuery SavedPosts { get; } = savedPosts;
         public SearchHistoryAdminQuery SearchHistories { get; } = searchHistories;
         public StoryAdminQuery Stories { get; } = stories;
-        public AppUserAdminQuery Users { get; } = users;
+        public AppUserAdminQuery Users { get; } = appUsers;
         public UserSettingAdminQuery UserSettings { get; } = userSettings;
         public ViewStoryAdminQuery ViewStories { get; } = viewStories;
     }
+
 
 }

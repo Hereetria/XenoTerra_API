@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 using XenoTerra.DataAccessLayer.Persistence;
 
 namespace XenoTerra.WebAPI.GraphQL.DataLoaders.Base

@@ -1,9 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Subscriptions.Events
 {
-    public record BlockUserAdminChangedEvent : ChangedEvent<ResultBlockUserDto>
+    public record BlockUserAdminChangedEvent : ChangedEvent<ResultBlockUserAdminDto>
     {
     }
 }

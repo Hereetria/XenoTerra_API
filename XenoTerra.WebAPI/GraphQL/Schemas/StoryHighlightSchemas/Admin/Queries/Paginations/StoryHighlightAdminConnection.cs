@@ -1,12 +1,12 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Queries.Paginations
 {
     public class StoryHighlightAdminConnection(
-        IReadOnlyList<Edge<ResultStoryHighlightWithRelationsDto>> edges,
+        IReadOnlyList<Edge<ResultStoryHighlightWithRelationsAdminDto>> edges,
         ConnectionPageInfo pageInfo,
-        int totalCount) : Connection<ResultStoryHighlightWithRelationsDto>(edges, pageInfo, totalCount)
+        int totalCount) : Connection<ResultStoryHighlightWithRelationsAdminDto>(edges, pageInfo, totalCount)
     {
     }
 }

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices;
-using XenoTerra.DTOLayer.Dtos.NoteDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NoteMutationServices;
+using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
     {
         public async Task<CreateNoteAdminPayload> CreateNoteAsync(
             [Service] INoteAdminMutationService mutationService,
-            [Service] INoteWriteService writeService,
+            [Service] INoteAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateNoteAdminInput> inputAdminValidator,
             CreateNoteAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateNoteAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateNoteAdminInput, CreateNoteDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateNoteAdminInput, CreateNoteAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateNoteAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
 
         public async Task<UpdateNoteAdminPayload> UpdateNoteAsync(
             [Service] INoteAdminMutationService mutationService,
-            [Service] INoteWriteService writeService,
+            [Service] INoteAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateNoteAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateNoteAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateNoteAdminInput, UpdateNoteDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateNoteAdminInput, UpdateNoteAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateNoteAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
 
         public async Task<DeleteNoteAdminPayload> DeleteNoteAsync(
             [Service] INoteAdminMutationService mutationService,
-            [Service] INoteWriteService writeService,
+            [Service] INoteAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Mutations
         private async Task SendNoteEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultNoteDto result,
+            ResultNoteAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

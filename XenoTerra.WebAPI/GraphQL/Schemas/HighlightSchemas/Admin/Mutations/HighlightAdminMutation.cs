@@ -1,8 +1,7 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using HotChocolate.Resolvers;
+using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.DTOLayer.Dtos.HighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Helpers;
 using FluentValidation;
@@ -12,7 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.HighlightMutationServices;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
-using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices;
+using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
     {
         public async Task<CreateHighlightAdminPayload> CreateHighlightAsync(
             [Service] IHighlightAdminMutationService mutationService,
-            [Service] IHighlightWriteService writeService,
+            [Service] IHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateHighlightAdminInput> inputAdminValidator,
             CreateHighlightAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateHighlightAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateHighlightAdminInput, CreateHighlightDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateHighlightAdminInput, CreateHighlightAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateHighlightAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
 
         public async Task<UpdateHighlightAdminPayload> UpdateHighlightAsync(
             [Service] IHighlightAdminMutationService mutationService,
-            [Service] IHighlightWriteService writeService,
+            [Service] IHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateHighlightAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateHighlightAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateHighlightAdminInput, UpdateHighlightDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateHighlightAdminInput, UpdateHighlightAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateHighlightAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
 
         public async Task<DeleteHighlightAdminPayload> DeleteHighlightAsync(
             [Service] IHighlightAdminMutationService mutationService,
-            [Service] IHighlightWriteService writeService,
+            [Service] IHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
         private async Task SendHighlightEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultHighlightDto result,
+            ResultHighlightAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

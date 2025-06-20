@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.PostLikeResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.PostLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostLikeAdminConnection, ResultPostLikeWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<PostLikeAdminConnection, ResultPostLikeWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostLikeAdminConnection, ResultPostLikeWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<PostLikeAdminConnection, ResultPostLikeWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultPostLikeWithRelationsDto?> GetPostLikeByIdAsync(
+        public async Task<ResultPostLikeWithRelationsAdminDto?> GetPostLikeByIdAsync(
             string? key,
             [Service] IPostLikeQueryService service,
             [Service] IPostLikeResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultPostLikeWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultPostLikeWithRelationsAdminDto>(entity);
         }
     }
 

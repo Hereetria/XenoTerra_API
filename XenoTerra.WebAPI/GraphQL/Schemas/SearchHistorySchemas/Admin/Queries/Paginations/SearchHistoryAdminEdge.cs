@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
+﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries.Paginations
 {
     public class SearchHistoryAdminEdge
     {
-        public ResultSearchHistoryWithRelationsDto Node { get; set; } = null!;
+        public ResultSearchHistoryWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

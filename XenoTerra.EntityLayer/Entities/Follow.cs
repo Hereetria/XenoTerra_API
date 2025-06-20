@@ -15,6 +15,7 @@ namespace XenoTerra.EntityLayer.Entities
 
         public Guid FollowingId { get; set; }
         public AppUser Following { get; set; } = null!;
+        public bool IsPending { get; set; }
 
         public DateTime FollowedAt { get; set; }
     }

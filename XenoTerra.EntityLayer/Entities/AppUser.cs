@@ -31,6 +31,7 @@ namespace XenoTerra.EntityLayer.Entities
         public ICollection<Follow> Followings { get; set; } = [];
 
         public ICollection<PostLike> PostLikes { get; set; } = [];
+        public ICollection<StoryLike> StoryLikes { get; set; } = [];
 
         public ICollection<Comment> Comments { get; set; } = [];
 
@@ -52,12 +53,14 @@ namespace XenoTerra.EntityLayer.Entities
 
         public ICollection<ReportComment> ReportComments { get; set; } = [];
         public ICollection<ReportPost> ReportPosts { get; set; } = [];
+        public ICollection<ReportStory> ReportStories { get; set; } = [];
 
         public ICollection<ViewStory> ViewStories { get; set; } = [];
 
         public UserSetting UserSetting { get; set; } = null!;
 
-        public ICollection<SearchHistoryUser> SearchedBy { get; set; } = [];
+        public ICollection<SearchHistory> PerformedSearches { get; set; } = [];
+        public ICollection<SearchHistoryUser> WasSearchedBy { get; set; } = [];
 
         public ICollection<RecentChats> RecentChats { get; set; } = [];
 

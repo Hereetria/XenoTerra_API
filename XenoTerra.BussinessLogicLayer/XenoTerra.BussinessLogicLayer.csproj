@@ -24,4 +24,61 @@
     <ProjectReference Include="..\XenoTerra.DataAccessLayer\XenoTerra.DataAccessLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Entity\AppRoleServices\Write\" />
+    <Folder Include="Services\Entity\AppRoleServices\Read\" />
+    <Folder Include="Services\Entity\AppUserServices\Read\" />
+    <Folder Include="Services\Entity\AppUserServices\Write\" />
+    <Folder Include="Services\Entity\BlockUserServices\Read\" />
+    <Folder Include="Services\Entity\BlockUserServices\Write\" />
+    <Folder Include="Services\Entity\CommentLikeServices\Read\" />
+    <Folder Include="Services\Entity\CommentLikeServices\Write\" />
+    <Folder Include="Services\Entity\CommentServices\Read\" />
+    <Folder Include="Services\Entity\CommentServices\Write\" />
+    <Folder Include="Services\Entity\FollowServices\Read\" />
+    <Folder Include="Services\Entity\FollowServices\Write\" />
+    <Folder Include="Services\Entity\HighlightServices\Read\" />
+    <Folder Include="Services\Entity\HighlightServices\Write\" />
+    <Folder Include="Services\Entity\MediaServices\Read\" />
+    <Folder Include="Services\Entity\MediaServices\Write\" />
+    <Folder Include="Services\Entity\MessageServices\Read\" />
+    <Folder Include="Services\Entity\MessageServices\Write\" />
+    <Folder Include="Services\Entity\NoteServices\Read\" />
+    <Folder Include="Services\Entity\NoteServices\Write\" />
+    <Folder Include="Services\Entity\NotificationServices\Read\" />
+    <Folder Include="Services\Entity\NotificationServices\Write\" />
+    <Folder Include="Services\Entity\PostLikeServices\Read\" />
+    <Folder Include="Services\Entity\PostLikeServices\Write\" />
+    <Folder Include="Services\Entity\PostServices\Read\" />
+    <Folder Include="Services\Entity\PostServices\Write\" />
+    <Folder Include="Services\Entity\ReactionServices\Read\" />
+    <Folder Include="Services\Entity\ReactionServices\Write\" />
+    <Folder Include="Services\Entity\RecentChatsServices\Read\" />
+    <Folder Include="Services\Entity\RecentChatsServices\Write\" />
+    <Folder Include="Services\Entity\ReportCommentServices\Read\" />
+    <Folder Include="Services\Entity\ReportCommentServices\Write\" />
+    <Folder Include="Services\Entity\ReportPostServices\Read\" />
+    <Folder Include="Services\Entity\ReportPostServices\Write\" />
+    <Folder Include="Services\Entity\ReportStoryServices\Read\" />
+    <Folder Include="Services\Entity\ReportStoryServices\Write\" />
+    <Folder Include="Services\Entity\SavedPostServices\Read\" />
+    <Folder Include="Services\Entity\SavedPostServices\Write\" />
+    <Folder Include="Services\Entity\SearchHistoryServices\Read\" />
+    <Folder Include="Services\Entity\SearchHistoryServices\Write\" />
+    <Folder Include="Services\Entity\SearchHistoryUserServices\Read\" />
+    <Folder Include="Services\Entity\SearchHistoryUserServices\Write\" />
+    <Folder Include="Services\Entity\StoryHighlightServices\Read\" />
+    <Folder Include="Services\Entity\StoryHighlightServices\Write\" />
+    <Folder Include="Services\Entity\StoryLikeServices\Read\" />
+    <Folder Include="Services\Entity\StoryLikeServices\Write\" />
+    <Folder Include="Services\Entity\StoryServices\Read\" />
+    <Folder Include="Services\Entity\StoryServices\Write\" />
+    <Folder Include="Services\Entity\UserPostTagServices\Read\" />
+    <Folder Include="Services\Entity\UserPostTagServices\Write\" />
+    <Folder Include="Services\Entity\UserSettingServices\Read\" />
+    <Folder Include="Services\Entity\UserSettingServices\Write\" />
+    <Folder Include="Services\Entity\ViewStoryServices\Read\" />
+    <Folder Include="Services\Entity\ViewStoryServices\Write\" />
+  </ItemGroup>
+
 </Project>

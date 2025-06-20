@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 
 namespace XenoTerra.WebAPI.Helpers
 {

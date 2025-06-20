@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Persistence
@@ -122,6 +122,31 @@ namespace XenoTerra.DataAccessLayer.Persistence
                 .HasForeignKey(rp => rp.ReporterUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<StoryLike>()
+    .HasOne(l => l.Story)
+    .WithMany(s => s.StoryLikes)
+    .HasForeignKey(l => l.StoryId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<StoryLike>()
+                .HasOne(l => l.User)
+                .WithMany(u => u.StoryLikes)
+                .HasForeignKey(l => l.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReportStory>()
+    .HasOne(rs => rs.Story)
+    .WithMany(s => s.ReportStories)
+    .HasForeignKey(rs => rs.StoryId)
+    .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ReportStory>()
+                .HasOne(rs => rs.ReporterUser)
+                .WithMany(u => u.ReportStories)
+                .HasForeignKey(rs => rs.ReporterUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<SavedPost>()
                 .HasOne(sp => sp.Post)
                 .WithMany(p => p.SavedPosts)
@@ -173,12 +198,17 @@ namespace XenoTerra.DataAccessLayer.Persistence
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<SearchHistoryUser>()
-                .HasOne(shu => shu.User)
-                .WithMany(u => u.SearchedBy) // Kullanýcýnýn arandýðý geçmiþler
-                .HasForeignKey(shu => shu.UserId)
+                .HasOne(shu => shu.SearchHistory)
+                .WithMany(sh => sh.SearchedUsers)  // SearchHistory'de ICollection<SearchHistoryUser> SearchedUsers olmalý
+                .HasForeignKey(shu => shu.SearchHistoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
+            // SearchHistoryUser: AppUser ile baðlantý (WasSearchedBy)
+            modelBuilder.Entity<SearchHistoryUser>()
+                .HasOne(shu => shu.User)
+                .WithMany(u => u.WasSearchedBy)
+                .HasForeignKey(shu => shu.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

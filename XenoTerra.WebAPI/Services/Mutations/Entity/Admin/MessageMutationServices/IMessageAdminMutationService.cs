@@ -1,10 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.MessageDtos;
-using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MessageMutationServices
 {
-    public interface IMessageAdminMutationService : IMutationService<Message, ResultMessageDto, CreateMessageDto, UpdateMessageDto, Guid>
+    public interface IMessageAdminMutationService : IMutationService<Message, ResultMessageAdminDto, CreateMessageAdminDto, UpdateMessageAdminDto, Guid>
     {
     }
 }

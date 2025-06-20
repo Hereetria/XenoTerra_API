@@ -1,10 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.StoryDtos;
-using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryMutationServices
 {
-    public interface IStoryAdminMutationService : IMutationService<Story, ResultStoryDto, CreateStoryDto, UpdateStoryDto, Guid>
+    public interface IStoryAdminMutationService : IMutationService<Story, ResultStoryAdminDto, CreateStoryAdminDto, UpdateStoryAdminDto, Guid>
     {
     }
 }

@@ -3,7 +3,6 @@ using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.DTOLayer.Dtos.ReportPostDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations.Payloads;
@@ -12,7 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Subscriptions.Eve
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReportPostMutationServices;
-using XenoTerra.BussinessLogicLayer.Services.Entity.ReportPostServices;
+using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ReportPostServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
     {
         public async Task<CreateReportPostAdminPayload> CreateReportPostAsync(
             [Service] IReportPostAdminMutationService mutationService,
-            [Service] IReportPostWriteService writeService,
+            [Service] IReportPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateReportPostAdminInput> inputAdminValidator,
             CreateReportPostAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateReportPostAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateReportPostAdminInput, CreateReportPostDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateReportPostAdminInput, CreateReportPostAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateReportPostAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
 
         public async Task<UpdateReportPostAdminPayload> UpdateReportPostAsync(
             [Service] IReportPostAdminMutationService mutationService,
-            [Service] IReportPostWriteService writeService,
+            [Service] IReportPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateReportPostAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateReportPostAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportPostAdminInput, UpdateReportPostDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportPostAdminInput, UpdateReportPostAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateReportPostAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
 
         public async Task<DeleteReportPostAdminPayload> DeleteReportPostAsync(
             [Service] IReportPostAdminMutationService mutationService,
-            [Service] IReportPostWriteService writeService,
+            [Service] IReportPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations
         private async Task SendReportPostEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultReportPostDto result,
+            ResultReportPostAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

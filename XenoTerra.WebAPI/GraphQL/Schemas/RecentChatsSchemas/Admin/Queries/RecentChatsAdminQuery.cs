@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.RecentChatsResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.RecentChatsQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<RecentChats, ResultRecentChatsWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<RecentChats, ResultRecentChatsWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<RecentChatsAdminConnection, ResultRecentChatsWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<RecentChatsAdminConnection, ResultRecentChatsWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<RecentChats, ResultRecentChatsWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<RecentChats, ResultRecentChatsWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<RecentChatsAdminConnection, ResultRecentChatsWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<RecentChatsAdminConnection, ResultRecentChatsWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultRecentChatsWithRelationsDto?> GetRecentChatsByIdAsync(
+        public async Task<ResultRecentChatsWithRelationsAdminDto?> GetRecentChatsByIdAsync(
             string? key,
             [Service] IRecentChatsQueryService service,
             [Service] IRecentChatsResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultRecentChatsWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultRecentChatsWithRelationsAdminDto>(entity);
         }
     }
 }

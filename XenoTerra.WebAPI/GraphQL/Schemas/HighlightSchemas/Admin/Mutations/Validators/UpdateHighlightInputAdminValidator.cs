@@ -11,6 +11,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Vali
             RuleFor(x => x.HighlightId)
                 .NotEmpty().WithMessage("HighlightId must not be empty.")
                 .Must(ValidationHelper.BeValidGuid).WithMessage("HighlightId must be a valid GUID.");
+
+            RuleFor(x => x.UserId)
+                .NotEmpty().WithMessage("UserId must not be empty.");
         }
     }
 }

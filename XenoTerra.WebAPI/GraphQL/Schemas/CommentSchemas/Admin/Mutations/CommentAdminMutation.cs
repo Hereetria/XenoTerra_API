@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Subscriptions.Events
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentMutationServices;
+using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
     {
         public async Task<CreateCommentAdminPayload> CreateCommentAsync(
             [Service] ICommentAdminMutationService mutationService,
-            [Service] ICommentWriteService writeService,
+            [Service] ICommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateCommentAdminInput> inputAdminValidator,
             CreateCommentAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateCommentAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateCommentAdminInput, CreateCommentDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateCommentAdminInput, CreateCommentAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateCommentAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
 
         public async Task<UpdateCommentAdminPayload> UpdateCommentAsync(
             [Service] ICommentAdminMutationService mutationService,
-            [Service] ICommentWriteService writeService,
+            [Service] ICommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateCommentAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateCommentAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentAdminInput, UpdateCommentDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentAdminInput, UpdateCommentAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateCommentAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
 
         public async Task<DeleteCommentAdminPayload> DeleteCommentAsync(
             [Service] ICommentAdminMutationService mutationService,
-            [Service] ICommentWriteService writeService,
+            [Service] ICommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Mutations
         private async Task SendCommentEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultCommentDto result,
+            ResultCommentAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

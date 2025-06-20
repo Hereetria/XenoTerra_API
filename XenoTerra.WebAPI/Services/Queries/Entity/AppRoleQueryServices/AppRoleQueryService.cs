@@ -3,7 +3,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Read;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;
 
-namespace XenoTerra.WebAPI.Services.Queries.Entity.RoleQueryServices
+namespace XenoTerra.WebAPI.Services.Queries.Entity.AppRoleQueryServices
 {
     public class AppRoleQueryService : QueryService<AppRole, Guid>, IAppRoleQueryService
     {

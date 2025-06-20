@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.ReportPostDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.ReportPostResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReportPostQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<ReportPost, ResultReportPostWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<ReportPost, ResultReportPostWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<ReportPostAdminConnection, ResultReportPostWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<ReportPostAdminConnection, ResultReportPostWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<ReportPost, ResultReportPostWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<ReportPost, ResultReportPostWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<ReportPostAdminConnection, ResultReportPostWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<ReportPostAdminConnection, ResultReportPostWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultReportPostWithRelationsDto?> GetReportPostByIdAsync(
+        public async Task<ResultReportPostWithRelationsAdminDto?> GetReportPostByIdAsync(
             string? key,
             [Service] IReportPostQueryService service,
             [Service] IReportPostResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultReportPostWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultReportPostWithRelationsAdminDto>(entity);
         }
     }
 

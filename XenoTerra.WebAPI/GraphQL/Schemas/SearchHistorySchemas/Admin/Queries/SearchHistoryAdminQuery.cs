@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.SearchHistoryResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.SearchHistoryQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<SearchHistoryAdminConnection, ResultSearchHistoryWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<SearchHistoryAdminConnection, ResultSearchHistoryWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<SearchHistory, ResultSearchHistoryWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<SearchHistoryAdminConnection, ResultSearchHistoryWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<SearchHistoryAdminConnection, ResultSearchHistoryWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultSearchHistoryWithRelationsDto?> GetSearchHistoryByIdAsync(
+        public async Task<ResultSearchHistoryWithRelationsAdminDto?> GetSearchHistoryByIdAsync(
             string? key,
             [Service] ISearchHistoryQueryService service,
             [Service] ISearchHistoryResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultSearchHistoryWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultSearchHistoryWithRelationsAdminDto>(entity);
         }
     }
 }

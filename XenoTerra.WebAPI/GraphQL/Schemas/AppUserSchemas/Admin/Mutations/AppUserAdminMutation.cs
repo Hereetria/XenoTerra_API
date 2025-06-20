@@ -13,7 +13,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Subscriptions.Events;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations
 {
@@ -49,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserAdminInput, UpdateAppUserDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserAdminInput, UpdateAppUserAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync(updateDto, modifiedFields);
 
@@ -77,7 +78,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations
         private async Task SendUserEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultAppUserPrivateDto result,
+            ResultAppUserOwnDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

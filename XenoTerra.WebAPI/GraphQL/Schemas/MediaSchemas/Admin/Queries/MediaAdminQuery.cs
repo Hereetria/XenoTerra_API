@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.MediaDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.MediaResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.MediaQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<MediaAdminConnection, ResultMediaWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<MediaAdminConnection, ResultMediaWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Media, ResultMediaWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<MediaAdminConnection, ResultMediaWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<MediaAdminConnection, ResultMediaWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultMediaWithRelationsDto?> GetMediaByIdAsync(
+        public async Task<ResultMediaWithRelationsAdminDto?> GetMediaByIdAsync(
             string? key,
             [Service] IMediaQueryService service,
             [Service] IMediaResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultMediaWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultMediaWithRelationsAdminDto>(entity);
         }
     }
 }

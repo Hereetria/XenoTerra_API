@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryUserMutationServices
 {
     public class SearchHistoryUserAdminMutationService(IMapper mapper)
-        : MutationService<SearchHistoryUser, ResultSearchHistoryUserDto, CreateSearchHistoryUserDto, UpdateSearchHistoryUserDto, Guid>(mapper),
+        : MutationService<SearchHistoryUser, ResultSearchHistoryUserAdminDto, CreateSearchHistoryUserAdminDto, UpdateSearchHistoryUserAdminDto, Guid>(mapper),
         ISearchHistoryUserAdminMutationService
     {
     }

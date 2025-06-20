@@ -1,11 +1,11 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Queries.Paginations
 {
     public class SearchHistoryUserAdminEdge
     {
-        public ResultSearchHistoryUserWithRelationsDto Node { get; set; } = null!;
+        public ResultSearchHistoryUserWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

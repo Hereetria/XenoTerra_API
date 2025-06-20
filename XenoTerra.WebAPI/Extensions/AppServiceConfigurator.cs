@@ -34,6 +34,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using Microsoft.AspNetCore.Authentication;
 using XenoTerra.WebAPI.GraphQL.Auth;
 using XenoTerra.WebAPI.Services.Mutations.Base;
+using XenoTerra.DataAccessLayer.Helpers.Abstract;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -158,6 +160,8 @@ namespace XenoTerra.WebAPI.Extensions
 
             builder.Services.AddScoped(typeof(IQueryService<,>), typeof(QueryService<,>));
             builder.Services.AddScoped(typeof(IMutationService<,,,,>), typeof(MutationService<,,,,>));
+
+            builder.Services.AddScoped(typeof(IExistenceChecker<>), typeof(ExistenceChecker<>));
         }
     }
 }

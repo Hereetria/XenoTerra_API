@@ -1,7 +1,7 @@
-﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
+﻿using XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations.Payloads
 {
-    public record UpdateSearchHistoryUserAdminPayload : Payload<ResultSearchHistoryUserDto>;
+    public record UpdateSearchHistoryUserAdminPayload : Payload<ResultSearchHistoryUserAdminDto>;
 }

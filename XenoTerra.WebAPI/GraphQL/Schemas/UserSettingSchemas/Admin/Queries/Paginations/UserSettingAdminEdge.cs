@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
+﻿using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Paginations
 {
     public class UserSettingAdminEdge
     {
-        public ResultUserSettingWithRelationsDto Node { get; set; } = null!;
+        public ResultUserSettingWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

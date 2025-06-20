@@ -19,6 +19,8 @@ namespace XenoTerra.EntityLayer.Entities
         public ICollection<ViewStory> ViewStories { get; set; } = [];
 
         public ICollection<StoryHighlight> StoryHighlights { get; set; } = [];
+        public ICollection<StoryLike> StoryLikes { get; set; } = [];
+        public ICollection<ReportStory> ReportStories { get; set; } = [];
 
         public DateTime CreatedAt { get; set; }
     }

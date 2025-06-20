@@ -1,4 +1,3 @@
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;
 

@@ -32,10 +32,12 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations;
@@ -61,11 +63,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootQueries
         RecentChatsSelfQuery recentChats,
         ReportCommentSelfQuery reportComments,
         ReportPostSelfQuery reportPosts,
+        StoryLikeSelfQuery storyLikes,
+        ReportStorySelfQuery reportStories,
         SavedPostSelfQuery savedPosts,
         SearchHistorySelfQuery searchHistories,
         StorySelfQuery stories,
-        AppUserPrivateSelfQuery usersPrivate,
-        AppUserPublicSelfQuery usersPublic,
+        AppUserOwnSelfQuery appUsersOwn,
+        AppUserPublicSelfQuery appUsersPublic,
         UserSettingSelfQuery userSettings,
         ViewStorySelfQuery viewStories)
     {
@@ -84,11 +88,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootQueries
         public RecentChatsSelfQuery RecentChats { get; } = recentChats;
         public ReportCommentSelfQuery ReportComments { get; } = reportComments;
         public ReportPostSelfQuery ReportPosts { get; } = reportPosts;
+        public StoryLikeSelfQuery StoryLikes { get; } = storyLikes;
+        public ReportStorySelfQuery ReportStories { get; } = reportStories;
         public SavedPostSelfQuery SavedPosts { get; } = savedPosts;
         public SearchHistorySelfQuery SearchHistories { get; } = searchHistories;
         public StorySelfQuery Stories { get; } = stories;
-        public AppUserPrivateSelfQuery UsersPrivate { get; } = usersPrivate;
-        public AppUserPublicSelfQuery UsersPublic { get; } = usersPublic;
+        public AppUserOwnSelfQuery UsersOwn { get; } = appUsersOwn;
+        public AppUserPublicSelfQuery UsersPublic { get; } = appUsersPublic;
         public UserSettingSelfQuery UserSettings { get; } = userSettings;
         public ViewStorySelfQuery ViewStories { get; } = viewStories;
     }

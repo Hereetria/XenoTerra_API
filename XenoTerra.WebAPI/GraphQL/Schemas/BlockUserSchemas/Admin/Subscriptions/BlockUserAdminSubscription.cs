@@ -1,6 +1,5 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.WebAPI.GraphQL.Schemas._RootSubscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Subscriptions.Events;
 

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentServices;
-using XenoTerra.DTOLayer.Dtos.ReportCommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Subscriptions.
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReportCommentMutationServices;
+using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
     {
         public async Task<CreateReportCommentAdminPayload> CreateReportCommentAsync(
             [Service] IReportCommentAdminMutationService mutationService,
-            [Service] IReportCommentWriteService writeService,
+            [Service] IReportCommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateReportCommentAdminInput> inputAdminValidator,
             CreateReportCommentAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateReportCommentAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateReportCommentAdminInput, CreateReportCommentDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateReportCommentAdminInput, CreateReportCommentAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateReportCommentAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
 
         public async Task<UpdateReportCommentAdminPayload> UpdateReportCommentAsync(
             [Service] IReportCommentAdminMutationService mutationService,
-            [Service] IReportCommentWriteService writeService,
+            [Service] IReportCommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateReportCommentAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateReportCommentAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportCommentAdminInput, UpdateReportCommentDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportCommentAdminInput, UpdateReportCommentAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateReportCommentAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
 
         public async Task<DeleteReportCommentAdminPayload> DeleteReportCommentAsync(
             [Service] IReportCommentAdminMutationService mutationService,
-            [Service] IReportCommentWriteService writeService,
+            [Service] IReportCommentAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Mutations
         private async Task SendReportCommentEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultReportCommentDto result,
+            ResultReportCommentAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

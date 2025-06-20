@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.NoteDtos;
+using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Admin.Subscriptions.Events
 {
-    public record NoteAdminUpdatedEvent : UpdatedEvent<ResultNoteDto>
+    public record NoteAdminUpdatedEvent : UpdatedEvent<ResultNoteAdminDto>
     {
     }
 }

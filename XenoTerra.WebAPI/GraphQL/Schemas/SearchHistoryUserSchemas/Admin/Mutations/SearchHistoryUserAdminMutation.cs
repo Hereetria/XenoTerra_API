@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserServices;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Subscripti
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryUserMutationServices;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
     {
         public async Task<CreateSearchHistoryUserAdminPayload> CreateSearchHistoryUserAsync(
             [Service] ISearchHistoryUserAdminMutationService mutationService,
-            [Service] ISearchHistoryUserWriteService writeService,
+            [Service] ISearchHistoryUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateSearchHistoryUserAdminInput> inputAdminValidator,
             CreateSearchHistoryUserAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
             InputGuard.EnsureNotNull(input, nameof(CreateSearchHistoryUserAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateSearchHistoryUserAdminInput, CreateSearchHistoryUserDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateSearchHistoryUserAdminInput, CreateSearchHistoryUserAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateSearchHistoryUserAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
 
         public async Task<UpdateSearchHistoryUserAdminPayload> UpdateSearchHistoryUserAsync(
             [Service] ISearchHistoryUserAdminMutationService mutationService,
-            [Service] ISearchHistoryUserWriteService writeService,
+            [Service] ISearchHistoryUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateSearchHistoryUserAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateSearchHistoryUserAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateSearchHistoryUserAdminInput, UpdateSearchHistoryUserDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateSearchHistoryUserAdminInput, UpdateSearchHistoryUserAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateSearchHistoryUserAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
 
         public async Task<DeleteSearchHistoryUserAdminPayload> DeleteSearchHistoryUserAsync(
             [Service] ISearchHistoryUserAdminMutationService mutationService,
-            [Service] ISearchHistoryUserWriteService writeService,
+            [Service] ISearchHistoryUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistoryUserSchemas.Admin.Mutati
         private async Task SendSearchHistoryUserEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultSearchHistoryUserDto result,
+            ResultSearchHistoryUserAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

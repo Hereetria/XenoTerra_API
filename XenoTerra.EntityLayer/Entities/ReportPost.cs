@@ -16,8 +16,6 @@ namespace XenoTerra.EntityLayer.Entities
         public Guid PostId { get; set; }
         public Post Post { get; set; } = null!;
 
-        public string Reason { get; set; } = string.Empty;
-
         public DateTime ReportedAt { get; set; }
     }
 }

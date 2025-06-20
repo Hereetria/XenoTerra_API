@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.FollowResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<FollowAdminConnection, ResultFollowWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<FollowAdminConnection, ResultFollowWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<FollowAdminConnection, ResultFollowWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<FollowAdminConnection, ResultFollowWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultFollowWithRelationsDto?> GetFollowByIdAsync(
+        public async Task<ResultFollowWithRelationsAdminDto?> GetFollowByIdAsync(
             string? key,
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultFollowWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultFollowWithRelationsAdminDto>(entity);
         }
     }
 

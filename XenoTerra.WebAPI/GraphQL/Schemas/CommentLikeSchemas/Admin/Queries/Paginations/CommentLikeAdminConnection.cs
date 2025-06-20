@@ -1,12 +1,12 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.CommentLikeDtos;
+using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Queries.Paginations
 {
     public class CommentLikeAdminConnection(
-        IReadOnlyList<Edge<ResultCommentLikeWithRelationsDto>> edges,
+        IReadOnlyList<Edge<ResultCommentLikeWithRelationsAdminDto>> edges,
         ConnectionPageInfo pageInfo,
-        int totalCount) : Connection<ResultCommentLikeWithRelationsDto>(edges, pageInfo, totalCount)
+        int totalCount) : Connection<ResultCommentLikeWithRelationsAdminDto>(edges, pageInfo, totalCount)
     {
     }
 }

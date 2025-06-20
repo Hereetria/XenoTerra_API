@@ -2,8 +2,10 @@
 using System.Reflection;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Helpers;
 using Microsoft.EntityFrameworkCore.Metadata;
+using XenoTerra.EntityLayer.Entities;
+using Microsoft.EntityFrameworkCore;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 {
@@ -23,7 +25,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
             foreach (var field in relationalFields)
             {
-                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(field);
+                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(dbContext, field);
 
                 if (crossTableName != null)
                 {
@@ -65,12 +67,15 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
                 .Cast<TKey>()
                 .ToHashSet();
 
+            var relatedPrimaryKeyProperty = TypeProviders.GetRelatedEntityKeyProperty<TEntity>(dbContext, field)
+                ?? throw new Exception($"Related entity primary key not found for '{field}'");
+
             var selectedFields = GraphQLFieldProvider
                 .GetNestedSelectedFields(context, field)
                 .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
-            if (!selectedFields.Contains(foreignKeyProperty.Name))
-                selectedFields.Add(foreignKeyProperty.Name);
+            if (!selectedFields.Contains(relatedPrimaryKeyProperty.Name))
+                selectedFields.Add(relatedPrimaryKeyProperty.Name);
 
             AddOrUpdateMap(entityMap, entityProperty.PropertyType, ids, selectedFields);
         }
@@ -109,23 +114,19 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
 
             var genericFkMethod = getFkMethod.MakeGenericMethod(entityType.ClrType);
 
-
             var fkProp = genericFkMethod.Invoke(null, new object[] { dbContext, navigationName, null }) as PropertyInfo
                 ?? throw new InvalidOperationException($"Foreign key property not found on related entity '{relatedType.Name}'.");
 
             var getRelatedKeysMethod = typeof(TypeProviders)
                 .GetMethod(nameof(TypeProviders.GetRelatedPrimaryKeysByForeignKeyMatch))
-                ?.MakeGenericMethod(relatedType, typeof(TKey))
+                ?.MakeGenericMethod(typeof(TEntity), relatedType, typeof(TKey))
                 ?? throw new Exception("Method GetRelatedPrimaryKeysByForeignKeyMatch not found.");
 
             if (!_entityKeyMap.TryGetValue(relatedType, out var relatedIds))
             {
-                var result = getRelatedKeysMethod.Invoke(null, new object[] { dbContext, fkProp, primaryKeys.ToList() }) as List<TKey>;
-
-                if (result == null)
-                    throw new InvalidOperationException("Failed to get related primary keys.");
-
-                relatedIds = result;
+                var result = getRelatedKeysMethod.Invoke(null, new object[] { dbContext, field, primaryKeys.ToList() }) as List<TKey>;
+                 
+                relatedIds = result ?? [];
                 _entityKeyMap[relatedType] = relatedIds;
             }
 
@@ -134,10 +135,20 @@ namespace XenoTerra.WebAPI.Services.Common.EntityMapping
                 ? new HashSet<string>(selectedFieldsRaw, StringComparer.InvariantCultureIgnoreCase)
                 : new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
 
-            selectedFields.Add(fkProp.Name);
+            var getFkNameMethod = typeof(TypeProviders)
+                .GetMethod(nameof(TypeProviders.GetForeignKeyPropertyName), BindingFlags.Public | BindingFlags.Static, null, new[] { typeof(DbContext) }, null)
+                ?.MakeGenericMethod(typeof(TEntity), relatedType)
+                ?? throw new Exception("Generic method 'GetForeignKeyPropertyName<T1,T2>' not found.");
+
+
+            var fkName = getFkNameMethod.Invoke(null, [dbContext]) as string
+                ?? throw new InvalidOperationException("Failed to retrieve foreign key property name.");
+
+            selectedFields.Add(fkName);
 
             AddOrUpdateMap(entityMap, relatedType, relatedIds, selectedFields);
         }
+
 
         private static void HandleManyToMany(
             AppDbContext dbContext,

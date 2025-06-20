@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReactionMutationServices
 {
     public class ReactionAdminMutationService(IMapper mapper)
-        : MutationService<Reaction, ResultReactionDto, CreateReactionDto, UpdateReactionDto, Guid>(mapper),
+        : MutationService<Reaction, ResultReactionAdminDto, CreateReactionAdminDto, UpdateReactionAdminDto, Guid>(mapper),
         IReactionAdminMutationService
     {
     }

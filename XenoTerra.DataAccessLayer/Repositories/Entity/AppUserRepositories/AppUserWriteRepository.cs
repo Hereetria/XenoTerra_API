@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;

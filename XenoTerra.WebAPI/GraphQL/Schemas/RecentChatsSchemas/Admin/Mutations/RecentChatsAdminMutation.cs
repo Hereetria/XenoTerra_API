@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsServices;
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RecentChatsMutationServices;
+using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
     {
         public async Task<CreateRecentChatsAdminPayload> CreateRecentChatsAsync(
             [Service] IRecentChatsAdminMutationService mutationService,
-            [Service] IRecentChatsWriteService writeService,
+            [Service] IRecentChatsAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateRecentChatsAdminInput> inputAdminValidator,
             CreateRecentChatsAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateRecentChatsAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateRecentChatsAdminInput, CreateRecentChatsDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateRecentChatsAdminInput, CreateRecentChatsAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateRecentChatsAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
 
         public async Task<UpdateRecentChatsAdminPayload> UpdateRecentChatsAsync(
             [Service] IRecentChatsAdminMutationService mutationService,
-            [Service] IRecentChatsWriteService writeService,
+            [Service] IRecentChatsAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateRecentChatsAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateRecentChatsAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateRecentChatsAdminInput, UpdateRecentChatsDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateRecentChatsAdminInput, UpdateRecentChatsAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateRecentChatsAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
 
         public async Task<DeleteRecentChatsAdminPayload> DeleteRecentChatsAsync(
             [Service] IRecentChatsAdminMutationService mutationService,
-            [Service] IRecentChatsWriteService writeService,
+            [Service] IRecentChatsAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
         private async Task SendRecentChatsEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultRecentChatsDto result,
+            ResultRecentChatsAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

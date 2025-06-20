@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 using XenoTerra.DataAccessLayer.Persistence;
+using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
 {
@@ -16,7 +17,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             List<TEntity> entityList,
             IReadOnlyDictionary<TRelatedKey, TRelatedEntity> relatedEntities)
         {
-            var navProperties = EntityAssignmentService<TEntity, TRelatedEntity, TRelatedKey>.GetMatchingNavigationProperties();
+            var navProperties = GetMatchingNavigationProperties();
 
             foreach (var navProperty in navProperties)
             {
@@ -24,8 +25,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 if (relatedEntityType == null)
                     continue;
 
-                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(navProperty.Name);
-
+                var crossTableName = CrossTableNameProvider.GetCrossTableName<TEntity>(dbContext, navProperty.Name);
 
                 if (crossTableName != null)
                 {
@@ -51,7 +51,7 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
         {
             foreach (var entity in entityList)
             {
-                var fkProperty = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, navProperty.Name);
+                var fkProperty = TypeProviders.GetForeignKeyPropertyFromRelated<TEntity>(dbContext, navProperty.Name);
 
                 if (fkProperty == null)
                     continue;
@@ -76,12 +76,15 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 return;
 
             var propertyType = entityNavProp.PropertyType;
-            var relatedEntityType = propertyType != typeof(string) &&
-                                    propertyType.IsGenericType &&
-                                    propertyType.GetInterfaces().Any(i =>
-                                        i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))
+            var isCollection = propertyType != typeof(string) &&
+                               propertyType.IsGenericType &&
+                               propertyType.GetInterfaces().Any(i =>
+                                   i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>));
+
+            var relatedEntityType = isCollection
                 ? propertyType.GetGenericArguments().FirstOrDefault()
                 : propertyType;
+
             if (relatedEntityType == null)
                 return;
 
@@ -90,11 +93,9 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 return;
 
             var singularNavPropertyName = WordInflector.ConvertToSingular(navProperty.Name);
-
             var navigationName = typeof(TEntity).Name;
 
             var fkPropName = TypeProviders.GetForeignKeyProperty<TRelatedEntity>(dbContext, navigationName)?.Name;
-
             if (fkPropName == null)
                 return;
 
@@ -111,21 +112,30 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
                 var matches = relatedEntities.Values
                     .Where(rel => Equals(fkProperty.GetValue(rel), entityId))
                     .ToList();
+
                 if (matches.Count == 0)
                     continue;
 
-                var listType = typeof(List<>).MakeGenericType(relatedEntityType);
-                if (Activator.CreateInstance(listType) is not System.Collections.IList list)
-                    continue;
-
-                foreach (var item in matches)
+                if (isCollection)
                 {
-                    list.Add(item);
-                }
+                    // Assign as List<T>
+                    var listType = typeof(List<>).MakeGenericType(relatedEntityType);
+                    if (Activator.CreateInstance(listType) is not System.Collections.IList list)
+                        continue;
 
-                navProperty.SetValue(entity, list);
+                    foreach (var item in matches)
+                        list.Add(item);
+
+                    navProperty.SetValue(entity, list);
+                }
+                else
+                {
+                    // Assign single item
+                    navProperty.SetValue(entity, matches.First());
+                }
             }
         }
+
         private static void AssignManyToMany(
             AppDbContext dbContext,
             List<TEntity> entityList,
@@ -133,78 +143,86 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
             PropertyInfo navProperty,
             string crossTableName)
         {
-            var entityKeyProperty = dbContext.Model.FindEntityType(typeof(TEntity))!
-                .FindPrimaryKey()!
-                .Properties[0];
+            var entityType = typeof(TEntity);
+            var relatedEntityType = typeof(TRelatedEntity);
+
+            var entityTypeModel = dbContext.Model.FindEntityType(entityType)
+                ?? throw new Exception($"Entity type '{entityType.Name}' not found in model.");
+
+            var entityKeyProperty = entityTypeModel.FindPrimaryKey()?.Properties.FirstOrDefault()
+                ?? throw new Exception($"Primary key not found for entity '{entityType.Name}'.");
+
             var entityKeyPropertyName = entityKeyProperty.Name;
+            var entityKeyClrProperty = entityKeyProperty.PropertyInfo
+                ?? throw new Exception($"PropertyInfo for key '{entityKeyPropertyName}' is null.");
 
-            var crossNavProp = typeof(TEntity)
+            var crossNavProp = entityType
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .FirstOrDefault(p => string.Equals(p.Name, crossTableName, StringComparison.InvariantCultureIgnoreCase))
-                ?? throw new Exception($"'{crossTableName}' property not found on '{typeof(TEntity).Name}'");
+                .FirstOrDefault(p => string.Equals(p.Name, crossTableName, StringComparison.OrdinalIgnoreCase))
+                ?? throw new Exception($"Navigation '{crossTableName}' not found on entity '{entityType.Name}'.");
 
-            var crossEntityType = crossNavProp.PropertyType.IsGenericType
-                ? crossNavProp.PropertyType.GetGenericArguments().First()
-                : crossNavProp.PropertyType;
+            var crossEntityType = crossNavProp.PropertyType.GetGenericArguments().FirstOrDefault()
+                ?? throw new Exception($"'{crossTableName}' is not a valid generic navigation.");
 
-            var crossEntityEfType = dbContext.Model.FindEntityType(crossEntityType)
-                ?? throw new Exception($"Cross entity '{crossEntityType.Name}' not found in DbContext.");
+            var crossEntityTypeModel = dbContext.Model.FindEntityType(crossEntityType)
+                ?? throw new Exception($"Entity type '{crossEntityType.Name}' not found in model.");
 
-            var crossEntityKeys = crossEntityEfType.FindPrimaryKey()?.Properties;
+            var crossEntityKeys = crossEntityTypeModel.FindPrimaryKey()?.Properties;
             if (crossEntityKeys == null || crossEntityKeys.Count != 2)
-                throw new Exception($"Cross table '{crossEntityType.Name}' must have exactly 2 primary keys.");
+                throw new Exception($"Cross entity '{crossEntityType.Name}' must have exactly 2 primary keys.");
 
             var relatedEntityKeyPropertyName = crossEntityKeys
-                .FirstOrDefault(k => !k.Name.Equals(entityKeyPropertyName, StringComparison.InvariantCultureIgnoreCase))
+                .FirstOrDefault(k => !k.Name.Equals(entityKeyPropertyName, StringComparison.OrdinalIgnoreCase))
                 ?.Name
                 ?? throw new Exception("Could not determine related entity key property.");
 
-            crossTableName = WordInflector.ConvertToSingular(crossTableName);
-            var crossTableType = dbContext.Model.GetEntityTypes()
-                .FirstOrDefault(e => e.ClrType.Name.Equals(crossTableName, StringComparison.InvariantCultureIgnoreCase))
-                ?.ClrType
-                ?? throw new Exception($"Cross table '{crossTableName}' not found.");
-
             var entityIdToRelatedIds = TypeProviders.GetEntityIdToRelatedIds(
                 dbContext,
-                crossTableType,
+                crossEntityType,
                 entityKeyPropertyName,
                 relatedEntityKeyPropertyName);
 
-            var relatedKeyProperty = typeof(TRelatedEntity).GetProperty(relatedEntityKeyPropertyName)
-                ?? throw new Exception($"Related entity '{typeof(TRelatedEntity).Name}' does not contain '{relatedEntityKeyPropertyName}'");
+            var relatedEntityKeyProp = relatedEntityType.GetProperty(relatedEntityKeyPropertyName)
+                ?? throw new Exception($"'{relatedEntityType.Name}' does not contain property '{relatedEntityKeyPropertyName}'.");
 
             var relatedEntityDict = resultsDict.Values
-                .ToDictionary(x => relatedKeyProperty.GetValue(x)!, x => x);
+                .ToDictionary(x => relatedEntityKeyProp.GetValue(x)!, x => x);
+
+            var crossEntityToEntityFkProp = crossEntityType.GetProperty(entityKeyPropertyName)
+                ?? throw new Exception($"'{entityKeyPropertyName}' not found on '{crossEntityType.Name}'.");
+
+            var crossEntityToRelatedFkProp = crossEntityType.GetProperty(relatedEntityKeyPropertyName)
+                ?? throw new Exception($"'{relatedEntityKeyPropertyName}' not found on '{crossEntityType.Name}'.");
+
+            var crossEntityNavToRelated = crossEntityType.GetProperty(navProperty.Name)
+                ?? throw new Exception($"Navigation '{navProperty.Name}' not found on '{crossEntityType.Name}'.");
 
             foreach (var entity in entityList)
             {
-                var entityId = entityKeyProperty.PropertyInfo?.GetValue(entity);
-                if (entityId == null)
+                var entityId = entityKeyClrProperty.GetValue(entity);
+                if (entityId == null || !entityIdToRelatedIds.TryGetValue(entityId, out var relatedIdList))
                     continue;
 
-                if (!entityIdToRelatedIds.TryGetValue(entityId, out var relatedIdList))
-                    continue;
-
-                var navType = navProperty.PropertyType;
-                var elementType = navType.IsGenericType
-                    ? navType.GetGenericArguments().First()
-                    : typeof(object);
-
-                var listType = typeof(List<>).MakeGenericType(elementType);
+                var listType = typeof(List<>).MakeGenericType(crossEntityType);
                 var listInstance = Activator.CreateInstance(listType);
                 if (listInstance is not System.Collections.IList list)
-                    throw new Exception($"Failed to create list of type List<{elementType.Name}>");
+                    throw new Exception($"Failed to create list of type List<{crossEntityType.Name}>");
 
                 foreach (var relatedId in relatedIdList)
                 {
-                    if (relatedEntityDict.TryGetValue(relatedId, out var relatedEntity))
-                    {
-                        list.Add(relatedEntity);
-                    }
+                    if (!relatedEntityDict.TryGetValue(relatedId, out var relatedEntity))
+                        continue;
+
+                    var crossInstance = Activator.CreateInstance(crossEntityType)!;
+
+                    crossEntityToEntityFkProp.SetValue(crossInstance, entityId);
+                    crossEntityToRelatedFkProp.SetValue(crossInstance, relatedId);
+                    crossEntityNavToRelated.SetValue(crossInstance, relatedEntity);
+
+                    list.Add(crossInstance);
                 }
 
-                navProperty.SetValue(entity, list);
+                crossNavProp.SetValue(entity, list);
             }
         }
 
@@ -228,14 +246,49 @@ namespace XenoTerra.WebAPI.Services.Common.EntityAssignment
 
         private static List<PropertyInfo> GetMatchingNavigationProperties()
         {
-            return [.. typeof(TEntity).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+            var entityType = typeof(TEntity);
+            var relatedType = typeof(TRelatedEntity);
+
+            var directMatches = entityType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
                 .Where(p =>
-                    p.PropertyType == typeof(TRelatedEntity ) ||
+                    p.PropertyType == relatedType ||
                     (p.PropertyType.IsGenericType &&
                      p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>) &&
-                     p.PropertyType.GetGenericArguments()[0] == typeof(TRelatedEntity)))];
-        }
+                     p.PropertyType.GetGenericArguments()[0] == relatedType))
+                .ToList();
 
+            if (directMatches.Count > 0)
+                return directMatches;
+
+            var crossProps = entityType
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p =>
+                    p.PropertyType.IsGenericType &&
+                    p.PropertyType.GetGenericTypeDefinition() == typeof(ICollection<>))
+                .ToList();
+
+            foreach (var crossProp in crossProps)
+            {
+                var joinType = crossProp.PropertyType.GetGenericArguments().FirstOrDefault();
+                if (joinType == null)
+                    continue;
+
+                var joinProps = joinType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+                var relatedNavInJoin = joinProps.FirstOrDefault(p =>
+                    p.PropertyType == relatedType ||
+                    (p.PropertyType.IsGenericType &&
+                     p.PropertyType.GetGenericArguments().Any(t => t == relatedType)));
+
+                if (relatedNavInJoin == null)
+                    continue;
+
+                return [relatedNavInJoin];
+            }
+
+            return [];
+        }
     }
 
 }

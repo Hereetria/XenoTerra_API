@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostServices;
-using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Even
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SavedPostMutationServices;
+using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
     {
         public async Task<CreateSavedPostAdminPayload> CreateSavedPostAsync(
             [Service] ISavedPostAdminMutationService mutationService,
-            [Service] ISavedPostWriteService writeService,
+            [Service] ISavedPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateSavedPostAdminInput> inputAdminValidator,
             CreateSavedPostAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateSavedPostAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateSavedPostAdminInput, CreateSavedPostDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateSavedPostAdminInput, CreateSavedPostAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateSavedPostAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
 
         public async Task<UpdateSavedPostAdminPayload> UpdateSavedPostAsync(
             [Service] ISavedPostAdminMutationService mutationService,
-            [Service] ISavedPostWriteService writeService,
+            [Service] ISavedPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateSavedPostAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateSavedPostAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateSavedPostAdminInput, UpdateSavedPostDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateSavedPostAdminInput, UpdateSavedPostAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateSavedPostAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
 
         public async Task<DeleteSavedPostAdminPayload> DeleteSavedPostAsync(
             [Service] ISavedPostAdminMutationService mutationService,
-            [Service] ISavedPostWriteService writeService,
+            [Service] ISavedPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations
         private async Task SendSavedPostEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultSavedPostDto result,
+            ResultSavedPostAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

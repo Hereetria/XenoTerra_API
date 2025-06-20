@@ -361,6 +361,9 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<Guid>("FollowingId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsPending")
+                        .HasColumnType("bit");
+
                     b.HasKey("FollowId");
 
                     b.HasIndex("FollowerId");
@@ -609,10 +612,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<Guid>("CommentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("ReportedAt")
                         .HasColumnType("datetime2");
 
@@ -637,10 +636,6 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Property<Guid>("PostId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Reason")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("ReportedAt")
                         .HasColumnType("datetime2");
 
@@ -654,6 +649,30 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.HasIndex("ReporterUserId");
 
                     b.ToTable("ReportPosts");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.ReportStory", b =>
+                {
+                    b.Property<Guid>("ReportStoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReportedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("ReporterUserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("StoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReportStoryId");
+
+                    b.HasIndex("ReporterUserId");
+
+                    b.HasIndex("StoryId");
+
+                    b.ToTable("ReportStory");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.SavedPost", b =>
@@ -753,6 +772,30 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.HasIndex("HighlightId");
 
                     b.ToTable("StoryHighlights");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.StoryLike", b =>
+                {
+                    b.Property<Guid>("StoryLikeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LikedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("StoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("StoryLikeId");
+
+                    b.HasIndex("StoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StoryLike");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.UserPostTag", b =>
@@ -1122,6 +1165,25 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("ReporterUser");
                 });
 
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.ReportStory", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "ReporterUser")
+                        .WithMany("ReportStories")
+                        .HasForeignKey("ReporterUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Story", "Story")
+                        .WithMany("ReportStories")
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ReporterUser");
+
+                    b.Navigation("Story");
+                });
+
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.SavedPost", b =>
                 {
                     b.HasOne("XenoTerra.EntityLayer.Entities.Post", "Post")
@@ -1199,6 +1261,25 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("Highlight");
 
                     b.Navigation("Story");
+                });
+
+            modelBuilder.Entity("XenoTerra.EntityLayer.Entities.StoryLike", b =>
+                {
+                    b.HasOne("XenoTerra.EntityLayer.Entities.Story", "Story")
+                        .WithMany("StoryLikes")
+                        .HasForeignKey("StoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("XenoTerra.EntityLayer.Entities.AppUser", "User")
+                        .WithMany("StoryLikes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Story");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.UserPostTag", b =>
@@ -1281,6 +1362,8 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
                     b.Navigation("ReportPosts");
 
+                    b.Navigation("ReportStories");
+
                     b.Navigation("SavedPosts");
 
                     b.Navigation("SearchedBy");
@@ -1290,6 +1373,8 @@ namespace XenoTerra.DataAccessLayer.Migrations
                     b.Navigation("SentMessages");
 
                     b.Navigation("Stories");
+
+                    b.Navigation("StoryLikes");
 
                     b.Navigation("TaggedPosts");
 
@@ -1338,7 +1423,11 @@ namespace XenoTerra.DataAccessLayer.Migrations
 
             modelBuilder.Entity("XenoTerra.EntityLayer.Entities.Story", b =>
                 {
+                    b.Navigation("ReportStories");
+
                     b.Navigation("StoryHighlights");
+
+                    b.Navigation("StoryLikes");
 
                     b.Navigation("ViewStories");
                 });

@@ -3,7 +3,6 @@ using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations.Payloads;
@@ -12,7 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Subscriptions.Event
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.PostLikeMutationServices;
-using XenoTerra.BussinessLogicLayer.Services.Entity.PostLikeServices;
+using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostLikeServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
     {
         public async Task<CreatePostLikeAdminPayload> CreatePostLikeAsync(
             [Service] IPostLikeAdminMutationService mutationService,
-            [Service] IPostLikeWriteService writeService,
+            [Service] IPostLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreatePostLikeAdminInput> inputAdminValidator,
             CreatePostLikeAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreatePostLikeAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreatePostLikeAdminInput, CreatePostLikeDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreatePostLikeAdminInput, CreatePostLikeAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreatePostLikeAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
 
         public async Task<UpdatePostLikeAdminPayload> UpdatePostLikeAsync(
             [Service] IPostLikeAdminMutationService mutationService,
-            [Service] IPostLikeWriteService writeService,
+            [Service] IPostLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdatePostLikeAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdatePostLikeAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdatePostLikeAdminInput, UpdatePostLikeDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdatePostLikeAdminInput, UpdatePostLikeAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdatePostLikeAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
 
         public async Task<DeletePostLikeAdminPayload> DeletePostLikeAsync(
             [Service] IPostLikeAdminMutationService mutationService,
-            [Service] IPostLikeWriteService writeService,
+            [Service] IPostLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Mutations
         private async Task SendPostLikeEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultPostLikeDto result,
+            ResultPostLikeAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

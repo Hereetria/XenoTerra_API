@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.PostServices;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.PostMutationServices;
+using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.PostServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
     {
         public async Task<CreatePostAdminPayload> CreatePostAsync(
             [Service] IPostAdminMutationService mutationService,
-            [Service] IPostWriteService writeService,
+            [Service] IPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreatePostAdminInput> inputAdminValidator,
             CreatePostAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreatePostAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreatePostAdminInput, CreatePostDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreatePostAdminInput, CreatePostAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreatePostAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
 
         public async Task<UpdatePostAdminPayload> UpdatePostAsync(
             [Service] IPostAdminMutationService mutationService,
-            [Service] IPostWriteService writeService,
+            [Service] IPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdatePostAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdatePostAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdatePostAdminInput, UpdatePostDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdatePostAdminInput, UpdatePostAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdatePostAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
 
         public async Task<DeletePostAdminPayload> DeletePostAsync(
             [Service] IPostAdminMutationService mutationService,
-            [Service] IPostWriteService writeService,
+            [Service] IPostAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Mutations
         private async Task SendPostEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultPostDto result,
+            ResultPostAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

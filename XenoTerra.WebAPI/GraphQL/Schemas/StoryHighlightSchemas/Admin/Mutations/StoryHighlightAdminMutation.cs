@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryHighlightMutationServices;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
     {
         public async Task<CreateStoryHighlightAdminPayload> CreateStoryHighlightAsync(
             [Service] IStoryHighlightAdminMutationService mutationService,
-            [Service] IStoryHighlightWriteService writeService,
+            [Service] IStoryHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateStoryHighlightAdminInput> inputAdminValidator,
             CreateStoryHighlightAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateStoryHighlightAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateStoryHighlightAdminInput, CreateStoryHighlightDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateStoryHighlightAdminInput, CreateStoryHighlightAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateStoryHighlightAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 
         public async Task<UpdateStoryHighlightAdminPayload> UpdateStoryHighlightAsync(
             [Service] IStoryHighlightAdminMutationService mutationService,
-            [Service] IStoryHighlightWriteService writeService,
+            [Service] IStoryHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateStoryHighlightAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateStoryHighlightAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryHighlightAdminInput, UpdateStoryHighlightDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryHighlightAdminInput, UpdateStoryHighlightAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateStoryHighlightAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 
         public async Task<DeleteStoryHighlightAdminPayload> DeleteStoryHighlightAsync(
             [Service] IStoryHighlightAdminMutationService mutationService,
-            [Service] IStoryHighlightWriteService writeService,
+            [Service] IStoryHighlightAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
         private async Task SendStoryHighlightEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultStoryHighlightDto result,
+            ResultStoryHighlightAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

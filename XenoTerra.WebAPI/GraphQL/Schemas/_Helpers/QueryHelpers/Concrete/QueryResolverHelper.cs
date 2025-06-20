@@ -48,7 +48,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete
             }
             else
             {
-                entities = await query.ToListAsync();
+                entities = [.. query];
             }
 
             if (entities.Count == 0)

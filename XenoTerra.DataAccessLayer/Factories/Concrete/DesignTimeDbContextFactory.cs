@@ -9,7 +9,7 @@ using Microsoft.Extensions.Configuration;
 using System.IO;
 using System.Text.Json;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 
 namespace XenoTerra.DataAccessLayer.Factories.Concrete
 {

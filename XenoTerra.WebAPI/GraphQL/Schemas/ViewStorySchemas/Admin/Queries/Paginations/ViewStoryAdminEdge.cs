@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
+﻿using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations
 {
     public class ViewStoryAdminEdge
     {
-        public ResultViewStoryWithRelationsDto Node { get; set; } = null!;
+        public ResultViewStoryWithRelationsAdminDto Node { get; set; } = null!;
         public string Cursor { get; set; } = string.Empty;
     }
 }

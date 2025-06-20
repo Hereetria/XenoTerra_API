@@ -9,13 +9,22 @@ namespace XenoTerra.WebAPI.Helpers
     {
         public static IQueryable<T> ApplyDefaultSorting<T>(this IQueryable<T> query, IResolverContext context)
         {
-            if (context.ArgumentLiteral<IValueNode>("order") is not ListValueNode orderList || !orderList.Items.Any())
+            var orderArg = context.ArgumentLiteral<IValueNode>("order");
+
+            IEnumerable<ObjectValueNode> orderItems = orderArg switch
+            {
+                ListValueNode listNode => listNode.Items.OfType<ObjectValueNode>(),
+                ObjectValueNode singleNode => new[] { singleNode },
+                _ => []
+            };
+
+            if (!orderItems.Any())
                 return query;
 
             var parameter = Expression.Parameter(typeof(T), "x");
             bool isFirst = true;
 
-            foreach (var item in orderList.Items.OfType<ObjectValueNode>())
+            foreach (var item in orderItems)
             {
                 if (item.Fields.Count != 1) continue;
 
@@ -29,7 +38,7 @@ namespace XenoTerra.WebAPI.Helpers
                     .Where(m => m.Name == methodName && m.GetParameters().Length == 2)
                     .Single()
                     .MakeGenericMethod(typeof(T), propertyType)
-                    .Invoke(null, [query, lambda]) as IQueryable<T>
+                    .Invoke(null, new object[] { query, lambda }) as IQueryable<T>
                     ?? throw new InvalidOperationException($"Failed to apply sorting by '{field.Name.Value}'");
 
                 isFirst = false;
@@ -37,7 +46,6 @@ namespace XenoTerra.WebAPI.Helpers
 
             return query;
         }
-
 
         private static (LambdaExpression Lambda, Type PropertyType, string Direction) BuildSorting(ObjectFieldNode field, Type rootType, ParameterExpression parameter)
         {
@@ -58,10 +66,12 @@ namespace XenoTerra.WebAPI.Helpers
                 currentNode = nestedField.Value;
             }
 
-            if (currentNode is not EnumValueNode directionNode)
-                throw new InvalidOperationException("Final sort value must be a sort direction (ASC/DESC).");
-
-            direction = directionNode.Value.ToUpperInvariant();
+            direction = currentNode switch
+            {
+                EnumValueNode enumNode => enumNode.Value.ToUpperInvariant(),
+                StringValueNode stringNode => stringNode.Value.ToUpperInvariant(),
+                _ => throw new InvalidOperationException("Final sort value must be a sort direction (ASC/DESC).")
+            };
 
             Expression body = parameter;
             foreach (var segment in path)

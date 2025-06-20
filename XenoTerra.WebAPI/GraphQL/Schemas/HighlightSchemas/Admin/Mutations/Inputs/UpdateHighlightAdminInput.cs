@@ -3,6 +3,7 @@
     public record UpdateHighlightAdminInput(
         string HighlightId,
         string? Name,
-        string? ProfilePicturePath
+        string? ProfilePicturePath,
+        string UserId
     );
 }

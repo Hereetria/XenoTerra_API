@@ -20,6 +20,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Mutations;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Mutations;
+using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Admin.Mutations;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
 {
@@ -39,11 +41,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
         RecentChatsAdminMutation recentChats,
         ReportCommentAdminMutation reportComments,
         ReportPostAdminMutation reportPosts,
-        AppRoleAdminMutation roles,
+        ReportStoryAdminMutation reportStories,
+        AppRoleAdminMutation appRoles,
         SavedPostAdminMutation savedPosts,
         SearchHistoryAdminMutation searchHistories,
         StoryAdminMutation stories,
-        AppUserAdminMutation users,
+        StoryLikeAdminMutation storyLikes,
+        AppUserAdminMutation appUsers,
         UserSettingAdminMutation userSettings,
         ViewStoryAdminMutation viewStories)
     {
@@ -62,11 +66,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
         public RecentChatsAdminMutation RecentChats { get; } = recentChats;
         public ReportCommentAdminMutation ReportComments { get; } = reportComments;
         public ReportPostAdminMutation ReportPosts { get; } = reportPosts;
-        public AppRoleAdminMutation Roles { get; } = roles;
+        public ReportStoryAdminMutation ReportStories { get; } = reportStories;
+        public AppRoleAdminMutation AppRoles { get; } = appRoles;
         public SavedPostAdminMutation SavedPosts { get; } = savedPosts;
         public SearchHistoryAdminMutation SearchHistories { get; } = searchHistories;
         public StoryAdminMutation Stories { get; } = stories;
-        public AppUserAdminMutation Users { get; } = users;
+        public StoryLikeAdminMutation StoryLikes { get; } = storyLikes;
+        public AppUserAdminMutation AppUsers { get; } = appUsers;
         public UserSettingAdminMutation UserSettings { get; } = userSettings;
         public ViewStoryAdminMutation ViewStories { get; } = viewStories;
     }

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices;
-using XenoTerra.DTOLayer.Dtos.FollowDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.FollowMutationServices;
+using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
     {
         public async Task<CreateFollowAdminPayload> CreateFollowAsync(
             [Service] IFollowAdminMutationService mutationService,
-            [Service] IFollowWriteService writeService,
+            [Service] IFollowAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateFollowAdminInput> inputAdminValidator,
             CreateFollowAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateFollowAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateFollowAdminInput, CreateFollowDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateFollowAdminInput, CreateFollowAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateFollowAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
 
         public async Task<UpdateFollowAdminPayload> UpdateFollowAsync(
             [Service] IFollowAdminMutationService mutationService,
-            [Service] IFollowWriteService writeService,
+            [Service] IFollowAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateFollowAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateFollowAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateFollowAdminInput, UpdateFollowDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateFollowAdminInput, UpdateFollowAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateFollowAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
 
         public async Task<DeleteFollowAdminPayload> DeleteFollowAsync(
             [Service] IFollowAdminMutationService mutationService,
-            [Service] IFollowWriteService writeService,
+            [Service] IFollowAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
         private async Task SendFollowEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultFollowDto result,
+            ResultFollowAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

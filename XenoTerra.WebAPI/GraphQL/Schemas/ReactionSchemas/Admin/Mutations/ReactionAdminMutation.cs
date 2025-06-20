@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionServices;
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Event
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReactionMutationServices;
+using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ReactionServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
     {
         public async Task<CreateReactionAdminPayload> CreateReactionAsync(
             [Service] IReactionAdminMutationService mutationService,
-            [Service] IReactionWriteService writeService,
+            [Service] IReactionAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateReactionAdminInput> inputAdminValidator,
             CreateReactionAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateReactionAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateReactionAdminInput, CreateReactionDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateReactionAdminInput, CreateReactionAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateReactionAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
 
         public async Task<UpdateReactionAdminPayload> UpdateReactionAsync(
             [Service] IReactionAdminMutationService mutationService,
-            [Service] IReactionWriteService writeService,
+            [Service] IReactionAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateReactionAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateReactionAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReactionAdminInput, UpdateReactionDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateReactionAdminInput, UpdateReactionAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateReactionAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
 
         public async Task<DeleteReactionAdminPayload> DeleteReactionAsync(
             [Service] IReactionAdminMutationService mutationService,
-            [Service] IReactionWriteService writeService,
+            [Service] IReactionAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Mutations
         private async Task SendReactionEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultReactionDto result,
+            ResultReactionAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
 

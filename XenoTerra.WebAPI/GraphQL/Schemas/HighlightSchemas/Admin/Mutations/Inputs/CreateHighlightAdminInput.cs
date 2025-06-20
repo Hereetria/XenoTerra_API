@@ -2,6 +2,7 @@
 {
     public record CreateHighlightAdminInput(
         string Name,
-        string ProfilePicturePath
+        string ProfilePicturePath,
+        string UserId
     );
 }

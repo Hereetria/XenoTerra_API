@@ -10,7 +10,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations.Inputs;
-using XenoTerra.DTOLayer.Dtos.AppRoleDtos;
+using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations
 {
@@ -26,7 +26,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateRoleAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateRoleAdminInput, CreateAppRoleDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateRoleAdminInput, CreateAppRoleAdminDto>(input);
             var payload = await mutationService.CreateAsync(createDto);
 
             if (payload.IsSuccess())
@@ -46,7 +46,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateRoleAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateRoleAdminInput, UpdateAppRoleDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateRoleAdminInput, UpdateAppRoleAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync(updateDto, modifiedFields);
 
@@ -74,7 +74,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations
         private async Task SendRoleEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultAppRoleDto result,
+            ResultAppRoleAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices;
-using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Subscriptions.Even
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ViewStoryMutationServices;
+using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
     {
         public async Task<CreateViewStoryAdminPayload> CreateViewStoryAsync(
             [Service] IViewStoryAdminMutationService mutationService,
-            [Service] IViewStoryWriteService writeService,
+            [Service] IViewStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateViewStoryAdminInput> inputAdminValidator,
             CreateViewStoryAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateViewStoryAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateViewStoryAdminInput, CreateViewStoryDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateViewStoryAdminInput, CreateViewStoryAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateViewStoryAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
 
         public async Task<UpdateViewStoryAdminPayload> UpdateViewStoryAsync(
             [Service] IViewStoryAdminMutationService mutationService,
-            [Service] IViewStoryWriteService writeService,
+            [Service] IViewStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateViewStoryAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateViewStoryAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateViewStoryAdminInput, UpdateViewStoryDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateViewStoryAdminInput, UpdateViewStoryAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateViewStoryAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
 
         public async Task<DeleteViewStoryAdminPayload> DeleteViewStoryAsync(
             [Service] IViewStoryAdminMutationService mutationService,
-            [Service] IViewStoryWriteService writeService,
+            [Service] IViewStoryAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
         private async Task SendViewStoryEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultViewStoryDto result,
+            ResultViewStoryAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

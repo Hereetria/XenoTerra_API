@@ -3,7 +3,6 @@ using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.DTOLayer.Dtos.CommentLikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations.Payloads;
@@ -12,7 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentLikeMutationServices;
-using XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices;
+using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
     {
         public async Task<CreateCommentLikeAdminPayload> CreateCommentLikeAsync(
             [Service] ICommentLikeAdminMutationService mutationService,
-            [Service] ICommentLikeWriteService writeService,
+            [Service] ICommentLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateCommentLikeAdminInput> inputAdminValidator,
             CreateCommentLikeAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateCommentLikeAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateCommentLikeAdminInput, CreateCommentLikeDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateCommentLikeAdminInput, CreateCommentLikeAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateCommentLikeAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
 
         public async Task<UpdateCommentLikeAdminPayload> UpdateCommentLikeAsync(
             [Service] ICommentLikeAdminMutationService mutationService,
-            [Service] ICommentLikeWriteService writeService,
+            [Service] ICommentLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateCommentLikeAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateCommentLikeAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentLikeAdminInput, UpdateCommentLikeDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentLikeAdminInput, UpdateCommentLikeAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateCommentLikeAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
 
         public async Task<DeleteCommentLikeAdminPayload> DeleteCommentLikeAsync(
             [Service] ICommentLikeAdminMutationService mutationService,
-            [Service] ICommentLikeWriteService writeService,
+            [Service] ICommentLikeAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
         private async Task SendCommentLikeEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultCommentLikeDto result,
+            ResultCommentLikeAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

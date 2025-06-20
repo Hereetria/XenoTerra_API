@@ -1,7 +1,7 @@
-﻿using XenoTerra.DTOLayer.Dtos.UserPostTagDtos;
+﻿using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations.Payloads
 {
-    public record CreateUserPostTagAdminPayload : Payload<ResultUserPostTagDto>;
+    public record CreateUserPostTagAdminPayload : Payload<ResultUserPostTagAdminDto>;
 }

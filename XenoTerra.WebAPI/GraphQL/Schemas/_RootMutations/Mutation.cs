@@ -6,14 +6,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
     {
         public AdminMutation Admin { get; }
         public UserMutation User { get; }
-        public RegisterMutation Register { get; }
-        public LoginMutation Login { get; }
+        public AuthMutation Login { get; }
 
-        public Mutation(AdminMutation admin, UserMutation user, RegisterMutation register, LoginMutation login)
+        public Mutation(AdminMutation admin, UserMutation user, AuthMutation login)
         {
             Admin = admin;
             User = user;
-            Register = register;
             Login = login;
         }
     }

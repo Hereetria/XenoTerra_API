@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentMutationServices
 {
     public class CommentAdminMutationService(IMapper mapper)
-        : MutationService<Comment, ResultCommentDto, CreateCommentDto, UpdateCommentDto, Guid>(mapper),
+        : MutationService<Comment, ResultCommentAdminDto, CreateCommentAdminDto, UpdateCommentAdminDto, Guid>(mapper),
         ICommentAdminMutationService
     {
     }

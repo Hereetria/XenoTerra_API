@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices;
-using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations.Payloads;
@@ -14,6 +12,8 @@ using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.BlockUserAdminMutationServices;
+using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 {
@@ -22,7 +22,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
     {
         public async Task<CreateBlockUserAdminPayload> CreateBlockUserAsync(
             [Service] IBlockUserAdminMutationService mutationService,
-            [Service] IBlockUserWriteService writeService,
+            [Service] IBlockUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateBlockUserAdminInput> inputAdminValidator,
             CreateBlockUserAdminInput? input)
@@ -31,7 +31,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateBlockUserAdminInput, CreateCommentckUserDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateBlockUserAdminInput, CreateBlockUserAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateBlockUserAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -42,7 +42,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 
         public async Task<UpdateBlockUserAdminPayload> UpdateBlockUserAsync(
             [Service] IBlockUserAdminMutationService mutationService,
-            [Service] IBlockUserWriteService writeService,
+            [Service] IBlockUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateBlockUserAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -52,7 +52,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateBlockUserAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateBlockUserAdminInput, UpdateBlockUserDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateBlockUserAdminInput, UpdateBlockUserAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateBlockUserAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -64,7 +64,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 
         public async Task<DeleteBlockUserAdminPayload> DeleteBlockUserAsync(
             [Service] IBlockUserAdminMutationService mutationService,
-            [Service] IBlockUserWriteService writeService,
+            [Service] IBlockUserAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -81,7 +81,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
         private async Task SendBlockUserEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultBlockUserDto result,
+            ResultBlockUserAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

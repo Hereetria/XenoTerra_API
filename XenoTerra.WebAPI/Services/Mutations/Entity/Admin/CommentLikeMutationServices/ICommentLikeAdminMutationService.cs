@@ -1,11 +1,10 @@
 ﻿using AutoMapper;
-using XenoTerra.DTOLayer.Dtos.CommentLikeDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentLikeMutationServices
 {
-    public interface ICommentLikeAdminMutationService : IMutationService<CommentLike, ResultCommentLikeDto, CreateCommentLikeDto, UpdateCommentLikeDto, Guid>
+    public interface ICommentLikeAdminMutationService : IMutationService<CommentLike, ResultCommentLikeAdminDto, CreateCommentLikeAdminDto, UpdateCommentLikeAdminDto, Guid>
     {
     }
 }

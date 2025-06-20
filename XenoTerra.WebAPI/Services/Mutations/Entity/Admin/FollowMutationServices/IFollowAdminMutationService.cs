@@ -1,10 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.FollowDtos;
-using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.FollowMutationServices
 {
-    public interface IFollowAdminMutationService : IMutationService<Follow, ResultFollowDto, CreateFollowDto, UpdateFollowDto, Guid>
+    public interface IFollowAdminMutationService : IMutationService<Follow, ResultFollowAdminDto, CreateFollowAdminDto, UpdateFollowAdminDto, Guid>
     {
     }
 }

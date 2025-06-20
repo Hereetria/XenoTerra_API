@@ -1,10 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.ReactionDtos;
-using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-
+using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReactionMutationServices
 {
-    public interface IReactionAdminMutationService : IMutationService<Reaction, ResultReactionDto, CreateReactionDto, UpdateReactionDto, Guid>
+    public interface IReactionAdminMutationService : IMutationService<Reaction, ResultReactionAdminDto, CreateReactionAdminDto, UpdateReactionAdminDto, Guid>
     {
     }
 }

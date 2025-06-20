@@ -1,4 +1,3 @@
-﻿using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Queries.Base;
 

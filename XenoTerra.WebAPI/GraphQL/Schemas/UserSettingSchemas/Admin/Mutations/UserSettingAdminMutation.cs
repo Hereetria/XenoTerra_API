@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices;
-using XenoTerra.DTOLayer.Dtos.UserSettingDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserSettingMutationServices;
+using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
     {
         public async Task<CreateUserSettingAdminPayload> CreateUserSettingAsync(
             [Service] IUserSettingAdminMutationService mutationService,
-            [Service] IUserSettingWriteService writeService,
+            [Service] IUserSettingAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateUserSettingAdminInput> inputAdminValidator,
             CreateUserSettingAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateUserSettingAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateUserSettingAdminInput, CreateUserSettingDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateUserSettingAdminInput, CreateUserSettingAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateUserSettingAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
 
         public async Task<UpdateUserSettingAdminPayload> UpdateUserSettingAsync(
             [Service] IUserSettingAdminMutationService mutationService,
-            [Service] IUserSettingWriteService writeService,
+            [Service] IUserSettingAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateUserSettingAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserSettingAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserSettingAdminInput, UpdateUserSettingDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserSettingAdminInput, UpdateUserSettingAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateUserSettingAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
 
         public async Task<DeleteUserSettingAdminPayload> DeleteUserSettingAsync(
             [Service] IUserSettingAdminMutationService mutationService,
-            [Service] IUserSettingWriteService writeService,
+            [Service] IUserSettingAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
         private async Task SendUserSettingEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultUserSettingDto result,
+            ResultUserSettingAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DTOLayer.Dtos.ViewStoryDtos;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.DataAccessLayer.Repositories.Entity.ViewStoryRepositories

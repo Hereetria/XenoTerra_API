@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.CommentDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.CommentResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.CommentQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentAdminConnection, ResultCommentWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentAdminConnection, ResultCommentWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentAdminConnection, ResultCommentWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentAdminConnection, ResultCommentWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultCommentWithRelationsDto?> GetCommentByIdAsync(
+        public async Task<ResultCommentWithRelationsAdminDto?> GetCommentByIdAsync(
             string? key,
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultCommentWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultCommentWithRelationsAdminDto>(entity);
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.FollowDtos;
+using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries.Paginations
 {
     public class FollowAdminConnection(
-        IReadOnlyList<Edge<ResultFollowWithRelationsDto>> edges,
+        IReadOnlyList<Edge<ResultFollowWithRelationsAdminDto>> edges,
         ConnectionPageInfo pageInfo,
-        int totalCount) : Connection<ResultFollowWithRelationsDto>(edges, pageInfo, totalCount)
+        int totalCount) : Connection<ResultFollowWithRelationsAdminDto>(edges, pageInfo, totalCount)
     {
     }
 }

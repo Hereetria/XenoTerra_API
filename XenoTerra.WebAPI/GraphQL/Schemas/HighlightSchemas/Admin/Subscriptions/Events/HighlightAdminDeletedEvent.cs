@@ -1,9 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.HighlightDtos;
+﻿using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Subscriptions.Events
 {
-    public record HighlightAdminDeletedEvent : DeletedEvent<ResultHighlightDto>
+    public record HighlightAdminDeletedEvent : DeletedEvent<ResultHighlightAdminDto>
     {
     }
 }

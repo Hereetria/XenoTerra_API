@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices;
-using XenoTerra.DTOLayer.Dtos.NotificationDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.E
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NotificationMutationServices;
+using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
     {
         public async Task<CreateNotificationAdminPayload> CreateNotificationAsync(
             [Service] INotificationAdminMutationService mutationService,
-            [Service] INotificationWriteService writeService,
+            [Service] INotificationAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateNotificationAdminInput> inputAdminValidator,
             CreateNotificationAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateNotificationAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateNotificationAdminInput, CreateNotificationDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateNotificationAdminInput, CreateNotificationAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateNotificationAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 
         public async Task<UpdateNotificationAdminPayload> UpdateNotificationAsync(
             [Service] INotificationAdminMutationService mutationService,
-            [Service] INotificationWriteService writeService,
+            [Service] INotificationAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateNotificationAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateNotificationAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateNotificationAdminInput, UpdateNotificationDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateNotificationAdminInput, UpdateNotificationAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateNotificationAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 
         public async Task<DeleteNotificationAdminPayload> DeleteNotificationAsync(
             [Service] INotificationAdminMutationService mutationService,
-            [Service] INotificationWriteService writeService,
+            [Service] INotificationAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
         private async Task SendNotificationEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultNotificationDto result,
+            ResultNotificationAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

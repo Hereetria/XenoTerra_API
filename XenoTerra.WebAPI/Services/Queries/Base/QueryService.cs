@@ -1,7 +1,8 @@
 ﻿using HotChocolate.Resolvers;
 using System.Linq.Expressions;
+using System.Reflection;
 using XenoTerra.BussinessLogicLayer.Services.Base.Read;
-using XenoTerra.DataAccessLayer.Helpers;
+using XenoTerra.DataAccessLayer.Helpers.Concrete;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Helpers;
@@ -14,13 +15,16 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
     {
         protected readonly IReadService<TEntity, TKey> _readService = readService;
 
+        public IQueryable<TEntity> GetRawQueryable() =>
+            ExecuteSafely(() => _readService.GetRawQueryable());
+
+
         public IQueryable<TEntity> GetAllQueryable(
             IResolverContext context,
             Expression<Func<TEntity, bool>>? filter = null)
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context).ToList();
             selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
-
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
@@ -59,7 +63,6 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             {
                 var rawQuery = _readService.GetRawQueryable();
 
-                // 🔥 Filtre varsa uygula
                 if (filter is not null)
                     rawQuery = rawQuery.Where(filter);
 
@@ -85,7 +88,6 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
         {
             var selectedFields = GraphQLFieldProvider.GetSelectedFields(context);
             selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
-
             ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
 
             var query = ExecuteSafely(() =>
@@ -102,6 +104,29 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             }) ?? Enumerable.Empty<TEntity>().AsQueryable();
 
             return query;
+        }
+
+        public IQueryable<TResult> GetCustomQueryable<TResult>(
+            IResolverContext context,
+            Func<IQueryable<TEntity>, IQueryable<TResult>> queryBuilder)
+        {
+            ArgumentGuard.EnsureNotNull(queryBuilder);
+
+            return ExecuteSafely(() =>
+            {
+                var selectedFields = GraphQLFieldProvider.GetSelectedFields(context).ToList();
+                selectedFields = [.. EnsureForeignKeysForRelations(selectedFields, context)];
+                ArgumentGuard.EnsureNotNullOrEmpty(selectedFields);
+
+                var rawQuery = _readService.GetRawQueryable();
+
+                var baseQuery = _readService.FetchAllQueryable(rawQuery, selectedFields)
+                                 ?? Enumerable.Empty<TEntity>().AsQueryable();
+
+                baseQuery = ModifyQueryForGetAll(baseQuery);
+
+                return queryBuilder(baseQuery);
+            }) ?? Enumerable.Empty<TResult>().AsQueryable();
         }
 
         public virtual IQueryable<TEntity> ModifyQueryForGetAll(IQueryable<TEntity> query) => query;
@@ -144,22 +169,52 @@ namespace XenoTerra.WebAPI.Services.Queries.Base
             }
         }
 
-        public static IEnumerable<string> EnsureForeignKeysForRelations(IEnumerable<string> selectedFields, IResolverContext context)
+        public static IEnumerable<string> EnsureForeignKeysForRelations(
+            IEnumerable<string> selectedFields,
+            IResolverContext context)
         {
-            var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
-
             var dbContext = context.Service<AppDbContext>();
             var fieldSet = selectedFields.ToHashSet(StringComparer.OrdinalIgnoreCase);
+            var relationalFields = GraphQLFieldProvider.GetRelationalFields(context);
+
+            var entityType = typeof(TEntity);
+            var entityProps = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                                        .Select(p => p.Name)
+                                        .ToHashSet(StringComparer.OrdinalIgnoreCase);
 
             foreach (var field in relationalFields)
             {
-                var foreignKeyProp = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, field)
-                    ?? throw new InvalidOperationException($"Foreign key property not found for field: {field}");
+                // Eğer field, TEntity içinde tanımlı bir navigation değilse doğrudan geç
+                if (!entityProps.Contains(field))
+                    continue;
 
-                if (!fieldSet.Contains(foreignKeyProp.Name))
+                // Bu noktada navigation varsa foreign key’ini almayı deneyelim
+                var foreignKeyProp = TypeProviders.GetForeignKeyProperty<TEntity>(dbContext, field);
+
+                if (foreignKeyProp != null)
                 {
-                    fieldSet.Add(foreignKeyProp.Name);
+                    if (!fieldSet.Contains(foreignKeyProp.Name))
+                        fieldSet.Add(foreignKeyProp.Name);
+
+                    continue;
                 }
+
+                // Eğer foreign key bulunamazsa → cross table kontrolü
+                var crossTablePropName = CrossTableNameProvider.GetCrossTableName<TEntity>(dbContext, field);
+                if (crossTablePropName == null)
+                    continue;
+
+                var crossProp = entityType.GetProperty(crossTablePropName);
+                if (crossProp == null)
+                    continue;
+
+                var joinEntityType = crossProp.PropertyType.GetGenericArguments().FirstOrDefault();
+                if (joinEntityType == null)
+                    continue;
+
+                var fkName = TypeProviders.GetForeignKeyPropertyName(dbContext, entityType, joinEntityType);
+                if (!string.IsNullOrEmpty(fkName) && !fieldSet.Contains(fkName))
+                    fieldSet.Add(fkName);
             }
 
             return fieldSet;

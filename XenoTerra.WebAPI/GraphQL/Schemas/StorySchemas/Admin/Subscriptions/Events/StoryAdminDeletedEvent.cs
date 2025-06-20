@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
+using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events
 {
-    public record StoryAdminDeletedEvent : DeletedEvent<ResultStoryDto>
+    public record StoryAdminDeletedEvent : DeletedEvent<ResultStoryAdminDto>
     {
     }
 }

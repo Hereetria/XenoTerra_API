@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Auth.Inputs;
 using XenoTerra.WebAPI.GraphQL.Auth.Payloads;
@@ -45,7 +45,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
 
             await _userManager.AddToRoleAsync(newUser, AppRoles.User.ToString());
 
-            var resultDto = new ResultAppUserPrivateDto
+            var resultDto = new ResultAppUserOwnDto
             {
                 Id = newUser.Id,
                 UserName = newUser.UserName!,
@@ -54,7 +54,7 @@ namespace XenoTerra.WebAPI.GraphQL.Auth.Services
                 BirthDate = DateOnly.Parse(input.BirthDate).ToDateTime()
             };
 
-            return Payload<ResultAppUserPrivateDto>.FromSuccess<RegisterPayload>(
+            return Payload<ResultAppUserOwnDto>.FromSuccess<RegisterPayload>(
                 "User registered successfully",
                 resultDto
             );

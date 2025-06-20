@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.ReactionDtos;
+using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events
 {
-    public record ReactionAdminUpdatedEvent : UpdatedEvent<ResultReactionDto>
+    public record ReactionAdminUpdatedEvent : UpdatedEvent<ResultReactionAdminDto>
     {
     }
 }

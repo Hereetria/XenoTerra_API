@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.MessageServices;
-using XenoTerra.DTOLayer.Dtos.MessageDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Subscriptions.Events
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MessageMutationServices;
+using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.MessageServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
     {
         public async Task<CreateMessageAdminPayload> CreateMessageAsync(
             [Service] IMessageAdminMutationService mutationService,
-            [Service] IMessageWriteService writeService,
+            [Service] IMessageAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateMessageAdminInput> inputAdminValidator,
             CreateMessageAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateMessageAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateMessageAdminInput, CreateMessageDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateMessageAdminInput, CreateMessageAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateMessageAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
 
         public async Task<UpdateMessageAdminPayload> UpdateMessageAsync(
             [Service] IMessageAdminMutationService mutationService,
-            [Service] IMessageWriteService writeService,
+            [Service] IMessageAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateMessageAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateMessageAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateMessageAdminInput, UpdateMessageDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateMessageAdminInput, UpdateMessageAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateMessageAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
 
         public async Task<DeleteMessageAdminPayload> DeleteMessageAsync(
             [Service] IMessageAdminMutationService mutationService,
-            [Service] IMessageWriteService writeService,
+            [Service] IMessageAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -79,7 +79,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
         private async Task SendMessageEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultMessageDto result,
+            ResultMessageAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

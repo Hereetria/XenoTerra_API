@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions.Events
 {
-    public record StoryHighlightAdminChangedEvent : ChangedEvent<ResultStoryHighlightDto>
+    public record StoryHighlightAdminChangedEvent : ChangedEvent<ResultStoryHighlightAdminDto>
     {
     }
 }

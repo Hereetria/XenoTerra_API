@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.RecentChatsDtos;
+using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Events
 {
-    public record RecentChatsAdminDeletedEvent : DeletedEvent<ResultRecentChatsDto>
+    public record RecentChatsAdminDeletedEvent : DeletedEvent<ResultRecentChatsAdminDto>
     {
     }
 }

@@ -1,10 +1,8 @@
 using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-﻿using FluentValidation;
+using FluentValidation;
 using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
-using XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices;
-using XenoTerra.DTOLayer.Dtos.UserPostTagDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations.Payloads;
@@ -13,6 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserPostTagMutationServices;
+using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices.Write.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
 {
@@ -21,7 +21,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
     {
         public async Task<CreateUserPostTagAdminPayload> CreateUserPostTagAsync(
             [Service] IUserPostTagAdminMutationService mutationService,
-            [Service] IUserPostTagWriteService writeService,
+            [Service] IUserPostTagAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<CreateUserPostTagAdminInput> inputAdminValidator,
             CreateUserPostTagAdminInput? input)
@@ -29,7 +29,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
             InputGuard.EnsureNotNull(input, nameof(CreateUserPostTagAdminInput));
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
-            var createDto = DtoMapperHelper.MapInputToDto<CreateUserPostTagAdminInput, CreateUserPostTagDto>(input);
+            var createDto = DtoMapperHelper.MapInputToDto<CreateUserPostTagAdminInput, CreateUserPostTagAdminDto>(input);
             var payload = await mutationService.CreateAsync<CreateUserPostTagAdminPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -40,7 +40,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
 
         public async Task<UpdateUserPostTagAdminPayload> UpdateUserPostTagAsync(
             [Service] IUserPostTagAdminMutationService mutationService,
-            [Service] IUserPostTagWriteService writeService,
+            [Service] IUserPostTagAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateUserPostTagAdminInput> inputAdminValidator,
             IResolverContext context,
@@ -50,7 +50,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputAdminValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserPostTagAdminInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserPostTagAdminInput, UpdateUserPostTagDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserPostTagAdminInput, UpdateUserPostTagAdminDto>(input, modifiedFields);
 
             var payload = await mutationService.UpdateAsync<UpdateUserPostTagAdminPayload>(writeService, updateDto, modifiedFields);
 
@@ -62,7 +62,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
 
         public async Task<DeleteUserPostTagAdminPayload> DeleteUserPostTagAsync(
             [Service] IUserPostTagAdminMutationService mutationService,
-            [Service] IUserPostTagWriteService writeService,
+            [Service] IUserPostTagAdminWriteService writeService,
             [Service] ITopicEventSender eventSender,
             string? key)
         {
@@ -78,7 +78,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
         private async Task SendUserPostTagEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultUserPostTagDto result,
+            ResultUserPostTagAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

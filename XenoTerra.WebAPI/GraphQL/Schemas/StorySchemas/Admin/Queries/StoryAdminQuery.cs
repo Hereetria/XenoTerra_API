@@ -2,7 +2,6 @@ using HotChocolate.Authorization;
 using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using AutoMapper;
 using HotChocolate.Resolvers;
-using XenoTerra.DTOLayer.Dtos.StoryDtos;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.StoryResolvers;
@@ -12,6 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
+using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries
 {
@@ -32,12 +32,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries
             var query = service.GetAllQueryable(context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<StoryAdminConnection, ResultStoryWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<StoryAdminConnection, ResultStoryWithRelationsAdminDto>(connection);
         }
 
         [UseCustomPaging]
@@ -54,15 +54,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context);
             var entityAdminConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsDto>(
+            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsAdminDto>(
                 entityAdminConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<StoryAdminConnection, ResultStoryWithRelationsDto>(connection);
+            return GraphQLConnectionFactory.Create<StoryAdminConnection, ResultStoryWithRelationsAdminDto>(connection);
         }
 
-        public async Task<ResultStoryWithRelationsDto?> GetStoryByIdAsync(
+        public async Task<ResultStoryWithRelationsAdminDto?> GetStoryByIdAsync(
             string? key,
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
@@ -73,7 +73,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries
             var query = service.GetByIdQueryable(parsedKey, context);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultStoryWithRelationsDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultStoryWithRelationsAdminDto>(entity);
         }
     }
 }

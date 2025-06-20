@@ -1,12 +1,12 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.PostDtos;
+using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Admin.Queries.Paginations
 {
     public class PostAdminConnection(
-        IReadOnlyList<Edge<ResultPostWithRelationsDto>> edges,
+        IReadOnlyList<Edge<ResultPostWithRelationsAdminDto>> edges,
         ConnectionPageInfo pageInfo,
-        int totalCount) : Connection<ResultPostWithRelationsDto>(edges, pageInfo, totalCount)
+        int totalCount) : Connection<ResultPostWithRelationsAdminDto>(edges, pageInfo, totalCount)
     {
     }
 }

@@ -1,9 +1,9 @@
-using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
+using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Subscriptions.Events
 {
-    public record SavedPostAdminDeletedEvent : DeletedEvent<ResultSavedPostDto>
+    public record SavedPostAdminDeletedEvent : DeletedEvent<ResultSavedPostAdminDto>
     {
     }
 }

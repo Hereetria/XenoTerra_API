@@ -1,10 +1,10 @@
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
-using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
+using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
 
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.BlockUserAdminMutationServices
 {
-    public interface IBlockUserAdminMutationService : IMutationService<BlockUser, ResultBlockUserDto, CreateCommentckUserDto, UpdateBlockUserDto, Guid>
+    public interface IBlockUserAdminMutationService : IMutationService<BlockUser, ResultBlockUserAdminDto, CreateBlockUserAdminDto, UpdateBlockUserAdminDto, Guid>
     {
     }
 }

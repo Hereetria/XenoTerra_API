@@ -1,7 +1,7 @@
-﻿using XenoTerra.DTOLayer.Dtos.SavedPostDtos;
+﻿using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations.Payloads
 {
-    public record CreateSavedPostAdminPayload : Payload<ResultSavedPostDto>;
+    public record CreateSavedPostAdminPayload : Payload<ResultSavedPostAdminDto>;
 }

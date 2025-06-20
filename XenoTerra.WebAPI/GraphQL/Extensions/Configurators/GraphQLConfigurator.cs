@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices;
+using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices.Read;
 using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepositories;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
 using XenoTerra.EntityLayer.Entities;
@@ -33,8 +33,7 @@ namespace XenoTerra.WebAPI.GraphQL.Extensions.Configurators
                 .Distinct()
                 .ToList();
 
-            allEntityNames.Add(nameof(LoginMutation).Replace("Mutation", ""));
-            allEntityNames.Add(nameof(RegisterMutation).Replace("Mutation", ""));
+            allEntityNames.Add(nameof(AuthMutation).Replace("Mutation", ""));
 
             var entityNamespace = typeof(BlockUser).Namespace;
             var entityTypes = typeof(BlockUser).Assembly
@@ -45,8 +44,7 @@ namespace XenoTerra.WebAPI.GraphQL.Extensions.Configurators
                     t.Namespace == entityNamespace)
                 .ToList();
 
-            entityTypes.Add(typeof(LoginMutation));
-            entityTypes.Add(typeof(RegisterMutation));
+            entityTypes.Add(typeof(AuthMutation));
 
             foreach (var entityType in entityTypes)
             {
