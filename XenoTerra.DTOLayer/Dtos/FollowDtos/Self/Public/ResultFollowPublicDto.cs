@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Public
 {
     public class ResultFollowPublicDto
     {

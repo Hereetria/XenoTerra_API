@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
 using XenoTerra.DataAccessLayer.Helpers.Concrete;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.ReportPostValidators.Admin

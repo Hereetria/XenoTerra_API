@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.PostLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Admin.Queries
 {

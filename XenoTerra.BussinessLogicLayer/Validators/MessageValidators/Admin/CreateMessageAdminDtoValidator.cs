@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MessageDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.MessageValidators.Admin
 {

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Public
 {
     public class ResultStoryPublicDto
     {

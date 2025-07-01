@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries
         private readonly IQueryResolverHelper<ReportPost, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportPostFilterType))]
-        [UseSorting(typeof(ReportPostSortType))]
+        [UseFiltering(typeof(ReportPostOwnFilterType))]
+        [UseSorting(typeof(ReportPostOwnSortType))]
         public async Task<ReportPostOwnConnection> GetAllReportPostsAsync(
             [Service] IReportPostQueryService service,
             [Service] IReportPostResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportPostFilterType))]
-        [UseSorting(typeof(ReportPostSortType))]
+        [UseFiltering(typeof(ReportPostOwnFilterType))]
+        [UseSorting(typeof(ReportPostOwnSortType))]
         public async Task<ReportPostOwnConnection> GetReportPostsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IReportPostQueryService service,

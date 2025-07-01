@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
         private readonly IQueryResolverHelper<SearchHistory, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(SearchHistoryFilterType))]
-        [UseSorting(typeof(SearchHistorySortType))]
+        [UseFiltering(typeof(SearchHistoryOwnFilterType))]
+        [UseSorting(typeof(SearchHistoryOwnSortType))]
         public async Task<SearchHistoryOwnConnection> GetAllSearchHistoriesAsync(
             [Service] ISearchHistoryQueryService service,
             [Service] ISearchHistoryResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(SearchHistoryFilterType))]
-        [UseSorting(typeof(SearchHistorySortType))]
+        [UseFiltering(typeof(SearchHistoryOwnFilterType))]
+        [UseSorting(typeof(SearchHistoryOwnSortType))]
         public async Task<SearchHistoryOwnConnection> GetSearchHistoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ISearchHistoryQueryService service,

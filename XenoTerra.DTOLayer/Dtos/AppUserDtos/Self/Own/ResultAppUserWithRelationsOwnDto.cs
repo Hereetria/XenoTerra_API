@@ -1,4 +1,24 @@
-﻿using XenoTerra.EntityLayer.Entities;
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MessageDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Self.Own;
 
 namespace XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own
 {
@@ -19,48 +39,47 @@ namespace XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own
         public DateTime LastActive { get; init; }
 
 
-        public ICollection<BlockUser> BlockingUsers { get; set; } = [];
-        public ICollection<Post> Posts { get; set; } = [];
+        public ICollection<ResultBlockUserOwnDto> BlockingUsers { get; set; } = [];
+        public ICollection<ResultPostOwnDto> Posts { get; set; } = [];
 
-        public ICollection<Follow> Followers { get; set; } = [];
+        public ICollection<ResultFollowOwnDto> Followers { get; set; } = [];
 
-        public ICollection<Follow> Followings { get; set; } = [];
+        public ICollection<ResultFollowOwnDto> Followings { get; set; } = [];
 
-        public ICollection<PostLike> PostLikes { get; set; } = [];
-        public ICollection<StoryLike> StoryLikes { get; set; } = [];
+        public ICollection<ResultPostLikeOwnDto> PostLikes { get; set; } = [];
+        public ICollection<ResultStoryLikeOwnDto> StoryLikes { get; set; } = [];
 
-        public ICollection<Comment> Comments { get; set; } = [];
+        public ICollection<ResultCommentOwnDto> Comments { get; set; } = [];
 
-        public ICollection<Highlight> Highlights { get; set; } = [];
+        public ICollection<ResultHighlightOwnDto> Highlights { get; set; } = [];
 
-        public ICollection<Message> SentMessages { get; set; } = [];
+        public ICollection<ResultMessageOwnDto> SentMessages { get; set; } = [];
 
-        public ICollection<Message> ReceivedMessages { get; set; } = [];
+        public ICollection<ResultMessageOwnDto> ReceivedMessages { get; set; } = [];
 
-        public ICollection<Notification> Notifications { get; set; } = [];
+        public ICollection<ResultNotificationOwnDto> Notifications { get; set; } = [];
 
-        public ICollection<Media> SentMedias { get; set; } = [];
+        public ICollection<ResultMediaOwnDto> SentMedias { get; set; } = [];
 
-        public ICollection<Media> ReceivedMedias { get; set; } = [];
+        public ICollection<ResultMediaOwnDto> ReceivedMedias { get; set; } = [];
 
-        public ICollection<Story> Stories { get; set; } = [];
+        public ICollection<ResultStoryOwnDto> Stories { get; set; } = [];
 
-        public ICollection<SavedPost> SavedPosts { get; set; } = [];
+        public ICollection<ResultSavedPostOwnDto> SavedPosts { get; set; } = [];
 
-        public ICollection<ReportComment> ReportComments { get; set; } = [];
-        public ICollection<ReportPost> ReportPosts { get; set; } = [];
-        public ICollection<ReportStory> ReportStories { get; set; } = [];
+        public ICollection<ResultReportCommentOwnDto> ReportComments { get; set; } = [];
+        public ICollection<ResultReportPostOwnDto> ReportPosts { get; set; } = [];
+        public ICollection<ResultReportStoryOwnDto> ReportStories { get; set; } = [];
 
-        public ICollection<ViewStory> ViewStories { get; set; } = [];
+        public ICollection<ResultViewStoryOwnDto> ViewStories { get; set; } = [];
 
-        public UserSetting UserSetting { get; set; } = null!;
+        public ResultUserSettingOwnDto UserSetting { get; set; } = null!;
 
-        public ICollection<SearchHistory> PerformedSearches { get; set; } = [];
-        public ICollection<SearchHistoryUser> WasSearchedBy { get; set; } = [];
+        public ICollection<ResultSearchHistoryOwnDto> PerformedSearches { get; set; } = [];
 
-        public ICollection<RecentChats> RecentChats { get; set; } = [];
+        public ICollection<ResultRecentChatsOwnDto> RecentChats { get; set; } = [];
 
-        public Note Note { get; set; } = null!;
-        public ICollection<UserPostTag> TaggedPosts { get; set; } = [];
+        public ResultNoteOwnDto Note { get; set; } = null!;
+        public ICollection<ResultUserPostTagOwnDto> TaggedPosts { get; set; } = [];
     }
 }

@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Paginations.Own
 {

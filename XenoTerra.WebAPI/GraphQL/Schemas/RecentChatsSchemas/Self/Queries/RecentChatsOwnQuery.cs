@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries
         private readonly IQueryResolverHelper<RecentChats, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(RecentChatsFilterType))]
-        [UseSorting(typeof(RecentChatsSortType))]
+        [UseFiltering(typeof(RecentChatsOwnFilterType))]
+        [UseSorting(typeof(RecentChatsOwnSortType))]
         public async Task<RecentChatsOwnConnection> GetAllRecentChatsAsync(
             [Service] IRecentChatsQueryService service,
             [Service] IRecentChatsResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(RecentChatsFilterType))]
-        [UseSorting(typeof(RecentChatsSortType))]
+        [UseFiltering(typeof(RecentChatsOwnFilterType))]
+        [UseSorting(typeof(RecentChatsOwnSortType))]
         public async Task<RecentChatsOwnConnection> GetRecentChatsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IRecentChatsQueryService service,

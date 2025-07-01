@@ -15,4 +15,8 @@
     <ProjectReference Include="..\XenoTerra.EntityLayer\XenoTerra.EntityLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\AuthDtos\Self\Own\" />
+  </ItemGroup>
+
 </Project>

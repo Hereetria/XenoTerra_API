@@ -1,40 +1,37 @@
 ﻿using AutoMapper;
-using XenoTerra.BussinessLogicLayer.Services.Entity.AppUserServices;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos.Own.Own;
+using XenoTerra.BussinessLogicLayer.Services.Entity.AppUserServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 using XenoTerra.DTOLayer.Dtos.AuthDtos;
-using XenoTerra.EntityLayer.Entities;
-using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Own.Mutations.Payloads;
+using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
-using XenoTerra.WebAPI.Services.Mutations.Base;
 
-namespace XenoTerra.WebAPI.Services.Mutations.Entity.Own.UserMutationServices
+namespace XenoTerra.WebAPI.Services.Mutations.Entity.Self.UserMutationServices
 {
     public class UserOwnMutationService(
-        IAppUserWriteService userWriteService,
+        IAppUserOwnWriteService userWriteService,
         IMapper mapper
     ) : IUserOwnMutationService
     {
-        private readonly IAppUserWriteService _userWriteService = userWriteService;
+        private readonly IAppUserOwnWriteService _userWriteService = userWriteService;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<CreateUserOwnPayload> CreateAsync(RegisterOwnDto dto)
+        public async Task<CreateUserOwnPayload> CreateAsync(RegisterDto dto)
         {
             var user = await _userWriteService.CreateAsync(dto);
-            var result = _mapper.Map<ResultAppUserOwnOwnDto>(user);
+            var result = _mapper.Map<ResultAppUserOwnDto>(user);
 
-            return Payload<ResultAppUserOwnOwnDto>.FromSuccess<CreateUserOwnPayload>(
+            return Payload<ResultAppUserOwnDto>.FromSuccess<CreateUserOwnPayload>(
                 "User created successfully.",
                 result
             );
         }
 
-        public async Task<UpdateUserOwnPayload> UpdateAsync(UpdateAppUserAdminOwnDto dto, IEnumerable<string> modifiedFields)
+        public async Task<UpdateUserOwnPayload> UpdateAsync(UpdateAppUserOwnDto dto, IEnumerable<string> modifiedFields)
         {
             var user = await _userWriteService.UpdateAsync(dto, modifiedFields);
-            var result = _mapper.Map<ResultAppUserOwnOwnDto>(user);
+            var result = _mapper.Map<ResultAppUserOwnDto>(user);
 
-            return Payload<ResultAppUserOwnOwnDto>.FromSuccess<UpdateUserOwnPayload>(
+            return Payload<ResultAppUserOwnDto>.FromSuccess<UpdateUserOwnPayload>(
                 "User updated successfully.",
                 result
             );
@@ -43,9 +40,9 @@ namespace XenoTerra.WebAPI.Services.Mutations.Entity.Own.UserMutationServices
         public async Task<DeleteUserOwnPayload> DeleteAsync(Guid id)
         {
             var user = await _userWriteService.DeleteAsync(id);
-            var result = _mapper.Map<ResultAppUserOwnOwnDto>(user);
+            var result = _mapper.Map<ResultAppUserOwnDto>(user);
 
-            return Payload<ResultAppUserOwnOwnDto>.FromSuccess<DeleteUserOwnPayload>(
+            return Payload<ResultAppUserOwnDto>.FromSuccess<DeleteUserOwnPayload>(
                 "User deleted successfully.",
                 result
             );

@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Queries.Paginations
 {

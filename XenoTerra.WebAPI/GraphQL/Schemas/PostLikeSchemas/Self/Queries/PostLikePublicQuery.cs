@@ -10,11 +10,13 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using XenoTerra.WebAPI.Services.Queries.Entity.PostLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.PostLikeResolvers;
-using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Own;
 
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -24,8 +26,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries
         private readonly IQueryResolverHelper<PostLike, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(PostLikeFilterType))]
-        [UseSorting(typeof(PostLikeSortType))]
+        [UseFiltering(typeof(PostLikePublicFilterType))]
+        [UseSorting(typeof(PostLikePublicSortType))]
         public async Task<PostLikePublicConnection> GetAllPostLikesAsync(
             [Service] IPostLikeQueryService service,
             [Service] IPostLikeResolver resolver,
@@ -39,17 +41,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikePublicDto>(
+            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostLikePublicConnection, ResultPostLikePublicDto>(connection);
+            return GraphQLConnectionFactory.Create<PostLikePublicConnection, ResultPostLikeWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(PostLikeFilterType))]
-        [UseSorting(typeof(PostLikeSortType))]
+        [UseFiltering(typeof(PostLikePublicFilterType))]
+        [UseSorting(typeof(PostLikePublicSortType))]
         public async Task<PostLikePublicConnection> GetPostLikesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IPostLikeQueryService service,
@@ -66,15 +68,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikePublicDto>(
+            var connection = ConnectionMapper.MapConnection<PostLike, ResultPostLikeWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostLikePublicConnection, ResultPostLikePublicDto>(connection);
+            return GraphQLConnectionFactory.Create<PostLikePublicConnection, ResultPostLikeWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultPostLikePublicDto?> GetPostLikeByIdAsync(
+        public async Task<ResultPostLikeWithRelationsPublicDto?> GetPostLikeByIdAsync(
             string? key,
             [Service] IPostLikeQueryService service,
             [Service] IPostLikeResolver resolver,
@@ -90,7 +92,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultPostLikePublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultPostLikeWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<PostLike, bool>>> BuildAccessFilterAsync(

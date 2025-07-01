@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReportCommentQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Admin.Queries
 {

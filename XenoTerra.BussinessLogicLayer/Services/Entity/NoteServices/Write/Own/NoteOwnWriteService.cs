@@ -11,7 +11,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices.Write.Own
 {

@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.CommentDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Admin.Queries.Paginations
 {

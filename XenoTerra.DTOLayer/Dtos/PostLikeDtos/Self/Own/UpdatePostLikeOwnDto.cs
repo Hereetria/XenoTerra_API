@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Own
 {
     public class UpdatePostLikeOwnDto
     {

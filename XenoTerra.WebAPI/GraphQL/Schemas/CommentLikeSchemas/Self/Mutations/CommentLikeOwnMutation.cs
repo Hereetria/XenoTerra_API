@@ -5,21 +5,21 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.CommentLikeMutationServices;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Read;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.CommentLikeMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class CommentLikeOwnMutation
     {
-        public async Task<CreateCommentLikeOwnPayload> CreateMyLikeAsync(
+        public async Task<CreateCommentLikeOwnPayload> CreateOwnCommentLikeAsync(
             [Service] ICommentLikeOwnMutationService mutationService,
             [Service] ICommentLikeOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
@@ -43,7 +43,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations
             return payload;
         }
 
-        public async Task<UpdateCommentLikeOwnPayload> UpdateMyLikeAsync(
+        public async Task<UpdateCommentLikeOwnPayload> UpdateOwnCommentLikeAsync(
             [Service] ICommentLikeOwnMutationService mutationService,
             [Service] ICommentLikeOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
@@ -59,7 +59,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentLikeOwnInput, UpdateCommentLikeOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateCommentLikeOwnPayload>(writeService, updateDto, modifiedFields);
 
@@ -69,7 +68,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations
             return payload;
         }
 
-        public async Task<DeleteCommentLikeOwnPayload> DeleteMyLikeAsync(
+        public async Task<DeleteCommentLikeOwnPayload> DeleteOwnCommentLikeAsync(
             [Service] ICommentLikeOwnMutationService mutationService,
             [Service] ICommentLikeReadService readService,
             [Service] ICommentLikeOwnWriteService writeService,

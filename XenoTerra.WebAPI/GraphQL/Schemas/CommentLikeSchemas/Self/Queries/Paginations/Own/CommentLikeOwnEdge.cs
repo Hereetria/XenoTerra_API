@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Paginations.Own
 {

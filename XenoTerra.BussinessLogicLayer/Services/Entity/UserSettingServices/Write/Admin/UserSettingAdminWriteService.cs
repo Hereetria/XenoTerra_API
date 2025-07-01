@@ -11,7 +11,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices.Write.Admin
 {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.UserPostTagValidators.Admin
 {

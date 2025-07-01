@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos.Admin
 {
     public class ResultSearchHistoryUserAdminDto
     {

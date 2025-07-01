@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MessageDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
         private readonly IQueryResolverHelper<Message, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(MessageFilterType))]
-        [UseSorting(typeof(MessageSortType))]
+        [UseFiltering(typeof(MessageOwnFilterType))]
+        [UseSorting(typeof(MessageOwnSortType))]
         public async Task<MessageOwnConnection> GetAllMessagesAsync(
             [Service] IMessageQueryService service,
             [Service] IMessageResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(MessageFilterType))]
-        [UseSorting(typeof(MessageSortType))]
+        [UseFiltering(typeof(MessageOwnFilterType))]
+        [UseSorting(typeof(MessageOwnSortType))]
         public async Task<MessageOwnConnection> GetMessagesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IMessageQueryService service,

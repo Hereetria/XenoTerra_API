@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.MediaValidators.Admin
 {
@@ -16,9 +16,13 @@ namespace XenoTerra.BussinessLogicLayer.Validators.MediaValidators.Admin
                 .NotEmpty()
                 .WithMessage("Photo URL is required.");
 
-            RuleFor(x => x.UserId)
+            RuleFor(x => x.SenderId)
                 .NotEqual(Guid.Empty)
-                .WithMessage("User ID is required.");
+                .WithMessage("Sender ID is required.");
+
+            RuleFor(x => x.ReceiverId)
+                .NotEqual(Guid.Empty)
+                .WithMessage("Receiver ID is required.");
 
             RuleFor(x => x.UploadedAt)
                 .LessThanOrEqualTo(DateTime.Today.AddDays(1))

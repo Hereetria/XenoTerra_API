@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Admin
 {
     public class ResultStoryHighlightWithRelationsAdminDto
     {

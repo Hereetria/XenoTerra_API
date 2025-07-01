@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin
 {
     public class UpdateBlockUserAdminDto
     {

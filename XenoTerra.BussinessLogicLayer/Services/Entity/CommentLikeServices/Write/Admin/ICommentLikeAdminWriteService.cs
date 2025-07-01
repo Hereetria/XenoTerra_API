@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Write.Admin
 {

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own
 {
     public class UpdateMediaOwnDto
     {

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ReactionDtos.Self.Own
 {
     public class ResultReactionOwnDto
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryLikeServices;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.StoryLikeValidators.Own

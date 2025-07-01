@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RecentChatsMutationServices;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Mutations
 {

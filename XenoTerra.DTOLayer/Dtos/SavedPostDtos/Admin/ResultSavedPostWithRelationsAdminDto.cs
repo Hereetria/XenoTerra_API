@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SavedPostDtos.Admin
 {
     public class ResultSavedPostWithRelationsAdminDto
     {

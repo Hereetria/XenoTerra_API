@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries.Paginations.Own
 {

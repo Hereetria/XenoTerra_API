@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own
 {
     public class ResultCommentLikeWithRelationsOwnDto
     {

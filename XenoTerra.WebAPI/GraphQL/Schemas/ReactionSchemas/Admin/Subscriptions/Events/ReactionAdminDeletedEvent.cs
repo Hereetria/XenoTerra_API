@@ -1,4 +1,4 @@
-using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Admin.Subscriptions.Events

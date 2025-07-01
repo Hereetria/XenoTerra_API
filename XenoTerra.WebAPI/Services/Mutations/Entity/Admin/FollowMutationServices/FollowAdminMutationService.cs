@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.FollowMutationServices
 {
     public class FollowAdminMutationService(IMapper mapper)

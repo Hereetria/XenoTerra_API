@@ -13,34 +13,32 @@ using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.BussinessLogicLayer.Helpers;
 using XenoTerra.DataAccessLayer.Helpers.Concrete;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Own
 {
-    public class StoryOwnWriteService<TEntity, TCreateDto, TKey>(
-        IWriteRepository<TEntity, TKey> writeRepository,
+    public class StoryOwnWriteService(
+        IWriteRepository<Story, Guid> writeRepository,
         IMapper mapper,
-        IValidator<TCreateDto> createValidator,
+        IValidator<CreateStoryOwnDto> createValidator,
         AppDbContext dbContext)
-        : IStoryOwnWriteService<TEntity, TCreateDto, TKey>
-        where TEntity : class
-        where TCreateDto : class
-        where TKey : notnull
+        : IStoryOwnWriteService
     {
-        protected readonly IWriteRepository<TEntity, TKey> _writeRepository = writeRepository;
+        protected readonly IWriteRepository<Story, Guid> _writeRepository = writeRepository;
         protected readonly IMapper _mapper = mapper;
-        protected readonly IValidator<TCreateDto> _createValidator = createValidator;
+        protected readonly IValidator<CreateStoryOwnDto> _createValidator = createValidator;
         protected readonly AppDbContext _dbContext = dbContext;
 
-        protected virtual Task PreCreateAsync(TCreateDto createDto) => Task.CompletedTask;
-
-        public async Task<TEntity> CreateStoryAsync(TCreateDto createDto)
+        public async Task<Story> CreateStoryAsync(CreateStoryOwnDto createDto)
         {
             ArgumentGuard.EnsureNotNull(createDto);
 
             await PreCreateAsync(createDto);
             await ValidationGuard.ValidateOrThrowAsync(_createValidator, createDto);
 
-            var entity = MappingGuard.MapOrThrow<TEntity, TCreateDto>(_mapper, createDto);
+            var entity = MappingGuard.MapOrThrow<Story, CreateStoryOwnDto>(_mapper, createDto);
 
             return await ServiceExceptionHandler.ExecuteWriteSafelyAsync(
                 _dbContext,
@@ -48,7 +46,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Own
             );
         }
 
-        public async Task<TEntity> DeleteStoryAsync(TKey key)
+        public async Task<Story> DeleteStoryAsync(Guid key)
         {
             ArgumentGuard.EnsureValidKey(key);
 
@@ -56,6 +54,12 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Own
                 _dbContext,
                 ctx => _writeRepository.RemoveAsync(key)
             );
+        }
+
+        protected static Task PreCreateAsync(CreateStoryOwnDto createDto)
+        {
+            createDto.CreatedAt = DateTime.UtcNow;
+            return Task.CompletedTask;
         }
     }
 }

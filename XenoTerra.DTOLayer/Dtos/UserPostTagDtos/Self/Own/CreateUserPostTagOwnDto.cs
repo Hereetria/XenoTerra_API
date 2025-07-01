@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Self.Own
 {
     public class CreateUserPostTagOwnDto
     {

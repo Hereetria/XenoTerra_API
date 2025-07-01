@@ -1,9 +1,9 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own
 {
     public class ResultCommentWithRelationsOwnDto
     {
@@ -13,10 +13,10 @@ namespace XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own
         public Guid UserId { get; init; }
         public DateTime CommentedAt { get; init; }
         public Guid? ParentCommentId { get; init; }
-        public ResultAppUserOwnDto User { get; init; } = new();
-        public ResultPostOwnDto Post { get; init; } = new();
-        public ICollection<ResultCommentLikeOwnDto> CommentLikes { get; init; } = [];
-        public ResultCommentOwnDto? ParentComment { get; init; }
-        public ICollection<ResultCommentOwnDto> Replies { get; init; } = [];
+        public ResultAppUserOwnDto User { get; set; } = new();
+        public ResultPostOwnDto Post { get; set; } = new();
+        public ICollection<ResultCommentLikeOwnDto> CommentLikes { get; set; } = [];
+        public ResultCommentOwnDto? ParentComment { get; set; }
+        public ICollection<ResultCommentOwnDto> Replies { get; set; } = [];
     }
 }

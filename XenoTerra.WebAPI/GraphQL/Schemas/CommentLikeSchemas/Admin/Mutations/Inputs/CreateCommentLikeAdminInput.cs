@@ -3,7 +3,7 @@
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations.Inputs
 {
     public record CreateCommentLikeAdminInput(
-        string PostId,
+        string CommentId,
         string UserId
     );
 }

@@ -10,11 +10,13 @@ using XenoTerra.WebAPI.Services.Queries.Entity.HighlightQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
-using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Own;
 
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -24,8 +26,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
         private readonly IQueryResolverHelper<Highlight, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(HighlightFilterType))]
-        [UseSorting(typeof(HighlightSortType))]
+        [UseFiltering(typeof(HighlightPublicFilterType))]
+        [UseSorting(typeof(HighlightPublicSortType))]
         public async Task<HighlightPublicConnection> GetAllHighlightsAsync(
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
@@ -39,17 +41,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<HighlightPublicConnection, ResultHighlightPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<HighlightPublicConnection, ResultHighlightWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(HighlightFilterType))]
-        [UseSorting(typeof(HighlightSortType))]
+        [UseFiltering(typeof(HighlightPublicFilterType))]
+        [UseSorting(typeof(HighlightPublicSortType))]
         public async Task<HighlightPublicConnection> GetHighlightsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IHighlightQueryService service,
@@ -66,15 +68,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Highlight, ResultHighlightWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<HighlightPublicConnection, ResultHighlightPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<HighlightPublicConnection, ResultHighlightWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultHighlightPublicDto?> GetHighlightByIdAsync(
+        public async Task<ResultHighlightWithRelationsPublicDto?> GetHighlightByIdAsync(
             string? key,
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
@@ -90,7 +92,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultHighlightPublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultHighlightWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<Highlight, bool>>> BuildAccessFilterAsync(

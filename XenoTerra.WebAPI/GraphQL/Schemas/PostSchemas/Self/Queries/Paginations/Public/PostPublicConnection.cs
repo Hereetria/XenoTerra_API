@@ -1,12 +1,12 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Public;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Paginations.Public
 {
     public class PostPublicConnection(
-        IReadOnlyList<Edge<ResultPostPublicDto>> edges,
+        IReadOnlyList<Edge<ResultPostWithRelationsPublicDto>> edges,
         ConnectionPageInfo pageInfo,
-        int totalCount) : Connection<ResultPostPublicDto>(edges, pageInfo, totalCount)
+        int totalCount) : Connection<ResultPostWithRelationsPublicDto>(edges, pageInfo, totalCount)
     {
     }
 }

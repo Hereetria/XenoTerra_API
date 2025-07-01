@@ -10,11 +10,12 @@ using XenoTerra.WebAPI.Services.Queries.Entity.CommentQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
-using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Public;
-
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -24,8 +25,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
         private readonly IQueryResolverHelper<Comment, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentFilterType))]
-        [UseSorting(typeof(CommentSortType))]
+        [UseFiltering(typeof(CommentPublicFilterType))]
+        [UseSorting(typeof(CommentPublicSortType))]
         public async Task<CommentPublicConnection> GetAllCommentsAsync(
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
@@ -40,17 +41,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentPublicConnection, ResultCommentPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentPublicConnection, ResultCommentWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentFilterType))]
-        [UseSorting(typeof(CommentSortType))]
+        [UseFiltering(typeof(CommentPublicFilterType))]
+        [UseSorting(typeof(CommentPublicSortType))]
         public async Task<CommentPublicConnection> GetCommentsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ICommentQueryService service,
@@ -68,15 +69,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Comment, ResultCommentWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentPublicConnection, ResultCommentPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentPublicConnection, ResultCommentWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultCommentPublicDto?> GetCommentByIdAsync(
+        public async Task<ResultCommentWithRelationsPublicDto?> GetCommentByIdAsync(
             string? key,
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
@@ -93,7 +94,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultCommentPublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultCommentWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<Comment, bool>>> BuildAccessFilterAsync(

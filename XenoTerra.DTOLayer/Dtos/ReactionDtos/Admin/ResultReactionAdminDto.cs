@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.ReactionDtos.Admin
 {
     public class ResultReactionAdminDto
     {

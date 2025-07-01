@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices.Write.Admin
 {

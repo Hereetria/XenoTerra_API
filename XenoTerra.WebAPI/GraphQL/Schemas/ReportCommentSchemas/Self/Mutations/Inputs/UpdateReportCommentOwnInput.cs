@@ -4,8 +4,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations.I
 {
     public record UpdateReportCommentOwnInput(
         string ReportCommentId,
-        string? ReporterUserId,
-        string? CommentId,
-        string? Reason
+        string? CommentId
     );
 }

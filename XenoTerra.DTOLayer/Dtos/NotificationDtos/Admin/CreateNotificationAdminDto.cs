@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.NotificationDtos.Admin
 {
     public class CreateNotificationAdminDto
     {

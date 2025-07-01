@@ -3,6 +3,6 @@
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations.Inputs
 {
     public record CreateCommentLikeOwnInput(
-        string PostId
+        string CommentId
     );
 }

@@ -1,10 +1,12 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.StoryDtos.Admin
 {
     public class ResultStoryWithRelationsAdminDto
     {
@@ -16,7 +18,7 @@ namespace XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin
         public ResultAppUserAdminDto User { get; set; } = new();
         public ICollection<ResultViewStoryAdminDto> ViewStories { get; set; } = [];
         public ICollection<ResultHighlightAdminDto> Highlights { get; set; } = [];
-        public ICollection<StoryLike> StoryLikes { get; set; } = [];
-        public ICollection<ReportStory> ReportStories { get; set; } = [];
+        public ICollection<ResultStoryLikeAdminDto> StoryLikes { get; set; } = [];
+        public ICollection<ResultReportStoryAdminDto> ReportStories { get; set; } = [];
     }
 }

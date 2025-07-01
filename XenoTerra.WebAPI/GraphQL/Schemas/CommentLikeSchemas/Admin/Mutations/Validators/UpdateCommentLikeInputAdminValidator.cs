@@ -12,10 +12,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations.Va
                 .NotEmpty().WithMessage("CommentLikeId must not be empty.")
                 .Must(ValidationHelper.BeValidGuid).WithMessage("CommentLikeId must be a valid GUID.");
 
-            When(x => x.PostId is not null, () =>
+            When(x => x.CommentId is not null, () =>
             {
-                RuleFor(x => x.PostId)
-                    .Must(ValidationHelper.BeValidGuid).WithMessage("PostId must be a valid GUID.");
+                RuleFor(x => x.CommentId)
+                    .Must(ValidationHelper.BeValidGuid).WithMessage("CommentId must be a valid GUID.");
             });
 
             When(x => x.UserId is not null, () =>

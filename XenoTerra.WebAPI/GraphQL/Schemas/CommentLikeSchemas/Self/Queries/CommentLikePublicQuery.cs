@@ -9,13 +9,15 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Filters;
-using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.Services.Queries.Entity.CommentLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.CommentLikeResolvers;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 
-namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Public.Queries
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Paginations.Public;
+namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class CommentLikePublicQuery(IMapper mapper, IQueryResolverHelper<CommentLike, Guid> queryResolver)
@@ -24,8 +26,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Public.Queries
         private readonly IQueryResolverHelper<CommentLike, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentLikeFilterType))]
-        [UseSorting(typeof(CommentLikeSortType))]
+        [UseFiltering(typeof(CommentLikePublicFilterType))]
+        [UseSorting(typeof(CommentLikePublicSortType))]
         public async Task<CommentLikePublicConnection> GetAllLikesAsync(
             [Service] ICommentLikeQueryService service,
             [Service] ICommentLikeResolver resolver,
@@ -39,17 +41,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Public.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<CommentLike, ResultCommentLikePublicDto>(
+            var connection = ConnectionMapper.MapConnection<CommentLike, ResultCommentLikeWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentLikePublicConnection, ResultCommentLikePublicDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentLikePublicConnection, ResultCommentLikeWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentLikeFilterType))]
-        [UseSorting(typeof(CommentLikeSortType))]
+        [UseFiltering(typeof(CommentLikePublicFilterType))]
+        [UseSorting(typeof(CommentLikePublicSortType))]
         public async Task<CommentLikePublicConnection> GetLikesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ICommentLikeQueryService service,
@@ -66,15 +68,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Public.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<CommentLike, ResultCommentLikePublicDto>(
+            var connection = ConnectionMapper.MapConnection<CommentLike, ResultCommentLikeWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<CommentLikePublicConnection, ResultCommentLikePublicDto>(connection);
+            return GraphQLConnectionFactory.Create<CommentLikePublicConnection, ResultCommentLikeWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultCommentLikePublicDto?> GetLikeByIdAsync(
+        public async Task<ResultCommentLikeWithRelationsPublicDto?> GetLikeByIdAsync(
             string? key,
             [Service] ICommentLikeQueryService service,
             [Service] ICommentLikeResolver resolver,
@@ -90,7 +92,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Public.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultCommentLikePublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultCommentLikeWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<CommentLike, bool>>> BuildAccessFilterAsync(

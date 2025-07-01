@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserPostTagMutationServices;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Mutations
 {

@@ -10,7 +10,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices.Write.Admin

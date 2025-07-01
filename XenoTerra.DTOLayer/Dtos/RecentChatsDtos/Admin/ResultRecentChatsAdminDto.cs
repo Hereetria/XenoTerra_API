@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin
 {
     public class ResultRecentChatsAdminDto
     {

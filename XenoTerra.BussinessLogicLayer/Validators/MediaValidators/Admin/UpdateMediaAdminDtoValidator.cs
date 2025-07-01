@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.MediaValidators.Admin
 {
@@ -21,10 +21,15 @@ namespace XenoTerra.BussinessLogicLayer.Validators.MediaValidators.Admin
                 .WithMessage("Photo URL cannot be empty.")
                 .When(x => x.PhotoUrl is not null);
 
-            RuleFor(x => x.UserId)
-                .NotEqual(Guid.Empty)
-                .WithMessage("User ID cannot be empty.")
-                .When(x => x.UserId.HasValue);
+            RuleFor(x => x.SenderId)
+                .NotEmpty()
+                .WithMessage("Sender Id required")
+                .When(x => x.SenderId is not null);
+
+            RuleFor(x => x.ReceiverId)
+                .NotEmpty()
+                .WithMessage("ReceiverId Id required")
+                .When(x => x.ReceiverId is not null);
         }
     }
 }

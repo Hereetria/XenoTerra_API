@@ -2,29 +2,29 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AuthDtos;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MessageDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.NotificationDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 
 namespace XenoTerra.DTOLayer.Mappings
 {
@@ -60,7 +60,7 @@ namespace XenoTerra.DTOLayer.Mappings
                 .ForMember(dest => dest.TaggedPosts, opt => opt.MapFrom(src => src.TaggedPosts))
                 .ReverseMap();
 
-            CreateMap<AppUser, ResultAppUserAdminDto>();
+            CreateMap<AppUser, ResultAppUserAdminDto>().ReverseMap();
             CreateMap<AppUser, RegisterDto>().ReverseMap();
             CreateMap<AppUser, UpdateAppUserAdminDto>().ReverseMap();
 

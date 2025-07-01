@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Subscriptions
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryHighlightMutationServices;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryHighlightServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Mutations
 {

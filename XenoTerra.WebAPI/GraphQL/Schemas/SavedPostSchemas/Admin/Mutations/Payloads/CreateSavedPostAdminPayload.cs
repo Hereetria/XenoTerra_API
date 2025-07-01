@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Admin.Mutations.Payloads

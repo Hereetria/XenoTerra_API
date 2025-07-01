@@ -36,6 +36,8 @@ using XenoTerra.WebAPI.GraphQL.Auth;
 using XenoTerra.WebAPI.Services.Mutations.Base;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
 using XenoTerra.DataAccessLayer.Helpers.Concrete;
+using XenoTerra.BussinessLogicLayer.Validators.AuthValidators;
+using XenoTerra.DTOLayer.Dtos.AuthDtos;
 
 namespace XenoTerra.WebAPI.Extensions
 {
@@ -71,8 +73,11 @@ namespace XenoTerra.WebAPI.Extensions
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),
                 ServiceLifetime.Scoped);
 
-            builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            builder.Services.AddAutoMapper(typeof(GeneralMapping).Assembly);
+            builder.Services.AddAutoMapper(
+                typeof(AdminMappingProfile).Assembly,
+                typeof(SelfMappingProfile).Assembly
+            );
+
 
             builder.Services.AddIdentity<AppUser, AppRole>(options =>
             {
@@ -161,7 +166,8 @@ namespace XenoTerra.WebAPI.Extensions
             builder.Services.AddScoped(typeof(IQueryService<,>), typeof(QueryService<,>));
             builder.Services.AddScoped(typeof(IMutationService<,,,,>), typeof(MutationService<,,,,>));
 
-            builder.Services.AddScoped(typeof(IExistenceChecker<>), typeof(ExistenceChecker<>));
+            builder.Services.AddScoped(typeof(IExistenceChecker<,>), typeof(ExistenceChecker<,>));
+            builder.Services.AddScoped<IValidator<RegisterDto>, RegisterDtoValidator>();
         }
     }
 }

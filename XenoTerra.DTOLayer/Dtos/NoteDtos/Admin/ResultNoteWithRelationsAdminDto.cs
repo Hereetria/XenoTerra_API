@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.NoteDtos.Admin
 {
     public class ResultNoteWithRelationsAdminDto
     {

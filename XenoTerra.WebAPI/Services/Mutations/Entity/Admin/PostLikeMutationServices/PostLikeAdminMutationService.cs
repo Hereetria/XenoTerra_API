@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.PostLikeMutationServices
 {
     public class PostLikeAdminMutationService(IMapper mapper)

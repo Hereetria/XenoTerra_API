@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.SavedPostDtos.Self.Own
 {
     public class ResultSavedPostOwnDto
     {

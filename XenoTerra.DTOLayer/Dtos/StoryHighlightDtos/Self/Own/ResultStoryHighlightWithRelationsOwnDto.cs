@@ -1,7 +1,7 @@
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Self.Own
 {
     public class ResultStoryHighlightWithRelationsOwnDto
     {

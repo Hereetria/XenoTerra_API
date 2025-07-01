@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.FollowDtos.Admin
 {
     public class CreateFollowAdminDto
     {

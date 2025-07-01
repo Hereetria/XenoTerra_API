@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
 using XenoTerra.DataAccessLayer.Helpers.Concrete;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.PostLikeValidators.Own

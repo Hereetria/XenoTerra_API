@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Http;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.ReportCommentMutationServices;
-using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportCommentServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.ReportCommentMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations
 {
@@ -60,7 +60,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportCommentOwnInput, UpdateReportCommentOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.ReporterUserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateReportCommentOwnPayload>(writeService, updateDto, modifiedFields);
 

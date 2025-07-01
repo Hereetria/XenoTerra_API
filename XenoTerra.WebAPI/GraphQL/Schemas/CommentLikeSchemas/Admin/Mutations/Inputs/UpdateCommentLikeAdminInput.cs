@@ -4,7 +4,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations.In
 {
     public record UpdateCommentLikeAdminInput(
         string CommentLikeId,
-        string? PostId,
+        string? CommentId,
         string? UserId
     );
 }

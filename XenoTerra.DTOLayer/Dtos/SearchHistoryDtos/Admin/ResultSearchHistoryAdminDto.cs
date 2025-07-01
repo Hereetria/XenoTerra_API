@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin
 {
     public class ResultSearchHistoryAdminDto
     {

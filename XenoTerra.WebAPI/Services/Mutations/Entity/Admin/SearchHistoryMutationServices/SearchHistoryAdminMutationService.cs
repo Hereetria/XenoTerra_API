@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryMutationServices
 {
     public class SearchHistoryAdminMutationService(IMapper mapper)

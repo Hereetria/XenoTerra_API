@@ -5,47 +5,22 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.UserSettingMutationServices;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices.Write.Own;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices.Read;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.UserSettingMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class UserSettingOwnMutation
     {
-        public async Task<CreateUserSettingOwnPayload> CreateOwnUserSettingAsync(
-            [Service] IUserSettingOwnMutationService mutationService,
-            [Service] IUserSettingOwnWriteService writeService,
-            [Service] ITopicEventSender eventSender,
-            [Service] IValidator<CreateUserSettingOwnInput> inputOwnValidator,
-            [Service] IHttpContextAccessor httpContextAccessor,
-            CreateUserSettingOwnInput? input)
-        {
-            InputGuard.EnsureNotNull(input, nameof(CreateUserSettingOwnInput));
-            await ValidationGuard.ValidateOrThrowAsync(inputOwnValidator, input);
-
-            var createDto = DtoMapperHelper.MapInputToDto<CreateUserSettingOwnInput, CreateUserSettingOwnDto>(input);
-
-            var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            createDto.UserId = userId;
-
-            var payload = await mutationService.CreateAsync<CreateUserSettingOwnPayload>(writeService, createDto);
-
-            if (payload.IsSuccess())
-                await SendUserSettingEventAsync(eventSender, ChangedEventType.Created, payload.Result, userId);
-
-            return payload;
-        }
-
         public async Task<UpdateUserSettingOwnPayload> UpdateOwnUserSettingAsync(
             [Service] IUserSettingOwnMutationService mutationService,
-            [Service] IUserSettingOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IValidator<UpdateUserSettingOwnInput> inputOwnValidator,
             [Service] IHttpContextAccessor httpContextAccessor,
@@ -59,9 +34,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserSettingOwnInput, UpdateUserSettingOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
-            var payload = await mutationService.UpdateAsync<UpdateUserSettingOwnPayload>(writeService, updateDto, modifiedFields);
+            var payload = await mutationService.UpdateAsync(updateDto, modifiedFields);
 
             if (payload.IsSuccess())
                 await SendUserSettingEventAsync(eventSender, ChangedEventType.Updated, payload.Result, userId, modifiedFields);
@@ -72,7 +46,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations
         public async Task<DeleteUserSettingOwnPayload> DeleteOwnUserSettingAsync(
             [Service] IUserSettingOwnMutationService mutationService,
             [Service] IUserSettingReadService readService,
-            [Service] IUserSettingOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
             [Service] IHttpContextAccessor httpContextAccessor,
             string? key)
@@ -95,7 +68,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations
                 );
             }
 
-            var payload = await mutationService.DeleteAsync<DeleteUserSettingOwnPayload>(writeService, parsedKey);
+            var payload = await mutationService.DeleteAsync(parsedKey);
 
             if (payload.IsSuccess())
                 await SendUserSettingEventAsync(eventSender, ChangedEventType.Deleted, payload.Result, userId);

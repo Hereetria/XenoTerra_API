@@ -6,14 +6,14 @@ using HotChocolate.Subscriptions;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.CommentMutationServices;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices.Read;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.CommentMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Mutations
 {
@@ -60,7 +60,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateCommentOwnInput, UpdateCommentOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateCommentOwnPayload>(writeService, updateDto, modifiedFields);
 

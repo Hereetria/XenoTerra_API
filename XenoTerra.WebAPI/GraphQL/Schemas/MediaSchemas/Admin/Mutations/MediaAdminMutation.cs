@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MediaMutationServices;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Mutations
 {

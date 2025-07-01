@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.MessageDtos.Admin
 {
     public class UpdateMessageAdminDto
     {

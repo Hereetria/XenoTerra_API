@@ -1,5 +1,4 @@
-
-namespace XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.ReactionDtos.Admin
 {
     public class UpdateReactionAdminDto
     {

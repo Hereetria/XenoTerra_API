@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ViewStoryQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries
 {
@@ -24,7 +24,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries
         [UseCustomPaging]
         [UseFiltering(typeof(ViewStoryAdminFilterType))]
         [UseSorting(typeof(ViewStoryAdminSortType))]
-        public async Task<ViewStoryAdminConnection> GetAllViewStorysAsync(
+        public async Task<ViewStoryAdminConnection> GetAllViewStoriesAsync(
             [Service] IViewStoryQueryService service,
             [Service] IViewStoryResolver resolver,
             IResolverContext context)
@@ -43,7 +43,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries
         [UseCustomPaging]
         [UseFiltering(typeof(ViewStoryAdminFilterType))]
         [UseSorting(typeof(ViewStoryAdminSortType))]
-        public async Task<ViewStoryAdminConnection> GetViewStorysByIdsAsync(
+        public async Task<ViewStoryAdminConnection> GetViewStoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IViewStoryQueryService service,
             [Service] IViewStoryResolver resolver,

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Self.Own
 {
     public class ResultViewStoryOwnDto
     {

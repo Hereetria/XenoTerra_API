@@ -9,7 +9,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.UserPostTagServices.Write.Own
 {

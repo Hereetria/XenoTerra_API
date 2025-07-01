@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Paginations.Own
 {

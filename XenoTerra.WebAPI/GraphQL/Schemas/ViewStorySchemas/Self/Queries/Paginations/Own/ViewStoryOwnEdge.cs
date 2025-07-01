@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Queries.Paginations.Own
 {

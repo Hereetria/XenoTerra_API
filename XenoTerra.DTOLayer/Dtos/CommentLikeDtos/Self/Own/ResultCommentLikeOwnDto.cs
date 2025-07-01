@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own
 {
     public class ResultCommentLikeOwnDto
     {

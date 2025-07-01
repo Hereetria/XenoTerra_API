@@ -1,8 +1,8 @@
-﻿using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
 
-namespace XenoTerra.WebAPI.Services.Mutations.Entity.Own.NotificationMutationServices
+namespace XenoTerra.WebAPI.Services.Mutations.Entity.Self.NotificationMutationServices
 {
     public interface INotificationOwnMutationService : IMutationService<Notification, ResultNotificationOwnDto, CreateNotificationOwnDto, UpdateNotificationOwnDto, Guid>
     {

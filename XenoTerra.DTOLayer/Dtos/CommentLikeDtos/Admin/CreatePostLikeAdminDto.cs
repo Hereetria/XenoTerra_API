@@ -1,5 +1,4 @@
-
-namespace XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Admin
 {
     public class CreateCommentLikeAdminDto
     {

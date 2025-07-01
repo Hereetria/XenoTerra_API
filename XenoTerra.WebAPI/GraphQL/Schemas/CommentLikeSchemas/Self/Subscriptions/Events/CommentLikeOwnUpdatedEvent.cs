@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Subscriptions.Events

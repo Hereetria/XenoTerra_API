@@ -1,5 +1,4 @@
-
-namespace XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.StoryDtos.Admin
 {
     public class UpdateStoryAdminDto
     {

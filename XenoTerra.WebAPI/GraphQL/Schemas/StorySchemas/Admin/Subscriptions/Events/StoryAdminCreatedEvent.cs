@@ -1,4 +1,4 @@
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Subscriptions.Events

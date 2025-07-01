@@ -12,7 +12,7 @@ using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.StoryLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using Microsoft.EntityFrameworkCore;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Queries
 {

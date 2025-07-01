@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SavedPostDtos.Admin
 {
     public class CreateSavedPostAdminDto
     {

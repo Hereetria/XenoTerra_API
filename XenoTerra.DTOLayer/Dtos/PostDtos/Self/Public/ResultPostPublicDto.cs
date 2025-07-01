@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.PostAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.PostDtos.Self.Public
 {
     public class ResultPostPublicDto
     {

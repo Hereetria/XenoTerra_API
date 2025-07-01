@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own
 {
     public class CreateStoryLikeOwnDto
     {

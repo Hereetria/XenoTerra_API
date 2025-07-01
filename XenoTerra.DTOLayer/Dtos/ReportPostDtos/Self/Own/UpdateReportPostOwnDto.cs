@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ReportPostDtos.Self.Own
 {
     public class UpdateReportPostOwnDto
     {

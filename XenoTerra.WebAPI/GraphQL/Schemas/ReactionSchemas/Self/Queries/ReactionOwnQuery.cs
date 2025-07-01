@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries
         private readonly IQueryResolverHelper<Reaction, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReactionFilterType))]
-        [UseSorting(typeof(ReactionSortType))]
+        [UseFiltering(typeof(ReactionOwnFilterType))]
+        [UseSorting(typeof(ReactionOwnSortType))]
         public async Task<ReactionOwnConnection> GetAllReactionsAsync(
             [Service] IReactionQueryService service,
             [Service] IReactionResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReactionFilterType))]
-        [UseSorting(typeof(ReactionSortType))]
+        [UseFiltering(typeof(ReactionOwnFilterType))]
+        [UseSorting(typeof(ReactionOwnSortType))]
         public async Task<ReactionOwnConnection> GetReactionsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IReactionQueryService service,

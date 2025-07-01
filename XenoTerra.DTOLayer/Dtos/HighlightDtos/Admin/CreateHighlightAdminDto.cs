@@ -1,5 +1,4 @@
-
-namespace XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin
 {
     public class CreateHighlightAdminDto
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices.Write.Admin

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin
 {
     public class CreateRecentChatsAdminDto
     {

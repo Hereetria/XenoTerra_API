@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.AppUserDtos.Own.Own;
+﻿using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations.Payloads

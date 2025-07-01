@@ -15,7 +15,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries
 {
@@ -26,9 +26,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries
         private readonly IQueryResolverHelper<StoryLike, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryLikeFilterType))]
-        [UseSorting(typeof(StoryLikeSortType))]
-        public async Task<StoryLikeOwnConnection> GetAllLikesAsync(
+        [UseFiltering(typeof(StoryLikeOwnFilterType))]
+        [UseSorting(typeof(StoryLikeOwnSortType))]
+        public async Task<StoryLikeOwnConnection> GetAllStoryLikesAsync(
             [Service] IStoryLikeQueryService service,
             [Service] IStoryLikeResolver resolver,
             [Service] IFollowedUserIdProvider followedUserIdProvider,
@@ -50,9 +50,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryLikeFilterType))]
-        [UseSorting(typeof(StoryLikeSortType))]
-        public async Task<StoryLikeOwnConnection> GetLikesByIdsAsync(
+        [UseFiltering(typeof(StoryLikeOwnFilterType))]
+        [UseSorting(typeof(StoryLikeOwnSortType))]
+        public async Task<StoryLikeOwnConnection> GetStoryLikesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IStoryLikeQueryService service,
             [Service] IStoryLikeResolver resolver,
@@ -76,7 +76,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Queries
             return GraphQLConnectionFactory.Create<StoryLikeOwnConnection, ResultStoryLikeWithRelationsOwnDto>(connection);
         }
 
-        public async Task<ResultStoryLikeWithRelationsOwnDto?> GetLikeByIdAsync(
+        public async Task<ResultStoryLikeWithRelationsOwnDto?> GetStoryLikeByIdAsync(
             string? key,
             [Service] IStoryLikeQueryService service,
             [Service] IStoryLikeResolver resolver,

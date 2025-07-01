@@ -1,5 +1,5 @@
 ﻿using GreenDonut;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 

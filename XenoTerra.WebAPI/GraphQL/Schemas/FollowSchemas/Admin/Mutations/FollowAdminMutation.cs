@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.FollowMutationServices;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations
 {

@@ -8,9 +8,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Mutations.Val
     {
         public CreateCommentLikeInputOwnValidator()
         {
-            RuleFor(x => x.PostId)
-                .NotEmpty().WithMessage("PostId must not be empty.")
-                .Must(ValidationHelper.BeValidGuid).WithMessage("PostId must be a valid GUID.");
+            RuleFor(x => x.CommentId)
+                .NotEmpty().WithMessage("CommentId must not be empty.")
+                .Must(ValidationHelper.BeValidGuid).WithMessage("CommentId must be a valid GUID.");
         }
     }
 }

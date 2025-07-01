@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Http;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
 {
@@ -24,8 +24,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
         private readonly IQueryResolverHelper<BlockUser, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(BlockUserFilterType))]
-        [UseSorting(typeof(BlockUserSortType))]
+        [UseFiltering(typeof(BlockUserOwnFilterType))]
+        [UseSorting(typeof(BlockUserOwnSortType))]
         public async Task<BlockUserOwnConnection> GetAllBlockUsersAsync(
             [Service] IBlockUserQueryService service,
             [Service] IBlockUserResolver resolver,
@@ -46,8 +46,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(BlockUserFilterType))]
-        [UseSorting(typeof(BlockUserSortType))]
+        [UseFiltering(typeof(BlockUserOwnFilterType))]
+        [UseSorting(typeof(BlockUserOwnSortType))]
         public async Task<BlockUserOwnConnection> GetBlockUsersByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IBlockUserQueryService service,

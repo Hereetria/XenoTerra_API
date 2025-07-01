@@ -26,53 +26,53 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations;
 namespace XenoTerra.WebAPI.GraphQL.Schemas._RootMutations
 {
     public class UserMutation(
-        BlockUserSelfMutation blockUsers,
-        CommentSelfMutation comments,
-        CommentLikeSelfMutation commentLikes,
-        FollowSelfMutation follows,
-        HighlightSelfMutation highlights,
-        MediaSelfMutation media,
-        MessageSelfMutation messages,
-        NoteSelfMutation notes,
-        NotificationSelfMutation notifications,
-        PostSelfMutation posts,
-        PostLikeSelfMutation postLikes,
-        ReactionSelfMutation reactions,
-        RecentChatsSelfMutation recentChats,
-        ReportCommentSelfMutation reportComments,
-        ReportPostSelfMutation reportPosts,
-        ReportStorySelfMutation reportStories,
-        SavedPostSelfMutation savedPosts,
-        SearchHistorySelfMutation searchHistories,
-        StorySelfMutation stories,
-        StoryLikeSelfMutation storyLikes,
-        AppUserSelfMutation appUsers,
-        UserSettingSelfMutation userSettings,
-        ViewStorySelfMutation viewStories)
+        BlockUserOwnMutation blockUsersOwn,
+        CommentOwnMutation commentsOwn,
+        CommentLikeOwnMutation commentLikesOwn,
+        FollowOwnMutation followsOwn,
+        HighlightOwnMutation highlightsOwn,
+        MediaOwnMutation mediaOwn,
+        MessageOwnMutation messagesOwn,
+        NoteOwnMutation notesOwn,
+        NotificationOwnMutation notificationsOwn,
+        PostOwnMutation posts,
+        PostLikeOwnMutation postLikesOwn,
+        ReactionOwnMutation reactionsOwn,
+        RecentChatsOwnMutation recentChatsOwn,
+        ReportCommentOwnMutation reportCommentsOwn,
+        ReportPostOwnMutation reportPostsOwn,
+        ReportStoryOwnMutation reportStoriesOwn,
+        SavedPostOwnMutation savedPostsOwn,
+        SearchHistoryOwnMutation searchHistoriesOwn,
+        StoryOwnMutation storiesOwn,
+        StoryLikeOwnMutation storyLikesOwn,
+        AppUserOwnMutation appUsersOwn,
+        UserSettingOwnMutation userSettingsOwn,
+        ViewStoryOwnMutation viewStoriesOwn)
     {
-        public BlockUserSelfMutation BlockUsers { get; } = blockUsers;
-        public CommentSelfMutation Comments { get; } = comments;
-        public CommentLikeSelfMutation CommentLikes { get; } = commentLikes;
-        public FollowSelfMutation Follows { get; } = follows;
-        public HighlightSelfMutation Highlights { get; } = highlights;
-        public MediaSelfMutation Media { get; } = media;
-        public MessageSelfMutation Messages { get; } = messages;
-        public NoteSelfMutation Notes { get; } = notes;
-        public NotificationSelfMutation Notifications { get; } = notifications;
-        public PostSelfMutation Posts { get; } = posts;
-        public PostLikeSelfMutation PostLikes { get; } = postLikes;
-        public ReactionSelfMutation Reactions { get; } = reactions;
-        public RecentChatsSelfMutation RecentChats { get; } = recentChats;
-        public ReportCommentSelfMutation ReportComments { get; } = reportComments;
-        public ReportPostSelfMutation ReportPosts { get; } = reportPosts;
-        public ReportStorySelfMutation ReportStories { get; } = reportStories;
-        public SavedPostSelfMutation SavedPosts { get; } = savedPosts;
-        public SearchHistorySelfMutation SearchHistories { get; } = searchHistories;
-        public StorySelfMutation Stories { get; } = stories;
-        public StoryLikeSelfMutation StoryLikes { get; } = storyLikes;
-        public AppUserSelfMutation AppUsers { get; } = appUsers;
-        public UserSettingSelfMutation UserSettings { get; } = userSettings;
-        public ViewStorySelfMutation ViewStories { get; } = viewStories;
+        public BlockUserOwnMutation BlockUsersOwn { get; } = blockUsersOwn;
+        public CommentOwnMutation CommentsOwn { get; } = commentsOwn;
+        public CommentLikeOwnMutation CommentLikesOwn { get; } = commentLikesOwn;
+        public FollowOwnMutation FollowsOwn { get; } = followsOwn;
+        public HighlightOwnMutation HighlightsOwn { get; } = highlightsOwn;
+        public MediaOwnMutation MediaOwn { get; } = mediaOwn;
+        public MessageOwnMutation MessagesOwn { get; } = messagesOwn;
+        public NoteOwnMutation NotesOwn { get; } = notesOwn;
+        public NotificationOwnMutation NotificationsOwn { get; } = notificationsOwn;
+        public PostOwnMutation PostsOwn { get; } = posts;
+        public PostLikeOwnMutation PostLikesOwn { get; } = postLikesOwn;
+        public ReactionOwnMutation ReactionsOwn { get; } = reactionsOwn;
+        public RecentChatsOwnMutation RecentChatsOwn { get; } = recentChatsOwn;
+        public ReportCommentOwnMutation ReportCommentsOwn { get; } = reportCommentsOwn;
+        public ReportPostOwnMutation ReportPostsOwn { get; } = reportPostsOwn;
+        public ReportStoryOwnMutation ReportStoriesOwn { get; } = reportStoriesOwn;
+        public SavedPostOwnMutation SavedPostsOwn { get; } = savedPostsOwn;
+        public SearchHistoryOwnMutation SearchHistoriesOwn { get; } = searchHistoriesOwn;
+        public StoryOwnMutation StoriesOwn { get; } = storiesOwn;
+        public StoryLikeOwnMutation StoryLikesOwn { get; } = storyLikesOwn;
+        public AppUserOwnMutation AppUsersOwn { get; } = appUsersOwn;
+        public UserSettingOwnMutation UserSettingsOwn { get; } = userSettingsOwn;
+        public ViewStoryOwnMutation ViewStoriesOwn { get; } = viewStoriesOwn;
     }
 
 }

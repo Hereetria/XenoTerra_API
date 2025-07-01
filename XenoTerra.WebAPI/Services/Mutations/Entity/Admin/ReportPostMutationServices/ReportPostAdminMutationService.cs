@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReportPostMutationServices
 {
     public class ReportPostAdminMutationService(IMapper mapper)

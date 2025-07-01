@@ -3,7 +3,7 @@
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Mutations.Inputs
 {
     public record UpdatePostLikeOwnInput(
-        string LikeId,
+        string PostLikeId,
         string? PostId
     );
 }

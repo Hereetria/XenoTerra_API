@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin
 {
     public class ResultBlockUserAdminDto
     {

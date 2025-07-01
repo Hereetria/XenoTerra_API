@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.HighlightMutationServices;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.HighlightServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Admin.Mutations
 {

@@ -15,7 +15,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
 {
@@ -26,17 +26,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
         private readonly IQueryResolverHelper<Story, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryFilterType))]
-        [UseSorting(typeof(StorySortType))]
+        [UseFiltering(typeof(StoryOwnFilterType))]
+        [UseSorting(typeof(StoryOwnSortType))]
         public async Task<StoryOwnConnection> GetAllStoriesAsync(
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetAllQueryable(context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -50,19 +48,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryFilterType))]
-        [UseSorting(typeof(StorySortType))]
+        [UseFiltering(typeof(StoryOwnFilterType))]
+        [UseSorting(typeof(StoryOwnSortType))]
         public async Task<StoryOwnConnection> GetStoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -79,13 +75,11 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             string? key,
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -93,79 +87,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultStoryWithRelationsOwnDto>(entity);
         }
 
-        public async Task<IEnumerable<ResultStoryWithRelationsOwnDto>> GetLatestStoriesByFollowingsAsync(
-            [Service] IStoryQueryService service,
-            [Service] IStoryResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IHttpContextAccessor httpContextAccessor,
-            IResolverContext context)
+        private static Expression<Func<Story, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
 
-            var allFollowedStories = await service.GetRawQueryable()
-                .AsNoTracking()
-                .Where(s => followedUserIds.Contains(s.UserId) && s.UserId != currentUserId)
-                .Include(s => s.ViewStories)
-                .ToListAsync();
-
-            var selectedStories = allFollowedStories
-                .GroupBy(s => s.UserId)
-                .Select(group =>
-                {
-                    var ordered = group.OrderBy(s => s.CreatedAt).ToList();
-                    var unseen = ordered.FirstOrDefault(s =>
-                        !s.ViewStories.Any(v => v.UserId == currentUserId));
-
-                    return unseen ?? ordered.OrderByDescending(s => s.CreatedAt).First();
-                })
-                .ToList();
-
-            // isViewed flag ile ayr ve srala
-            var sortedStories = selectedStories
-                .OrderBy(s => s.ViewStories.Any(v => v.UserId == currentUserId)) // false (unseen) nce, true (seen) sonra
-                .ThenByDescending(s => s.CreatedAt) // her grup iinde en yeni yukarda
-                .ToList();
-
-            var storyIds = sortedStories.Select(s => s.StoryId).ToList();
-
-            var query = service.GetCustomQueryable(
-                context,
-                baseQ => baseQ
-                    .AsNoTracking()
-                    .Where(s => storyIds.Contains(s.StoryId))
+            return FilterExpressionHelper.BuildEqualsExpression<Story, Guid>(
+                b => b.UserId,
+                currentUserId
             );
-
-            var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
-
-            // Sralamay bozmadan mapper uygulamak iin storyId srasn koru
-            var entityMap = entities.ToDictionary(e => e.StoryId);
-            var finalOrdered = storyIds
-                .Select(id => entityMap.TryGetValue(id, out var entity) ? _mapper.Map<ResultStoryWithRelationsOwnDto>(entity) : null)
-                .Where(dto => dto != null)
-                .Cast<ResultStoryWithRelationsOwnDto>()
-                .ToList();
-
-
-            return finalOrdered;
-        }
-
-        private static async Task<Expression<Func<Story, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider,
-            IPublicUserIdProvider publicUserIdProvider)
-        {
-            var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
-            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
-
-            var authorizedUserIds = followedUserIds
-                .Concat(publicUserIds)
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildContainsExpression<Story, Guid>(s => s.UserId, authorizedUserIds);
         }
     }
 }

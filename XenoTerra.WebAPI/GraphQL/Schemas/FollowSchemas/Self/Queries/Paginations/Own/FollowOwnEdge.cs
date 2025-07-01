@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Paginations.Own
 {

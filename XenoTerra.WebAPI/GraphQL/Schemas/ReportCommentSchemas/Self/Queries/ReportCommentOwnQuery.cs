@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries
         private readonly IQueryResolverHelper<ReportComment, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportCommentFilterType))]
-        [UseSorting(typeof(ReportCommentSortType))]
+        [UseFiltering(typeof(ReportCommentOwnFilterType))]
+        [UseSorting(typeof(ReportCommentOwnSortType))]
         public async Task<ReportCommentOwnConnection> GetAllReportCommentsAsync(
             [Service] IReportCommentQueryService service,
             [Service] IReportCommentResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportCommentFilterType))]
-        [UseSorting(typeof(ReportCommentSortType))]
+        [UseFiltering(typeof(ReportCommentOwnFilterType))]
+        [UseSorting(typeof(ReportCommentOwnSortType))]
         public async Task<ReportCommentOwnConnection> GetReportCommentsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IReportCommentQueryService service,

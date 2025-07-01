@@ -13,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.ReportStoryResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries
 {
@@ -24,8 +24,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries
         private readonly IQueryResolverHelper<ReportStory, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportStoryFilterType))]
-        [UseSorting(typeof(ReportStorySortType))]
+        [UseFiltering(typeof(ReportStoryOwnFilterType))]
+        [UseSorting(typeof(ReportStoryOwnSortType))]
         public async Task<ReportStoryOwnConnection> GetAllReportStoriesAsync(
             [Service] IReportStoryQueryService service,
             [Service] IReportStoryResolver resolver,
@@ -48,8 +48,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(ReportStoryFilterType))]
-        [UseSorting(typeof(ReportStorySortType))]
+        [UseFiltering(typeof(ReportStoryOwnFilterType))]
+        [UseSorting(typeof(ReportStoryOwnSortType))]
         public async Task<ReportStoryOwnConnection> GetReportStoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IReportStoryQueryService service,

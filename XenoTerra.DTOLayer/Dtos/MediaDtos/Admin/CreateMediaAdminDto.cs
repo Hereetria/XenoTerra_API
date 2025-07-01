@@ -1,6 +1,6 @@
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.MediaDtos.Admin
 {
     public class CreateMediaAdminDto
     {

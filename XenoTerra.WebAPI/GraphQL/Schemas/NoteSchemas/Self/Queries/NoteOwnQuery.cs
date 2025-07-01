@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
 {
@@ -23,16 +23,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
         private readonly IQueryResolverHelper<Note, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(NoteFilterType))]
-        [UseSorting(typeof(NoteSortType))]
+        [UseFiltering(typeof(NoteOwnFilterType))]
+        [UseSorting(typeof(NoteOwnSortType))]
         public async Task<NoteOwnConnection> GetAllNotesAsync(
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
+
             var query = service.GetAllQueryable(context, filter);
 
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -46,18 +46,19 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(NoteFilterType))]
-        [UseSorting(typeof(NoteSortType))]
+        [UseFiltering(typeof(NoteOwnFilterType))]
+        [UseSorting(typeof(NoteOwnSortType))]
         public async Task<NoteOwnConnection> GetNotesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
+
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
 
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -74,12 +75,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
             string? key,
             [Service] INoteQueryService service,
             [Service] INoteResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider);
+
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
+
             var query = service.GetByIdQueryable(parsedKey, context, filter);
 
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -87,21 +89,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultNoteWithRelationsOwnDto>(entity);
         }
 
-        private static async Task<Expression<Func<Note, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider)
+        private static Expression<Func<Note, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
 
-            var authorizedUserIds = followedUserIds
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildContainsExpression<Note, Guid>(
-                note => note.UserId,
-                authorizedUserIds);
+            return FilterExpressionHelper.BuildEqualsExpression<Note, Guid>(
+                b => b.UserId,
+                currentUserId
+            );
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.ReportPostServices.Write.Admin
 {

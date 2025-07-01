@@ -35,18 +35,7 @@ namespace XenoTerra.BussinessLogicLayer.Services.Entity.AppUserServices.Write.Ad
         private readonly IValidator<UpdateAppUserAdminDto> _updateValidator = updateValidator;
         private readonly AppDbContext _dbContext = dbContext;
 
-        protected virtual Task PreCreateAsync(RegisterDto dto)
-        {
-            dto.Bio = string.Empty;
-            dto.ProfilePicture = string.Empty;
-            dto.Website = string.Empty;
-            dto.FollowersCount = 0;
-            dto.FollowingCount = 0;
-            dto.IsVerified = false;
-            dto.LastActive = DateTime.UtcNow;
-
-            return Task.CompletedTask;
-        }
+        protected virtual Task PreCreateAsync(RegisterDto dto) => Task.CompletedTask;
 
         protected virtual Task PreUpdateAsync(UpdateAppUserAdminDto dto) => Task.CompletedTask;
 

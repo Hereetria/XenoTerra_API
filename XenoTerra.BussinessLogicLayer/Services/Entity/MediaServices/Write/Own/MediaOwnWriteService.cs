@@ -11,7 +11,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices.Write.Own
 {

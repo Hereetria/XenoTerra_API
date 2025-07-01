@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryServices.Write.Admin
 {

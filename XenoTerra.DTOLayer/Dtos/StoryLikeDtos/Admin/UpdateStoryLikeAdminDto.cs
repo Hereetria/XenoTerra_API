@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin
 {
     public class UpdateStoryLikeAdminDto
     {

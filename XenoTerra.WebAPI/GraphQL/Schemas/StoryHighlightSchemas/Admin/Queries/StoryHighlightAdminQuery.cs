@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Queries.Sorts
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.StoryHighlightQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryHighlightSchemas.Admin.Queries
 {

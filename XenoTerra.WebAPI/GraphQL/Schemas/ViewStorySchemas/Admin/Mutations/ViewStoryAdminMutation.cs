@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Subscriptions.Even
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ViewStoryMutationServices;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Mutations
 {

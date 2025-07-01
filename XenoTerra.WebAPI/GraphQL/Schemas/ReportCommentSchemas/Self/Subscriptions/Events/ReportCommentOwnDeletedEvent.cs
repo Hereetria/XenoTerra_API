@@ -1,4 +1,4 @@
-using XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Subscriptions.Events

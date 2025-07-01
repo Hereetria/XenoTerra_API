@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Http;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.ReportPostMutationServices;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportPostServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.ReportPostMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Mutations
 {
@@ -60,7 +60,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateReportPostOwnInput, UpdateReportPostOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.ReporterUserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateReportPostOwnPayload>(writeService, updateDto, modifiedFields);
 

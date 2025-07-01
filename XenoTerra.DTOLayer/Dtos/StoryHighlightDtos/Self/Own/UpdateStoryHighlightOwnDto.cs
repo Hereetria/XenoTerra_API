@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Self.Own
 {
     public class UpdateStoryHighlightOwnDto
     {

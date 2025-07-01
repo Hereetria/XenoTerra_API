@@ -13,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
 {
@@ -24,17 +24,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
         private readonly IQueryResolverHelper<Follow, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(FollowFilterType))]
-        [UseSorting(typeof(FollowSortType))]
+        [UseFiltering(typeof(FollowOwnFilterType))]
+        [UseSorting(typeof(FollowOwnSortType))]
         public async Task<FollowOwnConnection> GetAllFollowsAsync(
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetAllQueryable(context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -48,20 +46,18 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(FollowFilterType))]
-        [UseSorting(typeof(FollowSortType))]
+        [UseFiltering(typeof(FollowOwnFilterType))]
+        [UseSorting(typeof(FollowOwnSortType))]
         public async Task<FollowOwnConnection> GetFollowsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -78,14 +74,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
             string? key,
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -93,24 +87,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultFollowWithRelationsOwnDto>(entity);
         }
 
-        private static async Task<Expression<Func<Follow, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider,
-            IPublicUserIdProvider publicUserIdProvider)
+        private static Expression<Func<Follow, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
-            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
 
-            var authorizedUserIds = followedUserIds
-                .Concat(publicUserIds)
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildMultiContainsOrExpression<Follow, Guid>(
-                [nameof(Follow.FollowerId), nameof(Follow.FollowingId)],
-                authorizedUserIds);
+            return FilterExpressionHelper.BuildEqualsExpression<Follow, Guid>(
+                b => b.FollowerId,
+                currentUserId
+            );
         }
     }
 }

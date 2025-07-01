@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
         private readonly IQueryResolverHelper<Media, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(MediaFilterType))]
-        [UseSorting(typeof(MediaSortType))]
+        [UseFiltering(typeof(MediaOwnFilterType))]
+        [UseSorting(typeof(MediaOwnSortType))]
         public async Task<MediaOwnConnection> GetAllMediasAsync(
             [Service] IMediaQueryService service,
             [Service] IMediaResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(MediaFilterType))]
-        [UseSorting(typeof(MediaSortType))]
+        [UseFiltering(typeof(MediaOwnFilterType))]
+        [UseSorting(typeof(MediaOwnSortType))]
         public async Task<MediaOwnConnection> GetMediasByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IMediaQueryService service,

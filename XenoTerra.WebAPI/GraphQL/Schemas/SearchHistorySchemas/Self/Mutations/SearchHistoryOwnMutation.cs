@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Http;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.SearchHistoryMutationServices;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Subscriptions.Events;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.SearchHistoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Mutations
 {
@@ -60,7 +60,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateSearchHistoryOwnInput, UpdateSearchHistoryOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateSearchHistoryOwnPayload>(writeService, updateDto, modifiedFields);
 

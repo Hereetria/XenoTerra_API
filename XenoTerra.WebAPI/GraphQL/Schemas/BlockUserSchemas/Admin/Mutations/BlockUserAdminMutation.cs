@@ -12,8 +12,8 @@ using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.BlockUserAdminMutationServices;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Mutations
 {

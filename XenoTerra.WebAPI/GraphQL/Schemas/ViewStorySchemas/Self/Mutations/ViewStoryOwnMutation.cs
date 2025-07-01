@@ -5,14 +5,14 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.ViewStoryMutationServices;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Subscriptions.Events;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices.Read;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ViewStoryServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.ViewStoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Self.Mutations
 {

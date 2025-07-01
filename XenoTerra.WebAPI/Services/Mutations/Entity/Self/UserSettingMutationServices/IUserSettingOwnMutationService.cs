@@ -1,10 +1,13 @@
-﻿using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Base;
 
-namespace XenoTerra.WebAPI.Services.Mutations.Entity.Own.UserSettingMutationServices
+namespace XenoTerra.WebAPI.Services.Mutations.Entity.Self.UserSettingMutationServices
 {
-    public interface IUserSettingOwnMutationService : IMutationService<UserSetting, ResultUserSettingOwnDto, CreateUserSettingOwnDto, UpdateUserSettingOwnDto, Guid>
+    public interface IUserSettingOwnMutationService
     {
+        Task<UpdateUserSettingOwnPayload> UpdateAsync(UpdateUserSettingOwnDto dto, IEnumerable<string> modifiedFields);
+        Task<DeleteUserSettingOwnPayload> DeleteAsync(Guid key);
     }
 }

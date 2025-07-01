@@ -1,10 +1,10 @@
-namespace XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own
 {
     public class ResultStoryLikeOwnDto
     {
-        public Guid StoryLikeId { get; set; }
-        public Guid StoryId { get; set; }
-        public Guid UserId { get; set; }
-        public DateTime LikedAt { get; set; }
+        public Guid StoryLikeId { get; init; }
+        public Guid StoryId { get; init; }
+        public Guid UserId { get; init; }
+        public DateTime LikedAt { get; init; }
     }
 }

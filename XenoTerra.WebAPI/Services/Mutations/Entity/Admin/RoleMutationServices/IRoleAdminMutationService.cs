@@ -1,7 +1,7 @@
 ﻿using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.RoleAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RoleMutationServices
 {
     public interface IRoleAdminMutationService

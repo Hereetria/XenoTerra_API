@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Queries
 {

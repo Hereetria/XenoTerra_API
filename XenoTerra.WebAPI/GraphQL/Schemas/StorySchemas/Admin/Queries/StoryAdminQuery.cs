@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.StoryQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Admin.Queries
 {

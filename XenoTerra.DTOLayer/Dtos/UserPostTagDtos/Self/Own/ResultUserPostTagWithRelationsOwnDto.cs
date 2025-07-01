@@ -1,8 +1,8 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Self.Own
 {
     public class ResultUserPostTagWithRelationsOwnDto
     {

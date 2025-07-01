@@ -1,18 +1,18 @@
+﻿using AutoMapper;
 using HotChocolate.Authorization;
-using XenoTerra.WebAPI.GraphQL.Auth.Roles;
-using AutoMapper;
 using HotChocolate.Resolvers;
+using System.Linq.Expressions;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Attributes;
-using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Queries.Entity.UserSettingQueryServices;
+using XenoTerra.WebAPI.GraphQL.Auth.Roles;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.UserSettingResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using System.Linq.Expressions;
-using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries.Filters;
+using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Self.Own;
+using XenoTerra.WebAPI.Helpers;
+using XenoTerra.WebAPI.Services.Queries.Entity.UserSettingQueryServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries
 {
@@ -23,9 +23,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries
         private readonly IQueryResolverHelper<UserSetting, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(UserSettingFilterType))]
-        [UseSorting(typeof(UserSettingSortType))]
-        public async Task<UserSettingOwnConnection> GetAllUserSettingsAsync(
+        [UseFiltering(typeof(UserSettingOwnFilterType))]
+        [UseSorting(typeof(UserSettingOwnSortType))]
+        public async Task<UserSettingOwnConnection> GetAllSearchHistoriesAsync(
             [Service] IUserSettingQueryService service,
             [Service] IUserSettingResolver resolver,
             [Service] IHttpContextAccessor httpContextAccessor,
@@ -45,9 +45,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(UserSettingFilterType))]
-        [UseSorting(typeof(UserSettingSortType))]
-        public async Task<UserSettingOwnConnection> GetUserSettingsByIdsAsync(
+        [UseFiltering(typeof(UserSettingOwnFilterType))]
+        [UseSorting(typeof(UserSettingOwnSortType))]
+        public async Task<UserSettingOwnConnection> GetSearchHistoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IUserSettingQueryService service,
             [Service] IUserSettingResolver resolver,
@@ -87,11 +87,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Self.Queries
         private static Expression<Func<UserSetting, bool>> CreateUserSettingAccessFilter(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-
-            return FilterExpressionHelper.BuildEqualsExpression<UserSetting, Guid>(
-                setting => setting.UserId,
-                currentUserId
-            );
+            return FilterExpressionHelper.BuildEqualsExpression<UserSetting, Guid>(x => x.UserId, currentUserId);
         }
     }
 }

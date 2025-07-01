@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos.Admin
 {
     public class CreateUserSettingAdminDto
     {

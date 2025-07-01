@@ -2,6 +2,7 @@
 using XenoTerra.BussinessLogicLayer.Services.Entity.BlockUserServices.Read;
 using XenoTerra.DataAccessLayer.Repositories.Entity.BlockUserRepositories;
 using XenoTerra.DTOLayer.Dtos.BlockUserDtos;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Auth;
 using XenoTerra.WebAPI.GraphQL.Extensions.Builders;
@@ -17,7 +18,7 @@ namespace XenoTerra.WebAPI.GraphQL.Extensions.Configurators
             var assemblies = new[]
             {
             typeof(BlockUser).Assembly,
-            typeof(ResultBlockUserDto).Assembly,
+            typeof(ResultBlockUserAdminDto).Assembly,
             typeof(BlockUserReadRepository).Assembly,
             typeof(BlockUserReadService).Assembly,
             typeof(BlockUserAdminQuery).Assembly

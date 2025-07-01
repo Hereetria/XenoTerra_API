@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.RecentChatsValidators.Own
 {

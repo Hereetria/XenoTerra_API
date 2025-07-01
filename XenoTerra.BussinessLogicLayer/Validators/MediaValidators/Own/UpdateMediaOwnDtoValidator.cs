@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.MediaValidators.Own
 {

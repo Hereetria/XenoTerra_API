@@ -1,12 +1,12 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostLikeDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.PostDtos.Admin
 {
     public class ResultPostWithRelationsAdminDto
     {

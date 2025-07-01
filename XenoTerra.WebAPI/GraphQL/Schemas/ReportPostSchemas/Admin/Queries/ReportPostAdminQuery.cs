@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.ReportPostQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportPostSchemas.Admin.Queries
 {

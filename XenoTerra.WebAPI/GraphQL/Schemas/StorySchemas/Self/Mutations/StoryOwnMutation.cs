@@ -5,13 +5,14 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.StoryMutationServices;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Subscriptions.Events;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Read;
+using XenoTerra.BussinessLogicLayer.Services.Entity.StoryServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.StoryMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations
 {
@@ -34,36 +35,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
             createDto.UserId = userId;
 
-            var payload = await mutationService.CreateAsync<CreateStoryOwnPayload>(writeService, createDto);
+            var payload = await mutationService.CreateAsync(createDto);
 
             if (payload.IsSuccess())
                 await SendStoryEventAsync(eventSender, ChangedEventType.Created, payload.Result, userId);
-
-            return payload;
-        }
-
-        public async Task<UpdateStoryOwnPayload> UpdateOwnStoryAsync(
-            [Service] IStoryOwnMutationService mutationService,
-            [Service] IStoryOwnWriteService writeService,
-            [Service] ITopicEventSender eventSender,
-            [Service] IValidator<UpdateStoryOwnInput> inputOwnValidator,
-            [Service] IHttpContextAccessor httpContextAccessor,
-            IResolverContext context,
-            UpdateStoryOwnInput? input)
-        {
-            InputGuard.EnsureNotNull(input, nameof(UpdateStoryOwnInput));
-            await ValidationGuard.ValidateOrThrowAsync(inputOwnValidator, input);
-
-            var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateStoryOwnInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryOwnInput, UpdateStoryOwnDto>(input, modifiedFields);
-
-            var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
-
-            var payload = await mutationService.UpdateAsync<UpdateStoryOwnPayload>(writeService, updateDto, modifiedFields);
-
-            if (payload.IsSuccess())
-                await SendStoryEventAsync(eventSender, ChangedEventType.Updated, payload.Result, userId, modifiedFields);
 
             return payload;
         }
@@ -94,7 +69,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Mutations
                 );
             }
 
-            var payload = await mutationService.DeleteAsync<DeleteStoryOwnPayload>(writeService, parsedKey);
+            var payload = await mutationService.DeleteAsync(parsedKey);
 
             if (payload.IsSuccess())
                 await SendStoryEventAsync(eventSender, ChangedEventType.Deleted, payload.Result, userId);

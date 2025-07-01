@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Self.Queries.Paginations.Own
 {

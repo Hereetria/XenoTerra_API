@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReactionDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.ReactionValidators.Own
 {

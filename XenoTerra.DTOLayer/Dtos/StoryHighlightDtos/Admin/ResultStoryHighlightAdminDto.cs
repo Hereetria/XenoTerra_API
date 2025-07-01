@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.StoryHighlightAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.StoryHighlightDtos.Admin
 {
     public class ResultStoryHighlightAdminDto
     {

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin
 {
     public class CreateUserPostTagAdminDto
     {

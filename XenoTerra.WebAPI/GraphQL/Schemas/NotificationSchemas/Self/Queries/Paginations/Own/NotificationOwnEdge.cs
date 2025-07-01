@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries.Paginations.Own
 {

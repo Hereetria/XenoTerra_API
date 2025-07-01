@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserPostTagSchemas.Admin.Queries.Paginations
 {

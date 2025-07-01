@@ -1,5 +1,4 @@
-
-namespace XenoTerra.DTOLayer.Dtos.ReportCommentAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.ReportCommentDtos.Admin
 {
     public class UpdateReportCommentAdminDto
     {

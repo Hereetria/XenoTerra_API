@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Self.Own
 {
     public class UpdateRecentChatsOwnDto
     {

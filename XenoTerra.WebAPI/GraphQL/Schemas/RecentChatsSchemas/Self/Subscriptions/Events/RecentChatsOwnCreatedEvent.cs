@@ -1,4 +1,4 @@
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Self.Subscriptions.Events

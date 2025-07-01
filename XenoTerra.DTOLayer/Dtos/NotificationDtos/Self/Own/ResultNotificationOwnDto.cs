@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own
 {
     public class ResultNotificationOwnDto
     {

@@ -4,15 +4,16 @@ using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppRoleSchemas.Admin.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.RoleAdminDtos.Admin;
+using XenoTerra.BussinessLogicLayer.Services.Entity.AppRoleServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.AppRoleDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RoleMutationServices
 {
     public class RoleAdminMutationService(
-        IAppRoleWriteService roleWriteService,
+        IAppRoleAdminWriteService roleWriteService,
         IMapper mapper
     ) : IRoleAdminMutationService
     {
-        private readonly IAppRoleWriteService _roleWriteService = roleWriteService;
+        private readonly IAppRoleAdminWriteService _roleWriteService = roleWriteService;
         private readonly IMapper _mapper = mapper;
 
         public async Task<CreateRoleAdminPayload> CreateAsync(CreateAppRoleAdminDto dto)

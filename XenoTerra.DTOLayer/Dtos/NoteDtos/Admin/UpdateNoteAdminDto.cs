@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.NoteDtos.Admin
 {
     public class UpdateNoteAdminDto
     {

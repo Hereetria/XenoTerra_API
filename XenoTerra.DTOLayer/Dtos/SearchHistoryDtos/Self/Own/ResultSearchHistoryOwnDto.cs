@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Self.Own
 {
     public class ResultSearchHistoryOwnDto
     {

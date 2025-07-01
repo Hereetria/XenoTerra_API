@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.Self.Own
 {
     public class ResultBlockUserWithRelationsOwnDto
     {

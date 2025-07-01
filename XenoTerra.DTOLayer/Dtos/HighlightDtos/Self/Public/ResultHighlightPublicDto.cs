@@ -1,10 +1,10 @@
-namespace XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Public
 {
     public class ResultHighlightPublicDto
     {
         public Guid HighlightId { get; init; }
         public string Name { get; init; } = string.Empty;
         public string ProfilePicturePath { get; init; } = string.Empty;
-        public Guid UserId { get; set; }
+        public Guid UserId { get; init; }
     }
 }

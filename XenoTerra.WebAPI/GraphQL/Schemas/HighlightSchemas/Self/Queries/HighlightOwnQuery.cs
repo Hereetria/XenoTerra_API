@@ -13,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.HighlightAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.HighlightDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
 {
@@ -24,17 +24,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
         private readonly IQueryResolverHelper<Highlight, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(HighlightFilterType))]
-        [UseSorting(typeof(HighlightSortType))]
+        [UseFiltering(typeof(HighlightOwnFilterType))]
+        [UseSorting(typeof(HighlightOwnSortType))]
         public async Task<HighlightOwnConnection> GetAllHighlightsAsync(
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetAllQueryable(context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -48,20 +46,18 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(HighlightFilterType))]
-        [UseSorting(typeof(HighlightSortType))]
+        [UseFiltering(typeof(HighlightOwnFilterType))]
+        [UseSorting(typeof(HighlightOwnSortType))]
         public async Task<HighlightOwnConnection> GetHighlightsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -78,14 +74,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
             string? key,
             [Service] IHighlightQueryService service,
             [Service] IHighlightResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -93,24 +87,13 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.HighlightSchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultHighlightWithRelationsOwnDto>(entity);
         }
 
-        private static async Task<Expression<Func<Highlight, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider,
-            IPublicUserIdProvider publicUserIdProvider)
+        private static Expression<Func<Highlight, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
-            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
 
-            var authorizedUserIds = followedUserIds
-                .Concat(publicUserIds)
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildContainsExpression<Highlight, Guid>(
-                h => h.UserId,
-                authorizedUserIds
+            return FilterExpressionHelper.BuildEqualsExpression<Highlight, Guid>(
+                b => b.UserId,
+                currentUserId
             );
         }
     }

@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.PostLikeDtos.Self.Public
 {
     public class ResultPostLikePublicDto
     {

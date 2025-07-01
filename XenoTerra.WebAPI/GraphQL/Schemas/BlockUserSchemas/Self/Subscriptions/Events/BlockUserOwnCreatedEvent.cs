@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 

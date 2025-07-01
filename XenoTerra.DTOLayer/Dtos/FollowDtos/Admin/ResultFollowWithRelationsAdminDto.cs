@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.FollowDtos.Admin
 {
     public class ResultFollowWithRelationsAdminDto
     {
@@ -10,7 +10,7 @@ namespace XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin
         public Guid FollowingId { get; init; }
         public bool IsPending { get; init; }
         public DateTime FollowedAt { get; init; }
-        public ResultAppUserAdminDto Follower { get; init; } = new();
-        public ResultAppUserAdminDto Following { get; init; } = new();
+        public ResultAppUserAdminDto Follower { get; set; } = new();
+        public ResultAppUserAdminDto Following { get; set; } = new();
     }
 }

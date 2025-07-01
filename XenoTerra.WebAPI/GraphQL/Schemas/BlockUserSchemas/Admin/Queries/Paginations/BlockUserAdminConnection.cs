@@ -1,5 +1,5 @@
 ﻿using HotChocolate.Types.Pagination;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.BlockUserSchemas.Admin.Queries.Paginations
 {

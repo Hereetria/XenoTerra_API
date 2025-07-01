@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
         private readonly IQueryResolverHelper<SavedPost, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(SavedPostFilterType))]
-        [UseSorting(typeof(SavedPostSortType))]
+        [UseFiltering(typeof(SavedPostOwnFilterType))]
+        [UseSorting(typeof(SavedPostOwnSortType))]
         public async Task<SavedPostOwnConnection> GetAllSavedPostsAsync(
             [Service] ISavedPostQueryService service,
             [Service] ISavedPostResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.SavedPostSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(SavedPostFilterType))]
-        [UseSorting(typeof(SavedPostSortType))]
+        [UseFiltering(typeof(SavedPostOwnFilterType))]
+        [UseSorting(typeof(SavedPostOwnSortType))]
         public async Task<SavedPostOwnConnection> GetSavedPostsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ISavedPostQueryService service,

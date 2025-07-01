@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.NoteDtos.Admin
 {
     public class ResultNoteAdminDto
     {

@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.CommentLikeMutationServices;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Mutations
 {

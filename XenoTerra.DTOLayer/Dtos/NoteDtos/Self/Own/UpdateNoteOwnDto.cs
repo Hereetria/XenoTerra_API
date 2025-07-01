@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Own
 {
     public class UpdateNoteOwnDto
     {

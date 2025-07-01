@@ -1,8 +1,8 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Self.Own
 {
     public class ResultReportStoryWithRelationsOwnDto
     {

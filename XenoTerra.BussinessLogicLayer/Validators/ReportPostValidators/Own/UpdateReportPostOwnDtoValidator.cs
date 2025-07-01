@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.PostLikeDtos;
-using XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.ReportPostDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.ReportPostValidators.Own

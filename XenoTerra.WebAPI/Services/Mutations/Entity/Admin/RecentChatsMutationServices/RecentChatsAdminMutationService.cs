@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.Services.Mutations.Base;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin;
 namespace XenoTerra.WebAPI.Services.Mutations.Entity.Admin.RecentChatsMutationServices
 {
     public class RecentChatsAdminMutationService(IMapper mapper)

@@ -5,14 +5,14 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.MediaMutationServices;
-using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices.Write.Own;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MediaServices.Read;
+using XenoTerra.DTOLayer.Dtos.MediaDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.MediaMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations
 {
@@ -33,7 +33,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations
             var createDto = DtoMapperHelper.MapInputToDto<CreateMediaOwnInput, CreateMediaOwnDto>(input);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            createDto.UserId = userId;
+
             var payload = await mutationService.CreateAsync<CreateMediaOwnPayload>(writeService, createDto);
 
             if (payload.IsSuccess())
@@ -58,7 +58,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateMediaOwnInput, UpdateMediaOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateMediaOwnPayload>(writeService, updateDto, modifiedFields);
 

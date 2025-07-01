@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.FollowValidators.Admin

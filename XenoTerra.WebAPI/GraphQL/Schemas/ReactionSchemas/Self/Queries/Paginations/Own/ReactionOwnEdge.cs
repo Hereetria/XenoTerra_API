@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.ReactionAdminDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.ReactionDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReactionSchemas.Self.Queries.Paginations.Own
 {

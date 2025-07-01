@@ -78,7 +78,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Mutations
         private async Task SendUserEventAsync(
             ITopicEventSender sender,
             ChangedEventType eventType,
-            ResultAppUserOwnDto result,
+            ResultAppUserAdminDto result,
             IEnumerable<string>? modifiedFields = null)
         {
             var now = DateTime.UtcNow;

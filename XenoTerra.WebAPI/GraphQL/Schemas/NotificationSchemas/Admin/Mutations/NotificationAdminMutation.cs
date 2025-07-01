@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Subscriptions.E
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.NotificationMutationServices;
-using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.NotificationDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Admin.Mutations
 {

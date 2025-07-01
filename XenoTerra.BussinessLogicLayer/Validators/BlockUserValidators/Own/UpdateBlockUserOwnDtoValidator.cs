@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.BlockUserDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.BlockUserValidators.Own

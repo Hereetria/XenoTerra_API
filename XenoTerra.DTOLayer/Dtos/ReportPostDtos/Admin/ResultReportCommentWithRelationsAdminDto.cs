@@ -1,8 +1,8 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.ReportPostAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.ReportPostDtos.Admin
 {
     public class ResultReportPostWithRelationsAdminDto
     {

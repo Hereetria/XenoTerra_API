@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin
 {
     public class ResultSearchHistoryWithRelationsAdminDto
     {

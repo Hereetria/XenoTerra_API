@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Subscriptions.
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.SearchHistoryMutationServices;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.SearchHistorySchemas.Admin.Mutations
 {

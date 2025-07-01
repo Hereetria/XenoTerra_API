@@ -13,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
 {
@@ -24,18 +24,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
         private readonly IQueryResolverHelper<Comment, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentFilterType))]
-        [UseSorting(typeof(CommentSortType))]
+        [UseFiltering(typeof(CommentOwnFilterType))]
+        [UseSorting(typeof(CommentOwnSortType))]
         public async Task<CommentOwnConnection> GetAllCommentsAsync(
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
-            [Service] IBlockedUserIdProvider blockedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetAllQueryable(context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -49,21 +46,18 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentFilterType))]
-        [UseSorting(typeof(CommentSortType))]
+        [UseFiltering(typeof(CommentOwnFilterType))]
+        [UseSorting(typeof(CommentOwnSortType))]
         public async Task<CommentOwnConnection> GetCommentsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
-            [Service] IBlockedUserIdProvider blockedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -80,15 +74,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
             string? key,
             [Service] ICommentQueryService service,
             [Service] ICommentResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
-            [Service] IBlockedUserIdProvider blockedUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider, blockedUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -96,30 +87,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentSchemas.Self.Queries
             return entity is null ? null : _mapper.Map<ResultCommentWithRelationsOwnDto>(entity);
         }
 
-        private static async Task<Expression<Func<Comment, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider,
-            IPublicUserIdProvider publicUserIdProvider,
-            IBlockedUserIdProvider blockedUserIdProvider)
+        private static Expression<Func<Comment, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
-            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
-            var blockedUserIds = await blockedUserIdProvider.GetBlockedUserIdsAsync(currentUserId);
 
-            var authorizedUserIds = followedUserIds
-                .Concat(publicUserIds)
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildContainsAndNotContainsExpression<Comment, Guid>(
-                c => c.Post.UserId,
-                authorizedUserIds,
-                blockedUserIds
+            return FilterExpressionHelper.BuildEqualsExpression<Comment, Guid>(
+                b => b.UserId,
+                currentUserId
             );
         }
-
-
     }
 }

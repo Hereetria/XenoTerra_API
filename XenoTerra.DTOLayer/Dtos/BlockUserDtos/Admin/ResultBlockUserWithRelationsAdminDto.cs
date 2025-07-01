@@ -1,6 +1,6 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.BlockUserAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.BlockUserDtos.Admin
 {
     public class ResultBlockUserWithRelationsAdminDto
     {

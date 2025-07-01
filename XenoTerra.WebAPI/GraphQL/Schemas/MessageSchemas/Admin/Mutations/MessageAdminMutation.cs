@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Subscriptions.Events
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.MessageMutationServices;
-using XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.MessageServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.MessageDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MessageSchemas.Admin.Mutations
 {

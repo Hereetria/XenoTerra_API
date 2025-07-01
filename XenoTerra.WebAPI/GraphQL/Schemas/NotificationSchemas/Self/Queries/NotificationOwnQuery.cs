@@ -12,7 +12,7 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries.Filters;
-using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries
 {
@@ -23,8 +23,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries
         private readonly IQueryResolverHelper<Notification, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(NotificationFilterType))]
-        [UseSorting(typeof(NotificationSortType))]
+        [UseFiltering(typeof(NotificationOwnFilterType))]
+        [UseSorting(typeof(NotificationOwnSortType))]
         public async Task<NotificationOwnConnection> GetAllNotificationsAsync(
             [Service] INotificationQueryService service,
             [Service] INotificationResolver resolver,
@@ -45,8 +45,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(NotificationFilterType))]
-        [UseSorting(typeof(NotificationSortType))]
+        [UseFiltering(typeof(NotificationOwnFilterType))]
+        [UseSorting(typeof(NotificationOwnSortType))]
         public async Task<NotificationOwnConnection> GetNotificationsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] INotificationQueryService service,

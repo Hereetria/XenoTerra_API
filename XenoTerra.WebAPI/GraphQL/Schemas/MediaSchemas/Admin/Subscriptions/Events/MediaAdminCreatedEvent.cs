@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.MediaDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.MediaSchemas.Admin.Subscriptions.Events

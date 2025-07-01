@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Self.Own
 {
     public class CreateReportStoryOwnDto
     {

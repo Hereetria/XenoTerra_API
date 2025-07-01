@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.UserSettingMutationServices;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.UserSettingServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Mutations
 {

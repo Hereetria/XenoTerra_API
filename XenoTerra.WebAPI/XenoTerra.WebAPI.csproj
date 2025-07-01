@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
-    <Content Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
-    <EmbeddedResource Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
-    <None Remove="GraphQL\Schemas\_Helpers\MutationHelpers\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="HotChocolate.AspNetCore" Version="15.0.3" />
     <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.0.3" />
@@ -26,6 +19,82 @@
 
   <ItemGroup>
     <ProjectReference Include="..\XenoTerra.BussinessLogicLayer\XenoTerra.BussinessLogicLayer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="GraphQL\Schemas\AppRoleSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\BlockUserSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\BlockUserSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\BlockUserSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\CommentLikeSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\CommentLikeSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\CommentLikeSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\CommentSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\CommentSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\CommentSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\FollowSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\FollowSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\FollowSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\HighlightSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\HighlightSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\HighlightSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\MediaSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\MediaSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\MediaSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\MessageSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\MessageSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\MessageSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\NoteSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\NoteSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\NoteSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\NotificationSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\NotificationSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\PostLikeSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\PostLikeSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\PostLikeSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\PostSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\PostSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\PostSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\ReactionSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\ReactionSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\ReactionSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\RecentChatsSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\RecentChatsSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\RecentChatsSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\ReportCommentSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\ReportCommentSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\ReportCommentSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\ReportPostSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\ReportPostSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\ReportPostSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\ReportStorySchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\ReportStorySchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\ReportStorySchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\SavedPostSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\SavedPostSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\SavedPostSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\SearchHistorySchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\SearchHistorySchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\SearchHistorySchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\SearchHistoryUserSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\StoryHighlightSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\StoryLikeSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\StoryLikeSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\StoryLikeSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\StorySchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\StorySchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\StorySchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\UserPostTagSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\UserPostTagSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\UserPostTagSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\UserSettingSchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\UserSettingSchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\UserSettingSchemas\Types\Self\Public\" />
+    <Folder Include="GraphQL\Schemas\ViewStorySchemas\Types\Admin\" />
+    <Folder Include="GraphQL\Schemas\ViewStorySchemas\Types\Self\Own\" />
+    <Folder Include="GraphQL\Schemas\ViewStorySchemas\Types\Self\Public\" />
   </ItemGroup>
 
 </Project>

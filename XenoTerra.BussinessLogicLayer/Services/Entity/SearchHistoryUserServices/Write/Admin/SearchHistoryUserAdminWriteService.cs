@@ -10,7 +10,7 @@ using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.SearchHistoryUserAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.SearchHistoryUserDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SearchHistoryUserServices.Write.Admin
 {

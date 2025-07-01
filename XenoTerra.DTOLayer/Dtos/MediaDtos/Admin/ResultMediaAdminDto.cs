@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.MediaDtos.Admin
 {
     public class ResultMediaAdminDto
     {

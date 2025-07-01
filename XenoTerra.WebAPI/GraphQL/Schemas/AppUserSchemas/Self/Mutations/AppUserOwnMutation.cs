@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Identity;
 using XenoTerra.EntityLayer.Entities;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.UserMutationServices;
-using XenoTerra.DTOLayer.Dtos.AppUserDtos.Own.Own;
+using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations.Payloads;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.UserMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations
 {
@@ -52,7 +52,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Self.Mutations
             await ValidationGuard.ValidateOrThrowAsync(inputOwnValidator, input);
 
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateUserOwnInput>(context, nameof(input));
-            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserOwnInput, UpdateAppUserAdminDto>(input, modifiedFields);
+            var updateDto = DtoMapperHelper.MapInputToDto<UpdateUserOwnInput, UpdateAppUserOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
 

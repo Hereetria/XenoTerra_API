@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Queries.Sorts;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Queries.Entity.CommentLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Admin.Queries
 {

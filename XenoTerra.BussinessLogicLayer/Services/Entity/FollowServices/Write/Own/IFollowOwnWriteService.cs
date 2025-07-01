@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices.Write.Own
 {

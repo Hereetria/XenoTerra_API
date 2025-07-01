@@ -10,7 +10,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.SavedPostAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.SavedPostDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.SavedPostServices.Write.Own
 {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
 using XenoTerra.DataAccessLayer.Helpers.Concrete;
-using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.ViewStoryValidators.Admin

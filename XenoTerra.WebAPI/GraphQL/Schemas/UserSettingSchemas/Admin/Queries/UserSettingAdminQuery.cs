@@ -11,7 +11,7 @@ using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.UserSettingResolvers;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Paginations;
 using XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserSettingDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.UserSettingSchemas.Admin.Queries
 {

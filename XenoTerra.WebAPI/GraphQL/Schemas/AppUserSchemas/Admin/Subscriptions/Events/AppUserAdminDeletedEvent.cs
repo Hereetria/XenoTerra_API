@@ -1,9 +1,9 @@
-﻿using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
+﻿using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.AppUserSchemas.Admin.Subscriptions.Events
 {
-    public record UserAdminDeletedEvent : DeletedEvent<ResultAppUserOwnDto>
+    public record UserAdminDeletedEvent : DeletedEvent<ResultAppUserAdminDto>
     {
     }
 }

@@ -1,6 +1,6 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.UserSettingAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.UserSettingDtos.Self.Own
 {
     public class ResultUserSettingWithRelationsOwnDto
     {

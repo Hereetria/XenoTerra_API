@@ -12,11 +12,13 @@ using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Own;
 
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -26,8 +28,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
         private readonly IQueryResolverHelper<Story, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryFilterType))]
-        [UseSorting(typeof(StorySortType))]
+        [UseFiltering(typeof(StoryPublicFilterType))]
+        [UseSorting(typeof(StoryPublicSortType))]
         public async Task<StoryPublicConnection> GetAllStoriesAsync(
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
@@ -41,17 +43,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Story, ResultStoryPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<StoryPublicConnection, ResultStoryPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<StoryPublicConnection, ResultStoryWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(StoryFilterType))]
-        [UseSorting(typeof(StorySortType))]
+        [UseFiltering(typeof(StoryPublicFilterType))]
+        [UseSorting(typeof(StoryPublicSortType))]
         public async Task<StoryPublicConnection> GetStoriesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IStoryQueryService service,
@@ -67,15 +69,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Story, ResultStoryPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Story, ResultStoryWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<StoryPublicConnection, ResultStoryPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<StoryPublicConnection, ResultStoryWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultStoryPublicDto?> GetStoryByIdAsync(
+        public async Task<ResultStoryWithRelationsPublicDto?> GetStoryByIdAsync(
             string? key,
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
@@ -90,10 +92,10 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultStoryPublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultStoryWithRelationsPublicDto>(entity);
         }
 
-        public async Task<IEnumerable<ResultStoryPublicDto>> GetLatestStoriesByFollowingsAsync(
+        public async Task<IEnumerable<ResultStoryWithRelationsPublicDto>> GetLatestStoriesByFollowingsAsync(
             [Service] IStoryQueryService service,
             [Service] IStoryResolver resolver,
             [Service] IFollowedUserIdProvider followedUserIdProvider,
@@ -103,28 +105,35 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
             var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
 
+            // Sadece aktif takip edilen kullanýcýlar
+            var validFollowedUserIds = followedUserIds.Distinct().ToList();
+
             var allFollowedStories = await service.GetRawQueryable()
                 .AsNoTracking()
-                .Where(s => followedUserIds.Contains(s.UserId) && s.UserId != currentUserId)
+                .Where(s => validFollowedUserIds.Contains(s.UserId) && s.UserId != currentUserId)
                 .Include(s => s.ViewStories)
                 .ToListAsync();
 
+            // Her kullanýcý için bir story: ya ilk görülmemiþ ya da sonuncusu
             var selectedStories = allFollowedStories
                 .GroupBy(s => s.UserId)
                 .Select(group =>
                 {
                     var ordered = group.OrderBy(s => s.CreatedAt).ToList();
-                    var unseen = ordered.FirstOrDefault(s =>
+
+                    // currentUser'ýn görmediði ilk story
+                    var firstUnseen = ordered.FirstOrDefault(s =>
                         !s.ViewStories.Any(v => v.UserId == currentUserId));
 
-                    return unseen ?? ordered.OrderByDescending(s => s.CreatedAt).First();
+                    // Hepsi görüldüyse sonuncuyu getir
+                    return firstUnseen ?? ordered.Last();
                 })
                 .ToList();
 
-            // isViewed flag ile ayr ve srala
+            // unseen story'ler önce
             var sortedStories = selectedStories
-                .OrderBy(s => s.ViewStories.Any(v => v.UserId == currentUserId)) // false (unseen) nce, true (seen) sonra
-                .ThenByDescending(s => s.CreatedAt) // her grup iinde en yeni yukarda
+                .OrderBy(s => s.ViewStories.Any(v => v.UserId == currentUserId)) // false (unseen) önce
+                .ThenByDescending(s => s.CreatedAt)
                 .ToList();
 
             var storyIds = sortedStories.Select(s => s.StoryId).ToList();
@@ -138,17 +147,16 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StorySchemas.Self.Queries
 
             var entities = await _queryResolver.ResolveEntitiesAsync(query, resolver, context);
 
-            // Sralamay bozmadan mapper uygulamak iin storyId srasn koru
             var entityMap = entities.ToDictionary(e => e.StoryId);
             var finalOrdered = storyIds
-                .Select(id => entityMap.TryGetValue(id, out var entity) ? _mapper.Map<ResultStoryPublicDto>(entity) : null)
+                .Select(id => entityMap.TryGetValue(id, out var entity) ? _mapper.Map<ResultStoryWithRelationsPublicDto>(entity) : null)
                 .Where(dto => dto != null)
-                .Cast<ResultStoryPublicDto>()
+                .Cast<ResultStoryWithRelationsPublicDto>()
                 .ToList();
-
 
             return finalOrdered;
         }
+
 
         private static async Task<Expression<Func<Story, bool>>> BuildAccessFilterAsync(
             IHttpContextAccessor httpContextAccessor,

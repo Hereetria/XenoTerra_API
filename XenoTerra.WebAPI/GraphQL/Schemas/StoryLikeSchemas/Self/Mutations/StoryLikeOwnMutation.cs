@@ -5,21 +5,21 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.StoryLikeOwnMutationServices;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations.Payloads;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryLikeServices.Write.Own;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryLikeServices.Read;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.StoryLikeSelfMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
     public class StoryLikeOwnMutation
     {
-        public async Task<CreateStoryLikeOwnPayload> CreateMyLikeAsync(
+        public async Task<CreateStoryLikeOwnPayload> CreateOwnStoryLikeAsync(
             [Service] IStoryLikeOwnMutationService mutationService,
             [Service] IStoryLikeOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
@@ -43,7 +43,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations
             return payload;
         }
 
-        public async Task<UpdateStoryLikeOwnPayload> UpdateMyLikeAsync(
+        public async Task<UpdateStoryLikeOwnPayload> UpdateOwnStoryLikeAsync(
             [Service] IStoryLikeOwnMutationService mutationService,
             [Service] IStoryLikeOwnWriteService writeService,
             [Service] ITopicEventSender eventSender,
@@ -59,7 +59,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateStoryLikeOwnInput, UpdateStoryLikeOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateStoryLikeOwnPayload>(writeService, updateDto, modifiedFields);
 
@@ -69,7 +68,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Self.Mutations
             return payload;
         }
 
-        public async Task<DeleteStoryLikeOwnPayload> DeleteMyLikeAsync(
+        public async Task<DeleteStoryLikeOwnPayload> DeleteOwnStoryLikeAsync(
             [Service] IStoryLikeOwnMutationService mutationService,
             [Service] IStoryLikeReadService readService,
             [Service] IStoryLikeOwnWriteService writeService,

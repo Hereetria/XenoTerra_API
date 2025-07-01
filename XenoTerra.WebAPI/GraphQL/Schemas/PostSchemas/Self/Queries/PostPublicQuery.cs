@@ -10,11 +10,13 @@ using XenoTerra.WebAPI.Services.Queries.Entity.PostQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
-using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Own;
 
+using XenoTerra.DTOLayer.Dtos.PostDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -24,8 +26,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
         private readonly IQueryResolverHelper<Post, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(PostFilterType))]
-        [UseSorting(typeof(PostSortType))]
+        [UseFiltering(typeof(PostPublicFilterType))]
+        [UseSorting(typeof(PostPublicSortType))]
         public async Task<PostPublicConnection> GetAllPostsAsync(
             [Service] IPostQueryService service,
             [Service] IPostResolver resolver,
@@ -40,17 +42,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
 
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Post, ResultPostPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Post, ResultPostWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostPublicConnection, ResultPostPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<PostPublicConnection, ResultPostWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(PostFilterType))]
-        [UseSorting(typeof(PostSortType))]
+        [UseFiltering(typeof(PostPublicFilterType))]
+        [UseSorting(typeof(PostPublicSortType))]
         public async Task<PostPublicConnection> GetPostsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IPostQueryService service,
@@ -67,15 +69,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
 
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Post, ResultPostPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Post, ResultPostWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<PostPublicConnection, ResultPostPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<PostPublicConnection, ResultPostWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultPostPublicDto?> GetPostByIdAsync(
+        public async Task<ResultPostWithRelationsPublicDto?> GetPostByIdAsync(
             string? key,
             [Service] IPostQueryService service,
             [Service] IPostResolver resolver,
@@ -91,7 +93,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostSchemas.Self.Queries
 
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultPostPublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultPostWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<Post, bool>>> CreatePostAccessFilterAsync(

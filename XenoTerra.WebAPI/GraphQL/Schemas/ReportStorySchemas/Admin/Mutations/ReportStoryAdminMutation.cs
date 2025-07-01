@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Admin.Subscriptions.Ev
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.ReportStoryAdminMutationServices;
-using XenoTerra.DTOLayer.Dtos.ReportStoryAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.ReportStoryServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.ReportStoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportStorySchemas.Admin.Mutations
 {

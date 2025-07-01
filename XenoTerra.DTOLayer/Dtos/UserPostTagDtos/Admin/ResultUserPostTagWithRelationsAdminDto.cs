@@ -5,10 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.PostAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.PostDtos.Admin;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin
 {
     public class ResultUserPostTagWithRelationsAdminDto
     {

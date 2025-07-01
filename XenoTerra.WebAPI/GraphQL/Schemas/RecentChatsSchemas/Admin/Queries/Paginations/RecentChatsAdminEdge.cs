@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.RecentChatsSchemas.Admin.Queries.Paginations
 {

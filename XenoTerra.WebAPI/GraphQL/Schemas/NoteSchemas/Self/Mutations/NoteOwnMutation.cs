@@ -5,14 +5,14 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.NoteMutationServices;
-using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices.Read;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NoteServices.Write.Own;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.NoteMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Mutations
 {
@@ -59,7 +59,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NoteSchemas.Self.Mutations
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateNoteOwnInput, UpdateNoteOwnDto>(input, modifiedFields);
 
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateNoteOwnPayload>(writeService, updateDto, modifiedFields);
 

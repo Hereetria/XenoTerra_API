@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.UserPostTagAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.UserPostTagDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.UserPostTagValidators.Admin
 {

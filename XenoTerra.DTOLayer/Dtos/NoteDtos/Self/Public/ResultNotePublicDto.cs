@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Self.Public
+namespace XenoTerra.DTOLayer.Dtos.NoteDtos.Self.Public
 {
     public class ResultNotePublicDto
     {

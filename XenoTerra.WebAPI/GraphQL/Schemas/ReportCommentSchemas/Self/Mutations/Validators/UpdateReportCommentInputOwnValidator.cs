@@ -12,12 +12,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.ReportCommentSchemas.Self.Mutations.V
                 .NotEmpty().WithMessage("ReportCommentId must not be empty.")
                 .Must(ValidationHelper.BeValidGuid).WithMessage("ReportCommentId must be a valid GUID.");
 
-            When(x => x.ReporterUserId is not null, () =>
-            {
-                RuleFor(x => x.ReporterUserId)
-                    .Must(ValidationHelper.BeValidGuid).WithMessage("ReporterUserId must be a valid GUID.");
-            });
-
             When(x => x.CommentId is not null, () =>
             {
                 RuleFor(x => x.CommentId)

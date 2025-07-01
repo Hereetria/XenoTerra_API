@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.CommentAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.CommentDtos.Self.Own
 {
     public class UpdateCommentOwnDto
     {

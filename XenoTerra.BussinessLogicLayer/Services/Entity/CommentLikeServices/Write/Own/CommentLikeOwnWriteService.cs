@@ -11,7 +11,7 @@ using XenoTerra.DataAccessLayer.Persistence;
 using XenoTerra.DataAccessLayer.Repositories.Base.Read;
 using XenoTerra.DataAccessLayer.Repositories.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.CommentLikeServices.Write.Own
 {

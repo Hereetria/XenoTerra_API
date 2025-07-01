@@ -5,18 +5,18 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.FollowMutationServices;
 using XenoTerra.BussinessLogicLayer.Services.Entity.AppUserServices;
 using XenoTerra.EntityLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 using XenoTerra.DataAccessLayer.Persistence;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Mutations.Inputs;
 using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices.Write.Own;
 using XenoTerra.BussinessLogicLayer.Services.Entity.FollowServices.Read;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.FollowMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Mutations
 {

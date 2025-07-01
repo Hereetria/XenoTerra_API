@@ -11,8 +11,8 @@ using XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Subscriptions.Even
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
 using XenoTerra.WebAPI.Services.Mutations.Entity.Admin.StoryLikeAdminMutationServices;
-using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin;
 using XenoTerra.BussinessLogicLayer.Services.Entity.StoryLikeServices.Write.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Mutations
 {

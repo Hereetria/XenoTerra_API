@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XenoTerra.DTOLayer.Dtos.PostLikeAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.PostLikeDtos.Admin
 {
     public class ResultPostLikeAdminDto
     {

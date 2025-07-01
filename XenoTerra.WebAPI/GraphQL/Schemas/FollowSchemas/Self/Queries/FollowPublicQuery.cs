@@ -10,11 +10,13 @@ using XenoTerra.WebAPI.Services.Queries.Entity.FollowQueryServices;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Abstract;
 using System.Linq.Expressions;
 using XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete;
-using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Paginations.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Paginations.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Filters;
 using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Sorts;
-using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Self.Public;
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Own;
 
+using XenoTerra.DTOLayer.Dtos.FollowDtos.Self.Public;
+using XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries.Paginations.Public;
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
 {
     [Authorize(Roles = new[] { nameof(AppRoles.User), nameof(AppRoles.Admin) })]
@@ -24,8 +26,8 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
         private readonly IQueryResolverHelper<Follow, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(FollowFilterType))]
-        [UseSorting(typeof(FollowSortType))]
+        [UseFiltering(typeof(FollowPublicFilterType))]
+        [UseSorting(typeof(FollowPublicSortType))]
         public async Task<FollowPublicConnection> GetAllFollowsAsync(
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
@@ -39,17 +41,17 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
             var query = service.GetAllQueryable(context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<FollowPublicConnection, ResultFollowPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<FollowPublicConnection, ResultFollowWithRelationsPublicDto>(connection);
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(FollowFilterType))]
-        [UseSorting(typeof(FollowSortType))]
+        [UseFiltering(typeof(FollowPublicFilterType))]
+        [UseSorting(typeof(FollowPublicSortType))]
         public async Task<FollowPublicConnection> GetFollowsByIdsAsync(
             IEnumerable<string>? keys,
             [Service] IFollowQueryService service,
@@ -66,15 +68,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityPublicConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
 
-            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowPublicDto>(
+            var connection = ConnectionMapper.MapConnection<Follow, ResultFollowWithRelationsPublicDto>(
                 entityPublicConnection,
                 _mapper
             );
 
-            return GraphQLConnectionFactory.Create<FollowPublicConnection, ResultFollowPublicDto>(connection);
+            return GraphQLConnectionFactory.Create<FollowPublicConnection, ResultFollowWithRelationsPublicDto>(connection);
         }
 
-        public async Task<ResultFollowPublicDto?> GetFollowByIdAsync(
+        public async Task<ResultFollowWithRelationsPublicDto?> GetFollowByIdAsync(
             string? key,
             [Service] IFollowQueryService service,
             [Service] IFollowResolver resolver,
@@ -90,7 +92,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Self.Queries
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
 
-            return entity is null ? null : _mapper.Map<ResultFollowPublicDto>(entity);
+            return entity is null ? null : _mapper.Map<ResultFollowWithRelationsPublicDto>(entity);
         }
 
         private static async Task<Expression<Func<Follow, bool>>> BuildAccessFilterAsync(

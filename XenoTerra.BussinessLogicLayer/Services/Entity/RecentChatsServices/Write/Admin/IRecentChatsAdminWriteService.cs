@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.BussinessLogicLayer.Services.Base.Write;
 using XenoTerra.EntityLayer.Entities;
-using XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Services.Entity.RecentChatsServices.Write.Admin
 {

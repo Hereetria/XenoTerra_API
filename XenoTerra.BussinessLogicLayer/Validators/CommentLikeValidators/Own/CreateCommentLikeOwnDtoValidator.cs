@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using XenoTerra.DataAccessLayer.Helpers.Abstract;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.CommentLikeValidators.Own
@@ -28,7 +28,7 @@ namespace XenoTerra.BussinessLogicLayer.Validators.CommentLikeValidators.Own
 
             RuleFor(x => x)
                 .MustAsync(async (dto, cancellation) =>
-                    !await existenceChecker.ExistsAsync(dto, x => x.CommentId, x => x.UserId))
+                    !await existenceChecker.ExistsAsync(dto, null, x => x.CommentId, x => x.UserId))
                 .WithMessage("This comment like already exists");
         }
     }

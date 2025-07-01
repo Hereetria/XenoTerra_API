@@ -13,7 +13,7 @@ using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Paginatio
 using XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Self.Queries.Sorts;
 using XenoTerra.WebAPI.Services.Queries.Entity.CommentLikeQueryServices;
 using XenoTerra.WebAPI.GraphQL.Resolvers.Entity.CommentLikeResolvers;
-using XenoTerra.DTOLayer.Dtos.CommentLikeAdminDtos.Self.Own;
+using XenoTerra.DTOLayer.Dtos.CommentLikeDtos.Self.Own;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
 {
@@ -24,17 +24,15 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
         private readonly IQueryResolverHelper<CommentLike, Guid> _queryResolver = queryResolver;
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentLikeFilterType))]
-        [UseSorting(typeof(CommentLikeSortType))]
+        [UseFiltering(typeof(CommentLikeOwnFilterType))]
+        [UseSorting(typeof(CommentLikeOwnSortType))]
         public async Task<CommentLikeOwnConnection> GetAllLikesAsync(
             [Service] ICommentLikeQueryService service,
             [Service] ICommentLikeResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetAllQueryable(context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -48,20 +46,18 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
         }
 
         [UseCustomPaging]
-        [UseFiltering(typeof(CommentLikeFilterType))]
-        [UseSorting(typeof(CommentLikeSortType))]
+        [UseFiltering(typeof(CommentLikeOwnFilterType))]
+        [UseSorting(typeof(CommentLikeOwnSortType))]
         public async Task<CommentLikeOwnConnection> GetLikesByIdsAsync(
             IEnumerable<string>? keys,
             [Service] ICommentLikeQueryService service,
             [Service] ICommentLikeResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKeys = GuidParser.ParseGuidOrThrow(keys, nameof(keys));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdsQueryable(parsedKeys, context, filter);
             var entityOwnConnection = await _queryResolver.ResolveEntityConnectionAsync(query, resolver, context);
@@ -78,14 +74,12 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
             string? key,
             [Service] ICommentLikeQueryService service,
             [Service] ICommentLikeResolver resolver,
-            [Service] IFollowedUserIdProvider followedUserIdProvider,
-            [Service] IPublicUserIdProvider publicUserIdProvider,
             [Service] IHttpContextAccessor httpContextAccessor,
             IResolverContext context)
         {
             var parsedKey = GuidParser.ParseGuidOrThrow(key, nameof(key));
 
-            var filter = await BuildAccessFilterAsync(httpContextAccessor, followedUserIdProvider, publicUserIdProvider);
+            var filter = BuildAccessFilterAsync(httpContextAccessor);
 
             var query = service.GetByIdQueryable(parsedKey, context, filter);
             var entity = await _queryResolver.ResolveEntityAsync(query, resolver, context);
@@ -93,26 +87,14 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.CommentLikeSchemas.Own.Queries
             return entity is null ? null : _mapper.Map<ResultCommentLikeWithRelationsOwnDto>(entity);
         }
 
-        private static async Task<Expression<Func<CommentLike, bool>>> BuildAccessFilterAsync(
-            IHttpContextAccessor httpContextAccessor,
-            IFollowedUserIdProvider followedUserIdProvider,
-            IPublicUserIdProvider publicUserIdProvider)
+        private static Expression<Func<CommentLike, bool>> BuildAccessFilterAsync(IHttpContextAccessor httpContextAccessor)
         {
             var currentUserId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            var followedUserIds = await followedUserIdProvider.GetFollowedUserIdsAsync();
-            var publicUserIds = await publicUserIdProvider.GetPublicUserIdsAsync();
 
-            var authorizedUserIds = followedUserIds
-                .Concat(publicUserIds)
-                .Append(currentUserId)
-                .Distinct()
-                .ToList();
-
-            return FilterExpressionHelper.BuildNestedContainsExpression<CommentLike, Guid>(
-                [
-                    like => like.Comment.UserId
-                ],
-                authorizedUserIds);
+            return FilterExpressionHelper.BuildEqualsExpression<CommentLike, Guid>(
+                b => b.UserId,
+                currentUserId
+            );
         }
     }
 }

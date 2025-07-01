@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 
-namespace XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.MessageDtos.Self.Own
 {
     public class ResultMessageWithRelationsOwnDto
     {
@@ -11,7 +11,7 @@ namespace XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Self.Own
         public Guid ReceiverId { get; init; }
         public string Header { get; init; } = string.Empty;
         public DateTime SentAt { get; init; }
-        public ResultAppUserOwnDto Sender { get; init; } = new();
-        public ResultAppUserOwnDto Receiver { get; init; } = new();
+        public ResultAppUserOwnDto Sender { get; set; } = new();
+        public ResultAppUserOwnDto Receiver { get; set; } = new();
     }
 }

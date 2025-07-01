@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.ViewStorySchemas.Admin.Queries.Paginations
 {

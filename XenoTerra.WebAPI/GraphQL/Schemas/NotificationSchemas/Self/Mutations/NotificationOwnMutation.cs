@@ -5,14 +5,14 @@ using HotChocolate.Resolvers;
 using HotChocolate.Subscriptions;
 using XenoTerra.WebAPI.GraphQL.Types.EventTypes;
 using XenoTerra.WebAPI.Helpers;
-using XenoTerra.WebAPI.Services.Mutations.Entity.Own.NotificationMutationServices;
-using XenoTerra.DTOLayer.Dtos.NotificationAdminDtos.Self.Own;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Mutations.Inputs;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Mutations.Payloads;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Subscriptions.Events;
 using XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Subscriptions;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices.Write.Own;
 using XenoTerra.BussinessLogicLayer.Services.Entity.NotificationServices.Read;
+using XenoTerra.DTOLayer.Dtos.NotificationDtos.Self.Own;
+using XenoTerra.WebAPI.Services.Mutations.Entity.Self.NotificationMutationServices;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Mutations
 {
@@ -58,7 +58,6 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.NotificationSchemas.Self.Mutations
             var modifiedFields = GraphQLFieldProvider.GetSelectedParameterFields<UpdateNotificationOwnInput>(context, nameof(input));
             var updateDto = DtoMapperHelper.MapInputToDto<UpdateNotificationOwnInput, UpdateNotificationOwnDto>(input, modifiedFields);
             var userId = HttpContextUserHelper.GetMyUserId(httpContextAccessor.HttpContext);
-            updateDto.UserId = userId;
 
             var payload = await mutationService.UpdateAsync<UpdateNotificationOwnPayload>(writeService, updateDto, modifiedFields);
 

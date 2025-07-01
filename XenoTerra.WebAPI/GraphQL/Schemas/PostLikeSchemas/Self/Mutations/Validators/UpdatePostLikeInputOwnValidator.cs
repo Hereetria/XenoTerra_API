@@ -8,9 +8,9 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas.PostLikeSchemas.Self.Mutations.Valida
     {
         public UpdatePostLikeInputOwnValidator()
         {
-            RuleFor(x => x.LikeId)
-                .NotEmpty().WithMessage("LikeId must not be empty.")
-                .Must(ValidationHelper.BeValidGuid).WithMessage("LikeId must be a valid GUID.");
+            RuleFor(x => x.PostLikeId)
+                .NotEmpty().WithMessage("PostLikeId must not be empty.")
+                .Must(ValidationHelper.BeValidGuid).WithMessage("PostLikeId must be a valid GUID.");
 
             When(x => x.PostId is not null, () =>
             {

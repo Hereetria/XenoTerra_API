@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using XenoTerra.DTOLayer.Dtos.NoteAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.NoteDtos.Admin;
 
 namespace XenoTerra.BussinessLogicLayer.Validators.NoteValidators.Admin
 {

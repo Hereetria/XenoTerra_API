@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.StoryLikeAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.StoryLikeDtos.Admin;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.StoryLikeSchemas.Admin.Queries.Paginations
 {

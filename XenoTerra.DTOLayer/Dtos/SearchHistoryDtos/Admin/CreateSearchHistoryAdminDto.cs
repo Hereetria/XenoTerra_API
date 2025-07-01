@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.SearchHistoryAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.SearchHistoryDtos.Admin
 {
     public class CreateSearchHistoryAdminDto
     {

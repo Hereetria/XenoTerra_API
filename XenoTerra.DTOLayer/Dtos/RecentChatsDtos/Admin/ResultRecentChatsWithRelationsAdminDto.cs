@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.RecentChatsAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.RecentChatsDtos.Admin
 {
     public class ResultRecentChatsWithRelationsAdminDto
     {

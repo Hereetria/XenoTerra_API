@@ -1,4 +1,4 @@
-namespace XenoTerra.DTOLayer.Dtos.MessageAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.MessageDtos.Self.Own
 {
     public class CreateMessageOwnDto
     {

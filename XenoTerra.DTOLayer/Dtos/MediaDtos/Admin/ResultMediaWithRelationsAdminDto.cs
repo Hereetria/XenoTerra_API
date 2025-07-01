@@ -3,7 +3,7 @@ using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Self.Own;
 using XenoTerra.EntityLayer.Entities;
 
-namespace XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin
+namespace XenoTerra.DTOLayer.Dtos.MediaDtos.Admin
 {
     public class ResultMediaWithRelationsAdminDto
     {
@@ -15,7 +15,7 @@ namespace XenoTerra.DTOLayer.Dtos.MediaAdminDtos.Admin
         public Guid ReceiverId { get; init; }
 
         public DateTime UploadedAt { get; init; }
-        public AppUser Sender { get; set; } = new();
-        public AppUser Receiver { get; set; } = new();
+        public AppUser Sender { get; init; } = new();
+        public AppUser Receiver { get; init; } = new();
     }
 }

@@ -1,4 +1,4 @@
-﻿using XenoTerra.DTOLayer.Dtos.FollowAdminDtos.Admin;
+﻿using XenoTerra.DTOLayer.Dtos.FollowDtos.Admin;
 using XenoTerra.WebAPI.GraphQL.Types.PayloadTypes;
 
 namespace XenoTerra.WebAPI.GraphQL.Schemas.FollowSchemas.Admin.Mutations.Payloads

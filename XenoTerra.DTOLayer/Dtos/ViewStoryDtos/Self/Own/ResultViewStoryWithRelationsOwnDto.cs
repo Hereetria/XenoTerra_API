@@ -1,7 +1,7 @@
 using XenoTerra.DTOLayer.Dtos.AppUserDtos.Admin;
-using XenoTerra.DTOLayer.Dtos.StoryAdminDtos.Admin;
+using XenoTerra.DTOLayer.Dtos.StoryDtos.Admin;
 
-namespace XenoTerra.DTOLayer.Dtos.ViewStoryAdminDtos.Self.Own
+namespace XenoTerra.DTOLayer.Dtos.ViewStoryDtos.Self.Own
 {
     public class ResultViewStoryWithRelationsOwnDto
     {
