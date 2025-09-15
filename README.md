@@ -116,9 +116,9 @@ Clone the repository and install required packages including `EntityFramework` a
 
 ### Code Quality & Architecture
 
-- **Clean Code**: The codebase is written with readability and maintainability in mind.
+- **Data Security**: Thanks to Admin and User-based DTOs, data exposure is minimized and security is enforced at the highest level.
 - **Strong Type Support**: Each major structure has a dedicated and extensible type.
-- **Modern C# Practices**: Features like `record` types and primary constructors are utilized. Compiler warnings are proactively addressed.
+- **Clean Code**: The codebase is written with readability and maintainability in mind.
 - **Organized Folder Structure**: Each module is clearly separated to simplify navigation and maintenance.
 - **Proper Naming Conventions**: Consistent and descriptive naming helps minimize confusion and improves clarity.
 
