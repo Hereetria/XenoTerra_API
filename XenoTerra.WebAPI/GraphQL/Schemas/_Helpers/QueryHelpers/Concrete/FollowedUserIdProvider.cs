@@ -16,7 +16,7 @@ namespace XenoTerra.WebAPI.GraphQL.Schemas._Helpers.QueryHelpers.Concrete
             var currentUserId = HttpContextUserHelper.GetMyUserId(_httpContextAccessor.HttpContext);
 
             return await _dbContext.Set<Follow>()
-                .Where(f => f.FollowerId == currentUserId)
+                .Where(f => f.FollowerId == currentUserId && f.IsPending == false)
                 .Select(f => f.FollowingId)
                 .ToListAsync();
         }
