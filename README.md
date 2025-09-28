@@ -130,14 +130,5 @@ Clone the repository and install required packages including `EntityFramework` a
 - **Entity Framework Core**
 - **GraphQL (HotChocolate)**
 - **MSSQL**
-- **DataLoader (GreenDonut)**
-
----
-## Contributions
-
-This project allowed me to dive deep into advanced GraphQL architecture and explore the inner workings of the HotChocolate framework. In many areas, the built-in capabilities of HotChocolate fell short of my specific needs, which led me to implement several modules manually.
-
-Throughout development, I rewrote large portions of the code multiple times, experimenting with different patterns to strike the right balance between functionality, performance, and code clarity. Some designs delivered excellent results but introduced unnecessary complexity, which pushed me to simplify the design while preserving extensibility. In certain areas, I consciously sacrificed some performance in favor of maintainability and cleaner abstractions.
-
-Ultimately, this journey not only helped me build a powerful and extensible API, but also led to the creation of a personal standard that I plan to apply across future projects.
+- **DataLoader (GreenDonut)**ojects.
 
