@@ -143,7 +143,7 @@ Clone the repository and install required packages including `EntityFramework` a
 
 <br>
 
-## 📝 License
+## 📜 License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
