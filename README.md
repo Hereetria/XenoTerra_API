@@ -119,7 +119,7 @@ Shown below in order:
 **1. Admin Posts Query** · **2. Users Public Query**
 
 <p align="center">
-  <img src="./docs/screenshots/admin-posts-query" width="32%">
+  <img src="./docs/screenshots/admin-posts-query.png" width="32%">
   <img src="./docs/screenshots/users-public-query.png" width="32%">
   <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif" width="32%">
 </p>
