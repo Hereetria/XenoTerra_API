@@ -148,3 +148,7 @@ Clone the repository and install required packages including `EntityFramework` a
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This project is licensed under the terms described in the [LICENSE](./LICENSE) file.
+
+---
+
+© 2025 Yusuf Okan Sirkeci — [Hereetria](https://github.com/Hereetria)
