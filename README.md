@@ -1,4 +1,4 @@
-# 🧱 XenoTerra_API — 🚀 Modular, High-Performance GraphQL Backend for Modern Applications
+# 🧱 XenoTerra_API — Modular, High-Performance GraphQL Backend for Modern Applications
 
 <br>
 
