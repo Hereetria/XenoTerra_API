@@ -121,8 +121,10 @@ This project showcases a well-architected, scalable GraphQL backend solution tha
 - **Organized Folder Structure**: Each module is clearly separated to simplify navigation and maintenance.
 - **Proper Naming Conventions**: Consistent and descriptive naming helps minimize confusion and improves clarity.
 
+<br>
 
 ## 🧰 Tech Stack
+This project was built using the following technologies:
 
 - **.NET Core 8.0**
 - **C#**
