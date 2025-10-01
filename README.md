@@ -52,7 +52,7 @@ It mirrors the behavior of a real-world social media backend, focusing on **clea
 
 ---
 
-### 🪄 Projection
+### 🔭 Projection
 - Fetches only requested fields using runtime expression trees.  
 - Supports nested relational entities without over-fetching.  
 - Optimized for maximum performance.
