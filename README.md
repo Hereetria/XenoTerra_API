@@ -140,7 +140,9 @@ dotnet ef database update
 
 # Run the API
 dotnet run
+```
 
+<br>
 
 ## 📜 License
 
