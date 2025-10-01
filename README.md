@@ -116,12 +116,14 @@ It mirrors the behavior of a real-world social media backend, focusing on **clea
 
 ## 🧰 Tech Stack
 
-- 🟦 **.NET Core 8.0**  
-- 🧠 **C#**  
-- 🧱 **Entity Framework Core**  
-- 💎 **GraphQL (HotChocolate)**  
-- 🧰 **DataLoader (GreenDonut)**  
-- 🗄️ **MSSQL**
+<p>
+  <img src="https://img.shields.io/badge/.NET%208.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
+  <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white" />
+  <img src="https://img.shields.io/badge/Entity%20Framework%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
+  <img src="https://img.shields.io/badge/GraphQL%20(HotChocolate)-E10098?style=for-the-badge&logo=graphql&logoColor=white" />
+  <img src="https://img.shields.io/badge/DataLoader%20(GreenDonut)-00BFA5?style=for-the-badge&logoColor=white" />
+  <img src="https://img.shields.io/badge/MSSQL-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" />
+</p>
 
 <br>
 
