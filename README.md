@@ -105,7 +105,7 @@ It mirrors the behavior of a real-world social media backend, focusing on **clea
 
 ---
 
-### 🧰 Code Quality & Architecture
+### 🏗️ Code Quality & Architecture
 - 🔒 Admin/User DTO separation for data security.  
 - 🧠 Strong type support for all major structures.  
 - ✍️ Clean, maintainable codebase.  
