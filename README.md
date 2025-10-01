@@ -114,15 +114,28 @@ It mirrors the behavior of a real-world social media backend, focusing on **clea
 
 <br>
 
+## 🖼️ Screenshots
+Shown below in order:  
+**1. Admin Posts Query** · **2. Users Public Query**
+
+<p align="center">
+  <img src="./docs/screenshots/admin-posts-query" width="32%">
+  <img src="./docs/screenshots/users-public-query.png" width="32%">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/c/ce/Transparent.gif" width="32%">
+</p>
+
+<br>
+
 ## 🧰 Tech Stack
 
 <p>
   <img src="https://img.shields.io/badge/.NET%208.0-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
   <img src="https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white" />
   <img src="https://img.shields.io/badge/Entity%20Framework%20Core-512BD4?style=for-the-badge&logo=dotnet&logoColor=white" />
+  <img src="https://img.shields.io/badge/MSSQL-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" />
+  <br>
   <img src="https://img.shields.io/badge/GraphQL%20(HotChocolate)-E10098?style=for-the-badge&logo=graphql&logoColor=white" />
   <img src="https://img.shields.io/badge/DataLoader%20(GreenDonut)-00BFA5?style=for-the-badge&logoColor=white" />
-  <img src="https://img.shields.io/badge/MSSQL-CC2927?style=for-the-badge&logo=microsoftsqlserver&logoColor=white" />
 </p>
 
 <br>
