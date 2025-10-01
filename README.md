@@ -31,6 +31,8 @@ This project showcases a well-architected, scalable GraphQL backend solution tha
 - Each layer is responsible only for its own task and aims to perform it in the most efficient manner.
 - The application receives a GraphQL schema input, which is processed through each layer to produce the corresponding output.
 
+---
+
 ### GraphQL-Based API
 
 - The core of this project is based on GraphQL using **HotChocolate**.
