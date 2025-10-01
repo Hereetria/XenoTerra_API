@@ -1,6 +1,13 @@
 # XenoTerra_API — Modular, High-Performance GraphQL Backend for Modern Applications
 
-## Project Overview
+<br>
+
+[![Report Bug](https://img.shields.io/badge/🐛_Report_Bug-red?style=for-the-badge)](../../issues/new?labels=bug)
+[![Request Feature](https://img.shields.io/badge/✨_Request_Feature-blue?style=for-the-badge)](../../issues/new?labels=enhancement)
+
+<br>
+
+## 📌 Project Overview
 
 This project focuses on designing a **fully functional and performant GraphQL API** that mirrors the behavior of a real-world social media backend. The implementation includes:
 
@@ -14,23 +21,15 @@ This project focuses on designing a **fully functional and performant GraphQL AP
 
 This project showcases a well-architected, scalable GraphQL backend solution that aligns with modern development standards and real-world application needs.
 
-## Installation
+<br>
 
-Clone the repository and install required packages including `EntityFramework` and `HotChocolate`. Once dependencies are installed, your API is ready to run.
-
----
-
-## Features
+## ✨ Features
 
 ### General Architecture
 
 - The project is built using a layered (n-tier) architecture.  
 - Each layer is responsible only for its own task and aims to perform it in the most efficient manner.
 - The application receives a GraphQL schema input, which is processed through each layer to produce the corresponding output.
-
----
-
-## Technical Highlights
 
 ### GraphQL-Based API
 
@@ -123,7 +122,7 @@ Clone the repository and install required packages including `EntityFramework` a
 - **Proper Naming Conventions**: Consistent and descriptive naming helps minimize confusion and improves clarity.
 
 
-## Technologies Used
+## 🧰 Tech Stack
 
 - **.NET Core 8.0**
 - **C#**
@@ -132,3 +131,16 @@ Clone the repository and install required packages including `EntityFramework` a
 - **MSSQL**
 - **DataLoader (GreenDonut)**ojects.
 
+<br>
+
+## 📥 Installation
+
+Clone the repository and install required packages including `EntityFramework` and `HotChocolate`. Once dependencies are installed, your API is ready to run.
+
+<br>
+
+## 📝 License
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+This project is licensed under the terms described in the [LICENSE](./LICENSE) file.
